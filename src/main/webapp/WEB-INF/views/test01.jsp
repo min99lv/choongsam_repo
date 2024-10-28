@@ -6,7 +6,12 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<div>
+<%@ include file="header.jsp"%>
+</div>
 <body>
+
+<div>
 와라
 
 성희가 고침 제발
@@ -29,5 +34,7 @@
 
 >>>>>>> 0696f9723da2ac6415c285be1425b641ac1dd4f4
 >>>>>>> 58379d739e233d59c797b8557032313ea74304f6
+
+</div>
 </body>
 </html>
