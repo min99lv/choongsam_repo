@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
-<mapper namespace="com.postgre.choongsam.mapper.test">
-	<select id="selectTest" resultType="Test01">
-		select *
-		from "test01"
+<mapper namespace="com.postgre.choongsam_repo.mapper.test">
+	<select id="selectTest" resultType="User_info">
+		SELECT * FROM public."USER_INFO" WHERE "USER_ID"='user01'
 	</select>
 	
 	
