@@ -3,8 +3,7 @@ package com.postgre.choongsam.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.postgre.choongsam.dto.Test01;
-import com.postgre.choongsam.dto.User_info;
+import com.postgre.choongsam.dto.User_Info;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,9 +14,9 @@ public class mainDao {
 	
 	private final SqlSession session;
 
-	public User_info test() {
+	public User_Info test() {
 		
-		User_info test = session.selectOne("com.postgre.choongsam_repo.mapper.test.selectTest");
+		User_Info test = session.selectOne("com.postgre.choongsam.mapper.test.selectTest");
 		
 		return test;
 	}
