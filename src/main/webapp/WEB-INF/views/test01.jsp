@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%> 
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,9 +25,14 @@
 미숙 고침 
 정후 고침
 태랑 고침
+지민 고침
 
 
 내가 진짜 고침
+
+
+
+정민이가 또 고침
 
 </div>
 </body>
