@@ -4,8 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.postgre.choongsam.dto.Test01;
-import com.postgre.choongsam.dto.User_info;
+import com.postgre.choongsam.dto.User_Info;
 import com.postgre.choongsam.service.mainService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,12 +20,12 @@ public class mainController {
 	public String test(Model model) {
 		System.out.println("컨트롤러옴");
 		
-		User_info test = ms.test();
+		User_Info test = ms.test();
 		
 		System.out.println(test);
 		
 		model.addAttribute("test",test);
-		return "test01";
+		return "main";
 	}
 
 }

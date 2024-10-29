@@ -57,12 +57,13 @@
         <div class="header__nav">
         <div class="header__logo">로고</div>
         <div class="header__navBar">
-            <a href="#">이건</a>
-            <a href="#">헤더</a>
-            <a href="#">입니다</a>
-            <a href="#">커뮤니티</a>
+            <a href="#">수강신청</a>
+            <a href="#">마이페이지</a>
+            <a href="#">공지사항</a>
+            <a href="#">문의사항</a>
         </div>
-            <div class="heder_login">로그인</div>
+            <div class="heder_login"><a href="#">로그인</a></div>
+            <div class="heder_join"><a href="#">회원가입</a></div>
         </div>
     </div>
 </body>
