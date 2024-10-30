@@ -144,8 +144,7 @@
         </header>
         
         <main>
-			
-		  <form>
+          <form action="">
 	        <div class="main_container">
 			<h2 style="color: #00664F ">회원가입</h2>
 			<hr style="width: 400px; margin: 0 auto;">
@@ -158,6 +157,7 @@
 	            		<div class="step3">가입완료</div>
 	           		</div>			
 	           </div>	
+           
            
 	            <div class="join_write">
 	           		<div class="text_guide">* 필수항목이므로 꼭 작성해주세요</div>
@@ -182,6 +182,11 @@
 	           			<tr>
 	           				<td>비밀번호 *</td>
 	           				<td><input type="password" placeholder="영문 또는 숫자 입력" required="required"></td>
+	           			</tr>
+	           			
+	           			<tr>
+	           				<td>비밀번호 확인 *</td>
+	           				<td><input type="password" required="required"></td>
 	           			</tr>
 	           			
 	           			<tr>
@@ -211,7 +216,7 @@
 	       </div>
 	        	
 	        	<div class="btnSection" align="center" style="margin-bottom: 20px;">
-					<input id="btnNext" type="button" onclick="location.href='signup3'"value="회원가입">
+					<input id="btnNext" type="submit" onclick="location.href='signup3'"value="회원가입">
 	            </div>
 	      </form>
 		</main>

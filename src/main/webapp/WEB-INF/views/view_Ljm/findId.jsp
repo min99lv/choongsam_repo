@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>로그인</title>
+<title>아이디 찾기</title>
 <style type="text/css">
     body {
         margin: 0;
@@ -76,7 +76,7 @@
 
      }
      
-     #btnLogin {
+     #btnfindId {
 		width: 250px;
         height: 36px;
         padding: 5px 10px 5px 10px;
@@ -97,28 +97,19 @@
 			
 		  <form method="post">
 	        <div class="main_container">
-			<h2 style="color: #00664F ">로그인</h2>
+			<h2 style="color: #00664F ">아이디 찾기</h2>
 			<hr style="width: 400px; margin: 0 auto;">
 			<br>
 			<p>
 	            <div class="login_section">
-	            	<select name="user_status" class="select">
-	  					<option disabled selected>로그인 할 회원 유형을 선택하세요</option>
-	  					<option value="student">학생</option>
-	  					<option value="professor">강사</option>
-					</select>
+					<input type="text" name="user_name" placeholder="아이디" required="required">
 					<p>
-					<input type="text" name="user_id" placeholder="아이디를 입력해주세요">
+					<input type="text" name="email" placeholder="이메일 주소" required="required">
 					<p>				
-					<input type="password" name="password" placeholder="비밀번호를 입력해주세요">
-					
-				<div class="find">
-					<a href="findId">아이디 찾기 | </a>
-					<a href="findPw">비밀번호 찾기 | </a>
-					<a href="signup1">회원가입</a>
-				</div>
+					<input type="password" name="phone_num" placeholder="전화번호" required="required">					
 				<br>
-				<input id="btnLogin" type="submit" value="로그인">
+				<br>				
+				<input id="btnfindId" type="submit" value="아이디 찾기">				
 	            </div>
 	            
 	        </div>
