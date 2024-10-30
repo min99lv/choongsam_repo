@@ -18,7 +18,7 @@
             height: 70px;
             font-size: 20px;
             color: black;
-            position: absolute;
+            position: static;
         }
 
         .header__color{
@@ -59,7 +59,7 @@
         <div class="header__navBar">
             <a href="#">수강신청</a>
             <a href="#">마이페이지</a>
-            <a href="#">공지사항</a>
+            <a href="api/notice">공지사항</a>
             <a href="#">문의사항</a>
         </div>
             <div class="heder_login"><a href="#">로그인</a></div>
