@@ -42,6 +42,10 @@ spring:
           auth: true
           starttls:
             enable: true
+            
+  devtools:
+    livereload:
+      enabled: true          
 #MyBatis
 mybatis:
   config-location: classpath:configuration.xml
