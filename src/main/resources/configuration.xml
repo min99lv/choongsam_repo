@@ -10,7 +10,10 @@
 
 	<typeAliases>
 		<typeAlias alias="User_Info" type="com.postgre.choongsam.dto.User_Info" />
+ 
+		<typeAlias alias="Notice" type="com.postgre.choongsam.dto.Notice" />
 
-		
+		<typeAlias alias="Homework" type="com.postgre.choongsam.dto.Homework" />
+
 	</typeAliases>
-</configuration> 
+</configuration>
