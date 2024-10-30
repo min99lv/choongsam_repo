@@ -45,7 +45,11 @@
             color: black;
             width: 100px;
             margin: 0 125px;
-
+        }
+        
+        .header_login a, .header_join a {
+        	text-decoration: none;
+            color: black;
         }
        
 
