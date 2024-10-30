@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.postgre.choongsam.dto.Class_Bookmark;
 import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Class_ScheduleAddVideo;
 import com.postgre.choongsam.dto.Lecture_Video;
@@ -51,8 +53,43 @@ public class JshController {
 		model.addAttribute("teacherName", teacherName);
 		model.addAttribute("contentList", contentList);
 		
-		return "view_Jsh/StuLecture";
+		return "view_Jsh/stuLecture";
 	}
+	
+	@GetMapping("/sh_lecture_teacher")
+	public String sh_lecture_teacher(Model model,
+									 @RequestParam String lctr_id,
+									 @RequestParam int user_seq) {
+		
+		model.addAttribute("lctr_id", lctr_id);
+		model.addAttribute("user_seq", user_seq);
+		
+		
+		return "view_Jsh/teaLecture";
+	}
+	
+	@GetMapping("/contsUploadForm")
+	public String contsUpload(Model model,
+							  @RequestParam String lctr_id,
+							  @RequestParam int user_seq) {
+		
+		
+		
+		return "view_Jsh/contsUploadForm";
+	}
+	
+	@PostMapping("/contsUpload")
+	public String contsUpload(Model model, 
+							  Lecture_Video video, 
+							  Class_Bookmark bookmark) {
+		
+		
+		
+		return "4";
+	}
+	
+	
+	
 	
 	
 }
