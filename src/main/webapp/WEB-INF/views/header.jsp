@@ -18,7 +18,7 @@
             height: 70px;
             font-size: 20px;
             color: black;
-            position: absolute;
+            position: static;
         }
 
         .header__color{
