@@ -42,6 +42,7 @@ spring:
           auth: true
           starttls:
             enable: true
+      
 #MyBatis
 mybatis:
   config-location: classpath:configuration.xml
