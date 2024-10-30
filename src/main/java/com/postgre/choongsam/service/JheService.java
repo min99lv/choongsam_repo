@@ -1,5 +1,9 @@
 package com.postgre.choongsam.service;
 
-public interface JheService {
+import java.util.List;
 
+import com.postgre.choongsam.dto.Homework;
+
+public interface JheService {
+	List<Homework>	selectHW();
 }
