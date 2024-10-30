@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.postgre.choongsam.mapper.Sh_mapper">
+	<select id="studentLecture" parameterType="map" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
+		SELECT *
+		FROM "CLASS_SCHEDULE" c
+		JOIN "LECTURE_VIDEO" lv
+		ON c."CONTS_ID" = lv."CONTS_ID"
+		JOIN "LECTURE" l
+		ON c."LCTR_ID" = l."LCTR_ID"
+		JOIN "USER_INFO" u
+		ON c."USER_SEQ" = u."USER_SEQ"
+		WHERE
+			c."LCTR_ID" = #{lctr_id}
+			AND c."USER_SEQ" = #{user_seq}
+			ORDER BY c."LCTR_NO"
+	</select>
+</mapper>
