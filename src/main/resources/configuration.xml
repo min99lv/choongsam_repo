@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration
-  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
 	<settings>
@@ -10,6 +9,7 @@
 
 	<typeAliases>
 		<typeAlias alias="User_Info" type="com.postgre.choongsam.dto.User_Info" />
+		<typeAlias alias="Login_Info" type="com.postgre.choongsam.dto.Login_Info" />
 
 		<typeAlias alias="Class_Schedule" type="com.postgre.choongsam.dto.Class_Schedule"/>
 		<typeAlias alias="Class_ScheduleAddVideo" type="com.postgre.choongsam.dto.Class_ScheduleAddVideo"/>
