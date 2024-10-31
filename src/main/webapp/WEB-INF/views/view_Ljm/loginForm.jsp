@@ -95,7 +95,7 @@
         
         <main>
 			
-		  <form method="post">
+		  <form action="login" method="post">
 	        <div class="main_container">
 			<h2 style="color: #00664F ">로그인</h2>
 			<hr style="width: 400px; margin: 0 auto;">
@@ -108,9 +108,9 @@
 	  					<option value="professor">강사</option>
 					</select>
 					<p>
-					<input type="text" name="user_id" placeholder="아이디를 입력해주세요">
+					<input type="text" name="user_id" value="${user_id }" placeholder="아이디">
 					<p>				
-					<input type="password" name="password" placeholder="비밀번호를 입력해주세요">
+					<input type="password" name="password" placeholder="비밀번호">
 					
 				<div class="find">
 					<a href="findId">아이디 찾기 | </a>
@@ -123,6 +123,8 @@
 	            
 	        </div>
 	      </form>
+	      ${user.user_id}
+	      ${user.user_seq }
 		</main>
         <footer>
         </footer>
