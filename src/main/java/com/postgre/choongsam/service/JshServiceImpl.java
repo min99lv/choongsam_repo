@@ -34,4 +34,22 @@ public class JshServiceImpl implements JshService {
 		return startDay;
 	}
 
+	@Override
+	public void contsUpload(Class_ScheduleAddVideo info) {
+		System.out.println("JshService contsUpload start...");
+		int result=0;
+		
+		String fileName = info.getFile_nm();
+		String fileSuffix= info.getFile_extn_nm();
+		long file_sz = info.getFile_sz();
+		String file_path = info.getFile_path_nm();
+		
+		if(fileName!=null&&fileSuffix!=null&&file_path!=null) {
+			result = Dao.contsFileUpload(info);
+			System.out.println("JshService contsUpload >> "+result);
+		}
+		
+		
+	}
+
 }
