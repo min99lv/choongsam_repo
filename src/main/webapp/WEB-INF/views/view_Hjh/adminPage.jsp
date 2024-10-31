@@ -73,30 +73,22 @@
 
 <header>
     <div class="logo"></div>
-    <h1>마이페이지</h1>
+    <h1>관리자</h1>
     <div class="user-info"></div>
 </header>
 
 <nav>
-    <ul>
-    <h1>강사</h1>
-        <li onclick="toggleSubMenu('myClassroomSubmenu')">나의 강의실</li>
-        <ul class="submenu" id="myClassroomSubmenu">
-            <li style="font-size: 13px;">현재 수업 중인 강의</li>
-            <li style="font-size: 13px;">강의 목록</li>
-        </ul>
-        <li onclick="toggleSubMenu('gradeManagementSubmenu')">성적 관리</li>
-        <ul class="submenu" id="gradeManagementSubmenu">
-            <li style="font-size: 13px;">하은</li>
-            <li style="font-size: 13px;">하은</li>
-            <li style="font-size: 13px;">하은</li>
-        </ul>
-        <li onclick="toggleSubMenu('userInfoSubmenu')">회원정보</li>
-        <ul class="submenu" id="userInfoSubmenu">
-            <li style="font-size: 13px;" onclick="location.href='updateProfile'">개인정보 수정</li>
 
-            <li style="font-size: 13px;">비밀번호 변경</li>
-            <li style="font-size: 13px;">회원 탈퇴</li>
+    <h1>관리자</h1>
+        <ul>
+          <li onclick="toggleSubMenu('userInfoSubmenu')">회원관리</li>
+        <ul class="submenu" id="userInfoSubmenu">
+            <li style="font-size: 13px;" onclick="location.href='updateProfileAdmin'">회원정보수정</li>
+        </ul>
+        <li onclick="toggleSubMenu('myClassroomSubmenu')">강의</li>
+        <ul class="submenu" id="myClassroomSubmenu">
+            <li style="font-size: 13px;">강의 승인</li>
+            <li style="font-size: 13px;">강의 목록<li>
         </ul>
         <li onclick="toggleSubMenu('inquirySubmenu')">1:1 문의</li>
         <ul class="submenu" id="inquirySubmenu">

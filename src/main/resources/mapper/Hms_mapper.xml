@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.postgre.choongsam.mapper.HMS">
+	<select id="findAllVideo" resultType="Lecture_Video">
+		SELECT * 
+		FROM "LECTURE_VIDEO" 
+		WHERE "CONTS_ID" IN ('1000','1001')
+	</select>
+
+
+</mapper>
