@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>로그인</title>
+<title>비밀번호 찾기</title>
 <style type="text/css">
     body {
         margin: 0;
@@ -76,7 +76,16 @@
 
      }
      
-     #btnLogin {
+     #btnCheck {
+		width: 105px;
+        height: 36px;
+        padding: 5px 10px 5px 10px;
+        background-color: #00664F;
+        color: white;
+        border: 1px solid #00664F;
+	}
+	
+     #btnfindPw {
 		width: 250px;
         height: 36px;
         padding: 5px 10px 5px 10px;
@@ -84,40 +93,37 @@
         color: white;
         border: 1px solid #00664F;
 	}
+	
+	
         
 </style>
 
 </head>
 <body>
         <header>
+        	<%@ include file="../header.jsp" %>
         </header>
         
         <main>
 			
 		  <form method="post">
 	        <div class="main_container">
-			<h2 style="color: #00664F ">로그인</h2>
+			<h2 style="color: #00664F ">비밀번호 찾기</h2>
 			<hr style="width: 400px; margin: 0 auto;">
 			<br>
 			<p>
 	            <div class="login_section">
-	            	<select name="user_status" class="select">
-	  					<option disabled selected>로그인 할 회원 유형을 선택하세요</option>
-	  					<option value="student">학생</option>
-	  					<option value="professor">강사</option>
-					</select>
+					<input type="text" name="user_name" placeholder="이름" required="required">
 					<p>
-					<input type="text" name="user_id" placeholder="아이디를 입력해주세요">
+					<input type="text" name="email" placeholder="이메일 주소" required="required" style="margin-left: 110px;">
+					<input id="btnCheck" type="button" value="인증번호 전송">
 					<p>				
-					<input type="password" name="password" placeholder="비밀번호를 입력해주세요">
-					
-				<div class="find">
-					<a href="view_Ljm/findId">아이디 찾기 | </a>
-					<a href="view_Ljm/findPw">비밀번호 찾기 | </a>
-					<a href="signup1">회원가입</a>
-				</div>
+					<input type="text" name="phone_num" placeholder="인증번호 입력" required="required" style="margin-left: 110px;">
+					<input id="btnCheck" type="button" value="인증번호 확인">
+										
 				<br>
-				<input id="btnLogin" type="submit" value="로그인">
+				<br>				
+				<input id="btnfindPw" type="submit" value="임시 비밀번호 발급">				
 	            </div>
 	            
 	        </div>

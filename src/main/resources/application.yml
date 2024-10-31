@@ -41,11 +41,12 @@ spring:
         smtp:
           auth: true
           starttls:
-            enable: true
-            
+            enable: true 
+                 
   devtools:
     livereload:
       enabled: true          
+
 #MyBatis
 mybatis:
   config-location: classpath:configuration.xml
