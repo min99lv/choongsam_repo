@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 
@@ -69,7 +69,7 @@
 	
 		<c:forEach var="conts" items="${contentList}">
 			<div class="list">
-				<img id="thumbnail" alt="À¯Æ©ºê ½æ³×ÀÏ" src="https://img.youtube.com/vi/${conts.vdo_url_addr }/default.jpg">
+				<img id="thumbnail" alt="ìœ íŠœë¸Œ ì¸ë„¤ì¼" src="https://img.youtube.com/vi/${conts.vdo_url_addr }/default.jpg">
 				
 				<div class="vdoInfor">
 					<div class="time">
@@ -87,7 +87,7 @@
 					
 					<div class="button">
 						<div id="state"></div>
-						<div id="start">ÇÐ½À ½ÃÀÛ</div>
+						<div id="start">í•™ìŠµ ì‹œìž‘</div>
 					</div>
 					
 				</div>

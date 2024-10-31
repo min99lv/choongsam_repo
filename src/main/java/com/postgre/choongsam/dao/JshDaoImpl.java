@@ -40,4 +40,21 @@ public class JshDaoImpl implements JshDao {
 		return contentList;
 	}
 
+	@Override
+	public List<Class_ScheduleAddVideo> getStartDay(String lctr_id) {
+		System.out.println("JshDao getStartDay start...");
+		System.out.println("JshDao getStartDay lctr_id >> "+lctr_id);
+		
+		List<Class_ScheduleAddVideo> startday = null;
+
+		try {
+			startday = session.selectList("getStartDay",lctr_id);
+			System.out.println("JshDao getStartDay startday 아니 왜 null인데 너가 나와>> " + startday);
+		} catch (Exception e) {
+			System.out.println("JshDao getStartDay exception>> "+e.getMessage());
+		}
+		
+		return startday;
+	}
+
 }
