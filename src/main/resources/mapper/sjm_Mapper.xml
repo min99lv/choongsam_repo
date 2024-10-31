@@ -30,4 +30,12 @@
 			LIMIT #{rowPage} OFFSET #{start};
     </select>
 
+
+	<select id="noticeDetail" parameterType="Int" resultType="Notice">
+		select *
+		FROM "NOTICE"
+		WHERE "NTC_MTTR_SN" = #{ntc_mttr_sn}
+
+	</select>
+
 </mapper>
