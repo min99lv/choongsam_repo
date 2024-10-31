@@ -73,30 +73,22 @@
 
 <header>
     <div class="logo"></div>
-    <h1>마이페이지</h1>
+    <h1>관리자</h1>
     <div class="user-info"></div>
 </header>
 
 <nav>
-    <ul>
-    <h1>강사</h1>
-        <li onclick="toggleSubMenu('myClassroomSubmenu')">나의 강의실</li>
-        <ul class="submenu" id="myClassroomSubmenu">
-            <li style="font-size: 13px;">현재 수업 중인 강의</li>
-            <li style="font-size: 13px;">강의 목록</li>
-        </ul>
-        <li onclick="toggleSubMenu('gradeManagementSubmenu')">성적 관리</li>
-        <ul class="submenu" id="gradeManagementSubmenu">
-            <li style="font-size: 13px;">하은</li>
-            <li style="font-size: 13px;">하은</li>
-            <li style="font-size: 13px;">하은</li>
-        </ul>
-        <li onclick="toggleSubMenu('userInfoSubmenu')">회원정보</li>
-        <ul class="submenu" id="userInfoSubmenu">
-            <li style="font-size: 13px;" onclick="location.href='updateProfile'">개인정보 수정</li>
 
-            <li style="font-size: 13px;">비밀번호 변경</li>
-            <li style="font-size: 13px;">회원 탈퇴</li>
+    <h1>관리자</h1>
+        <ul>
+          <li onclick="toggleSubMenu('userInfoSubmenu')">회원관리</li>
+        <ul class="submenu" id="userInfoSubmenu">
+            <li style="font-size: 13px;" onclick="location.href='updateProfileAdmin'">회원정보수정</li>
+        </ul>
+        <li onclick="toggleSubMenu('myClassroomSubmenu')">강의</li>
+        <ul class="submenu" id="myClassroomSubmenu">
+            <li style="font-size: 13px;">강의 승인</li>
+            <li style="font-size: 13px;">강의 목록<li>
         </ul>
         <li onclick="toggleSubMenu('inquirySubmenu')">1:1 문의</li>
         <ul class="submenu" id="inquirySubmenu">
@@ -107,9 +99,34 @@
 </nav>
 
 <main>
+    <table class="tg" border="1">
+    <table class="tg" border="1">
+        <tr>
+            <th style="font-size: 18px; width: 50px;">No</th>
+            <th style="font-size: 18px; width: 100px;">이름</th>
+            <th style="font-size: 18px; width: 100px;">아이디</th>
+            <th style="font-size: 18px; width: 200px;">이메일</th>
+            <th style="font-size: 18px; width: 100px;">주소</th>
+            <th style="font-size: 18px; width: 100px;">핸드폰번호</th>
+            <th style="font-size: 18px;">회원상태</th>
+        </tr>
 
-
+        <c:forEach var="user" items="${userList}" varStatus="status">
+            <tr>
+                <td>no</td>
+                <td>${user.user_name}</td>
+                <td>${user.user_id}</td>
+                <td>${user.email}</td>
+                <td>${user.address}</td>
+                <td>${user.phone_num}</td>
+                <td><c:choose>
+                    <c:when test="${user.user_status == 1}">학생</c:when>
+                    <c:when test="${user.user_status == 2}">강사</c:when>
+                    <c:otherwise>기타</c:otherwise>
+                </c:choose></td>
+            </tr>
+        </c:forEach>
+    </table>
 </main>
-
 </body>
 </html>
