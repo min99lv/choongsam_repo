@@ -14,15 +14,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JshServiceImpl implements JshService {
 	
-	private final JshDao JshDao;
+	private final JshDao Dao;
 	
 	@Override
 	public List<Class_ScheduleAddVideo> studentLecture(String lctr_id, int user_seq) {
 		System.out.println("JshService StudentLecture start...");
-		List<Class_ScheduleAddVideo> contentList = JshDao.studentLecture(lctr_id, user_seq);
+		List<Class_ScheduleAddVideo> contentList = Dao.studentLecture(lctr_id, user_seq);
 		System.out.println("JshService StudentLecture contentList >> "+contentList);
 		
 		return contentList;
+	}
+
+	@Override
+	public List<Class_ScheduleAddVideo> getStartDay(String lctr_id) {
+		System.out.println("JshService getStartDay start...");
+		
+		List<Class_ScheduleAddVideo> startDay = Dao.getStartDay(lctr_id);
+		
+		return startDay;
 	}
 
 }
