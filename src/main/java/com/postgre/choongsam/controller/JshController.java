@@ -236,6 +236,8 @@ public class JshController {
 		    System.out.println("업로드된 파일이 없습니다.");
 		}
 		
+		info.setLctr_no(lctr_no);								//강의번호
+		info.setUser_seq(user_seq);						//강사번호
 		info.setVdo_file_nm(title);							//제목
 		info.setLctr_no(lctr_no);								//차시
 		info.setViewing_period(viewing_period);	//출석인정기간
@@ -247,6 +249,8 @@ public class JshController {
 		info.setConts_chpttl(conts_chpttl1);			//챕터내용1
 		info.setConts_chpttl2(conts_chpttl2);			//챕터내용1
 		info.setConts_chpttl3(conts_chpttl3);			//챕터내용1
+		
+		service.contsUpload(info);
 		
 		return "view_Jsh/teaLecture";
 	}

@@ -57,4 +57,24 @@ public class JshDaoImpl implements JshDao {
 		return startday;
 	}
 
+	@Override
+	public int contsFileUpload(Class_ScheduleAddVideo info) {
+		System.out.println("JshDao contsFileUpload start...");
+		
+		int result = 0;
+		
+		String fileName = info.getFile_nm();
+		String fileSuffix= info.getFile_extn_nm();
+		long file_sz = info.getFile_sz();
+		String file_path = info.getFile_path_nm();
+		
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return result;
+	}
+
 }

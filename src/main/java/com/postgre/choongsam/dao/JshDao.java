@@ -11,4 +11,6 @@ public interface JshDao {
 
 	List<Class_ScheduleAddVideo> getStartDay(String lctr_id);
 
+	int contsFileUpload(Class_ScheduleAddVideo info);
+
 }
