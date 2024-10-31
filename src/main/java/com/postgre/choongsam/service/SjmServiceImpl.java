@@ -33,4 +33,15 @@ public class SjmServiceImpl implements SjmService {
 		
 		return total;
 	}
+
+	@Override
+	public Notice noticeDetail(int ntc_mttr_sn) {
+		
+		System.out.println("SjmServiceImpl.noticeDetail() start.....");
+
+		Notice notice = sd.noticeDetail(ntc_mttr_sn);
+
+
+		return notice;
+	}
 }
