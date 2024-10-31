@@ -11,4 +11,6 @@ public class Lecture_Video {
 	private	String	vdo_length;		// 영상 길이
 	private	int		lctr_no;		// 차시
 	private int		file_group;		// 파일 그룹
+	
+	private String file_data; //테스트용
 }
