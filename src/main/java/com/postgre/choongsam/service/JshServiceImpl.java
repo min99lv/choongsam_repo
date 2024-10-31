@@ -46,7 +46,12 @@ public class JshServiceImpl implements JshService {
 		
 		if(fileName!=null&&fileSuffix!=null&&file_path!=null) {
 			result = Dao.contsFileUpload(info);
-			System.out.println("JshService contsUpload >> "+result);
+			if(result==0) {
+				System.out.println("JshService contsUpload 첨부파일 등록 실패...");
+			}
+			else {
+				System.out.println("JshService contsUpload 첨부파일 등록 성공");
+			}
 		}
 		
 		

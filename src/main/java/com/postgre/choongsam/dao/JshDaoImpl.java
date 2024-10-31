@@ -68,8 +68,15 @@ public class JshDaoImpl implements JshDao {
 		long file_sz = info.getFile_sz();
 		String file_path = info.getFile_path_nm();
 		
+		Map<String, Object> fileInfo = new HashMap<>();
+		
+		fileInfo.put("fileName", fileName);
+		fileInfo.put("fileSuffix", fileSuffix);
+		fileInfo.put("file_sz", file_sz);
+		fileInfo.put("file_path", file_path);
+		
 		try {
-			
+			result = session.insert(file_path)
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
