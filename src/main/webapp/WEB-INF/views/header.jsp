@@ -63,11 +63,11 @@
         <div class="header__navBar">
             <a href="#">수강신청</a>
             <a href="/view_Hjh/myPageStd">마이페이지</a>
-            <a href="api/notice">공지사항</a>
+            <a href="/api/notice">공지사항</a>
             <a href="/video-details?videoId=5NbeB10h1wM">문의사항</a>
         </div>
-            <div class="header_login"><a href="view_Ljm/login">로그인</a></div>
-            <div class="header_join"><a href="view_Ljm/signup1">회원가입</a></div>
+            <div class="header_login"><a href="/view_Ljm/loginForm">로그인</a></div>
+            <div class="header_join"><a href="/view_Ljm/signup1">회원가입</a></div>
         </div>
     </div>
 </body>
