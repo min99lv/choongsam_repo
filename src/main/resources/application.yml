@@ -62,5 +62,6 @@ logging:
 youtube:
   api:
     key: "AIzaSyDB-l20C9L1cR8XYmyN9Olb-8TZ07ZPbd0"
-    base-url: "https://www.youtube.com/embed"
+    base-url: "https://www.googleapis.com/youtube/v3/"
+
  
