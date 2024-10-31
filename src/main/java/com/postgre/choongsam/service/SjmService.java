@@ -11,4 +11,6 @@ public interface SjmService {
 
 	int countNotice(String keyword);
 
+    Notice noticeDetail(int ntc_mttr_sn);
+
 }
