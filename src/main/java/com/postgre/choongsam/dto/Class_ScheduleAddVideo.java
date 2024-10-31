@@ -40,4 +40,17 @@ public class Class_ScheduleAddVideo {
 	private String 	phone_num;		//전화번호
 	private String 	del_state;			//삭제여부
     private int    	user_status;     	//회원분류
+    
+	private	String	conts_chptime;	// 챕터 시간
+	private String	conts_chpttl;		// 챕터 내용
+	private	String	conts_chptime2;	// 챕터 시간
+	private String	conts_chpttl2;		// 챕터 내용
+	private	String	conts_chptime3;	// 챕터 시간
+	private String	conts_chpttl3;		// 챕터 내용
+	
+	private int 		file_seq; 				// 소일련번호
+	private String 	file_nm; 				// 실제파일명
+	private String 	file_extn_nm; 			// 확장자
+	private long 		file_sz; 				// 파일 크기
+	private String 	file_path_nm; 			// 파일 경로
 }

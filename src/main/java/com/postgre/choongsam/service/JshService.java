@@ -9,4 +9,6 @@ public interface JshService {
 
 	List<Class_ScheduleAddVideo> studentLecture(String lctr_id, int user_seq);
 
+	List<Class_ScheduleAddVideo> getStartDay(String lctr_id);
+
 }

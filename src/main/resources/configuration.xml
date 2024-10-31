@@ -13,12 +13,15 @@
 
 		<typeAlias alias="Class_Schedule" type="com.postgre.choongsam.dto.Class_Schedule"/>
 		<typeAlias alias="Class_ScheduleAddVideo" type="com.postgre.choongsam.dto.Class_ScheduleAddVideo"/>
+		<typeAlias alias="Syllabus" type="com.postgre.choongsam.dto.Syllabus"/>
 		
 
  
 		<typeAlias alias="Notice" type="com.postgre.choongsam.dto.Notice" />
 
 		<typeAlias alias="Homework" type="com.postgre.choongsam.dto.Homework" />
+		
+		<typeAlias alias="Lecture_Video" type="com.postgre.choongsam.dto.Lecture_Video"/>
 
 
 	</typeAliases>
