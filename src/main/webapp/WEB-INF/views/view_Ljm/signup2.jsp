@@ -34,7 +34,7 @@
 
     .main_container {
         margin-top: 60px; /* 헤더 높이에 맞게 마진 설정 */
-        margin-bottom: 60px; /* 푸터 높이에 맞게 마진 설정 */
+        
         margin-left: 100px;
         margin-right: 100px;
         padding: 20px; /* 콘텐츠 여백 */
@@ -76,38 +76,87 @@
 	    border: 1px solid #BCBCBC;
 	}
 	
-	.select {
-        width: 250px;
-        height: 33px;
-        padding: 5px 10px 5px 10px;
-        outline: 0 none;
-        margin-left: 20px;
-    }
-
-    .select option {
-        background: white;
-        color: black;
-        padding: 3px 0;
-    }
-
-    input[type="text"], input[type="password"] {
-    	width: 205px;
-        height: 22px;
-        padding: 5px 30px 5px 10px;
-        
-        margin-left: 20px;
-    }
-    
-    .join_write {
-    	 display: flex;           /* Flexbox 사용 */
-	    flex-direction: column;  /* 세로 방향으로 정렬 */
-	    align-items: center;     /* 자식 요소를 가운데 정렬 */
-	    text-align: left;        /* 테이블 셀 안의 텍스트는 왼쪽 정렬 */
+	.join_write {
+	    display: flex;               /* Flexbox 사용 */
+	    flex-direction: column;      /* 세로 방향으로 정렬 */
+	    align-items: center;         /* 자식 요소를 가운데 정렬 */
+	    text-align: left;            /* 테이블 셀 안의 텍스트는 왼쪽 정렬 */
+	    max-width: 600px;
+	    margin: 20px auto;
+	    padding: 20px;
+	    border: 1px solid #ddd;
+	    border-radius: 8px;
+	    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	    background-color: #f9f9f9;
 	}
 	
-	tr {
-		margin-bottom: 20px;
+	.text_guide {
+	    font-size: 14px;
+	    color: #555;
+	    margin-bottom: 20px;
+	    text-align: left;
 	}
+	
+	table {
+	    width: 100%;
+	    border-collapse: collapse;
+	}
+	
+	td {
+	    padding: 10px;
+	    vertical-align: middle;
+	}
+	
+	td:first-child {
+	    width: 30%;
+	    font-weight: bold;
+	    color: #333;
+	}
+	
+	select, input[type="text"], input[type="password"], input[type="date"] {
+	    width: calc(100% - 20px);
+	    padding: 10px;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    font-size: 14px;
+	    transition: border-color 0.3s;
+	}
+	
+	select:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus {
+	    border-color: #007bff;
+	    outline: none;
+	}
+	
+	input[type="button"] {
+	    padding: 10px 15px;
+	    border: none;
+	    border-radius: 4px;
+	    background-color: #007bff;
+	    color: white;
+	    cursor: pointer;
+	    transition: background-color 0.3s;
+	}
+	
+	input[type="button"]:hover {
+	    background-color: #0056b3;
+	}
+	
+	input[type="button"]:focus {
+	    outline: none;
+	}
+	
+	@media (max-width: 600px) {
+	    td {
+	        display: block;
+	        width: 100%;
+	        margin-bottom: 10px;
+	    }
+	
+	    td:first-child {
+	        margin-bottom: 5px;
+	    }
+	}
+
 	
      
      #btnNext {
@@ -136,6 +185,11 @@
         color: white;
         border: 1px solid #00664F;
 	}
+	
+	.btnSection {
+    margin-bottom: 10px; /* 아래쪽 마진을 줄입니다 */
+    margin-top: 20px; /* 위쪽 마진을 추가하여 공간을 조절합니다 */
+}
 </style>
 </head>
 <body>
@@ -144,8 +198,7 @@
         </header>
         
         <main>
-			
-		  <form>
+          <form action="signup3" method="POST">
 	        <div class="main_container">
 			<h2 style="color: #00664F ">회원가입</h2>
 			<hr style="width: 400px; margin: 0 auto;">
@@ -159,13 +212,14 @@
 	           		</div>			
 	           </div>	
            
+           
 	            <div class="join_write">
 	           		<div class="text_guide">* 필수항목이므로 꼭 작성해주세요</div>
 	           		<p>
 	           		<table class="">
 	           			<tr>
 	           				<td>회원유형 *</td>
-	           				<td><select name="user_status" class="select" required="required">
+	           				<td><select name="user_status" class="select" required="required" style="width: 300px;">
 		  							<option disabled selected>회원 유형을 선택하세요</option>
 		  							<option value="student">학생</option>
 		  							<option value="professor">강사</option>
@@ -176,7 +230,8 @@
 	           			<tr>
 	           				<td>아이디 *</td>
 	           				<td><input type="text" placeholder="영문 또는 숫자 입력" required="required"></td>
-	           				<td><input id="btnCheck" type="button" value="중복확인">
+	           				<td><input id="btnCheck" type="button" value="중복확인"></td>
+	           				<td><div id="message_id"></div></td>
 	           			</tr>
 	           			
 	           			<tr>
@@ -185,8 +240,13 @@
 	           			</tr>
 	           			
 	           			<tr>
+	           				<td>비밀번호 확인 *</td>
+	           				<td><input type="password" required="required"></td>
+	           			</tr>
+	           			
+	           			<tr>
 	           				<td>생년월일 *</td>
-	           				<td><input type="text" placeholder="0000-00-00 형식으로 입력" required="required"></td>
+	           				<td><input type="date" placeholder="0000-00-00 형식으로 입력" required="required"></td>
 	           			</tr>
 	           			
 	           			<tr>
@@ -211,7 +271,7 @@
 	       </div>
 	        	
 	        	<div class="btnSection" align="center" style="margin-bottom: 20px;">
-					<input id="btnNext" type="button" onclick="location.href='signup3'"value="회원가입">
+					<input id="btnNext" type="submit" onclick="location.href='signup3'"value="회원가입">
 	            </div>
 	      </form>
 		</main>
