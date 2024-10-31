@@ -16,4 +16,17 @@
 			AND c."USER_SEQ" = #{user_seq}
 			ORDER BY c."LCTR_NO"
 	</select>
+	
+	<select id="getStartDay" parameterType="String" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
+		SELECT l."LCTR_START_DATE", s."LCTR_NO", l."LCTR_CNTSCHD", v."VIEWING_PERIOD"
+		FROM "LECTURE" l
+		JOIN "SYLLABUS" s
+		ON l."LCTR_ID" = s."LCTR_ID"
+		JOIN "LECTURE_VIDEO" v
+		ON s."CONTS_ID" = v."CONTS_ID"
+		WHERE l."LCTR_ID" = #{lctr_id}
+		ORDER BY 
+		    s."LCTR_NO" DESC
+		LIMIT 1;
+	</select>
 </mapper>

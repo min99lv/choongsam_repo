@@ -98,6 +98,8 @@
 							<button type="submit" class="manager_Qna_header_search_but">검색</button>
 						</div>
 					</form>
+
+					<a href="/api/notice/new">공지사항 작성</a>
 				</div>
 
 
@@ -114,7 +116,7 @@
 							<c:forEach var="notice" items="${noticeList}" varStatus="status">
 								<tr>
 									<td>${status.index + 1}</td>
-									<td><a href="">${notice.ntc_mttr_ttl}</a></td>
+									<td><a href="noticeDetail'">${notice.ntc_mttr_ttl}</a></td>
 									<td>${notice.ntc_mttr_dt}</td>
 								</tr>
 							</c:forEach>

@@ -33,6 +33,15 @@ public class SjmDaoImpl implements SjmDao{
 		
 		return total;
 	}
+
+	@Override
+	public Notice noticeDetail(int ntc_mttr_sn) {
+
+		Notice notice = session.selectOne("com.postgre.choongsam.mapper.sjm.noticeDetail", ntc_mttr_sn);
+
+		System.out.println("SjmDaoImpl.noticeDetail() notice >>" + notice);
+		return notice;
+	}
 	
 	
 	
