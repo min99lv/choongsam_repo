@@ -5,5 +5,6 @@ import java.util.List;
 import com.postgre.choongsam.dto.Homework;
 
 public interface JheService {
-	List<Homework>	selectHW();
+	List<Homework> selectHW();
+	int insertHomework(Homework homework);
 }

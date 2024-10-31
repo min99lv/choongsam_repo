@@ -45,7 +45,11 @@
             color: black;
             width: 100px;
             margin: 0 125px;
-
+        }
+        
+        .header_login a, .header_join a {
+        	text-decoration: none;
+            color: black;
         }
        
 
@@ -58,8 +62,8 @@
         <div class="header__logo">로고</div>
         <div class="header__navBar">
             <a href="#">수강신청</a>
-            <a href="/view_Hjh/myPageStd">마이페이지</a>
-            <a href="api/notice">공지사항</a>
+            <a href="/view_Hjh/adminPage">마이페이지</a>
+            <a href="/api/notice">공지사항</a>
             <a href="/video-details?videoId=5NbeB10h1wM">문의사항</a>
         </div>
             <div class="header_login"><a href="view_Ljm/login">로그인</a></div>

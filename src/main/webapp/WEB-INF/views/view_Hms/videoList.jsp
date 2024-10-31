@@ -43,7 +43,7 @@
         player = new YT.Player('player', {
             height: '778',
             width: '1377',
-            videoId: 'KhpO-7bHeAs',
+            videoId: '4HGg3PGxXTI',
             playerVars: {
                 rel: 0,
                 modestbranding: 1
@@ -124,47 +124,6 @@
             document.getElementById('status').innerText = "출석이 인정되지 않았습니다. 영상 시청을 완료해주세요.";
         }
     });
-    
-    //유튜브 api 자료 가져오기 함수
-    const apiKey = 'AIzaSyDB-l20C9L1cR8XYmyN9Olb-8TZ07ZPbd0';  // 유효한 API 키로 교체 필요
-    const videoId = 'KhpO-7bHeAs';  // 조회할 비디오 ID
-
-    $(document).ready(function(){
-        $.ajax({
-            url: "https://www.googleapis.com/youtube/v3/videos",
-            type: "GET",
-            data: {
-                part: 'snippet,contentDetails,statistics',
-                id: videoId,
-                key: apiKey
-            },
-            success: function(data) {
-            	console.log(data);
-                if (data.items && data.items.length > 0) {
-                    const item = data.items[0];
-                    const title = item.snippet.title;
-                    const description = item.snippet.description;
-                    const thumbnailUrl = item.snippet.thumbnails.high.url;
-                    const channelId = item.snippet.channelId;
-                    
-                    // YouTube 영상 정보를 출력
-                    const output = `
-                        <h3>${title}</h3>
-                        <p>${description}</p>
-                        <img src="${thumbnailUrl}" alt="${title}">
-                        <p>채널 ID: ${channelId}</p>
-                    `;
-                    $("#player").append(output);
-                } else {
-                    console.error("해당 비디오 정보를 찾을 수 없습니다.");
-                }
-            },
-            error: function(error) {
-                console.error("YouTube API 요청 오류:", error);
-            }
-        });
-    });
-    
 </script>
 <script src="https://www.youtube.com/iframe_api"></script>
 </body>
