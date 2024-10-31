@@ -3,9 +3,15 @@
 
 <mapper namespace = "com.postgre.choongsam.dto.jheMapper">
 	<select id="getAllHw" resultType="HOMEWORK">
-		SELECT	 l."LCTR_NAME", h."ASMT_NO", h."ASMT_NM"
-		FROM	 "HOMEWORK" AS h
-		JOIN	 "LECTURE" AS l ON l."LCTR_ID" = h."LCTR_ID"
-		ORDER BY "ASMT_NO" ASC
+		SELECT		 l."LCTR_NAME", h."ASMT_NM", u."USER_NAME", h."ASMT_NO", l."LCTR_ID"
+		FROM			"USER_INFO" AS u
+		JOIN			"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
+		JOIN			"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
+		WHERE		"USER_STATUS" = 1002
+		ORDER BY	h."ASMT_NM" ASC
 	</select>
+	<insert id="insertHomework" parameterType="Homework">
+		INSERT INTO "HOMEWORK" ("ASMT_NO", "LCTR_ID", "ASMT_NM", "ASMT_CN", "SBMSN_BGNG_YMD", "SBMSN_END_YMD", "FILE_GROUP")
+		VALUES (NEXTVAL('asmt_no_seq'), #{LCTR_ID}, #{ASMT_NM}, #{ASMT_CN}, #{SBMSN_BGNG_YMD}, #{SBMSN_END_YMD}, null)
+	</insert>
 </mapper>
