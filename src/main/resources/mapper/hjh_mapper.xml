@@ -3,7 +3,10 @@
  
 <mapper namespace="com.postgre.choongsam.mapper.hjh">
 
-	
+	 	<select id="teastdlist"  resultType="User_Info">
+		    SELECT user_id, user_name, email, address, phone_num, user_status
+		    FROM User_Info
+	</select>
 	
 		
 		
