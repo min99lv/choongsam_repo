@@ -7,15 +7,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>과제리스트</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	alert('${status == "success" ? "과제가 제출되었습니다." : "과제 제출에 실패했습니다. 다시 시도해 주세요."}');
+</script>
+<title>수강중인 강의 과제 리스트</title>
 </head>
 <body>
-	<h2>나는 과제리스트</h2>
+	<h2>나는 수강중인 강의 과제 리스트 (학생)</h2>
 	<table id="homeworkList">
 		<tr>
 			<th>강의명</th>
 			<th>강사명</th>
 			<th>과제명</th>
+			<th></th>
 		</tr>
 		<c:set var="previousName" value="" />
 		<c:set var="previousAsmtNm" value="" />
@@ -25,7 +30,8 @@
 				<tr>
 					<td>${HWList.lctr_name}</td>
 					<td>${HWList.user_name}</td>
-					<td>${HWList.ASMT_NM}</td>
+					<td><a href="/Jhe/updateHomework?ASMT_NO=${HWList.ASMT_NO}">${HWList.ASMT_NM}</a></td>
+					<td><input type="checkbox" name="delCheck" value="${HWList.ASMT_NO}"></td>
 				</tr>
 				<c:set var="previousName" value="${HWList.lctr_name}" />
 				<c:set var="previousprofNm" value="${HWList.user_name}" />
@@ -36,12 +42,14 @@
 				<tr>
 					<td></td>
 					<td></td>
-					<td>${HWList.ASMT_NM}</td>
+					<td><a href="/Jhe/updateHomework?ASMT_NO=${HWList.ASMT_NO}">${HWList.ASMT_NM}</a></td>
+					<td><input type="checkbox" name="delCheck" value="${HWList.ASMT_NO}"></td>
 				</tr>
 				<c:set var="previousAsmtNm" value="${HWList.ASMT_NM}" />
 			</c:if>
 		</c:forEach>
 	</table>
 	<a href="/Jhe/insertHomework"><button type="button">과제등록</button></a>
+	<button type="submit">삭제</button>
 </body>
 </html>
