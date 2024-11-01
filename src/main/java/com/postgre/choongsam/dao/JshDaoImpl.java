@@ -76,11 +76,154 @@ public class JshDaoImpl implements JshDao {
 		fileInfo.put("file_path", file_path);
 		
 		try {
-			result = session.insert(file_path)
+			result = session.insert("contsFileUpload",fileInfo);
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("JshDao contsFileUpload exception >> "+e.getMessage());
 		}
 		
+		return result;
+	}
+
+	@Override
+	public int fileLectureVideoUpload(Class_ScheduleAddVideo info) {
+		System.out.println("JshDao fileLectureVideoUpload start...");
+		
+		int result = 0;
+		
+		String conts_id = info.getConts_id();
+		String title = info.getVdo_file_nm();
+		String conts_url = info.getVdo_url_addr();
+		String viewing_period = info.getViewing_period();
+		Integer vdo_length = info.getVdo_length();
+		int chashi = info.getLctr_no();
+		int file_group = info.getFile_group();
+		int lctr_no = info.getLctr_no();
+		
+		Map<String, Object> lectureInfo = new HashMap<>();
+		
+		lectureInfo.put("conts_id", conts_id);
+		lectureInfo.put("title", title);
+		lectureInfo.put("conts_url", conts_url);
+		lectureInfo.put("viewing_period", viewing_period);
+		lectureInfo.put("vdo_length", vdo_length);
+		lectureInfo.put("chashi", chashi);
+		lectureInfo.put("file_group", file_group);
+		lectureInfo.put("lctr_no", lctr_no);
+		
+		
+		try {
+			result = session.insert("fileLectureVideoUpload", lectureInfo);
+		} catch (Exception e) {
+			System.out.println("JshDao lectureVideoUpload exception >> "+e.getMessage());
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int lectureVideoUpload(Class_ScheduleAddVideo info) {
+		System.out.println("JshDao lectureVideoUpload start...");
+		
+		int result = 0;
+		
+		String conts_id = info.getConts_id();
+		String title = info.getVdo_file_nm();
+		String conts_url = info.getVdo_url_addr();
+		String viewing_period = info.getViewing_period();
+		Integer vdo_length = info.getVdo_length();
+		int chashi = info.getLctr_no();
+		int lctr_no = info.getLctr_no();
+		
+		Map<String, Object> lectureInfo = new HashMap<>();
+		
+		lectureInfo.put("conts_id", conts_id);
+		lectureInfo.put("title", title);
+		lectureInfo.put("conts_url", conts_url);
+		lectureInfo.put("viewing_period", viewing_period);
+		lectureInfo.put("vdo_length", vdo_length);
+		lectureInfo.put("chashi", chashi);
+		lectureInfo.put("lctr_no", lctr_no);
+		
+		try {
+			result = session.insert("lectureVideoUpload", lectureInfo);
+		} catch (Exception e) {
+			System.out.println("JshDao lectureVideoUpload exception >> "+e.getMessage());
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int syllabusUpload(Class_ScheduleAddVideo info) {
+		System.out.println("JshDao lectureVideoUpload start...");
+		int result = 0;
+		
+		int lctr_no = info.getLctr_no();
+		String lctr_id = info.getLctr_id();
+		String conts_id = info.getConts_id();
+		int user_seq = info.getUser_seq();
+		String lctr_otln = info.getLctr_otln();
+		
+		Map<String, Object> syllabusInfo = new HashMap<>();
+		
+		syllabusInfo.put("lctr_no", lctr_no);
+		syllabusInfo.put("lctr_id", lctr_id);
+		syllabusInfo.put("conts_id", conts_id);
+		syllabusInfo.put("user_seq", user_seq);
+		syllabusInfo.put("lctr_otln", lctr_otln);
+		
+		try {
+			result = session.insert("syllabusUpload", syllabusInfo);
+		} catch (Exception e) {
+			System.out.println("JshDao syllabusUpload exception >> "+e.getMessage());
+		}
+		
+		
+		return result;
+	}
+
+	@Override
+	public int chpTimeUpload(Class_ScheduleAddVideo info) {
+		System.out.println("JshDao chpTimeUpload start...");
+		int result = 0;
+		
+		String conts_id = info.getConts_id();
+		Integer chp_time = info.getConts_chptime();
+		String cap_ttl = info.getConts_chpttl();
+		Integer chp_time2 = info.getConts_chptime2();
+		String cap_ttl2 = info.getConts_chpttl2();
+		Integer chp_time3 = info.getConts_chptime3();
+		String cap_ttl3 = info.getConts_chpttl3();
+		
+		System.out.println("dao >> "+chp_time);
+		System.out.println("dao >> "+chp_time2);
+		System.out.println("dao >> "+chp_time3);
+		
+		Map<String, Object> chpInfo = new HashMap<>();
+		chpInfo.put("conts_id", conts_id);
+		chpInfo.put("chp_time", chp_time);
+		chpInfo.put("cap_ttl", cap_ttl);
+		
+		try {
+			result = session.insert("chpTimeUpload", chpInfo);
+			
+			if(chp_time2!=null&&chp_time2!=0) {
+				result = 0;
+				chpInfo.put("chp_time", chp_time2);
+				chpInfo.put("cap_ttl", cap_ttl2);
+				
+				result = session.insert("chpTimeUpload", chpInfo);
+			}
+			else if(chp_time3!=null&&chp_time3!=0) {
+				result=0;
+				chpInfo.put("chp_time", chp_time3);
+				chpInfo.put("cap_ttl", cap_ttl3);
+				
+				result = session.insert("chpTimeUpload", chpInfo);
+			}
+		} catch (Exception e) {
+			System.out.println("JshDao chpTimeUpload exception >> "+e.getMessage());
+		}
 		return result;
 	}
 
