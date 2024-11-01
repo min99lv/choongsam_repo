@@ -172,7 +172,7 @@ public class JshController {
 		int lctr_no = video.getLctr_no();											//차시 정보 가져오기
 		String viewing_period = video.getViewing_period();				//출석인정기간 가져오기
 		String vdo_url_addr = video.getVdo_url_addr();					//유튜브ID 가져오기
-		String vdo_length = video.getVdo_length();							//영상 전체길이 가져오기
+		//String vdo_length = video.getVdo_length();							//영상 전체길이 가져오기
 		String conts_chptime1 = bookmark.getConts_chptime(); 		//챕터시간1 가져오기
 		String conts_chpttl1 = bookmark.getConts_chpttl();				//챕터제목1 가져오기
 		String conts_chptime2 = bookmark.getConts_chptime2();	//챕터시간2 가져오기
@@ -186,7 +186,7 @@ public class JshController {
 		System.out.println("title >> "+title);
 		System.out.println("lctr_no >> "+lctr_no);
 		System.out.println("vdo_url_addr >> "+vdo_url_addr);
-		System.out.println("vdo_length >> "+vdo_length+"초");
+		//System.out.println("vdo_length >> "+vdo_length+"초");
 		System.out.println("conts_chptime1 >> "+conts_chptime1);
 		System.out.println("conts_chpttl1 >> "+conts_chpttl1);
 		System.out.println("conts_chptime2 >> "+conts_chptime2);
@@ -240,7 +240,7 @@ public class JshController {
 		info.setLctr_no(lctr_no);								//차시
 		info.setViewing_period(viewing_period);	//출석인정기간
 		info.setVdo_url_addr(vdo_url_addr);			//유튜브ID
-		info.setVdo_length(vdo_length);					//영상전체길이
+		//info.setVdo_length(vdo_length);					//영상전체길이
 		info.setConts_chptime(conts_chptime1);	//챕터시간1
 		info.setConts_chptime2(conts_chptime2);	//챕터시간2
 		info.setConts_chptime3(conts_chptime3);	//챕터시간3
