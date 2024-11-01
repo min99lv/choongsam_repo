@@ -11,4 +11,6 @@ public interface JshService {
 
 	List<Class_ScheduleAddVideo> getStartDay(String lctr_id);
 
+	void contsUpload(Class_ScheduleAddVideo info);
+
 }
