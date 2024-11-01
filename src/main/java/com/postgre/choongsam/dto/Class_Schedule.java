@@ -4,11 +4,13 @@ import lombok.Data;
 
 @Data
 public class Class_Schedule {	// 차시 진행 현황
-	private	int		lctr_no;		// 차시
-	private	String	lctr_id;			// 강의 번호
-	private	String	conts_id;		// 영상 번호
-	private int		user_seq;		// 학생 번호
-	private	int	conts_final;	// FINAL 위치
-	private	int	conts_max;	// MAX 위치
-	private int		conts_prgrt;	// 강의진행율
+
+	private	int			lctr_no;		// 차시
+	private	String		lctr_id;			// 강의 번호
+	private	String		conts_id;		// 영상 번호
+	private 	int			user_seq;		// 학생 번호
+	private	Integer		conts_final;	// FINAL 위치
+	private	Integer		conts_max;	// MAX 위치
+	private 	int				conts_prgrt;	// 강의진행율
+
 }

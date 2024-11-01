@@ -7,15 +7,15 @@ public class Class_ScheduleAddVideo {
 	private	int		lctr_no;		// 차시
 	private	String	lctr_id;			// 강의 번호
 	private	String	conts_id;		// 영상 번호
-	private int		user_seq;		// 학생 번호
-	private	String	conts_final;	// FINAL 위치
-	private	String	conts_max;	// MAX 위치
+	private 	int		user_seq;		// 학생 번호
+	private	Integer		conts_final;	// FINAL 위치
+	private	Integer	conts_max;	// MAX 위치
 	private int		conts_prgrt;	// 강의진행율
 	
 	private	String	vdo_file_nm;	// 영상 제목
 	private	String	vdo_url_addr;	// 영상 URL 주소
 	private String	viewing_period;	// 시청 가능 기간
-	private	String	vdo_length;		// 영상 길이
+	private	int	vdo_length;		// 영상 길이
 	private int		file_group;		// 파일 그룹
 	
 	private String 		onoff;				// 온오프라인 여부
@@ -41,16 +41,23 @@ public class Class_ScheduleAddVideo {
 	private String 	del_state;			//삭제여부
     private int    	user_status;     	//회원분류
     
-	private	String	conts_chptime;	// 챕터 시간
-	private String	conts_chpttl;		// 챕터 내용
-	private	String	conts_chptime2;	// 챕터 시간
-	private String	conts_chpttl2;		// 챕터 내용
-	private	String	conts_chptime3;	// 챕터 시간
-	private String	conts_chpttl3;		// 챕터 내용
+	private Integer 	conts_chptime;	// 챕터 시간
+	private String		conts_chpttl;		// 챕터 내용
+	private Integer 	conts_chptime2;	// 챕터 시간
+	private String		conts_chpttl2;		// 챕터 내용
+	private Integer 	conts_chptime3;	// 챕터 시간
+	private String		conts_chpttl3;		// 챕터 내용
+	private String 	lctr_otln;				// 강의개요
 	
 	private int 		file_seq; 				// 소일련번호
 	private String 	file_nm; 				// 실제파일명
 	private String 	file_extn_nm; 			// 확장자
 	private long 		file_sz; 				// 파일 크기
 	private String 	file_path_nm; 			// 파일 경로
+	
+	private Integer conts_chptime_sec1;
+	private Integer conts_chptime_sec2;
+	private Integer conts_chptime_sec3;
+	
+	
 }

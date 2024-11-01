@@ -40,36 +40,7 @@ public class JshController {
 	private final JshService service;
 	
 	
-	@GetMapping("/sh_lecture_student")
-	public String StudentLecture(Model model,
-								 @RequestParam String lctr_id,
-								 @RequestParam int user_seq) {
-		System.out.println("JshController StudentLecture start...");
-		System.out.println("JshController StudentLecture lctr_id >> "+lctr_id);
-		System.out.println("JshController StudentLecture user_seq >> "+user_seq);
-		
-		List<Class_ScheduleAddVideo> contentList = service.studentLecture(lctr_id, user_seq);
-		System.out.println("JshController StudentLecture contentList >> "+contentList);
-		
-		//강사의 이름만 필터링해서 꺼내는 동작
-		Optional<String> lectName = contentList.stream()
-								                  .map(Class_ScheduleAddVideo::getLctr_name)
-								                  .findFirst();
-		Optional<String> teacherName = contentList.stream()
-								                  .map(Class_ScheduleAddVideo::getUser_name)
-								                  .findFirst();
-		System.out.println("강의명 >> "+lectName);
-		System.out.println("강사명 >> "+teacherName);
-		
-		
-		
-		
-		model.addAttribute("lectName", lectName);
-		model.addAttribute("teacherName", teacherName);
-		model.addAttribute("contentList", contentList);
-		
-		return "view_Jsh/stuLecture";
-	}
+	//교수
 	
 	@GetMapping("/sh_lecture_teacher")
 	public String sh_lecture_teacher(Model model,
@@ -172,13 +143,15 @@ public class JshController {
 		int lctr_no = video.getLctr_no();											//차시 정보 가져오기
 		String viewing_period = video.getViewing_period();				//출석인정기간 가져오기
 		String vdo_url_addr = video.getVdo_url_addr();					//유튜브ID 가져오기
-		//String vdo_length = video.getVdo_length();							//영상 전체길이 가져오기
-		String conts_chptime1 = bookmark.getConts_chptime(); 		//챕터시간1 가져오기
-		String conts_chpttl1 = bookmark.getConts_chpttl();				//챕터제목1 가져오기
-		String conts_chptime2 = bookmark.getConts_chptime2();	//챕터시간2 가져오기
-		String conts_chpttl2 = bookmark.getConts_chpttl2();			//챕터제목2 가져오기
-		String conts_chptime3 = bookmark.getConts_chptime3(); 	//챕터시간3 가져오기
-		String conts_chpttl3 = bookmark.getConts_chpttl3();			//챕터제목3 가져오기
+
+		int vdo_length = video.getVdo_length();								//영상 전체길이 가져오기
+		Integer conts_chptime1 = bookmark.getConts_chptime_sec1(); // 챕터시간1 가져오기
+		String conts_chpttl1 = bookmark.getConts_chpttl(); 						// 챕터제목1 가져오기
+		Integer conts_chptime2 = bookmark.getConts_chptime_sec2(); 	// 챕터시간2 가져오기
+		String conts_chpttl2 = bookmark.getConts_chpttl2(); 					// 챕터제목2 가져오기
+		Integer conts_chptime3 = bookmark.getConts_chptime_sec3();	// 챕터시간3 가져오기
+		String conts_chpttl3 = bookmark.getConts_chpttl3();					 // 챕터제목3 가져오기
+
 		
 		System.out.println("file.getOriginalFilename >> "+file.getOriginalFilename());
 		
@@ -196,9 +169,21 @@ public class JshController {
 		System.out.println("viewing_period >> "+viewing_period);
 		
 		//시간 초단위 변경 메소드 출력
-		Integer chapTimeSec1 = getSec(conts_chptime1);
+		/*Integer chapTimeSec1 = getSec(conts_chptime1);
 		Integer chapTimeSec2 = getSec(conts_chptime2);
 		Integer chapTimeSec3 = getSec(conts_chptime3);
+		String chapTimeSec1Str = null;
+		String chapTimeSec2Str = null;
+		String chapTimeSec3Str = null;
+		
+		info.setConts_chptime(chapTimeSec1);		//초단위챕터시간1
+		info.setConts_chptime2(chapTimeSec2);	//초단위챕터시간2
+		info.setConts_chptime3(chapTimeSec3);	//초단위챕터시간3*/
+		
+		info.setConts_chptime(conts_chptime1);		//초단위챕터시간1
+		info.setConts_chptime2(conts_chptime2);	//초단위챕터시간2
+		info.setConts_chptime3(conts_chptime3);	//초단위챕터시간3
+		
 		
 		
 		String originFile = file.getOriginalFilename();
@@ -225,8 +210,7 @@ public class JshController {
 		        info.setFile_nm(originFileName);		//실제파일명
 		        info.setFile_extn_nm(fileSuffix);			//파일 확장자명
 		        info.setFile_sz(fileSize);						//파일 크기
-		        info.setFile_path_nm(uploadPath);	//파일경로
-		        
+		        info.setFile_path_nm(uploadPath+"\\"+originFile);	//파일경로
 		        
 		    } else {
 		        // 파일 확장자가 없는 경우 처리
@@ -236,29 +220,19 @@ public class JshController {
 		    System.out.println("업로드된 파일이 없습니다.");
 		}
 		
-		info.setVdo_file_nm(title);							//제목
-		info.setLctr_no(lctr_no);								//차시
-		info.setViewing_period(viewing_period);	//출석인정기간
-		info.setVdo_url_addr(vdo_url_addr);			//유튜브ID
-		//info.setVdo_length(vdo_length);					//영상전체길이
-		info.setConts_chptime(conts_chptime1);	//챕터시간1
-		info.setConts_chptime2(conts_chptime2);	//챕터시간2
-		info.setConts_chptime3(conts_chptime3);	//챕터시간3
-		info.setConts_chpttl(conts_chpttl1);			//챕터내용1
-		info.setConts_chpttl2(conts_chpttl2);			//챕터내용1
-		info.setConts_chpttl3(conts_chpttl3);			//챕터내용1
+
 		
 		return "view_Jsh/teaLecture";
 	}
 	
-	
+	/*
 	// 시간형식을 초로 변환해주는 메소드 (ex: 00:02:20 >> 140)
-    public Integer getSec (String chptimeString) {
+    public Integer getSec (Integer chptimeString) {
 
     	Integer totalSeconds = null;
     	
     	//null이 아닌 겨웅에만 실행, null인 경우 null반환
-    	if(chptimeString != null && !chptimeString.trim().isEmpty()) {
+    	if(chptimeString != null) {
     		// HH:mm:ss 형식으로 LocalTime 객체로 변환
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalTime time = LocalTime.parse(chptimeString, formatter);
@@ -271,6 +245,7 @@ public class JshController {
         
 		return totalSeconds;
     }
+    */
     
     
     
@@ -320,6 +295,39 @@ public class JshController {
 	 		return result;
 	 	}
     
+	 	
+	 	//************************************************************************************************************
+	 	
+	 	//학생
+	 	@GetMapping("/sh_lecture_student")
+		public String StudentLecture(Model model,
+									 @RequestParam String lctr_id,
+									 @RequestParam int user_seq) {
+			System.out.println("JshController StudentLecture start...");
+			System.out.println("JshController StudentLecture lctr_id >> "+lctr_id);
+			System.out.println("JshController StudentLecture user_seq >> "+user_seq);
+			
+			List<Class_ScheduleAddVideo> contentList = service.studentLecture(lctr_id, user_seq);
+			System.out.println("JshController StudentLecture contentList >> "+contentList);
+			
+			//강사의 이름만 필터링해서 꺼내는 동작
+			String lectName = contentList.stream()
+									                  .map(Class_ScheduleAddVideo::getLctr_name)
+									                  .findFirst()
+									                  .orElse("");
+			String teacherName = contentList.stream()
+									                  .map(Class_ScheduleAddVideo::getUser_name)
+									                  .findFirst()
+									                  .orElse("");
+			System.out.println("강의명 >> "+lectName);
+			System.out.println("강사명 >> "+teacherName);
+			
+			model.addAttribute("lectName", lectName);
+			model.addAttribute("teacherName", teacherName);
+			model.addAttribute("contentList", contentList);
+			
+			return "view_Jsh/stuLecture";
+		}
     
 	
 	

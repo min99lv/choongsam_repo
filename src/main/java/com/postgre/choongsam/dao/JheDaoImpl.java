@@ -20,11 +20,11 @@ public class JheDaoImpl implements JheDao {
 	private final SqlSession session;
 
 	@Override
-	public List<Homework> selectHW() {
+	public List<Homework> profHomeworkList() {
 		System.out.println("따오");
 		List<Homework> HWList = null;
 		try {
-			HWList = session.selectList("getAllHw",HWList);
+			HWList = session.selectList("profHomeworkList");
 		} catch (Exception e) {
 			System.out.println("selectHW error: " + e.getMessage());
 		}
@@ -46,5 +46,42 @@ public class JheDaoImpl implements JheDao {
 			
 		}
 		return insHWList;
+	}
+
+	@Override
+	public Homework findById(Homework homework) {
+		System.out.println("과제 수정 이따오");
+		Homework findByASMT = null;
+		try {
+			findByASMT = session.selectOne("findById", homework);
+		} catch (Exception e) {
+			System.out.println("findById error: " + e.getMessage());
+		}
+		return findByASMT;
+	}
+
+	@Override
+	public int updateHomework(Homework homework) {
+		System.out.println("과제 수정 해따오");
+		int upHomeworkList = 0;
+		try {
+			upHomeworkList = session.update("updateHomework", homework);
+		} catch (Exception e) {
+			System.out.println("updateHomework error: " + e.getMessage());
+		}
+		return upHomeworkList;
+	}
+
+	@Override
+	public void deleteHomework(int asmtNo) {
+		System.out.println("과제삭제 와따오");
+		session.delete("delHomework", asmtNo);
+	}
+
+	public void deleteHomeworkList(List<Integer> asmtNoList) {
+		System.out.println("과제삭제 리스트여따오");
+		for (Integer asmtNo : asmtNoList) {
+			deleteHomework(asmtNo);
+		}
 	}
 }
