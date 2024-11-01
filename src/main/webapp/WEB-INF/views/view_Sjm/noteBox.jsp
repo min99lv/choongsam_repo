@@ -5,7 +5,7 @@
 
 		<head>
 			<meta charset="UTF-8">
-			<title>공지사항</title>
+			<title>쪽지함</title>
 			<style>
 				body {
 					margin: 0;
@@ -42,7 +42,6 @@
 
 				table {
 					padding: 0;
-					width: 1280px;
 					border-top: 2px solid black;
 				}
 
@@ -174,6 +173,50 @@ td a:hover {
 		</head>
 		<script type="text/javascript">
 		
+		 document.addEventListener('DOMContentLoaded', function() {
+		        // 페이지 로드 시 쪽지 목록을 가져오는 함수
+		        fetchNotes();
+
+		        function fetchNotes() {
+		            fetch('/api/note')
+		                .then(response => {
+		                    if (!response.ok) {
+		                        throw new Error('네트워크 오류 발생');
+		                    }
+		                    return response.json();
+		                })
+		                .then(data => {
+		                    // 테이블에 데이터를 추가하는 함수 호출
+		                    populateNoteTable(data);
+		                })
+		                .catch(error => console.error('에러:', error));
+		        }
+
+		        function populateNoteTable(notes) {
+		            const tableBody = document.querySelector('.list tbody');
+		            tableBody.innerHTML = ''; // 기존 데이터 초기화
+		            
+		            if (notes.length === 0) {
+		                const emptyRow = `<tr><td colspan="3" style="text-align: center;">등록된 쪽지가 없습니다.</td></tr>`;
+		                tableBody.innerHTML = emptyRow;
+		                return;
+		            }
+
+		            let rows = '';
+		            notes.forEach((note, index) => {
+		            	 console.log(note); // 각 노트 객체 확인
+		            	 rows += `
+		            	        <tr>
+		            	            <td>`+ note.note_sn +`</td>
+		            	            <td>`+note.note_ttl+`</td>
+		            	            <td>`+note.sndpty_seq+`</td> <!-- note_cn으로 수정 -->
+		            	        </tr>
+		            	    `;
+		            });
+		            tableBody.innerHTML = rows; // 모든 행을 한 번에 추가
+		        }
+
+		    });
 		
 		</script>
 
@@ -183,8 +226,21 @@ td a:hover {
 			</header>
 
 			<div class="container">
+			
+			 <div class="sidebar">
+        <h2>네비게이션</h2>
+        <ul>
+            <li><a href="/api/home">전체쪽지</a></li>
+            <li><a href="/api/notice">받은쪽지</a></li>
+            <li><a href="/api/messages">보낸쪽지</a></li>
+            <li><a href="/api/profile">쪽지 보내기</a></li>
+            <!-- 추가적인 링크를 여기 추가할 수 있습니다. -->
+        </ul>
+    </div>
+			
+			
 				<div class="contents">
-					<h1>공지사항</h1>
+					<h1>쪽지함</h1>
 				</div>
 
 				<div class="contents1" >
@@ -200,7 +256,7 @@ td a:hover {
 						</div>
 					</form>
 
-					<a class="writeNoticeBtn" href="/api/notice/new">공지사항 작성</a>
+					<a class="writeNoticeBtn" href="/api/notice/new">쪽지 보내기</a>
 				</div>
 
 
@@ -210,32 +266,14 @@ td a:hover {
 							<tr>
 								<th>번호</th>
 								<th>제목</th>
-								<th>등록일</th>
+								<th>보낸사람</th>
 							</tr>
 						</thead>
-					<c:if test="${total>0}">
+					
 						<tbody>
-						<c:set var="startIndex" value="${total - (page.currentPage - 1) * page.rowPage}" />
 						
-							<c:forEach var="notice" items="${noticeList}" varStatus="status">
-								<tr>
-									<td>${startIndex - status.index}</td>
-									<td><a href="/view_Sjm/noticeDetail?ntc_mttr_sn=${notice.ntc_mttr_sn}">${notice.ntc_mttr_ttl}</a></td>
-									<td>${notice.ntc_mttr_dt}</td>
-								</tr>
-							</c:forEach>
 						</tbody>
-					</c:if>
-
-
-
-			<c:if test="${total == 0}">
-        <tbody>
-            <tr>
-                <td colspan="3" style="text-align: center;">등록된 공지사항이 없습니다.</td>
-            </tr>
-        </tbody>
-    </c:if>
+					
 					</table>
 
 

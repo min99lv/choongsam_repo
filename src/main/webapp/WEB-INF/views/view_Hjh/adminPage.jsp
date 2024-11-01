@@ -98,10 +98,7 @@
     </ul>
 </nav>
 
-<main>
 
-
-</main>
 
 </body>
 </html>
