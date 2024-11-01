@@ -119,49 +119,6 @@
             console.log('vdo_length >> ' + durationInSeconds + ' 초'); // 수정된 로그 출력
             document.getElementById('vdo_length').value = durationInSeconds; // 비디오 길이를 정수로 폼 필드에 설정
         }
-        
-        //챕터시간을 초로 변경 후 숫자타입으로 컨트롤러에 전송하는 함수
-        function convertDurationToSeconds() {
-		    console.log("convertDurationToSeconds function called"); // 함수가 호출되었는지 확인
-		    const timeInputs = [
-		        { timeInputId: 'conts1_chptime', secondsInputId: 'conts_chptime_sec1' },
-		        { timeInputId: 'conts2_chptime', secondsInputId: 'conts_chptime_sec2' },
-		        { timeInputId: 'conts3_chptime', secondsInputId: 'conts_chptime_sec3' },
-		    ];
-		
-		    timeInputs.forEach(({ timeInputId, secondsInputId }) => {
-		        const timeInput = document.querySelector(`input[name="${timeInputId}"]`);
-		        if (!timeInput) {
-		            console.error(`Input field not found for: ${timeInputId}`);
-		            return; // 또는 continue; 를 사용하여 다음 요소로 넘어갑니다.
-		        }
-		
-		        const timeValue = timeInput.value;
-		        alert(`Input value for ${timeInputId}: ${timeValue}`); // 입력 값 로그
-		
-		        if (timeValue) {
-		            const timeParts = timeValue.split(':').map(Number);
-		            let totalSeconds = 0;
-		
-		            if (timeParts.length === 3) { // HH:MM:SS 형식
-		                const [hours, minutes, seconds] = timeParts;
-		                totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-		            } else if (timeParts.length === 2) { // MM:SS 형식
-		                const [minutes, seconds] = timeParts;
-		                totalSeconds = (minutes * 60) + seconds;
-		            }
-		
-		            document.getElementById(secondsInputId).value = totalSeconds; // 초로 저장
-		            alert(`Total seconds for ${secondsInputId}: ${totalSeconds}`); // 초로 변환된 값 로그
-		        } else {
-		            document.getElementById(secondsInputId).value = 0; // 기본값을 0으로 설정
-		            alert(`No input provided for ${timeInputId}. Setting ${secondsInputId} to 0`); // 기본값 로그
-		        }
-		    });
-		}
-
-
-
 
     </script>
 </head>
@@ -213,20 +170,23 @@
             <div id="chapter">
                 <div class="chapterTime">
                     <label class="text">챕터시간 입력</label>
-                    <input type="text" name="conts1_chptime" id="conts1_chptime" placeholder="HH:MM:SS 형식으로 입력">
-                    <input type="hidden" name="conts_chptime_sec1" id="conts_chptime_sec1">
+                    <input type="text" name="chp_str1">
+                    <label class="text">챕터내용 입력</label>
+                    <input type="text" name="conts_chpttl">
                 </div>
                 
                 <div class="chapterTime">
                     <label class="text">챕터시간 입력</label>
-                    <input type="text" name="conts2_chptime" id="conts2_chptime" placeholder="HH:MM:SS 형식으로 입력">
-                    <input type="hidden" name="conts_chptime_sec2" id="conts_chptime_sec2">
+                    <input type="text" name="chp_str2">
+                    <label class="text">챕터내용 입력</label>
+                    <input type="text" name="conts_chpttl2">
                 </div>
                 
                 <div class="chapterTime">
                     <label class="text">챕터시간 입력</label>
-                    <input type="text" name="conts3_chptime" id="conts3_chptime" placeholder="HH:MM:SS 형식으로 입력">
-                    <input type="hidden" name="conts_chptime_sec3" id="conts_chptime_sec3">
+                    <input type="text" name="chp_str3">
+                    <label class="text">챕터내용 입력</label>
+                    <input type="text" name="conts_chpttl3">
                 </div>
             </div>
             
@@ -238,7 +198,7 @@
             <input type="hidden" name="lctr_id" value="${lctr_id}">
     		<input type="hidden" name="user_seq" value="${user_seq}">
             
-            <button type="button" id="convertButton" onclick="convertDurationToSeconds(); document.querySelector('form').submit();">수업 등록</button>
+             <button type="submit">수업 등록</button>
 
         
     	</div>
