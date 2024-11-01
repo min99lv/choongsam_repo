@@ -18,6 +18,7 @@
 
  
 		<typeAlias alias="Notice" type="com.postgre.choongsam.dto.Notice" />
+		<typeAlias alias="Note" type="com.postgre.choongsam.dto.Note" />
 
 		<typeAlias alias="Homework" type="com.postgre.choongsam.dto.Homework" />
 		
