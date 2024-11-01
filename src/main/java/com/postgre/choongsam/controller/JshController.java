@@ -143,6 +143,7 @@ public class JshController {
 		int lctr_no = video.getLctr_no();											//차시 정보 가져오기
 		String viewing_period = video.getViewing_period();				//출석인정기간 가져오기
 		String vdo_url_addr = video.getVdo_url_addr();					//유튜브ID 가져오기
+
 		int vdo_length = video.getVdo_length();								//영상 전체길이 가져오기
 		Integer conts_chptime1 = bookmark.getConts_chptime_sec1(); // 챕터시간1 가져오기
 		String conts_chpttl1 = bookmark.getConts_chpttl(); 						// 챕터제목1 가져오기
@@ -150,6 +151,7 @@ public class JshController {
 		String conts_chpttl2 = bookmark.getConts_chpttl2(); 					// 챕터제목2 가져오기
 		Integer conts_chptime3 = bookmark.getConts_chptime_sec3();	// 챕터시간3 가져오기
 		String conts_chpttl3 = bookmark.getConts_chpttl3();					 // 챕터제목3 가져오기
+
 		
 		System.out.println("file.getOriginalFilename >> "+file.getOriginalFilename());
 		
@@ -157,7 +159,7 @@ public class JshController {
 		System.out.println("title >> "+title);
 		System.out.println("lctr_no >> "+lctr_no);
 		System.out.println("vdo_url_addr >> "+vdo_url_addr);
-		System.out.println("vdo_length >> "+vdo_length+"초");
+		//System.out.println("vdo_length >> "+vdo_length+"초");
 		System.out.println("conts_chptime1 >> "+conts_chptime1);
 		System.out.println("conts_chpttl1 >> "+conts_chpttl1);
 		System.out.println("conts_chptime2 >> "+conts_chptime2);
@@ -218,7 +220,7 @@ public class JshController {
 		    System.out.println("업로드된 파일이 없습니다.");
 		}
 		
-		//service.contsUpload(info);
+
 		
 		return "view_Jsh/teaLecture";
 	}
