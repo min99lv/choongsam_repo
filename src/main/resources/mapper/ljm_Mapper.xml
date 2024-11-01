@@ -7,4 +7,9 @@
 		FROM "LOGIN_INFO" 
 		WHERE "USER_ID" = #{user_id}
 	</select>
+	
+	<insert id="signup" parameterType="Login_Info">
+		INSERT INTO "LOGIN_INFO" ("USER_SEQ", "USER_ID", "PASSWORD", "USER_STATUS")
+		VALUES (NEXTVAL('user_seq'), #{user_id}, #{password}, #{user_status})
+	</insert>
 </mapper>

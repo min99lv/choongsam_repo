@@ -5,5 +5,7 @@ import com.postgre.choongsam.dto.Login_Info;
 public interface LjmDao {
 
 	Login_Info login(String user_id);
+
+	int signup(Login_Info login_Info);
 	
 }
