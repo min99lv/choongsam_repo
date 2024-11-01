@@ -33,6 +33,7 @@
 		height: 203px;
 		background-color: white;
 		margin-bottom: 11px;
+		display: inline-block;
 	}
 	
 	#thumbnail {
@@ -69,16 +70,27 @@
 	
 		<c:forEach var="conts" items="${contentList}">
 			<div class="list">
-				<img id="thumbnail" alt="유튜브 썸네일" src="https://img.youtube.com/vi/${conts.vdo_url_addr }/default.jpg">
+				<div>
+					<img id="thumbnail" alt="유튜브 썸네일" src="https://img.youtube.com/vi/${conts.vdo_url_addr }/default.jpg">
+				</div>
 				
 				<div class="vdoInfor">
 					<div class="time">
-						<div id="chashi">${conts.lctr_no }</div>
-						<div id="gigan"></div>
-					</div>
+    <div id="chashi">${conts.lctr_no}</div>
+    <div id="gigan">
+        <c:choose>
+            <c:when test="${conts.lctr_no == 1}">
+                ${conts.lctr_start_date} ~ ${conts.viewing_period}
+            </c:when>
+            <c:otherwise>
+                ${conts.befor_period} ~ ${conts.viewing_period}
+            </c:otherwise>
+        </c:choose>
+    </div>
+</div>
 					
-					<div id="name">
-						${conts.lctr_no }
+					<div id="title">
+						${conts.vdo_file_nm }
 					</div>
 					
 					<div id="jindo">

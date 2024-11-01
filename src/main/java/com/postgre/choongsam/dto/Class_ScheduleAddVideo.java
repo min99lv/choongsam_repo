@@ -14,7 +14,7 @@ public class Class_ScheduleAddVideo {
 	
 	private	String	vdo_file_nm;	// 영상 제목
 	private	String	vdo_url_addr;	// 영상 URL 주소
-	private String	viewing_period;	// 시청 가능 기간
+	private String		viewing_period;	// 시청 가능 기간
 	private	int	vdo_length;		// 영상 길이
 	private int		file_group;		// 파일 그룹
 	
@@ -55,9 +55,11 @@ public class Class_ScheduleAddVideo {
 	private long 		file_sz; 				// 파일 크기
 	private String 	file_path_nm; 			// 파일 경로
 	
-	private Integer conts_chptime_sec1;
-	private Integer conts_chptime_sec2;
-	private Integer conts_chptime_sec3;
+	private String chp_str1;			//스트링챕터시간
+	private String chp_str2;			//스트링챕터시간
+	private String chp_str3;			//스트링챕터시간
+	
+	private String befor_period;		//이전차시 수강기간
 	
 	
 }
