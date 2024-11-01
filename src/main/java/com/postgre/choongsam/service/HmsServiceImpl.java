@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.postgre.choongsam.dao.HmsDao;
+import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Lecture_Video;
 
 import lombok.RequiredArgsConstructor;
@@ -71,9 +72,13 @@ public class HmsServiceImpl implements HmsService{
 	            video.setVdo_file_nm(title);
 	            video.setFile_data(description);
 	            video.setVdo_url_addr(thumbnailUrl);
-	            video.setVdo_length(duration);
+	            video.setVdo_length(durationInSeconds);
+	            
+	            //데이터베이스에 저장
+	            HD.APIdata(videoId);
 
 	            System.out.println("duration->" + duration);
+	            System.out.println("durationInSeconds->" + durationInSeconds);
 	            System.out.println("API 응답: " + response); // 전체 응답 확인
 	            return "view_Hms/videoView";
 	        } else {
@@ -115,6 +120,16 @@ public class HmsServiceImpl implements HmsService{
 		System.out.println("msService findAllVideo start..");		
 		return HD.findAllVideo();
 	}
+
+	//뷰에서 값 가져와서 insert해주기
+	@Override
+	public void saveWatchTime(Class_Schedule class_schedule) {
+		System.out.println("msService saveWatchTime start...");
+		HD.saveWatchTime(class_schedule);
+	}
+
+	
+
 
 	
 	
