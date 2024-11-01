@@ -2,16 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace = "com.postgre.choongsam.dto.jheMapper">
-	<select id="getAllHw" resultType="HOMEWORK">
-		SELECT		 l."LCTR_NAME", h."ASMT_NM", u."USER_NAME", h."ASMT_NO", l."LCTR_ID"
-		FROM			"USER_INFO" AS u
-		JOIN			"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
-		JOIN			"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
-		WHERE		"USER_STATUS" = 1002
-		ORDER BY	h."ASMT_NM" ASC
+	<select id="profHomeworkList" resultType="HOMEWORK">
+		SELECT		u."USER_NAME", l."LCTR_ID", l."LCTR_NAME",
+					h."ASMT_NO", h."LCTR_ID", h."ASMT_NM", h."ASMT_CN",
+					h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD", h."FILE_GROUP"
+		FROM		"USER_INFO" AS u
+		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
+		JOIN		"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
+		WHERE		L."USER_SEQ" = 10010
+		ORDER BY	h."SBMSN_BGNG_YMD" ASC
+	</select>
+	<select id="studHomeworkList" resultType="HOMEWORK">
+		SELECT		u."USER_NAME", l."LCTR_ID", l."LCTR_NAME",
+					h."ASMT_NO", h."LCTR_ID", h."ASMT_NM", h."ASMT_CN",
+					h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD", h."FILE_GROUP"
+		FROM		"USER_INFO" AS u
+		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
+		JOIN		"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
+		WHERE		L."USER_SEQ" = 10012
+		ORDER BY	l."LCTR_NAME" ASC, h."SBMSN_BGNG_YMD" ASC
 	</select>
 	<insert id="insertHomework" parameterType="Homework">
 		INSERT INTO "HOMEWORK" ("ASMT_NO", "LCTR_ID", "ASMT_NM", "ASMT_CN", "SBMSN_BGNG_YMD", "SBMSN_END_YMD", "FILE_GROUP")
 		VALUES (NEXTVAL('asmt_no_seq'), #{LCTR_ID}, #{ASMT_NM}, #{ASMT_CN}, #{SBMSN_BGNG_YMD}, #{SBMSN_END_YMD}, null)
 	</insert>
+	<select id="findById" parameterType="HOMEWORK" resultType="HOMEWORK">
+		SELECT	h.*, l."LCTR_ID", l."LCTR_NAME"
+		FROM	"HOMEWORK" AS h
+		JOIN	"LECTURE" AS l ON l."LCTR_ID" = h."LCTR_ID"
+		WHERE	"ASMT_NO" = #{ASMT_NO}
+	</select>
+	<update id="updateHomework" parameterType="Homework">
+		UPDATE	"HOMEWORK"
+		SET		"ASMT_NM" = #{ASMT_NM}, "ASMT_CN" = #{ASMT_CN},
+				"SBMSN_BGNG_YMD" = #{SBMSN_BGNG_YMD},"SBMSN_END_YMD" = #{SBMSN_END_YMD}
+		WHERE	"ASMT_NO" = #{ASMT_NO}
+	</update>
+	<delete id="delHomework">
+		DELETE	FROM  "HOMEWORK"  WHERE	 "ASMT_NO" = #{ASMT_NO}
+	</delete>
 </mapper>
