@@ -26,8 +26,30 @@
         OR
             ("NTC_MTTR_TTL" ILIKE '%' || #{keyword} || '%'
             OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} || '%')
-			ORDER BY "NTC_MTTR_DT"
+			ORDER BY "NTC_MTTR_DT" desc
 			LIMIT #{rowPage} OFFSET #{start};
     </select>
+
+
+	<select id="noticeDetail" parameterType="Int" resultType="Notice">
+		select *
+		FROM "NOTICE"
+		WHERE "NTC_MTTR_SN" = #{ntc_mttr_sn}
+
+	</select>
+	
+	<select id="noteList" parameterType="Map" resultType="Note">
+		SELECT *
+		FROM "NOTE"
+		WHERE "SNDPTY_SEQ" = #{user_seq} OR "RCVR_SEQ" = #{user_seq}
+	</select>
+	
+	<select id="countNote" parameterType="Map" resultType="Int">
+	
+	
+	
+	
+	
+	</select>
 
 </mapper>
