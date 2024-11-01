@@ -2,20 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.postgre.choongsam.mapper.Sh_mapper">
-	<select id="studentLecture" parameterType="map" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
-		SELECT *
-		FROM "CLASS_SCHEDULE" c
-		JOIN "LECTURE_VIDEO" lv
-		ON c."CONTS_ID" = lv."CONTS_ID"
-		JOIN "LECTURE" l
-		ON c."LCTR_ID" = l."LCTR_ID"
-		JOIN "USER_INFO" u
-		ON c."USER_SEQ" = u."USER_SEQ"
-		WHERE
-			c."LCTR_ID" = #{lctr_id}
-			AND c."USER_SEQ" = #{user_seq}
-			ORDER BY c."LCTR_NO"
-	</select>
 	
 	<select id="getStartDay" parameterType="String" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
 		SELECT l."LCTR_START_DATE", s."LCTR_NO", l."LCTR_CNTSCHD", v."VIEWING_PERIOD"
@@ -27,6 +13,53 @@
 		WHERE l."LCTR_ID" = #{lctr_id}
 		ORDER BY 
 		    s."LCTR_NO" DESC
-		LIMIT 1;
+		LIMIT 1
 	</select>
+	
+	<insert id="contsFileUpload" parameterType="map">
+		INSERT INTO "FILE" ("FILE_GROUP", "FILE_SEQ", "FILE_NM", "FILE_EXTN_NM", "FILE_SZ", "FILE_PATH_NM" )
+			VALUES (nextval('file_group_seq'),	1, #{fileName}, #{fileSuffix}, #{file_sz}, #{file_path})
+	</insert>
+	
+	<insert id="fileLectureVideoUpload" parameterType="map">
+	    INSERT INTO "LECTURE_VIDEO"("CONTS_ID", "VDO_FILE_NM", "VDO_URL_ADDR", "VIEWING_PERIOD", "VDO_LENGTH", "LCTR_NO", "FILE_GROUP")
+	    	VALUES (nextval('conts_id_seq'),  #{title}, #{conts_url}, #{viewing_period}, #{vdo_length}, #{lctr_no}, currval('file_group_seq'))
+	</insert>
+	
+	<insert id="lectureVideoUpload" parameterType="map">
+	    INSERT INTO "LECTURE_VIDEO"("CONTS_ID", "VDO_FILE_NM", "VDO_URL_ADDR", "VIEWING_PERIOD", "VDO_LENGTH", "LCTR_NO", "FILE_GROUP")
+	    	VALUES (nextval('conts_id_seq'),  #{title}, #{conts_url}, #{viewing_period}, #{vdo_length}, #{lctr_no}, 0)
+	</insert>
+	
+	<insert id="syllabusUpload" parameterType="map">
+		INSERT INTO "SYLLABUS"("LCTR_NO", "LCTR_ID", "CONTS_ID", "USER_SEQ", "LCTR_OTLN")
+				VALUES (#{lctr_no},  #{lctr_id}, currval('conts_id_seq'), #{user_seq}, #{lctr_otln})
+	</insert>
+	
+	<insert id="chpTimeUpload" parameterType="map">
+		INSERT INTO "CLASS_BOOKMARK"("CONTS_ID", "CONTS_CHPTIME", "CONTS_CHPTTL")
+				VALUES (currval('conts_id_seq'),  #{chp_time}, #{cap_ttl})
+	</insert>
+	
+	
+	
+	
+	<select id="studentLecture" parameterType="map" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
+		SELECT * 
+		FROM "COURSE_REGISTRATION" c
+		JOIN "USER_INFO" u
+		ON c."USER_SEQ" = u."USER_SEQ"
+		JOIN "LECTURE" l
+		ON c."LCTR_ID" = l."LCTR_ID"
+		JOIN "SYLLABUS" s
+		ON l."LCTR_ID" = s."LCTR_ID"
+		LEFT JOIN "CLASS_SCHEDULE" cs
+		ON s."LCTR_NO" = cs."LCTR_NO"
+		LEFT JOIN "LECTURE_VIDEO" lv
+		ON s."CONTS_ID" = lv."CONTS_ID"
+		WHERE c."USER_SEQ" = #{user_seq}
+			AND c."LCTR_ID" = #{lctr_id}
+			ORDER BY lv."LCTR_NO";
+	</select>
+	
 </mapper>

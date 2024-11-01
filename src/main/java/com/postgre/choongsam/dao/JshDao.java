@@ -13,4 +13,12 @@ public interface JshDao {
 
 	int contsFileUpload(Class_ScheduleAddVideo info);
 
+	int lectureVideoUpload(Class_ScheduleAddVideo info);
+
+	int fileLectureVideoUpload(Class_ScheduleAddVideo info);
+
+	int syllabusUpload(Class_ScheduleAddVideo info);
+
+	int chpTimeUpload(Class_ScheduleAddVideo info);
+
 }
