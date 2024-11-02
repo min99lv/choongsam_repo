@@ -198,7 +198,7 @@
         </header>
         
         <main>
-          <form action="signup3" method="POST">
+          <form action="signup" method="POST">
 	        <div class="main_container">
 			<h2 style="color: #00664F ">회원가입</h2>
 			<hr style="width: 400px; margin: 0 auto;">
@@ -221,22 +221,22 @@
 	           				<td>회원유형 *</td>
 	           				<td><select name="user_status" class="select" required="required" style="width: 300px;">
 		  							<option disabled selected>회원 유형을 선택하세요</option>
-		  							<option value="student">학생</option>
-		  							<option value="professor">강사</option>
+		  							<option value="1001">학생</option>
+		  							<option value="1002">강사</option>
 								</select>
 							</td>
 	           			</tr>
 	           			
 	           			<tr>
 	           				<td>아이디 *</td>
-	           				<td><input type="text" placeholder="영문 또는 숫자 입력" required="required"></td>
+	           				<td><input name="user_id" type="text" placeholder="영문 또는 숫자 입력" required="required"></td>
 	           				<td><input id="btnCheck" type="button" value="중복확인"></td>
 	           				<td><div id="message_id"></div></td>
 	           			</tr>
 	           			
 	           			<tr>
 	           				<td>비밀번호 *</td>
-	           				<td><input type="password" placeholder="영문 또는 숫자 입력" required="required"></td>
+	           				<td><input name="password" type="password" placeholder="영문 또는 숫자 입력" required="required"></td>
 	           			</tr>
 	           			
 	           			<tr>
