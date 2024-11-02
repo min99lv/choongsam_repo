@@ -10,5 +10,5 @@ public class Login_Info {			// 로그인 정보
     private int    	pw_err_num;		//암호오류횟수
     private String 	last_login;		//최근접속일
     private int 	user_status;	// 회원분류
-    
+
 }

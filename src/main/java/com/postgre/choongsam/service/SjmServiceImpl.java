@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.postgre.choongsam.dao.SjmDao;
+import com.postgre.choongsam.dto.Note;
 import com.postgre.choongsam.dto.Notice;
 
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,22 @@ public class SjmServiceImpl implements SjmService {
 
 
 		return notice;
+	}
+
+	@Override
+	public List<Note> noteList(Map<String, Object> params) {
+		List<Note> noteList = sd.noteList(params);
+		return noteList;
+	}
+
+
+
+	@Override
+	public int countNote(Map<String, Object> params) {
+		
+		
+		int total = sd.countNote(params);
+		
+		return total;
 	}
 }

@@ -3,11 +3,33 @@
  
 <mapper namespace="com.postgre.choongsam.mapper.hjh">
 
-	 	<select id="teastdlist"  resultType="User_Info">
-		    SELECT user_id, user_name, email, address, phone_num, user_status
-		    FROM User_Info
+		<select id="teastdlist" resultType="User_Info" parameterType="Map">
+	    SELECT * 
+	    FROM "USER_INFO"
+	    WHERE 
+			#{keyword} IS NULL 
+        OR
+            ("USER_NAME" ILIKE '%' || #{keyword} || '%'
+            OR "USER_ID" ILIKE '%' || #{keyword} || '%')
+			LIMIT #{rowPage} OFFSET #{start};
+    </select>
+		
+		
+		<select id="totalusercount" resultType="int" parameterType="String">
+	    SELECT count(*)
+	    FROM "USER_INFO"
+	    WHERE 
+		#{keyword} IS NULL 
+			OR
+					("USER_NAME" ILIKE '%' || #{keyword} || '%'
+					OR "USER_ID" ILIKE '%' || #{keyword} || '%')
+
+		</select>
+	<select id="detailProfile" parameterType="Map" resultType="User_Info">
+	    SELECT *
+	    FROM "USER_INFO"
+	    WHERE "USER_ID" = #{USER_ID}
 	</select>
-	
 		
 		
 

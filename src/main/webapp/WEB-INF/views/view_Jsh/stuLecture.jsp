@@ -82,7 +82,14 @@
 					</div>
 					
 					<div id="jindo">
-						<meter min="0" max="" value=""></meter>
+						<c:choose>
+						    <c:when test="${conts != null && conts.conts_max != null && conts.conts_max > 0}">
+						        <meter min="0" max="${conts.vdo_length}" value="${conts.vdo_length != null && conts.vdo_length >= 0 ? conts.conts_max : 0}"></meter>
+						    </c:when>
+						    <c:otherwise>
+						        <meter min="0" max="100" value="0"></meter>
+						    </c:otherwise>
+						</c:choose>
 					</div>
 					
 					<div class="button">
