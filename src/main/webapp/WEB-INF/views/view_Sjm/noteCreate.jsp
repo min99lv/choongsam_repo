@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>공지사항 상세</title>
+    <title>쪽지 작성</title>
     <style>
         body {
             margin: 0;
@@ -50,18 +50,11 @@
             border-left: 0.4px solid #e2e8ee;
             cursor: pointer;
             font-weight: bold;
+            text-align: center;
             color: #323232;
             font-size: 14px;
             height: 50px;
-             padding: 20px;
-              font-size: 20px;
         }
-        
-		.contentsss{
-		    vertical-align: top; /* 내용 위쪽 정렬 */
-		    height: 500px;
-		    padding: 20px;
-		}
 
         .manager_pagination {
             text-align: center;
@@ -97,70 +90,84 @@
 
         }
         
-         button {
-            width: 200px;
-            text-align: center;
-            /* 버튼 가운데 정렬을 위한 추가 스타일 */
-            margin: 20px auto; /* 버튼을 가운데 정렬 */
-            display: block; /* 블록으로 설정 */
-            height: 50px;
-            background-color: #00664F;
-            border: none;
-            color: white;
-        }
+        
+        submitBtn {
+    width: 200px;
+    text-align: center;
+    margin: 20px auto;
+    display: block;
+    height: 50px;
+    background-color: #00664F;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
     </style>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <script type="text/javascript">
 
-    // URL에서 공지사항 번호(ntc_mttr_sn) 추출
-    const urlParams = new URLSearchParams(window.location.search);
-    const ntc_mttr_sn = "${ntc_mttr_sn}";  // 서버에서 전달받은 파라미터를 JavaScript 변수로 사용
-    console.log(ntc_mttr_sn); // 확인용
+async function uploadAndInsertImage() {
+            const fileInput = document.querySelector('input[name="attachment"]');
+            const file = fileInput.files[0];
 
-    // 공지사항 데이터 가져오기
-    async function fetchNoticeDetail() {
-        try {
-            const response = await fetch(`/api/notice/${ntc_mttr_sn}`);
-            if (!response.ok) {
-                throw new Error(`Error fetching notice: ${response.status}`);
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
+
+                // 이미지 업로드
+                const response = await fetch("/uploadImage", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const imageUrl = await response.text(); // 업로드된 이미지 URL 수신
+
+                // 이미지 URL을 내용 textarea에 삽입
+                const contentField = document.querySelector('textarea[name="content"]');
+                contentField.value += `![이미지](${imageUrl})\n`; // 마크다운 이미지 형식으로 삽입
             }
-            const notice = await response.json();
-
-            // 가져온 데이터를 HTML 요소에 넣기
-            document.getElementById('notice.ntc_mttr_ttl').textContent = notice.ntc_mttr_ttl;
-            document.getElementById('notice.ntc_mttr_cn').textContent = notice.ntc_mttr_cn;
-        } catch (error) {
-            console.error('Error:', error);
-            document.getElementById('notice.ntc_mttr_ttl').textContent = "공지사항을 불러올 수 없습니다.";
-            document.getElementById('notice.ntc_mttr_cn').textContent = error.message;
         }
-    }
-
-    // 페이지가 로드되면 공지사항 데이터를 가져옵니다.
-    window.onload = fetchNoticeDetail;
       </script>
 </head>
 <body>
     <header>
         <%@ include file="../header.jsp" %>
     </header>
-    
+
     <div class="container">
         <div class="contents">
-            <h1>공지사항 작성</h1>
+            <h1>쪽지 작성</h1>
         </div>
+
+        <form id="noticeForm" method="post" action="your_action_url_here">
+
             <table class="list">
                 <tr>
                     <th>제목</th>
-                    <td id="notice.ntc_mttr_ttl"></td>
+                    <td><input type="text" name="title" required></td>
+                </tr>
+                <tr>
+                    <th>작성자</th>
+                    <td><input type="text" name="author" required></td>
+                </tr>
+                <tr>
+                    <th>첨부파일</th>
+                    <td>
+                        <input type="file" name="attachment" onchange="uploadAndInsertImage()">
+                        <div id="filePreview"></div>
+                    </td>
                 </tr>
                 <tr>
                     <th>내용</th>
-                    <td class="contentsss" id="notice.ntc_mttr_cn" ></td>
+                    <td><textarea name="content" rows="10" required></textarea></td>
                 </tr>
             </table>
             
-            <button onclick="history.back();">목록</button>
+            <button class="submitBtn" type="submit">작성완료</button>
+    <!--        <button class="submitBtn" type="submit" onclick="submitForm()">작성 완료</button> -->
+        </form>
     </div>
-    
 </body>
 </html>
