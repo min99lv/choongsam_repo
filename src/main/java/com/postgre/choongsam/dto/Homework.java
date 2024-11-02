@@ -14,4 +14,5 @@ public class Homework extends Lecture { // 과제
 	private String	SBMSN_END_YMD;		// 과제 제출 마감일
 	private int		FILE_GROUP;			// 파일 그룹
 	private String	user_name;				// 회원 이름
+    private int    	USER_STATUS;     	//회원분류
 }

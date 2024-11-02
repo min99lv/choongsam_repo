@@ -6,6 +6,14 @@
 		FROM "LECTURE_VIDEO" 
 		WHERE "CONTS_ID" IN ('1000','1001')
 	</select>
+	
+	<insert id="saveWatchTime" parameterType="Class_Schedule">
+INSERT INTO "CLASS_SCHEDULE" ("LCTR_ID", "CONTS_ID", "USER_SEQ", "CONTS_FINAL", "CONTS_MAX", "CONTS_PRGRT")
+    VALUES ('0010', #{videoId},'user50', #{conts_final}, #{conts_max}, #{conts_prgrt})
+	</insert>
+	
+	
+	
 
 
 </mapper>

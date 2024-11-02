@@ -52,26 +52,6 @@
     <script type="text/javascript">
 
         
-        
-
-        /* function plusChapter() {
-            var chapterDiv = document.createElement("div");
-            chapterDiv.className = "chapter";
-
-            chapterDiv.innerHTML = `
-                <div class="chapterTime">
-                    <label class="text">챕터시간 입력</label>
-                    <input type="text" name="chapterTime[${chapterIndex}]"> <!-- 인덱스 포함 -->
-                </div>
-                <div class="chapterTitle">
-                    <label class="text">챕터 제목 입력</label>
-                    <input type="text" name="chapterTitle[${chapterIndex}]"> <!-- 인덱스 포함 -->
-                </div>
-            `;
-
-            document.getElementById("chapter").appendChild(chapterDiv);
-            chapterIndex++; // 인덱스 증가
-        } */
 
         let chapterIndex = 1; // 초기 인덱스 설정 (0은 기본 챕터)
         let player; // 전역 player 변수를 선언
@@ -139,14 +119,41 @@
             console.log('vdo_length >> ' + durationInSeconds + ' 초'); // 수정된 로그 출력
             document.getElementById('vdo_length').value = durationInSeconds; // 비디오 길이를 정수로 폼 필드에 설정
         }
-
-
-
-
-
-
         
-        
+        //챕터시간을 초로 변경 후 숫자타입으로 컨트롤러에 전송하는 함수
+        function convertDurationToSeconds() {
+		    const timeInputs = [
+		        { timeInputId: 'conts1_chptime', secondsInputId: 'conts_chptime_sec1' },
+		        { timeInputId: 'conts2_chptime', secondsInputId: 'conts_chptime_sec2' },
+		        { timeInputId: 'conts3_chptime', secondsInputId: 'conts_chptime_sec3' },
+		    ];
+		
+		    timeInputs.forEach(({ timeInputId, secondsInputId }) => {
+		        const timeInput = document.querySelector(`input[name="${timeInputId}"]`).value;
+		        alert(`Input value for ${timeInputId}: ${timeInput}`); // 입력 값 로그
+		
+		        if (timeInput) {
+		            const timeParts = timeInput.split(':').map(Number);
+		            let totalSeconds = 0;
+		
+		            if (timeParts.length === 3) { // HH:MM:SS 형식
+		                const [hours, minutes, seconds] = timeParts;
+		                totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+		            } else if (timeParts.length === 2) { // MM:SS 형식
+		                const [minutes, seconds] = timeParts;
+		                totalSeconds = (minutes * 60) + seconds;
+		            }
+		
+		            document.getElementById(secondsInputId).value = totalSeconds; // 초로 저장
+		            alert(`Total seconds for ${secondsInputId}: ${totalSeconds}`); // 초로 변환된 값 로그
+		        } else {
+		            document.getElementById(secondsInputId).value = 0; // 기본값을 0으로 설정
+		            alert(`No input provided for ${timeInputId}. Setting ${secondsInputId} to 0`); // 기본값 로그
+		        }
+		    });
+		}
+
+
 
     </script>
 </head>
@@ -163,6 +170,11 @@
             <div class="oneLine">
                 <label id="text">차시</label>
                 <input type="text" name="lctr_no" value="${max_lctr_no+1 }" readonly="readonly">
+            </div>
+            
+            <div class="oneLine">
+                <label id="text">강의개요</label>
+                <input type="text" name="lctr_otln" placeholder="강의개요를 입력해주세요">
             </div>
 
             <div class="twoLine">
@@ -191,36 +203,24 @@
             <div class="video"></div>
 
             <div id="chapter">
-                <!-- <div class="butt">
-                    <button type="button" onclick="plusChapter()">챕터 추가</button>
-                </div> -->
-                <div class="chapterTime">
-                    <label class="text">챕터시간 입력</label>
-                    <input type="text" name="conts_chptime">
-                </div>
-                <div class="chapterTitle">
-                    <label class="text">챕터 제목 입력</label>
-                    <input type="text" name="conts_chpttl">
-                </div>
-                
-                <div class="chapterTime">
-                    <label class="text">챕터시간 입력</label>
-                    <input type="text" name="conts_chptime2">
-                </div>
-                <div class="chapterTitle">
-                    <label class="text">챕터 제목 입력</label>
-                    <input type="text" name="conts_chpttl2">
-                </div>
-                
-                <div class="chapterTime">
-                    <label class="text">챕터시간 입력</label>
-                    <input type="text" name="conts_chptime3">
-                </div>
-                <div class="chapterTitle">
-                    <label class="text">챕터 제목 입력</label>
-                    <input type="text" name="conts_chpttl3">
-                </div>
-            </div>
+			    <div class="chapterTime">
+			        <label class="text">챕터시간 입력</label>
+			        <input type="text" name="conts1_chptime" placeholder="HH:MM:SS 형식으로 입력">
+			        <input type="hidden" name="conts_chptime_sec1" id="conts_chptime_sec1">
+			    </div>
+			    
+			    <div class="chapterTime">
+			        <label class="text">챕터시간 입력</label>
+			        <input type="text" name="conts2_chptime" placeholder="HH:MM:SS 형식으로 입력">
+			        <input type="hidden" name="conts_chptime_sec2" id="conts_chptime_sec2">
+			    </div>
+			    
+			    <div class="chapterTime">
+			        <label class="text">챕터시간 입력</label>
+			        <input type="text" name="conts3_chptime" placeholder="HH:MM:SS 형식으로 입력">
+			        <input type="hidden" name="conts_chptime_sec3" id="conts_chptime_sec3">
+			    </div>
+			</div>
             
             <div class="file">
                 <label class="text">첨부파일</label>
@@ -230,7 +230,7 @@
             <input type="hidden" name="lctr_id" value="${lctr_id}">
     		<input type="hidden" name="user_seq" value="${user_seq}">
             
-            <button type="submit">수업 등록</button>
+            <button type="submit" onclick="convertDurationToSeconds()">수업 등록</button>
         
     	</div>
         
