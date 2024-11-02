@@ -64,7 +64,7 @@ public class SjmController {
 	@GetMapping(value="/api/notice/new")
 	public String noticeCreateForm(){
 		
-		System.out.println("SjmController.noticeCreate() start .....");
+		System.out.println("SjmController.noticeCreate start .....");
 
 		return "view_Sjm/noticeCreate";
 	}
