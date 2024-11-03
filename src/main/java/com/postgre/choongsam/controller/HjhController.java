@@ -29,14 +29,20 @@ public class HjhController {
 	
 	@RequestMapping(value = "/adminPage")
 	public String adminPage(Model model) {
-		System.out.println("학생마이페이지");
+		System.out.println("관리자마이페이지");
 	return "view_Hjh/adminPage";
 	
 	}
 	@RequestMapping(value = "/myPageTeacher")
 	public String myPageTeacher(Model model) {
-		System.out.println("학생마이페이지");
+		System.out.println("강사마이페이지");
 	return "view_Hjh/myPageTeacher";
+	
+	}
+	@RequestMapping(value = "/myPageStd")
+	public String myPageStd(Model model) {
+		System.out.println("학생마이페이지");
+	return "view_Hjh/myPageStd";
 	
 	}
 	@GetMapping("updateProfile")
