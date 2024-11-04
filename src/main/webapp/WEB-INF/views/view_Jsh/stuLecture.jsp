@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +34,7 @@
 		height: 203px;
 		background-color: white;
 		margin-bottom: 11px;
-		display: inline-block;
+		display: flex;
 	}
 	
 	#thumbnail {
@@ -44,9 +45,10 @@
 	
 	.vdoInfor {
 		width: 566px;
+		display: flex;
 	}
 	
-	.button {
+	.buttStatus {
 		width: 240px;
 		height: 86px;
 	}
@@ -75,19 +77,20 @@
 				</div>
 				
 				<div class="vdoInfor">
-					<div class="time">
-    <div id="chashi">${conts.lctr_no}</div>
-    <div id="gigan">
-        <c:choose>
-            <c:when test="${conts.lctr_no == 1}">
-                ${conts.lctr_start_date} ~ ${conts.viewing_period}
-            </c:when>
-            <c:otherwise>
-                ${conts.befor_period} ~ ${conts.viewing_period}
-            </c:otherwise>
-        </c:choose>
-    </div>
-</div>
+					<div class="infor2">
+						<div class="time">
+					    <div id="chashi">${conts.lctr_no}</div>
+					    <div id="gigan">
+					        <c:choose>
+					            <c:when test="${conts.lctr_no == 1}">
+					                ${conts.lctr_start_date} ~ ${conts.viewing_period}
+					            </c:when>
+					            <c:otherwise>
+					                ${conts.befor_period} ~ ${conts.viewing_period}
+					            </c:otherwise>
+					        </c:choose>
+					    </div>
+					</div>
 					
 					<div id="title">
 						${conts.vdo_file_nm }
@@ -97,16 +100,27 @@
 						<c:choose>
 						    <c:when test="${conts != null && conts.conts_max != null && conts.conts_max > 0}">
 						        <meter min="0" max="${conts.vdo_length}" value="${conts.vdo_length != null && conts.vdo_length >= 0 ? conts.conts_max : 0}"></meter>
+						        <span class="percent">
+							        <fmt:formatNumber value="${conts.vdo_length != null && conts.vdo_length > 0 ? (conts.conts_max * 100 / conts.vdo_length) : 0}" 
+							                          type="number" 
+							                          maxFractionDigits="2" />%
+							    </span>
 						    </c:when>
 						    <c:otherwise>
 						        <meter min="0" max="100" value="0"></meter>
+						         <span class="percent">0%</span>
 						    </c:otherwise>
 						</c:choose>
 					</div>
+					</div>
 					
-					<div class="button">
-						<div id="state"></div>
-						<div id="start">학습 시작</div>
+					<div class="buttStatus">
+						<div id="state">
+							${conts.view_status }
+						</div>
+						<a href="">
+							<div id="start">학습 시작</div>
+						</a>
 					</div>
 					
 				</div>

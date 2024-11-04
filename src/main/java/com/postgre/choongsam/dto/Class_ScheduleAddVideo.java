@@ -61,5 +61,7 @@ public class Class_ScheduleAddVideo {
 	
 	private String befor_period;		//이전차시 수강기간
 	
+	private String view_status;		//출석, 결석여부 확인
+	
 	
 }
