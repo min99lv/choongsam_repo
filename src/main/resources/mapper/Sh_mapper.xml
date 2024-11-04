@@ -58,7 +58,20 @@
 		            ELSE lv_prev."VIEWING_PERIOD"
 		        END,
 		        NULL
-		    ) AS "befor_period"
+		    ) AS "befor_period",
+		    CASE 
+		        WHEN TO_DATE(lv."VIEWING_PERIOD", 'YYYY-MM-DD') &lt; CURRENT_DATE THEN 
+		            CASE 
+		                WHEN cs."CONTS_PRGRT" = 100 THEN '출석'
+		                ELSE '결석'
+		            END
+		        WHEN TO_DATE(lv."VIEWING_PERIOD", 'YYYY-MM-DD') > CURRENT_DATE THEN 
+		            CASE 
+		                WHEN cs."CONTS_PRGRT" = 100 THEN '출석'
+		                ELSE '미수강'
+		            END
+		        ELSE '결석'
+		    END AS "VIEW_STATUS"
 		FROM "COURSE_REGISTRATION" c
 		JOIN "USER_INFO" u ON c."USER_SEQ" = u."USER_SEQ"
 		JOIN "LECTURE" l ON c."LCTR_ID" = l."LCTR_ID"

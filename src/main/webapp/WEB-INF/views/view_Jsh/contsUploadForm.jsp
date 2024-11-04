@@ -119,17 +119,46 @@
             console.log('vdo_length >> ' + durationInSeconds + ' 초'); // 수정된 로그 출력
             document.getElementById('vdo_length').value = durationInSeconds; // 비디오 길이를 정수로 폼 필드에 설정
         }
+        
+        //챕터시간 자동 형식 변환
+        const hypenTime = (target) => {
+        	 target.value = target.value
+        	   .replace(/[^0-9]/g, '')
+        	   .replace(/^(\d{2})(\d{2})(\d{2})$/, `$1:$2:$3`);
+        	}
+        
+        //영상확인버튼 눌렀는지 확인하는 버튼
+        function videoChk() {
+        const vdoUrlAddr = document.getElementById('vdo_url_addr').value;
+        
+        if (!vdoUrlAddr) {
+            alert('유튜브 ID를 먼저 입력해주세요');
+            return;
+        }
+        document.getElementById('contsTest').value = "1";
+        alert('영상 확인되었습니다.');
+    }
+        
+        function submitChk() {
+            // Check if the hidden input contsTest has a value of 1
+            const contsTestValue = document.getElementById('contsTest').value;
+            if (contsTestValue !== "1") {
+                alert('영상 확인 버튼을 눌러주세요');
+                return false;
+            }
+            return true;
+        }
 
     </script>
 </head>
 <body>
 
 <div id="listBody">
-    <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data">
+    <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data" onsubmit="return submitChk()">
         <div id="inserts">
             <div class="oneLine">
                 <label id="text">강의 제목 입력</label>
-                <input type="text" placeholder="강의 제목을 입력해주세요" name="vdo_file_nm">
+                <input type="text" placeholder="강의 제목을 입력해주세요" name="vdo_file_nm" required="required">
             </div>
 
             <div class="oneLine">
@@ -157,34 +186,35 @@
 			</div>
 
             <div class="twoLine">
-                <label class="text">유튜브 ID</label>
-                <input type="text" name="vdo_url_addr">
-                <input type="hidden" name="vdo_length" id="vdo_length">
-                <div>
-                    <button type="button" onclick="videoChk()">영상 확인</button>
-                </div>
-            </div>
+			    <label class="text">유튜브 ID</label>
+			    <input type="text" name="vdo_url_addr" id="vdo_url_addr">
+			    <input type="hidden" name="vdo_length" id="vdo_length" required="required">
+			    <div>
+			        <button type="button" id="idInput" onclick="videoChk()">영상 확인</button>
+			        <input type="hidden" id="contsTest" value="0">
+			    </div>
+			</div>
 
             <div class="video"></div>
 
             <div id="chapter">
                 <div class="chapterTime">
                     <label class="text">챕터시간 입력</label>
-                    <input type="text" name="chp_str1">
+                    <input type="text" name="chp_str1" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력">
                     <label class="text">챕터내용 입력</label>
                     <input type="text" name="conts_chpttl">
                 </div>
                 
                 <div class="chapterTime">
                     <label class="text">챕터시간 입력</label>
-                    <input type="text" name="chp_str2">
+                    <input type="text" name="chp_str2" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력">
                     <label class="text">챕터내용 입력</label>
                     <input type="text" name="conts_chpttl2">
                 </div>
                 
                 <div class="chapterTime">
                     <label class="text">챕터시간 입력</label>
-                    <input type="text" name="chp_str3">
+                    <input type="text" name="chp_str3" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력">
                     <label class="text">챕터내용 입력</label>
                     <input type="text" name="conts_chpttl3">
                 </div>
