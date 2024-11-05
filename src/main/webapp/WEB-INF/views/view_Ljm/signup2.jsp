@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
+
 <style type="text/css">
     body {
         margin: 0;
@@ -156,6 +157,26 @@
 	        margin-bottom: 5px;
 	    }
 	}
+	
+	/* 메시지 ID 스타일 */
+	.message {
+	    color: red; /* 텍스트 색상 */
+	    font-size: 12px; /* 폰트 크기 */
+	    margin-top: 5px; /* 입력 필드와의 간격 */
+	    height: 18px; /* 높이를 설정하여 줄 바꿈 방지 */
+	}
+	
+	#checkIdMsg, #checkPwMsg1, #checkPwMsg2 {
+		color: red; /* 텍스트 색상 */
+	    font-size: 12px; /* 폰트 크기 */
+	    margin-top: 5px; /* 입력 필드와의 간격 */
+	    height: 18px; /* 높이를 설정하여 줄 바꿈 방지 */
+	}
+
+	/* 각 tr 사이에 여백 추가 */
+	table tr {
+    	margin-bottom: 15px; /* tr 사이에 아래쪽 여백 추가 */
+	}
 
 	
      
@@ -191,6 +212,98 @@
     margin-top: 20px; /* 위쪽 마진을 추가하여 공간을 조절합니다 */
 }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+
+let isIdConfirmed = false; // 아이디 중복 확인 여부
+
+//아이디 중복 체크
+function confirmId() {
+    var userId = $("#user_id").val();
+
+    // 아이디 유효성 검사
+    var regex = /^[a-zA-Z0-9]{4,12}$/;  // 4~12자의 영문 또는 숫자만 허용
+    if (!regex.test(userId)) {
+        alert("아이디는 4~12자의 영문 또는 숫자만 가능합니다.\n특수문자나 한글은 포함될 수 없습니다.");
+        $("#user_id").val('');  // 아이디 입력 필드 초기화
+        return;  // 유효하지 않으면 중복 확인 로직을 실행하지 않음
+    }
+
+    $.ajax({
+        url: '/view_Ljm/confirmId', // 경로 확인
+        type: 'GET',
+        dataType: 'json',
+        data: { 'user_id': userId },
+        success: function (data) {
+            var checkIdMsg = $("#checkIdMsg");
+            if (data === 1) {
+                // 중복된 아이디
+                checkIdMsg.text("이미 존재하는 아이디입니다").css("color", "red");
+                isIdConfirmed = false;
+            } else {
+                // 사용 가능한 아이디
+                checkIdMsg.text("사용 가능한 아이디입니다").css("color", "green");
+                isIdConfirmed = true;
+            }
+        },
+        error: function () {
+            alert("아이디 중복 확인 중 오류가 발생했습니다.");
+        }
+    });
+}
+
+//비밀번호 유효성 검사 및 일치 여부 확인
+function confirmPw() {
+    var pw1 = $('#pw1').val();
+    var pw2 = $('#pw2').val();
+
+    // 비밀번호 유효성 검사 (4~12자의 영문 또는 숫자만 허용)
+     var regex = /^[a-zA-Z0-9!@#$%^&*()_+={}\[\]:;"'<>,.?\/\\|-]{4,12}$/;
+    
+    // 비밀번호 유효성 메시지
+    if (!regex.test(pw1)) {
+        $('#checkPwMsg1').text('비밀번호는 4~12자의 영문 또는 숫자만 가능합니다.').css('color', 'red');
+    } else {
+        $('#checkPwMsg1').text('사용 가능한 비밀번호 형식입니다.').css('color', 'green');
+    }
+
+    // 비밀번호 확인 일치 여부 확인
+    if (pw1 && pw2) {
+        if (pw1 === pw2) {
+            $('#checkPwMsg2').text('비밀번호 일치').css('color', 'green');
+        } else {
+            $('#checkPwMsg2').text('비밀번호 불일치').css('color', 'red');
+        }
+    }
+}
+
+// 주소 찾기 API
+function findAddr() {	
+	var postcode = new daum.Postcode({
+		oncomplete: function (data) {
+			var roadAddr = data.roadAddress;
+			var jibunAddr = data.jibunAddress;
+			if (roadAddr !== '') {
+				document.getElementById("addr1").value = roadAddr;
+			} else if (jibunAddr !== '') {
+				document.getElementById("addr2").value = jibunAddr;
+			}
+			// 상세 주소에 자동 포커스
+			document.getElementById("addr2").focus();
+		},
+		onclose: function () {
+			// 팝업이 닫힐 때 수행할 동작
+			console.log("주소 팝업이 닫혔습니다.");
+		}
+	});
+
+	// 팝업 열기
+	postcode.open();
+}
+
+
+</script>
 </head>
 <body>
         <header>
@@ -215,54 +328,90 @@
            
 	            <div class="join_write">
 	           		<div class="text_guide">* 필수항목이므로 꼭 작성해주세요</div>
-	           		<p>
 	           		<table class="">
 	           			<tr>
-	           				<td>회원유형 *</td>
+	           				<td>회원유형 *<div class="message"></div></td>
 	           				<td><select name="user_status" class="select" required="required" style="width: 300px;">
 		  							<option disabled selected>회원 유형을 선택하세요</option>
 		  							<option value="1001">학생</option>
 		  							<option value="1002">강사</option>
 								</select>
+								<div class="message"></div>
 							</td>
 	           			</tr>
 	           			
 	           			<tr>
-	           				<td>아이디 *</td>
-	           				<td><input name="user_id" type="text" placeholder="영문 또는 숫자 입력" required="required"></td>
-	           				<td><input id="btnCheck" type="button" value="중복확인"></td>
-	           				<td><div id="message_id"></div></td>
+	           				<td>이름 *<div class="message"></div></td>
+	           				<td>
+	           					<input name="user_name" id="user_name" type="text" required="required">
+	           					<div class="message"></div>
+	           				</td>	           				
+	           			</tr>
+	           			
+	           			
+	           			<tr>
+	           				<td>아이디 *<div class="message"></div></td>
+	           				<td>
+	           					<input name="user_id" id="user_id" type="text" placeholder="4~12자의 영문 또는 숫자 입력" required="required">
+	           					<div id="checkIdMsg"></div>
+	           				</td>
+	           				<td>
+	           					<input id="btnCheck" type="button" value="중복확인" onclick="confirmId()">
+	           					<div class="message"></div>
+	           				</td>
+	           				
 	           			</tr>
 	           			
 	           			<tr>
 	           				<td>비밀번호 *</td>
-	           				<td><input name="password" type="password" placeholder="영문 또는 숫자 입력" required="required"></td>
+	           				<td>
+	           					<input name="password" id="pw1" type="password" oninput="confirmPw()" placeholder="4~12자의 영문 또는 숫자 입력" required="required">
+	           					<div id="checkPwMsg1"></div>	  	           				
+	           				</td>
 	           			</tr>
 	           			
 	           			<tr>
-	           				<td>비밀번호 확인 *</td>
-	           				<td><input type="password" required="required"></td>
+	           				<td>비밀번호 확인 *<div class="message"></div></td>
+	           				<td>
+	           					<input type="password" id="pw2" oninput="confirmPw()" required="required">
+	           					<div id="checkPwMsg2"></div>
+	           				</td>
 	           			</tr>
 	           			
 	           			<tr>
-	           				<td>생년월일 *</td>
-	           				<td><input type="date" placeholder="0000-00-00 형식으로 입력" required="required"></td>
+	           				<td>생년월일 *<div class="message"></div></td>
+	           				<td>
+	           					<input name="birth" type="date" placeholder="0000-00-00 형식으로 입력" required="required">
+	           					<div class="message"></div>
+	           				</td>
 	           			</tr>
 	           			
 	           			<tr>
-	           				<td>주소 *</td>
-	           				<td><input type="text" required="required"></td>
-	           				<td><input id="btnAddress" type="button" value="찾기">
+	           				<td>주소 *<div class="message"></div><div class="message"></div></td>
+	           				<td>
+	           					<input name="address" type="text" id="addr1" placeholder="주소" required="required" style="margin-bottom: 10px;" readonly="readonly">
+	           					<input name="addr_detail" type="text" id="addr2" placeholder="상세주소">	           					
+	           				</td>
+	           				<td>
+	           					<input id="btnAddress" type="button" onclick="findAddr()" value="찾기">
+	           					<div class="message"></div><div class="message"></div>
+	           				</td>
 	           			</tr>
 	           			
 	           			<tr>
-	           				<td>메일 *</td>
-	           				<td><input type="text" required="required"></td>
+	           				<td>메일 *<div class="message"></div></td>
+	           				<td>
+	           					<input name="email" type="text" required="required">
+	           					<div class="message"></div>
+	           				</td>
 	           			</tr>
 	           			
 	           			<tr>
-	           				<td>전화번호 *</td>
-	           				<td><input type="text" placeholder="000-0000-0000 형식으로 입력" required="required"></td>
+	           				<td>전화번호 *<div class="message"></div></td>
+	           				<td>	           				
+	           					<input name="phone_num" type="text" placeholder="000-0000-0000" required="required">
+					           	<div class="message"></div>			
+	           				</td>
 	           			</tr>
 	           				           		           			
 	           		</table>
@@ -271,7 +420,7 @@
 	       </div>
 	        	
 	        	<div class="btnSection" align="center" style="margin-bottom: 20px;">
-					<input id="btnNext" type="submit" onclick="location.href='signup3'"value="회원가입">
+					<input id="btnNext" type="submit" value="회원가입">
 	            </div>
 	      </form>
 		</main>
