@@ -21,7 +21,7 @@ public interface SjmService {
 
     Notice noticeDetail(int ntc_mttr_sn);
 
-	List<Not> noteList(Map<String, Object> params);
+	List<Note> noteList(Map<String, Object> params);
 
 	int countNote(Map<String, Object> params);
 

@@ -7,7 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.postgre.choongsam.dto.Filegroup;
+import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Note;
 import com.postgre.choongsam.dto.Notice;
@@ -48,7 +48,7 @@ public class SjmDaoImpl implements SjmDao {
 
 	// NOTE - 공지사항 작성
 	@Override
-	public int noticeCreate(Notice notice, List<Filegroup> uploadFiles) {
+	public int noticeCreate(Notice notice, List<File_Group> uploadFiles) {
 		System.out.println("공지사항 작성");
 
 		// 파일 그룹 ID 생성
@@ -58,7 +58,7 @@ public class SjmDaoImpl implements SjmDao {
 
 		// 파일 정보가 있다면 저장
 		if (uploadFiles != null && !uploadFiles.isEmpty()) {
-			for (Filegroup fileUpload : uploadFiles) { // Filegroup 객체를 순회
+			for (File_Group fileUpload : uploadFiles) { // Filegroup 객체를 순회
 
 				int fileSeq = createNewFileSeq(fileGroupId);
 
