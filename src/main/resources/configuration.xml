@@ -19,7 +19,7 @@
 		<typeAlias alias="Homework" type="com.postgre.choongsam.dto.Homework" />
 		<typeAlias alias="Lecture" type="com.postgre.choongsam.dto.Lecture" />
 		<typeAlias alias="Lecture_Video" type="com.postgre.choongsam.dto.Lecture_Video"/>
-		<typeAlias alias="Filegroup" type="com.postgre.choongsam.dto.Filegroup"/>
+		<typeAlias alias="File_Group" type="com.postgre.choongsam.dto.File_Group"/>
 		<typeAlias alias="Course_Registration" type="com.postgre.choongsam.dto.Course_Registration"/>
 		<typeAlias alias="Homework_Submission" type="com.postgre.choongsam.dto.Homework_Submission"/>
 
