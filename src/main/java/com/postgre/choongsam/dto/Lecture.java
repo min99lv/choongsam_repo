@@ -16,9 +16,9 @@ public class Lecture { // 강의 정보
 	private String 		lctr_state;			// 강의상태명
 	private String 		eval_criteria;		// 평가기준
 	private String 		lctr_start_date;	// 개강일
-	private int 			lctr_date;			// 수업일수 
 	private int 			lctr_cntschd;		// 총 차시
 	private int 			file_group;			// 파일 그룹
+	private String 		lctr_schd;			// 스케쥴
 	
 	
 

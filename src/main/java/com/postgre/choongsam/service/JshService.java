@@ -13,4 +13,6 @@ public interface JshService {
 
 	void contsUpload(Class_ScheduleAddVideo info);
 
+	int classScheChk(String chashi, String conts_id, String lctr_id, String user_seq);
+
 }

@@ -10,6 +10,7 @@
 	<typeAliases>
 		<typeAlias alias="User_Info" type="com.postgre.choongsam.dto.User_Info" />
 		<typeAlias alias="Login_Info" type="com.postgre.choongsam.dto.Login_Info" />
+		<typeAlias alias="Lecture" type="com.postgre.choongsam.dto.Lecture" />
 		<typeAlias alias="Class_Schedule" type="com.postgre.choongsam.dto.Class_Schedule"/>
 		<typeAlias alias="Class_ScheduleAddVideo" type="com.postgre.choongsam.dto.Class_ScheduleAddVideo"/>
 		<typeAlias alias="Syllabus" type="com.postgre.choongsam.dto.Syllabus"/>
