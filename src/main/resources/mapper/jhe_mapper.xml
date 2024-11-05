@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "com.postgre.choongsam.dto.jheMapper">
+	<select id="getLectureHomeworkList" resultType="Homework">
+		SELECT		u."USER_NAME", u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",
+					h."ASMT_NO", h."ASMT_NM", h."ASMT_CN",
+					h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD", h."FILE_GROUP"
+		FROM		"USER_INFO" AS u
+		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
+		JOIN		"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
+		ORDER BY	l."LCTR_NAME" ASC
+	</select>
+	<select id="getProfHomeworkList" resultType="Homework">
+		SELECT		u."USER_NAME", u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",
+					h."ASMT_NO", h."ASMT_NM", h."ASMT_CN",
+					h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD", h."FILE_GROUP"
+		FROM		"USER_INFO" AS u
+		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
+		JOIN		"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
+		WHERE		l."LCTR_ID" = #{LCTR_ID}
+		ORDER BY	l."LCTR_NAME" ASC
+	</select>
+	<select id="findByLCTR" resultType="Lecture">
+		SELECT		"LCTR_ID", "LCTR_NAME", "USER_SEQ"
+		FROM		"LECTURE"
+		WHERE		"LCTR_ID" = #{LCTR_ID}
+	</select>
+	<insert id="insertHomework" parameterType="Homework">
+		INSERT INTO "HOMEWORK" ("ASMT_NO", "LCTR_ID", "ASMT_NM", "ASMT_CN", "SBMSN_BGNG_YMD", "SBMSN_END_YMD", "FILE_GROUP")
+		VALUES (NEXTVAL('asmt_no_seq'), #{LCTR_ID}, #{ASMT_NM}, #{ASMT_CN}, #{SBMSN_BGNG_YMD}, #{SBMSN_END_YMD}, null)
+	</insert>
+	<select id="notifyStudents" parameterType="String" resultType="Homework">
+		SELECT	u."USER_SEQ", h."ASMT_NO", h."LCTR_ID"
+		FROM	"COURSE_REGISTRATION" AS c
+		JOIN	"HOMEWORK" AS h ON c."LCTR_ID" = h."LCTR_ID"
+		JOIN	"USER_INFO" AS u ON c."USER_SEQ" = u."USER_SEQ"
+		WHERE	h."LCTR_ID" = #{lctr_ID}
+		AND		h."ASMT_NO" = (
+				SELECT		"ASMT_NO"
+				FROM		"HOMEWORK"
+				WHERE		"LCTR_ID" = #{lctr_ID}
+				ORDER BY	"ASMT_NO" DESC
+				LIMIT 1
+				)
+	</select>
+	<insert id="insSubmission" parameterType="Homework_Submission">
+		INSERT INTO "HOMEWORK_SUBMISSION" ("USER_SEQ", "ASMT_NO", "SBMSN_YN")
+		VALUES (#{user_seq}, #{asmt_no}, 'N')
+	</insert>
+	<select id="findById" parameterType="Homework" resultType="Homework">
+		SELECT	h.*, l."LCTR_ID", l."LCTR_NAME", l."USER_SEQ", u."USER_NAME"
+		FROM	"HOMEWORK" AS h
+		JOIN	"LECTURE" AS l ON l."LCTR_ID" = h."LCTR_ID"
+		JOIN	"USER_INFO" AS u ON u."USER_SEQ" = l."USER_SEQ"
+		WHERE	"ASMT_NO" = #{ASMT_NO}
+	</select>
+	<update id="updateHomework" parameterType="Homework">
+		UPDATE	"HOMEWORK"
+		SET		"ASMT_NM" = #{ASMT_NM}, "ASMT_CN" = #{ASMT_CN},
+				"SBMSN_BGNG_YMD" = #{SBMSN_BGNG_YMD}, "SBMSN_END_YMD" = #{SBMSN_END_YMD}
+		WHERE	"ASMT_NO" = #{ASMT_NO}
+	</update>
+	<delete id="delHomeworkSubmission" parameterType="int">
+		DELETE	FROM  "HOMEWORK_SUBMISSION"  WHERE	 "ASMT_NO" = #{asmt_no}
+	</delete>
+	<delete id="delHomework">
+		DELETE	FROM  "HOMEWORK"  WHERE	 "ASMT_NO" = #{ASMT_NO}
+	</delete>
+	<select id="getStudHomeworkList" resultType="Homework">
+		SELECT		u."USER_NAME" AS profName, l."LCTR_ID", l."LCTR_NAME", hs."SBMSN_YN",
+					h."ASMT_NO", h."ASMT_NM", h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD"
+		FROM		"COURSE_REGISTRATION" AS c
+		JOIN		"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"
+		JOIN		"USER_INFO" u ON l."USER_SEQ" = u."USER_SEQ"
+		JOIN		"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
+		JOIN		"HOMEWORK_SUBMISSION" AS hs ON h."ASMT_NO" = hs."ASMT_NO"
+		WHERE		hs."USER_SEQ" = #{USER_SEQ}
+		AND			TO_DATE(h."SBMSN_END_YMD", 'YYYY-MM-DD') >= CURRENT_DATE
+		ORDER BY	l."LCTR_NAME" ASC
+	</select>
+	<update id="updatesubmitHomework" parameterType="Homework_Submission">
+		UPDATE	"HOMEWORK_SUBMISSION"
+		SET		"SBMSN_YN" = #{sbmsn_yn}, "SBMSN_YMD" = #{sbmsn_ymd}, "FILE_GROUP" = #{file_group}
+		WHERE	"ASMT_NO" = #{asmt_no}
+		AND		"USER_SEQ" = #{user_seq}
+	</update>
+	<select id="getTotStudInCourse" resultType="int">
+		SELECT	COUNT(*)
+		FROM	"COURSE_REGISTRATION"
+		WHERE	"LCTR_ID" = #{LCTR_ID}
+	</select>
+	<select id="getSubmittedStuds" resultType="int">
+		SELECT	COUNT(*)
+		FROM	"HOMEWORK_SUBMISSION"
+		WHERE	"ASMT_NO" = #{ASMT_NO}
+		AND		"SBMSN_YN" = 'Y'
+	</select>
+</mapper>
