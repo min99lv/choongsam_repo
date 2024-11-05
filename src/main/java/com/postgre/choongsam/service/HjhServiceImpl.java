@@ -18,8 +18,6 @@ public class HjhServiceImpl implements HjhService {
 	@Override
 	public List<User_Info> userList(Map<String, Object> params) {
 		List<User_Info> listteastd = hjhdao.teastdlist(params);
-
-		
 		return listteastd;
 	}
 
@@ -32,8 +30,29 @@ public class HjhServiceImpl implements HjhService {
 	@Override
 	public User_Info detailProfile(String user_id) {
 		User_Info detailProfile = hjhdao.detailProfile(user_id);
-		return null;
+		return detailProfile;
 	}
+
+	@Override
+	public int userProfile1(User_Info info) {
+		int userProfile1 = hjhdao.userProfile1(info);
+		return userProfile1;
+	}
+
+	@Override
+	public List<User_Info> profileupdate(String user_id) {
+		List<User_Info> profileupdate = hjhdao.profileupdate(user_id);
+		return profileupdate;
+	}
+
+	@Override
+	public User_Info detailProfileuser(String userId) {
+		User_Info detailProfileuser = hjhdao.detailProfileuser(userId);
+		System.out.println("detailProfileuser service: " + detailProfileuser);
+		return detailProfileuser;
+	}
+
+
 
 
 }

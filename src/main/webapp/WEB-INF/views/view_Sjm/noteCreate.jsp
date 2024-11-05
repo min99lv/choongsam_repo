@@ -23,6 +23,7 @@
             height: auto;
             padding: 20px; /* 여백 추가 */
             font-size: 20px;
+            margin-bottom: 200px;
         }
 
         .list {
@@ -89,46 +90,116 @@
             border-radius: none;
 
         }
+    
+        button{
+            width: 200px;
+            text-align: center;
+            /* 버튼 가운데 정렬을 위한 추가 스타일 */
+            margin: 20px auto; /* 버튼을 가운데 정렬 */
+            display: block; /* 블록으로 설정 */
+            height: 50px;
+            background-color: #00664F;
+            border: none;
+            color: white;
+
+
+
+        }
         
         
-        submitBtn {
-    width: 200px;
-    text-align: center;
-    margin: 20px auto;
-    display: block;
-    height: 50px;
-    background-color: #00664F;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-}
+        	/* 모달 기본 스타일 */
+			.modal {
+				display: none;
+				/* 기본적으로 숨김 */
+				position: fixed;
+				z-index: 1;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+
+			/* 모달 콘텐츠 스타일 */
+			.modal-content {
+				background-color: #fff;
+				margin: 15% auto;
+				padding: 20px;
+				border: 1px solid #888;
+				width: 50%;
+			}
+
+			.close {
+				color: #aaa;
+				float: right;
+				font-size: 28px;
+				font-weight: bold;
+			}
+
+			.close:hover,
+			.close:focus {
+				color: #000;
+				text-decoration: none;
+				cursor: pointer;
+			}
+        
+        
+
     </style>
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <script type="text/javascript">
 
-async function uploadAndInsertImage() {
-            const fileInput = document.querySelector('input[name="attachment"]');
-            const file = fileInput.files[0];
-
-            if (file) {
-                const formData = new FormData();
-                formData.append("file", file);
-
-                // 이미지 업로드
-                const response = await fetch("/uploadImage", {
-                    method: "POST",
-                    body: formData
+    
+    
+    function openRecipientModal(userSeq) {
+    	  console.log("openRecipientModal called with userSeq:", userSeq);
+        fetch(`/api/lectures/my?userSeq=${userSeq}`)
+            .then(response => response.json())
+            .then(data => {
+                const lectureList = document.getElementById('lectureList');
+                lectureList.innerHTML = ''; // 목록 초기화
+                data.forEach(lecture => {
+                    const li = document.createElement('li');
+                    li.textContent = lecture.lctrName; // 강의명 설정
+                    li.onclick = () => fetchRecipients(lecture.lctrId); // 강의 클릭 시 수신자 목록 조회
+                    lectureList.appendChild(li);
                 });
+                document.getElementById('recipientModal').style.display = 'block'; // 모달 열기
+            });
+    }
 
-                const imageUrl = await response.text(); // 업로드된 이미지 URL 수신
+    function fetchRecipients(lectureId) {
+        fetch(`/api/lectures/${lectureId}/recipients`)
+            .then(response => response.json())
+            .then(data => {
+                const recipientList = document.getElementById('recipientList');
+                recipientList.innerHTML = ''; // 목록 초기화
+                data.forEach(recipient => {
+                    const li = document.createElement('li');
+                    li.textContent = recipient.userName; // 이름 설정
+                    li.setAttribute('data-user-seq', recipient.userSeq); // 사용자 번호 저장
+                    li.onclick = selectRecipient; // 선택 시 처리
+                    recipientList.appendChild(li);
+                });
+            });
+    }
 
-                // 이미지 URL을 내용 textarea에 삽입
-                const contentField = document.querySelector('textarea[name="content"]');
-                contentField.value += `![이미지](${imageUrl})\n`; // 마크다운 이미지 형식으로 삽입
-            }
-        }
+    function selectRecipient(event) {
+        const selectedUserSeq = event.target.getAttribute('data-user-seq');
+        const selectedName = event.target.textContent;
+        
+        // 수신자 목록을 화면에 추가하는 로직
+        addRecipientToDisplay(selectedUserSeq, selectedName);
+    }
+
+    function addRecipientToDisplay(userSeq, name) {
+        const recipientDisplay = document.getElementById('recipientDisplay'); // 수신자 표시 공간
+        const li = document.createElement('li');
+        li.textContent = name;
+        li.setAttribute('data-user-seq', userSeq); // 데이터 속성 추가
+        recipientDisplay.appendChild(li); // 화면에 추가
+    }
+
+
       </script>
 </head>
 <body>
@@ -141,33 +212,43 @@ async function uploadAndInsertImage() {
             <h1>쪽지 작성</h1>
         </div>
 
-        <form id="noticeForm" method="post" action="your_action_url_here">
+        <form method="post" action="/api/notes">
+        
+        
+        <input type="hidden" name="sndpty_seq" value="${sessionScope.user_seq}">
+        <input type="hidden" name="sndpty_note_yn" value="N">
+        <input type="hidden" name="rcvr_note_yn" value="N">
 
             <table class="list">
                 <tr>
+                    <th>받는사람</th>
+                    <td><input type="text" name="rcvr_seq" ><button onclick="openRecipientModal(${sessionScope.user_seq})">추가</button></td>
+                </tr>
+                <tr>
                     <th>제목</th>
-                    <td><input type="text" name="title" required></td>
-                </tr>
-                <tr>
-                    <th>작성자</th>
-                    <td><input type="text" name="author" required></td>
-                </tr>
-                <tr>
-                    <th>첨부파일</th>
-                    <td>
-                        <input type="file" name="attachment" onchange="uploadAndInsertImage()">
-                        <div id="filePreview"></div>
-                    </td>
+                    <td><input type="text" name="note_ttl" required></td>
                 </tr>
                 <tr>
                     <th>내용</th>
-                    <td><textarea name="content" rows="10" required></textarea></td>
+                    <td><textarea name="note_cn" rows="10" required></textarea></td>
                 </tr>
             </table>
             
-            <button class="submitBtn" type="submit">작성완료</button>
-    <!--        <button class="submitBtn" type="submit" onclick="submitForm()">작성 완료</button> -->
+           <button type="submit" >작성완료</button>
         </form>
     </div>
+    
+    
+    <div id="recipientModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>받는 사람 추가</h2>
+        <h3>내 강의 목록</h3>
+        <ul id="lectureList"></ul>
+        <h3>받는 사람 목록</h3>
+        <ul id="recipientList"></ul>
+        <button id="sendMessageButton">쪽지 보내기</button>
+    </div>
+</div>
 </body>
 </html>
