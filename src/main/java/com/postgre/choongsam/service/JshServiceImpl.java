@@ -61,6 +61,7 @@ public class JshServiceImpl implements JshService {
 			
 			result = 0;
 			result = Dao.fileLectureVideoUpload(info);
+			System.out.println("*************************************************************");
 			if(result==0) {
 				System.out.println("JshService fileLectureVideoUpload 강의영상 등록 실패...");
 			}
@@ -72,6 +73,7 @@ public class JshServiceImpl implements JshService {
 			//첨부파일이 없는 경우 업로드
 			result = 0;
 			result = Dao.lectureVideoUpload(info);
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			if(result==0) {
 				System.out.println("JshService lectureVideoUpload 강의영상 등록 실패...");
 			}

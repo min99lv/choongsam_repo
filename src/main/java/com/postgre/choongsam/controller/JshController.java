@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.http.codec.multipart.Part;
@@ -67,6 +68,8 @@ public class JshController {
 		model.addAttribute("lectName", lectName);
 		model.addAttribute("teacherName", teacherName);
 		model.addAttribute("contentList", contsList);
+		model.addAttribute("lctr_id", lctr_id);
+		model.addAttribute("user_seq", user_seq);
 		
 		
 		return "view_Jsh/teaLecture";
@@ -81,7 +84,20 @@ public class JshController {
 		System.out.println("contsUploadForm lctr_id >> "+lctr_id);
 		System.out.println("contsUploadForm user_seq >> "+user_seq);
 		
+		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
+				
+		String lectName = contsList.stream()
+		                .map(Class_ScheduleAddVideo::getLctr_name)
+		                .findFirst()
+		                .orElse("");
+		String teacherName = contsList.stream()
+		                .map(Class_ScheduleAddVideo::getUser_name)
+		                .findFirst()
+		                .orElse("");
+		
+		
 		List<Class_ScheduleAddVideo> startInfo = service.getStartDay(lctr_id);
+		System.out.println("startInfo >> "+startInfo);
 		
 		Optional<String> startDay = startInfo.stream()
 					                .map(Class_ScheduleAddVideo::getLctr_start_date)
@@ -92,9 +108,16 @@ public class JshController {
 		Optional<Integer> chongChashi = startInfo.stream()
 	               .map(Class_ScheduleAddVideo::getLctr_cntschd)
 	               .findFirst();
+		
 		Optional<String> viewing_period = startInfo.stream()
-	               .map(Class_ScheduleAddVideo::getViewing_period)
-	               .findFirst();
+			    .map(Class_ScheduleAddVideo::getViewing_period)
+			    .filter(Objects::nonNull) // null 값 필터링
+			    .findFirst();
+		
+		// viewing_period가 비어있을 경우 startDay를 사용
+		if (!viewing_period.isPresent()) {
+		    viewing_period = startDay;
+		}
 		
 		String endDay = "";
 		
@@ -112,6 +135,8 @@ public class JshController {
 			System.out.println(endDay);
 		}
 		
+		model.addAttribute("lectName", lectName);
+		model.addAttribute("teacherName", teacherName);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("max_lctr_no", max_lctr_no.get());
 		model.addAttribute("user_seq", user_seq);
