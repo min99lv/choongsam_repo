@@ -273,4 +273,24 @@ public class JshDaoImpl implements JshDao {
 		return result;
 	}
 
+	@Override
+	public List<Class_ScheduleAddVideo> searchTeachConts(String lctr_id, int user_seq) {
+		System.out.println("JshDao searchTeachConts start...");
+		
+		List<Class_ScheduleAddVideo> info = null;
+		Map<String, Object> value = new HashMap<>();
+		
+		value.put("lctr_id", lctr_id);
+		value.put("user_seq", user_seq);
+		
+		try {
+			info = session.selectList("searchTeachConts", value);
+			
+		} catch (Exception e) {
+			System.out.println("JshDao searchTeachConts exception >> "+e.getMessage());
+		}
+		
+		return info;
+	}
+
 }
