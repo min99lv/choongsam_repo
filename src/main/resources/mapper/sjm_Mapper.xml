@@ -59,7 +59,7 @@
 	</insert>
 
 
-	<insert id="FileUpload" parameterType="Filegroup">
+	<insert id="FileUpload" parameterType="File_Group">
 		INSERT INTO
 		"FILEGROUP"
 		("FILE_GROUP","FILE_SEQ","IDNTF_NO","FILE_NM","FILE_EXTN_NM","FILE_SZ","FILE_PATH_NM")
