@@ -3,10 +3,12 @@ package com.postgre.choongsam.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.postgre.choongsam.dto.Login_Info;
+import com.postgre.choongsam.dto.User_Info;
 import com.postgre.choongsam.service.LjmService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,23 +44,33 @@ public class LjmController {
 			if (login_info == null) {
 				System.out.println(user_id + "로그인 실패");
 				model.addAttribute("loginError", "아이디 또는 비밀번호가 틀렸습니다.");
-				model.addAttribute("user_id", user_id); // 입력한 아이디를 다시 전달
+				model.addAttribute("user_id", user_id);
 				System.err.println("로그인 실패");
 				return "view_Ljm/loginForm"; 
 			}
 			
-			// 기존 세션을 무효화하고 새로운 세션 ID 발급
-			session.invalidate(); // 기존 세션을 무효화
+			// 기존 세션을 무효화, 새로운 세션 ID 발급
+			session.invalidate(); // 기존 세션 무효화
 			session = request.getSession(true); // 새로운 세션 생성
 
-			// 사용자 정보를 세션에 저장
-			session.setAttribute("user", login_info); // 새로운 세션에 사용자 정보 저장
-			session.setMaxInactiveInterval(60 * 60); // 60분 동안 활동이 없으면 세션 만료 설정
+			// 회원 아이디, 회원 분류를 세션에 저장
+			session.setAttribute("user", login_info.getUser_id()); // 새로운 세션에 회원 아이디 저장
+			session.setAttribute("usertype", login_info.getUser_status()); // 새로운 세션에 회원 분류 저장
+			session.setMaxInactiveInterval(60 * 60); // 60분 동안 활동이 없으면 세션 만료
 			
 			System.out.println("로그인 성공");
 			return "redirect:/"; // 로그인 성공 시 리다이렉트
 
-		}				
+		}
+		
+		// 로그아웃
+		@GetMapping(value = "/logout")
+		public String logout(HttpSession session, Model model) {
+			// 세션 해제
+			session.invalidate();
+			System.out.println("로그아웃");
+			return "redirect:/";
+		}
 		
 		// 아이디 찾기 페이지 이동
 		@GetMapping(value =  "view_Ljm/findId")
@@ -84,12 +96,21 @@ public class LjmController {
 			return "view_Ljm/signup2";
 		}
 		
-		// 아이디 중복체크
-		
-		
-		// 회원가입 페이지 (가입완료) 이동
-		@RequestMapping(value =  "view_Ljm/signup3")
-		public String showSignupPage3() {
-			return "view_Ljm/signup3";
+		// 회원가입 처리
+		@RequestMapping(value = "view_Ljm/signup")
+		public String signup(@ModelAttribute Login_Info login_Info, Model model) {
+			System.out.println(" signup Start...");
+			
+			int signupResult = ljs.signup(login_Info);
+			System.out.println("LjmController signupResult -> " + signupResult);
+			
+			if (signupResult > 0) {
+				return "view_Ljm/signup3";
+			} else {
+				model.addAttribute("msg", "회원가입에 실패하였습니다.");
+				return "main";
+			}
+			
+			
 		}
 }
