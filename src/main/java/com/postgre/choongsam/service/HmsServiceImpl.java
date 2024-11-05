@@ -121,11 +121,40 @@ public class HmsServiceImpl implements HmsService{
 		return HD.findAllVideo();
 	}
 
-	//뷰에서 값 가져와서 insert해주기
+	//뷰에서 값 가져와서 update해주기
 	@Override
 	public void saveWatchTime(Class_Schedule class_schedule) {
 		System.out.println("msService saveWatchTime start...");
 		HD.saveWatchTime(class_schedule);
+	}
+
+	//현재 max값
+	@Override
+	public long findCurrentMax(String videoId) {
+		System.out.println("msService findCurrentMax start..");
+		return HD.findCurrentMax(videoId);
+	}
+
+	//max값 빼고 업뎃
+	@Override
+	public void saveWatchTimeNoMaxUpdate(Class_Schedule class_schedule) {
+		System.out.println("msService saveWatchTime start...");
+		System.out.println("msService saveWatchTime class_schedule..."+class_schedule);
+		HD.saveWatchTimeNoMaxUpdate(class_schedule);
+	}
+
+	//final
+	@Override
+	public int watchedFinalTime(String videoId) {
+		System.out.println("msService watchedFinalTime start...");
+		System.out.println("msService watchedFinalTime videoId..."+videoId);
+		return HD.watchedFinalTime(videoId);
+	}
+
+	@Override
+	public String getFilePath(String filename) {
+		System.out.println("msservice getFileName start..");
+		return HD.getFilePath(filename);
 	}
 
 	

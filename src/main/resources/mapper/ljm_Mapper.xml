@@ -7,4 +7,28 @@
 		FROM "LOGIN_INFO" 
 		WHERE "USER_ID" = #{user_id}
 	</select>
+	
+	<insert id="loginSignup" parameterType="Login_Info">
+		INSERT INTO "LOGIN_INFO" ("USER_SEQ", "USER_ID", "PASSWORD", "USER_STATUS")
+		VALUES (NEXTVAL('user_seq'), #{user_id}, #{password}, #{user_status})
+	</insert>
+	
+	<insert id="userSignup" parameterType="User_Info">
+		INSERT INTO "USER_INFO" ("USER_SEQ", "USER_ID", "USER_NAME", "BIRTH", "PROFILE_NAME", "PROFILE_ADDR",
+		"ADDRESS", "EMAIL", "PHONE_NUM", "DEL_STATE", "FILE_GROUP", "ADDR_DETAIL")
+		VALUES (CURRVAL('user_seq'), #{user_id}, #{user_name}, #{birth}, #{profile_name}, #{profile_addr}, #{address},
+		#{email}, #{phone_num}, 0, #{file_group}, #{addr_detail)
+	</insert>
+	
+	<select id="confirmId" resultType="int" parameterType="String"> 
+		SELECT count(*)
+		FROM "LOGIN_INFO"
+		WHERE "USER_ID" = #{user_id} 
+	</select>
+	
+	<select id="findId" parameterType="User_Info" resultType="String">
+	 	SELECT "USER_ID"
+	 	FROM "USER_INFO" 
+	 	WHERE "USER_NAME" = #{user_name} AND "EMAIL" = #{email} 
+	</select>
 </mapper>
