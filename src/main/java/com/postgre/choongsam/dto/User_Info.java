@@ -15,6 +15,5 @@ public class User_Info {	// 회원정보
 	private String 	phone_num;		//전화번호
 	private String 	del_state;			//삭제여부
     private int    	file_group;      	//파일그룹
-    private int    	user_status;     	//회원분류
 	
 }
