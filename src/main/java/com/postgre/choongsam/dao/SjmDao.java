@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.postgre.choongsam.dto.Filegroup;
+import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture;
 
 import com.postgre.choongsam.dto.Note;
@@ -24,7 +24,7 @@ public interface SjmDao {
 
 	int countNote(Map<String, Object> params);
 
-	int noticeCreate(Notice notice,List<Filegroup> uploadFiles);
+	int noticeCreate(Notice notice,List<File_Group> uploadFiles);
 
 	int getUserSeq(Map<String, Object> params);
 
