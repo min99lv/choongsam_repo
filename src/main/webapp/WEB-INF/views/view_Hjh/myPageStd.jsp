@@ -68,13 +68,15 @@
         }
     }
 </script>
+
+
 </head>
 <body>
 
 <header>
     <div class="logo"></div>
     <h1>마이페이지</h1>
-    <div class="user-info"></div>
+
 </header>
 
 <nav>
@@ -94,7 +96,7 @@
         <li onclick="toggleSubMenu('userInfoSubmenu')">회원정보</li>
         <ul class="submenu" id="userInfoSubmenu">
 
-            <li style="font-size: 13px;" onclick="location.href='updateProfile'">개인정보 수정</li>
+            <li style="font-size: 13px;" onclick="location.href='updateProfile?user=${user}'">개인정보 수정</li>
             <li style="font-size: 13px;">비밀번호 변경</li>
             <li style="font-size: 13px;">회원 탈퇴</li>
         </ul>

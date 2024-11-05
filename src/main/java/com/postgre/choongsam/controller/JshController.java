@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dto.Class_Bookmark;
@@ -145,11 +146,11 @@ public class JshController {
 		String vdo_url_addr = video.getVdo_url_addr();					//유튜브ID 가져오기
 
 		int vdo_length = video.getVdo_length();								//영상 전체길이 가져오기
-		Integer conts_chptime1 = bookmark.getConts_chptime_sec1(); // 챕터시간1 가져오기
+		String conts_chptime = info.getChp_str1();							//탭처1 시간 스트링 가져오기
 		String conts_chpttl1 = bookmark.getConts_chpttl(); 						// 챕터제목1 가져오기
-		Integer conts_chptime2 = bookmark.getConts_chptime_sec2(); 	// 챕터시간2 가져오기
+		String conts_chptime2 = info.getChp_str2();							//탭처1 시간 스트링 가져오기
 		String conts_chpttl2 = bookmark.getConts_chpttl2(); 					// 챕터제목2 가져오기
-		Integer conts_chptime3 = bookmark.getConts_chptime_sec3();	// 챕터시간3 가져오기
+		String conts_chptime3 = info.getChp_str3();							//탭처1 시간 스트링 가져오기
 		String conts_chpttl3 = bookmark.getConts_chpttl3();					 // 챕터제목3 가져오기
 
 		
@@ -159,8 +160,8 @@ public class JshController {
 		System.out.println("title >> "+title);
 		System.out.println("lctr_no >> "+lctr_no);
 		System.out.println("vdo_url_addr >> "+vdo_url_addr);
-		//System.out.println("vdo_length >> "+vdo_length+"초");
-		System.out.println("conts_chptime1 >> "+conts_chptime1);
+		System.out.println("vdo_length >> "+vdo_length+"초");
+		System.out.println("conts_chptime1 >> "+conts_chptime);
 		System.out.println("conts_chpttl1 >> "+conts_chpttl1);
 		System.out.println("conts_chptime2 >> "+conts_chptime2);
 		System.out.println("conts_chpttl2 >> "+conts_chpttl2);
@@ -169,20 +170,13 @@ public class JshController {
 		System.out.println("viewing_period >> "+viewing_period);
 		
 		//시간 초단위 변경 메소드 출력
-		/*Integer chapTimeSec1 = getSec(conts_chptime1);
+		Integer chapTimeSec1 = getSec(conts_chptime);
 		Integer chapTimeSec2 = getSec(conts_chptime2);
 		Integer chapTimeSec3 = getSec(conts_chptime3);
-		String chapTimeSec1Str = null;
-		String chapTimeSec2Str = null;
-		String chapTimeSec3Str = null;
 		
 		info.setConts_chptime(chapTimeSec1);		//초단위챕터시간1
 		info.setConts_chptime2(chapTimeSec2);	//초단위챕터시간2
-		info.setConts_chptime3(chapTimeSec3);	//초단위챕터시간3*/
-		
-		info.setConts_chptime(conts_chptime1);		//초단위챕터시간1
-		info.setConts_chptime2(conts_chptime2);	//초단위챕터시간2
-		info.setConts_chptime3(conts_chptime3);	//초단위챕터시간3
+		info.setConts_chptime3(chapTimeSec3);	//초단위챕터시간3
 		
 		
 		
@@ -220,19 +214,19 @@ public class JshController {
 		    System.out.println("업로드된 파일이 없습니다.");
 		}
 		
-
+		service.contsUpload(info);
 		
 		return "view_Jsh/teaLecture";
 	}
 	
-	/*
+	
 	// 시간형식을 초로 변환해주는 메소드 (ex: 00:02:20 >> 140)
-    public Integer getSec (Integer chptimeString) {
+    public Integer getSec (String chptimeString) {
 
     	Integer totalSeconds = null;
     	
     	//null이 아닌 겨웅에만 실행, null인 경우 null반환
-    	if(chptimeString != null) {
+    	if(chptimeString != null&& !chptimeString.trim().isEmpty()) {
     		// HH:mm:ss 형식으로 LocalTime 객체로 변환
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalTime time = LocalTime.parse(chptimeString, formatter);
@@ -245,7 +239,7 @@ public class JshController {
         
 		return totalSeconds;
     }
-    */
+    
     
     
     
@@ -328,6 +322,24 @@ public class JshController {
 			
 			return "view_Jsh/stuLecture";
 		}
+	 	
+	 	//만약 학습시작 버튼을 눌렀는데 클래스 스케쥴 테이블에 컬럼이 없다면 insert
+	 	@PostMapping("/classScheChk")
+	 	@ResponseBody
+	 	public int cassScheChk(@RequestParam String chashi,
+	 											@RequestParam String conts_id,
+	 											@RequestParam String user_seq,
+	 											@RequestParam String lctr_id) {
+	 		
+	 		System.out.println("JshController cassScheChk start  차시 >> "+chashi+"강의번호 >> "+lctr_id+" 영상번호 >> "+conts_id+ " 유저번호 >> "+user_seq);
+	 		int result = 0;
+	 		
+	 		result = service.classScheChk(chashi, conts_id,lctr_id, user_seq);
+	 		System.out.println("JshController cassScheChk result >> "+result);
+	 		
+	 		return result;
+	 	}
+	 	
     
 	
 	

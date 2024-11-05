@@ -10,7 +10,7 @@ public class Notice { // 공지사항
 	private	String	ntc_mttr_ttl;		// 공지 제목
 	private	String	ntc_mttr_cn;		// 공지 내용
 	private	String	ntc_mttr_dt;		// 공지 등록 날짜
-	private String	ntc_mttr_yn;		// 공지 여부
-	private String	lctr_id;				// 강의 번호
-	private int		file_group;			// 파일 그룹
+	private String	 	ntc_mttr_yn;		// 공지 여부
+	private String		lctr_id;				// 강의 번호
+	private int		 	file_group;			// 파일 그룹
 }

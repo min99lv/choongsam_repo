@@ -8,9 +8,6 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
-	alert('${status == "success" ? "과제가 제출되었습니다." : "과제 제출에 실패했습니다. 다시 시도해 주세요."}');
-</script>
 <title>수강중인 강의 과제 리스트</title>
 </head>
 <body>
@@ -20,36 +17,46 @@
 			<th>강의명</th>
 			<th>강사명</th>
 			<th>과제명</th>
-			<th></th>
+			<th>진행</th>
+			<th>제출</th>
+			<th>마감일</th>
 		</tr>
 		<c:set var="previousName" value="" />
 		<c:set var="previousAsmtNm" value="" />
 		<c:set var="previousprofNm" value="" />
-		<c:forEach var="HWList" items="${HWList}">
-			<c:if test="${HWList.lctr_name != previousName}">
+		<c:forEach var="homeworkList" items="${homeworkList}">
+			<c:if test="${homeworkList.lctr_name != previousName}">
 				<tr>
-					<td>${HWList.lctr_name}</td>
-					<td>${HWList.user_name}</td>
-					<td><a href="/Jhe/updateHomework?ASMT_NO=${HWList.ASMT_NO}">${HWList.ASMT_NM}</a></td>
-					<td><input type="checkbox" name="delCheck" value="${HWList.ASMT_NO}"></td>
+					<td>${homeworkList.lctr_name}</td>
+					<td>${homeworkList.profName}</td>
+					<td><a href="/Jhe/submitHomework?ASMT_NO=${homeworkList.ASMT_NO}">${homeworkList.ASMT_NM}</a></td>
+					<td>${homeworkList.asmtStatus}</td>
+					<td><c:choose>
+						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">제출</c:when>
+						<c:when test="${homeworkList.sbmsn_yn == 'N'}">미제출</c:when>
+					</c:choose></td>
+					<td>${homeworkList.SBMSN_END_YMD}</td>
 				</tr>
-				<c:set var="previousName" value="${HWList.lctr_name}" />
-				<c:set var="previousprofNm" value="${HWList.user_name}" />
-				<c:set var="previousAsmtNm" value="${HWList.ASMT_NM}" />
+				<c:set var="previousName" value="${homeworkList.lctr_name}" />
+				<c:set var="previousprofNm" value="${homeworkList.user_name}" />
+				<c:set var="previousAsmtNm" value="${homeworkList.ASMT_NM}" />
 			</c:if>
 			<c:if
-				test="${HWList.lctr_name == previousName && HWList.user_name == previousprofNm && HWList.ASMT_NM != previousAsmtNm}">
+				test="${homeworkList.lctr_name == previousName && homeworkList.user_name == previousprofNm && homeworkList.ASMT_NM != previousAsmtNm}">
 				<tr>
 					<td></td>
 					<td></td>
-					<td><a href="/Jhe/updateHomework?ASMT_NO=${HWList.ASMT_NO}">${HWList.ASMT_NM}</a></td>
-					<td><input type="checkbox" name="delCheck" value="${HWList.ASMT_NO}"></td>
+					<td><a href="/Jhe/submitHomework?ASMT_NO=${homeworkList.ASMT_NO}">${homeworkList.ASMT_NM}</a></td>
+					<td>${homeworkList.asmtStatus}</td>
+					<td><c:choose>
+						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">제출</c:when>
+						<c:when test="${homeworkList.sbmsn_yn == 'N'}">미제출</c:when>
+					</c:choose></td>
+					<td>${homeworkList.SBMSN_END_YMD}</td>
 				</tr>
-				<c:set var="previousAsmtNm" value="${HWList.ASMT_NM}" />
+				<c:set var="previousAsmtNm" value="${homeworkList.ASMT_NM}" />
 			</c:if>
 		</c:forEach>
 	</table>
-	<a href="/Jhe/insertHomework"><button type="button">과제등록</button></a>
-	<button type="submit">삭제</button>
 </body>
 </html>
