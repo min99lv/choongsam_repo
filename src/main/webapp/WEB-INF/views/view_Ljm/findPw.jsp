@@ -106,7 +106,7 @@
         
         <main>
 			
-		  <form method="post">
+		  <form action="findPwResult" method="post">
 	        <div class="main_container">
 			<h2 style="color: #00664F ">비밀번호 찾기</h2>
 			<hr style="width: 400px; margin: 0 auto;">

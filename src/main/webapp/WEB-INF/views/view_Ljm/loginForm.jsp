@@ -104,27 +104,28 @@
 	            <div class="login_section">
 	            	<select name="user_status" class="select">
 	  					<option disabled selected>로그인 할 회원 유형을 선택하세요</option>
-	  					<option value="student">학생</option>
-	  					<option value="professor">강사</option>
+	  					<option value="1001">학생</option>
+	  					<option value="1002">강사</option>
 					</select>
 					<p>
 					<input type="text" name="user_id" value="${user_id }" placeholder="아이디">
 					<p>				
 					<input type="password" name="password" placeholder="비밀번호">
+					<p>
+					<input id="btnLogin" type="submit" value="로그인">
 					
 				<div class="find">
 					<a href="findId">아이디 찾기 | </a>
 					<a href="findPw">비밀번호 찾기 | </a>
 					<a href="signup1">회원가입</a>
-				</div>
-				<br>
-				<input id="btnLogin" type="submit" value="로그인">
-	            </div>
-	            
+				</div>				
+	            </div>	            
 	        </div>
 	      </form>
-	      ${user.user_id}
-	      ${user.user_seq }
+	      	USER_SEQ : ${user_seq } <p>
+	   		USER_ID : ${user } <p>
+	   		USER_STATUS : ${usertype }
+	      
 		</main>
         <footer>
         </footer>

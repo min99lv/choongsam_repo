@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Ask { // 문의사항
-	private	String	dscsn_sn;			// 문의 번호
+	private int	dscsn_sn;			// 문의 번호
 	private int		user_seq;			// 회원 번호 (문의자)
 	private String	dscsn_ttl;			// 문의 제목
 	private	String	dscsn_cn;			// 문의 내용
