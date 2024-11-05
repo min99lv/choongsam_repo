@@ -227,4 +227,50 @@ public class JshDaoImpl implements JshDao {
 		return result;
 	}
 
+	@Override
+	public int searchSche(String chashi, String conts_id, String user_seq) {
+		System.out.println("JshDao searchSche start...");
+		int result = 0;
+		
+		Map<String, Object> info = new HashMap<>();
+		info.put("lctr_no", chashi);
+		info.put("conts_id", conts_id);
+		info.put("user_seq", user_seq);
+		
+		try {
+			result = session.selectOne("searchSche", info);
+			System.out.println("JshDao searchSche result >> "+result);
+		} catch (Exception e) {
+			System.out.println("JshDao searchSche exception >> "+e.getMessage());
+		}
+		
+		System.out.println("뭘 반환하는거야 "+result);
+		return result;
+	}
+
+	@Override
+	public int insertSche(String chashi, String conts_id, String lctr_id, String user_seq) {
+		System.out.println("JshDao insertSche start...");
+		int result = 0;
+		
+		Integer lctr_no = Integer.parseInt(chashi);
+		Integer user_seqInt = Integer.parseInt(user_seq);
+		
+		Map<String, Object> info = new HashMap<>();
+		info.put("lctr_no", lctr_no);
+		info.put("conts_id", conts_id);
+		info.put("user_seq", user_seqInt);
+		info.put("lctr_id", lctr_id);
+		
+		
+		try {
+			result = session.insert("insertSche", info);
+			System.out.println("JshDao insertSche result >> "+result);
+		} catch (Exception e) {
+			System.out.println("JshDao searchSche exception >> "+e.getMessage());
+		}
+		
+		return result;
+	}
+
 }

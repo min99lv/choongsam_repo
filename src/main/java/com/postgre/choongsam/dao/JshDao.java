@@ -21,4 +21,8 @@ public interface JshDao {
 
 	int chpTimeUpload(Class_ScheduleAddVideo info);
 
+	int searchSche(String chashi, String conts_id, String user_seq);
+
+	int insertSche(String chashi, String conts_id, String lctr_id, String user_seq);
+
 }

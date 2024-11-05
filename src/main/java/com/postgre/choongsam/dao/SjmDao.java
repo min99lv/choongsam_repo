@@ -3,6 +3,8 @@ package com.postgre.choongsam.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.aspectj.weaver.ast.Not;
+
 import com.postgre.choongsam.dto.Note;
 import com.postgre.choongsam.dto.Notice;
 

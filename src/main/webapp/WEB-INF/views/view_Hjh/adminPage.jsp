@@ -83,12 +83,12 @@
         <ul>
           <li onclick="toggleSubMenu('userInfoSubmenu')">회원관리</li>
         <ul class="submenu" id="userInfoSubmenu">
-            <li style="font-size: 13px;" onclick="location.href='updateProfileAdmin'">회원정보수정</li>
+            <li style="font-size: 13px;" onclick="location.href='/view_Hjh/updateProfileAdmin'">회원정보수정</li>
         </ul>
         <li onclick="toggleSubMenu('myClassroomSubmenu')">강의</li>
         <ul class="submenu" id="myClassroomSubmenu">
             <li style="font-size: 13px;">강의 승인</li>
-            <li style="font-size: 13px;">강의 목록<li>
+            <li style="font-size: 13px;">강의 목록</li>
         </ul>
         <li onclick="toggleSubMenu('inquirySubmenu')">1:1 문의</li>
         <ul class="submenu" id="inquirySubmenu">

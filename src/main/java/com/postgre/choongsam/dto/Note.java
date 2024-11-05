@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class Note { // 쪽지
-	private	String	note_sn;		// 쪽지 번호
-	private	String	bfr_note_sn;	// 이전 쪽지 번호
+	private	int	note_sn;		// 쪽지 번호
+	private	int	bfr_note_sn;	// 이전 쪽지 번호
 	private	int		sndpty_seq;	// 회원 번호 (발신)
 	private	int		rcvr_seq;		// 회원 번호 (수신)
 	private	String	dsptch_dt;		// 쪽지 발신 일시
