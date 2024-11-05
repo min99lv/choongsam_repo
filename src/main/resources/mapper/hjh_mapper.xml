@@ -7,12 +7,12 @@
 	    SELECT * 
 	    FROM "USER_INFO"
 	    WHERE 
-			#{keyword} IS NULL 
+			#{keyword} IS NULL
         OR
             ("USER_NAME" ILIKE '%' || #{keyword} || '%'
             OR "USER_ID" ILIKE '%' || #{keyword} || '%')
 			LIMIT #{rowPage} OFFSET #{start};
-    </select>
+    	</select>
 		
 		
 		<select id="totalusercount" resultType="int" parameterType="String">
@@ -30,8 +30,30 @@
 	    FROM "USER_INFO"
 	    WHERE "USER_ID" = #{USER_ID}
 	</select>
+	
+
+			
+		<update id="userProfile1" parameterType="User_Info">
+			UPDATE public."USER_INFO"
+			    SET   "USER_NAME"= #{user_name}
+			    WHERE "USER_ID" = #{user_id}
+		</update>
+
 		
+	<select id="profileupdate" resultType="User_Info" >
+	    SELECT * 
+	    FROM "USER_INFO"
+	    WHERE "USER_ID" = #{USER_ID}
+
+    	</select>
+    	
+    	<select id="detailProfileuser" parameterType="String" resultType="User_Info">
+		    SELECT *
+	    FROM "USER_INFO"
+	    WHERE "USER_ID" = #{user_id}
+		</select>
 		
+
 
 
 </mapper> 

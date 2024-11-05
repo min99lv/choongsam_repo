@@ -45,6 +45,10 @@
       	.twoLine {
       		display: flex;
       	}
+      	
+      	.text {
+      		font-size: 15px;
+      	}
         
     </style>
     
@@ -120,51 +124,73 @@
             document.getElementById('vdo_length').value = durationInSeconds; // 비디오 길이를 정수로 폼 필드에 설정
         }
         
-        //챕터시간을 초로 변경 후 숫자타입으로 컨트롤러에 전송하는 함수
-        function convertDurationToSeconds() {
-		    const timeInputs = [
-		        { timeInputId: 'conts1_chptime', secondsInputId: 'conts_chptime_sec1' },
-		        { timeInputId: 'conts2_chptime', secondsInputId: 'conts_chptime_sec2' },
-		        { timeInputId: 'conts3_chptime', secondsInputId: 'conts_chptime_sec3' },
-		    ];
+        //챕터시간 자동 형식 변환
+        const hypenTime = (target) => {
+        	 target.value = target.value
+        	   .replace(/[^0-9]/g, '')
+        	   .replace(/^(\d{2})(\d{2})(\d{2})$/, `$1:$2:$3`);
+        	}
+        
+        //영상확인버튼 눌렀는지 확인하는 버튼
+        function videoChk() {
+		    const youtubeIdInput = document.querySelector('input[name="vdo_url_addr"]').value.trim();
+		    const youtubeIdMatch = youtubeIdInput.match(/([a-zA-Z0-9_-]{11})/);
+		    const youtubeId = youtubeIdMatch ? youtubeIdMatch[1] : '';
 		
-		    timeInputs.forEach(({ timeInputId, secondsInputId }) => {
-		        const timeInput = document.querySelector(`input[name="${timeInputId}"]`).value;
-		        alert(`Input value for ${timeInputId}: ${timeInput}`); // 입력 값 로그
+		    const videoDiv = document.querySelector('.video');
+		    console.log('youtubeId >> ' + youtubeId);
 		
-		        if (timeInput) {
-		            const timeParts = timeInput.split(':').map(Number);
-		            let totalSeconds = 0;
+		    if (youtubeId) {
+		        if (!player) {
+		            videoDiv.innerHTML = '<div id="player"></div>'; // player div를 추가
+		            videoDiv.style.display = 'block'; // 비디오 div를 보이도록 설정
 		
-		            if (timeParts.length === 3) { // HH:MM:SS 형식
-		                const [hours, minutes, seconds] = timeParts;
-		                totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-		            } else if (timeParts.length === 2) { // MM:SS 형식
-		                const [minutes, seconds] = timeParts;
-		                totalSeconds = (minutes * 60) + seconds;
-		            }
-		
-		            document.getElementById(secondsInputId).value = totalSeconds; // 초로 저장
-		            alert(`Total seconds for ${secondsInputId}: ${totalSeconds}`); // 초로 변환된 값 로그
+		            // 비디오가 준비되면 player를 생성합니다.
+		            player = new YT.Player('player', {
+		                height: '390',
+		                width: '640',
+		                videoId: youtubeId,
+		                events: {
+		                    'onReady': onPlayerReady,
+		                    'onStateChange': onPlayerStateChange
+		                }
+		            });
 		        } else {
-		            document.getElementById(secondsInputId).value = 0; // 기본값을 0으로 설정
-		            alert(`No input provided for ${timeInputId}. Setting ${secondsInputId} to 0`); // 기본값 로그
+		            pendingVideoId = youtubeId; // 비디오 ID를 대기 상태로 저장
+		            if (isPlayerReady) {
+		                player.loadVideoById(pendingVideoId); // 플레이어가 준비되면 비디오 ID 변경
+		            }
 		        }
-		    });
+		        
+		        // 아래 코드 추가
+		        document.getElementById('contsTest').value = "1"; // 유효한 ID일 때 contsTest 업데이트
+		        alert('영상 확인되었습니다.'); // 이 부분은 비디오 확인 후 보여줍니다.
+		    } else {
+		        alert('유효한 유튜브 ID를 입력해주세요.');
+		        videoDiv.style.display = 'none'; // 유효하지 않으면 비디오 div 숨기기
+		    }
 		}
-
-
+        
+        function submitChk() {
+            // Check if the hidden input contsTest has a value of 1
+            const contsTestValue = document.getElementById('contsTest').value;
+            if (contsTestValue !== "1") {
+                alert('영상 확인 버튼을 눌러주세요');
+                return false;
+            }
+            return true;
+        }
 
     </script>
 </head>
 <body>
 
 <div id="listBody">
-    <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data">
+    <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data" onsubmit="return submitChk()">
         <div id="inserts">
             <div class="oneLine">
                 <label id="text">강의 제목 입력</label>
-                <input type="text" placeholder="강의 제목을 입력해주세요" name="vdo_file_nm">
+                <input type="text" placeholder="강의 제목을 입력해주세요" name="vdo_file_nm" required="required">
             </div>
 
             <div class="oneLine">
@@ -192,35 +218,39 @@
 			</div>
 
             <div class="twoLine">
-                <label class="text">유튜브 ID</label>
-                <input type="text" name="vdo_url_addr">
-                <input type="hidden" name="vdo_length" id="vdo_length">
-                <div>
-                    <button type="button" onclick="videoChk()">영상 확인</button>
-                </div>
-            </div>
+			    <label class="text">유튜브 ID</label>
+			    <input type="text" name="vdo_url_addr" id="vdo_url_addr">
+			    <input type="hidden" name="vdo_length" id="vdo_length" required="required">
+			    <div>
+			        <button type="button" id="idInput" onclick="videoChk()">영상 확인</button>
+			        <input type="hidden" id="contsTest" value="0">
+			    </div>
+			</div>
 
             <div class="video"></div>
 
             <div id="chapter">
-			    <div class="chapterTime">
-			        <label class="text">챕터시간 입력</label>
-			        <input type="text" name="conts1_chptime" placeholder="HH:MM:SS 형식으로 입력">
-			        <input type="hidden" name="conts_chptime_sec1" id="conts_chptime_sec1">
-			    </div>
-			    
-			    <div class="chapterTime">
-			        <label class="text">챕터시간 입력</label>
-			        <input type="text" name="conts2_chptime" placeholder="HH:MM:SS 형식으로 입력">
-			        <input type="hidden" name="conts_chptime_sec2" id="conts_chptime_sec2">
-			    </div>
-			    
-			    <div class="chapterTime">
-			        <label class="text">챕터시간 입력</label>
-			        <input type="text" name="conts3_chptime" placeholder="HH:MM:SS 형식으로 입력">
-			        <input type="hidden" name="conts_chptime_sec3" id="conts_chptime_sec3">
-			    </div>
-			</div>
+                <div class="chapterTime">
+                    <label class="text">챕터시간 입력</label>
+                    <input type="text" name="chp_str1" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력">
+                    <label class="text">챕터내용 입력</label>
+                    <input type="text" name="conts_chpttl">
+                </div>
+                
+                <div class="chapterTime">
+                    <label class="text">챕터시간 입력</label>
+                    <input type="text" name="chp_str2" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력">
+                    <label class="text">챕터내용 입력</label>
+                    <input type="text" name="conts_chpttl2">
+                </div>
+                
+                <div class="chapterTime">
+                    <label class="text">챕터시간 입력</label>
+                    <input type="text" name="chp_str3" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력">
+                    <label class="text">챕터내용 입력</label>
+                    <input type="text" name="conts_chpttl3">
+                </div>
+            </div>
             
             <div class="file">
                 <label class="text">첨부파일</label>
@@ -230,7 +260,8 @@
             <input type="hidden" name="lctr_id" value="${lctr_id}">
     		<input type="hidden" name="user_seq" value="${user_seq}">
             
-            <button type="submit" onclick="convertDurationToSeconds()">수업 등록</button>
+             <button type="submit">수업 등록</button>
+
         
     	</div>
         
