@@ -61,7 +61,7 @@
     <div class="header__">
         <div class="header__color"></div>
         <div class="header__nav">
-        <div class="header__logo"><a href="/view_Sjm/noteBox">로고</a></div>
+        <div class="header__logo"><a href="/notes">로고</a></div>
         <div class="header__navBar">
             <a href="#">수강신청</a>
 			<c:choose>
