@@ -70,13 +70,13 @@
 	.vdoInfor {
 		width: 566px;
 		display: flex;
-		margin-left: 25px;
+		margin-left: 90px;
 	}
 	
 	.buttStatus {
 		width: 240px;
 		height: 86px;
-		margin-left: 110px;
+		margin-left: 50px;
 		font-size: 25px;
 		font-weight: bold;
 	}
@@ -238,7 +238,7 @@
 		<c:forEach var="conts" items="${contentList}">
 			<div class="list">
 				<div class="thumbnailDiv">
-					<img id="thumbnail" alt="유튜브 썸네일" src="https://img.youtube.com/vi/${conts.vdo_url_addr }/default.jpg">
+					<img id="thumbnail" alt="유튜브 썸네일" src="https://img.youtube.com/vi/${conts.vdo_url_addr }/maxresdefault.jpg">
 				</div>
 				
 				<div class="vdoInfor">
