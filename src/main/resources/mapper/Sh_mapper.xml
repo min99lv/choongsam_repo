@@ -76,12 +76,28 @@
 		JOIN "USER_INFO" u ON c."USER_SEQ" = u."USER_SEQ"
 		JOIN "LECTURE" l ON c."LCTR_ID" = l."LCTR_ID"
 		JOIN "SYLLABUS" s ON l."LCTR_ID" = s."LCTR_ID"
-		LEFT JOIN "CLASS_SCHEDULE" cs ON s."LCTR_NO" = cs."LCTR_NO"
+		LEFT JOIN "CLASS_SCHEDULE" cs ON s."LCTR_NO" = cs."LCTR_NO" AND cs."USER_SEQ" = #{user_seq}
 		LEFT JOIN "LECTURE_VIDEO" lv ON s."CONTS_ID" = lv."CONTS_ID"
 		LEFT JOIN "LECTURE_VIDEO" lv_prev ON lv."LCTR_NO" = lv_prev."LCTR_NO" + 1
 		WHERE c."USER_SEQ" = #{user_seq}
 		  AND c."LCTR_ID" = #{lctr_id}
 		ORDER BY lv."LCTR_NO";
 	</select>
+	
+	<select id="searchSche" parameterType="map" resultType="int">
+		SELECT * 
+		FROM "CLASS_SCHEDULE"
+		WHERE 
+			"USER_SEQ"=#{user_seq}::integer
+			AND "CONTS_ID"=#{conts_id}
+			AND "LCTR_NO"=#{lctr_no}::integer
+	</select>
+	
+	<insert id="insertSche" parameterType="map">
+		INSERT INTO "CLASS_SCHEDULE" 
+			("LCTR_NO", "LCTR_ID", "CONTS_ID", "USER_SEQ", "CONTS_FINAL", "CONTS_MAX", "CONTS_PRGRT")
+			VALUES (#{lctr_no}, #{lctr_id}, #{conts_id}, #{user_seq}, 0, 0, 0);
+	</insert>
+	
 	
 </mapper>

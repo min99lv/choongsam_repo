@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dto.Class_Bookmark;
@@ -321,6 +322,24 @@ public class JshController {
 			
 			return "view_Jsh/stuLecture";
 		}
+	 	
+	 	//만약 학습시작 버튼을 눌렀는데 클래스 스케쥴 테이블에 컬럼이 없다면 insert
+	 	@PostMapping("/classScheChk")
+	 	@ResponseBody
+	 	public int cassScheChk(@RequestParam String chashi,
+	 											@RequestParam String conts_id,
+	 											@RequestParam String user_seq,
+	 											@RequestParam String lctr_id) {
+	 		
+	 		System.out.println("JshController cassScheChk start  차시 >> "+chashi+"강의번호 >> "+lctr_id+" 영상번호 >> "+conts_id+ " 유저번호 >> "+user_seq);
+	 		int result = 0;
+	 		
+	 		result = service.classScheChk(chashi, conts_id,lctr_id, user_seq);
+	 		System.out.println("JshController cassScheChk result >> "+result);
+	 		
+	 		return result;
+	 	}
+	 	
     
 	
 	

@@ -45,6 +45,10 @@
       	.twoLine {
       		display: flex;
       	}
+      	
+      	.text {
+      		font-size: 15px;
+      	}
         
     </style>
     
@@ -129,15 +133,43 @@
         
         //영상확인버튼 눌렀는지 확인하는 버튼
         function videoChk() {
-        const vdoUrlAddr = document.getElementById('vdo_url_addr').value;
-        
-        if (!vdoUrlAddr) {
-            alert('유튜브 ID를 먼저 입력해주세요');
-            return;
-        }
-        document.getElementById('contsTest').value = "1";
-        alert('영상 확인되었습니다.');
-    }
+		    const youtubeIdInput = document.querySelector('input[name="vdo_url_addr"]').value.trim();
+		    const youtubeIdMatch = youtubeIdInput.match(/([a-zA-Z0-9_-]{11})/);
+		    const youtubeId = youtubeIdMatch ? youtubeIdMatch[1] : '';
+		
+		    const videoDiv = document.querySelector('.video');
+		    console.log('youtubeId >> ' + youtubeId);
+		
+		    if (youtubeId) {
+		        if (!player) {
+		            videoDiv.innerHTML = '<div id="player"></div>'; // player div를 추가
+		            videoDiv.style.display = 'block'; // 비디오 div를 보이도록 설정
+		
+		            // 비디오가 준비되면 player를 생성합니다.
+		            player = new YT.Player('player', {
+		                height: '390',
+		                width: '640',
+		                videoId: youtubeId,
+		                events: {
+		                    'onReady': onPlayerReady,
+		                    'onStateChange': onPlayerStateChange
+		                }
+		            });
+		        } else {
+		            pendingVideoId = youtubeId; // 비디오 ID를 대기 상태로 저장
+		            if (isPlayerReady) {
+		                player.loadVideoById(pendingVideoId); // 플레이어가 준비되면 비디오 ID 변경
+		            }
+		        }
+		        
+		        // 아래 코드 추가
+		        document.getElementById('contsTest').value = "1"; // 유효한 ID일 때 contsTest 업데이트
+		        alert('영상 확인되었습니다.'); // 이 부분은 비디오 확인 후 보여줍니다.
+		    } else {
+		        alert('유효한 유튜브 ID를 입력해주세요.');
+		        videoDiv.style.display = 'none'; // 유효하지 않으면 비디오 div 숨기기
+		    }
+		}
         
         function submitChk() {
             // Check if the hidden input contsTest has a value of 1
