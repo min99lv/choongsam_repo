@@ -113,7 +113,7 @@
 			<br>
 			<p>
 	            <div class="login_section">
-					<input type="text" name="user_name" placeholder="이름" required="required">
+					<input type="text" name="user_id" placeholder="아이디" required="required">
 					<p>
 					<input type="text" name="email" placeholder="이메일 주소" required="required" style="margin-left: 110px;">
 					<input id="btnCheck" type="button" value="인증번호 전송">
