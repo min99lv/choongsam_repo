@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +57,7 @@ public class SjmServiceImpl implements SjmService {
 
 		return notice;
 	}
+
 
 
 
@@ -153,6 +155,7 @@ public class SjmServiceImpl implements SjmService {
 		return noteList;
 	}
 
+
 	@Override
 	public int countNote(Map<String, Object> params) {
 
@@ -190,10 +193,12 @@ public class SjmServiceImpl implements SjmService {
 	}
 
 	@Override
+
 	public List<Lecture> getSameLeceture(int lectureId) {
 		List<Lecture> lectures = sd.getSameLeceture(lectureId);
 		return lectures;
 	}
+
 
 
 }

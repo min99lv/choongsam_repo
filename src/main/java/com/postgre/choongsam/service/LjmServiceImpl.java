@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.postgre.choongsam.dao.LjmDao;
 import com.postgre.choongsam.dto.Login_Info;
+import com.postgre.choongsam.dto.User_Info;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,15 +44,38 @@ public class LjmServiceImpl implements LjmService {
     
     // 회원가입
 	@Override
-	public int signup(Login_Info login_Info) {
+	public int signup(Login_Info login_Info, User_Info user_info) {
 		System.out.println("LjmServiceImpl signup() start....");
 		
 		String encodePassword = passwordEncoder.encode(login_Info.getPassword());
 		login_Info.setPassword(encodePassword);
-		int signupResult = ljd.signup(login_Info);
+		int signupResult = ljd.signup(login_Info, user_info);
 		System.out.println("LjmServiceImpl signupResult -> " + signupResult);
 		
 		return signupResult;
+	}
+	
+	// 아이디 중복 체크
+	@Override
+	public int confirmId(String user_id) {
+		System.out.println("LjmServiceImpl confirmId() start....");
+		int result = ljd.confirmId(user_id);
+		System.out.println("LjmServiceImpl confirmId() result -> " + result);
+		return result;
+	}
+	
+	// 아이디 찾기
+	@Override
+	public String findId(User_Info user_info) {
+		System.out.println("LjmServiceImpl findId() start...");
+		System.out.println("LjmServiceImpl findId() user_name -> " + user_info.getUser_name());
+		System.out.println("LjmServiceImpl findId() user_email -> " + user_info.getEmail());
+
+		String user_id = ljd.findId(user_info);
+
+		System.out.println("LjmServiceImpl findId() user_id -> " + user_id);
+
+		return user_id;
 	}
 
 }

@@ -172,6 +172,11 @@
 	            	</div>
 			
 	        </div>	
+	            			
+    			<div class="agree" style="margin-top: 20px; text-align: right;">
+    				<input type="checkbox" id="agreeAll" onclick="toggleAgreeTerms()">
+    				<label for="agreeAll">전체 동의</label>
+				</div>
 	        	<h4>회원가입 약관</h4>
 				<div class="join_box00">
 					<div class="join_box01" style="text-align: left;">
@@ -266,8 +271,9 @@
         			<input type="checkbox" id="agreeTerms2">
         			<label for="agreeTerms2">개인정보수집 및 이용안내에 동의합니다.</label>
     			</div>
+
             
-	        	</div>
+	        	</div>	        		        	
 	        	
 	        	<div class="btnSection" align="center" style="margin-bottom: 20px;">
 					<input id="btnNext" type="button" value="다음">
@@ -279,6 +285,7 @@
     </body>
     
 <script type="text/javascript">
+	// 약관 모두 동의 시 다음 페이지 이동
 	document.getElementById('btnNext').addEventListener('click', function() {
 	    const isAgreed1 = document.getElementById('agreeTerms1').checked;
 	    const isAgreed2 = document.getElementById('agreeTerms2').checked;
@@ -289,5 +296,15 @@
 	        location.href = 'signup2'; // 다음 페이지로 이동
 	    }
 	});
+	
+	// 전체 동의
+	function toggleAgreeTerms() {
+        // 전체 동의 체크박스를 확인
+        var agreeAll = document.getElementById('agreeAll');
+        
+        // "전체 동의"가 체크되면 다른 두 체크박스를 모두 체크
+        document.getElementById('agreeTerms1').checked = agreeAll.checked;
+        document.getElementById('agreeTerms2').checked = agreeAll.checked;
+    }
 </script>
 </html>

@@ -108,4 +108,25 @@ public class JshServiceImpl implements JshService {
 		
 	}
 
+	@Override
+	public int classScheChk(String chashi, String conts_id, String lctr_id, String user_seq) {
+		System.out.println("JshService cassScheChk start  차시 >> "+chashi+"강의번호 >> "+lctr_id+" 영상번호 >> "+conts_id+ " 유저번호 >> "+user_seq);
+		
+		int result = 0;
+		Integer search = 0;
+		
+		search = Dao.searchSche(chashi, conts_id, user_seq);
+		
+		if(search!=null&&search!=0) {
+			result = 1;
+			System.out.println("리스트 존재");
+		}
+		else {
+			System.out.println("리스트에 존재하지 않음");
+			result = Dao.insertSche(chashi, conts_id, lctr_id ,user_seq);
+		}
+		
+		return result;
+	}
+
 }

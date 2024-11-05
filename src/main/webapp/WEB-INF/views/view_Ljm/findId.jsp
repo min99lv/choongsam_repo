@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%> 
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -95,18 +96,16 @@
         
         <main>
 			
-		  <form method="post">
+		  <form action="findIdResult" method="post">
 	        <div class="main_container">
 			<h2 style="color: #00664F ">아이디 찾기</h2>
 			<hr style="width: 400px; margin: 0 auto;">
 			<br>
 			<p>
 	            <div class="login_section">
-					<input type="text" name="user_name" placeholder="아이디" required="required">
+					<input type="text" name="user_name" placeholder="이름" required="required">
 					<p>
-					<input type="text" name="email" placeholder="이메일 주소" required="required">
-					<p>				
-					<input type="password" name="phone_num" placeholder="전화번호" required="required">					
+					<input type="text" name="email" placeholder="이메일 주소" required="required">			
 				<br>
 				<br>				
 				<input id="btnfindId" type="submit" value="아이디 찾기">				

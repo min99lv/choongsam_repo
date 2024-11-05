@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+나가기 -> 강의목록으로 
 </body>
 </html>

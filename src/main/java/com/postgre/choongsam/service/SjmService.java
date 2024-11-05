@@ -3,6 +3,7 @@ package com.postgre.choongsam.service;
 import java.util.List;
 import java.util.Map;
 
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dto.Lecture;
@@ -10,6 +11,7 @@ import com.postgre.choongsam.dto.Note;
 import com.postgre.choongsam.dto.Notice;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 
 public interface SjmService {
 
@@ -19,7 +21,7 @@ public interface SjmService {
 
     Notice noticeDetail(int ntc_mttr_sn);
 
-	List<Note> noteList(Map<String, Object> params);
+	List<Not> noteList(Map<String, Object> params);
 
 	int countNote(Map<String, Object> params);
 

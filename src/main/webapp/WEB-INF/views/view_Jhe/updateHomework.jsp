@@ -12,11 +12,15 @@
 </head>
 <body>
 	<h2>진행중인 강의 과제 수정 (강사)</h2>
-	<form action="/Jhe/updateHomework" method="post" id="updateHWForm">
+	<form action="/Jhe/updateHomework" method="post" id="updateHomework">
 		<table>
 			<tr>
 				<th><input type="hidden" name="ASMT_NO" value="${upHomework.ASMT_NO}">
-					과제명</th>
+					강의명</th>
+				<td>${upHomework.lctr_name}</td>
+			</tr>
+			<tr>
+				<th>과제명</th>
 				<td><input type="text" name="ASMT_NM" value="${upHomework.ASMT_NM}" required></td>
 			</tr>
 			<tr>
@@ -25,7 +29,7 @@
 			</tr>
 			<tr>
 				<th>과제 마감일</th>
-				<td><input type="text" name="SBMSN_END_YMD" value="${upHomework.SBMSN_END_YMD}"></td>
+				<td><input type="text" name="SBMSN_END_YMD" value="${upHomework.SBMSN_END_YMD}" required></td>
 			</tr>
 			<tr>
 				<th>첨부파일</th>
