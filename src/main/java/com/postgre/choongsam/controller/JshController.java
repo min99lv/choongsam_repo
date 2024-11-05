@@ -45,11 +45,28 @@ public class JshController {
 	
 	@GetMapping("/sh_lecture_teacher")
 	public String sh_lecture_teacher(Model model,
-									 @RequestParam String lctr_id,
-									 @RequestParam int user_seq) {
+														   Class_ScheduleAddVideo info,
+														   @RequestParam String lctr_id,
+														   @RequestParam int user_seq) {
 		
-		model.addAttribute("lctr_id", lctr_id);
-		model.addAttribute("user_seq", user_seq);
+		System.out.println("JshController sh_lecture_teacher start...");
+		
+		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
+		
+		String lectName = contsList.stream()
+		                .map(Class_ScheduleAddVideo::getLctr_name)
+		                .findFirst()
+		                .orElse("");
+		String teacherName = contsList.stream()
+		                .map(Class_ScheduleAddVideo::getUser_name)
+		                .findFirst()
+		                .orElse("");
+		System.out.println("강의명 >> "+lectName);
+		System.out.println("강사명 >> "+teacherName);
+		
+		model.addAttribute("lectName", lectName);
+		model.addAttribute("teacherName", teacherName);
+		model.addAttribute("contentList", contsList);
 		
 		
 		return "view_Jsh/teaLecture";

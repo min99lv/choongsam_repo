@@ -8,6 +8,7 @@ import com.postgre.choongsam.dao.JshDao;
 import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Class_ScheduleAddVideo;
 
+import jakarta.mail.Session;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -127,6 +128,16 @@ public class JshServiceImpl implements JshService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public List<Class_ScheduleAddVideo> searchTeachConts(String lctr_id, int user_seq) {
+		System.out.println("JshService cassScheChk start  과목번호 >> "+lctr_id+" 강사번호 >> "+user_seq);
+		List<Class_ScheduleAddVideo> info = Dao.searchTeachConts(lctr_id, user_seq);
+		
+		System.out.println("JshService cassScheChk start info >> "+info);
+		
+		return info;
 	}
 
 }

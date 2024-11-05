@@ -63,7 +63,7 @@
 	}
 	
 	#thumbnail {
-		height: 180px;
+		height: 170px;
 		border-radius: 17px;
 	}
 	
