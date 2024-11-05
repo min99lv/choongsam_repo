@@ -3,6 +3,7 @@ package com.postgre.choongsam.service;
 import java.util.List;
 import java.util.Map;
 
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 
 import com.postgre.choongsam.dao.SjmDao;
@@ -46,11 +47,11 @@ public class SjmServiceImpl implements SjmService {
 		return notice;
 	}
 
-	@Override
-	public List<Note> noteList(Map<String, Object> params) {
-		List<Note> noteList = sd.noteList(params);
-		return noteList;
-	}
+//	@Override
+//	public List<Note> noteList(Map<String, Object> params) {
+//		List<Note> noteList = sd.noteList(params);
+//		return noteList;
+//	}
 
 
 
@@ -61,5 +62,11 @@ public class SjmServiceImpl implements SjmService {
 		int total = sd.countNote(params);
 		
 		return total;
+	}
+
+	@Override
+	public List<Not> noteList(Map<String, Object> params) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

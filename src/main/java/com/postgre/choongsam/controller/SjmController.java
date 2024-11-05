@@ -108,22 +108,22 @@ public class SjmController {
 	}
 	
 	// NOTE - 쪽지 목록
-	@GetMapping(value="/api/note")
-	@ResponseBody
-	public List<Note> noteList(HttpSession session) {
-		
-		Login_Info user = (Login_Info) session.getAttribute("user");
-		
-		System.out.println("user.getUser_seq() "+user.getUser_seq() );
-		
-		Map<String, Object> params = new HashMap<>();
-		params.put("user_seq", user.getUser_seq() );
-		
-		List<Note> noteList = ss.noteList(params);
-		
-		
-		return noteList;
-	}
-
-
+//	@GetMapping(value="/api/note")
+//	@ResponseBody
+//	public List<Note> noteList(HttpSession session) {
+//		
+//		Login_Info user = (Login_Info) session.getAttribute("user");
+//		
+//		System.out.println("user.getUser_seq() "+user.getUser_seq() );
+//		
+//		Map<String, Object> params = new HashMap<>();
+//		params.put("user_seq", user.getUser_seq() );
+//		
+//	//	List<Note> noteList = ss.noteList(params);
+//		
+//		
+//		return noteList;
+//	}
+//
+//
 }

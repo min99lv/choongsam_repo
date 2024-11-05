@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.postgre.choongsam.mapper.Atr">
+	<select id="trRegisterCourse" parameterType="Lecture" >
+		INSERT INTO "LECTURE" ("LCTR_ID", "USER_SEQ", "ONOFF","LCTR_CATEGORY","LCTR_NAME", "LCTR_COUNT","RCRT_DATE", "LCTR_COST", "LCTR_STATE", "EVAL_CRITERIA", "LCTR_START_DATE", "LCTR_CNTSCHD", "FILE_GROUP", "LCTR_SCHD") 
+		values (NEXTVAL('lctr_id_seq'), 0, #{onoff},#{lctr_category},#{lctr_name},#{lctr_count},#{rcrt_date},#{lctr_cost},#{lctr_state},#{eval_criteria},#{lctr_start_date},#{lctr_cntschd},#{file_group},#{lctr_schd})
+	</select>
+</mapper>
