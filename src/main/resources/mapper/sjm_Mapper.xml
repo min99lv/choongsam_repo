@@ -1,55 +1,240 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.postgre.choongsam.mapper.sjm">
-	<!-- <select id="countNotice" resultType="int">
-			SELECT count(*)
-			FROM "NOTICE"
-	</select> -->
+	<!-- <select id="countNotice" resultType="int"> SELECT count(*) FROM "NOTICE" 
+		</select> -->
 	<select id="countNotice" resultType="int" parameterType="String">
-			SELECT COUNT(*)
-			FROM "NOTICE"
-			WHERE 
-			#{keyword} IS NULL 
-			OR
-					("NTC_MTTR_TTL" ILIKE '%' || #{keyword} || '%'
-					OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} || '%')
+		SELECT
+		COUNT(*)
+		FROM "NOTICE"
+		WHERE
+		#{keyword} IS NULL
+		OR
+		("NTC_MTTR_TTL" ILIKE
+		'%' || #{keyword} || '%'
+		OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} ||
+		'%')
 
-		
+
 	</select>
-	
-
-    <select id="selectNoticeList" resultType="Notice" parameterType="Map">
-			SELECT *
-			FROM "NOTICE"
-			WHERE 
-			#{keyword} IS NULL 
-        OR
-            ("NTC_MTTR_TTL" ILIKE '%' || #{keyword} || '%'
-            OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} || '%')
-			ORDER BY "NTC_MTTR_DT" desc
-			LIMIT #{rowPage} OFFSET #{start};
-    </select>
 
 
-	<select id="noticeDetail" parameterType="Int" resultType="Notice">
+	<select id="selectNoticeList" resultType="Notice"
+		parameterType="Map">
+		SELECT *
+		FROM "NOTICE"
+		WHERE
+		#{keyword} IS NULL
+		OR
+		("NTC_MTTR_TTL" ILIKE '%' || #{keyword} || '%'
+		OR "NTC_MTTR_CN" ILIKE
+		'%' || #{keyword} || '%')
+		ORDER BY "NTC_MTTR_DT" desc
+		LIMIT #{rowPage}
+		OFFSET #{start};
+	</select>
+
+
+	<select id="noticeDetail" parameterType="Int"
+		resultType="Notice">
 		select *
 		FROM "NOTICE"
 		WHERE "NTC_MTTR_SN" = #{ntc_mttr_sn}
 
 	</select>
-	
-	<select id="noteList" parameterType="Map" resultType="Note">
-		SELECT *
-		FROM "NOTE"
-		WHERE "SNDPTY_SEQ" = #{user_seq} OR "RCVR_SEQ" = #{user_seq}
+
+
+	<insert id="noticeCreate" parameterType="Notice">
+
+		INSERT INTO "NOTICE"
+		("NTC_MTTR_SN", "USER_SEQ",
+		"NTC_MTTR_GUBUN","NTC_MTTR_TTL","NTC_MTTR_CN",
+		"NTC_MTTR_DT","NTC_MTTR_YN","LCTR_ID","FILE_GROUP")
+		VALUES
+		(NEXTVAL('ntc_mttr_sn_seq'),10023,6001,#{ntc_mttr_ttl},
+		#{ntc_mttr_cn},LOCALTIMESTAMP(0),'N', #{lctr_id},#{file_group});
+
+
+
+	</insert>
+
+
+	<insert id="FileUpload" parameterType="Filegroup">
+		INSERT INTO
+		"FILEGROUP"
+		("FILE_GROUP","FILE_SEQ","IDNTF_NO","FILE_NM","FILE_EXTN_NM","FILE_SZ","FILE_PATH_NM")
+		VALUES
+		(#{file_group},#{file_seq},#{idntf_no},#{file_nm},#{file_extn_nm},#{file_sz},#{file_path_nm})
+	</insert>
+
+	<select id="getNextFileGroupId" resultType="Int">
+		SELECT
+		NEXTVAL('file_group_seq')
 	</select>
-	
-	<select id="countNote" parameterType="Map" resultType="Int">
-	
-	
-	
-	
-	
+
+
+	<!-- 특정 file_group에 대한 최대 file_seq 가져오기 -->
+	<select id="getMaxFileSeq" parameterType="int"
+		resultType="java.lang.Integer">
+		SELECT COALESCE(MAX("FILE_SEQ"), 0) FROM "FILEGROUP" WHERE
+		"FILE_GROUP" =
+		#{file_group}
+	</select>
+
+
+
+
+
+	<select id="getUserSeq" parameterType="Map" resultType="Int">
+		SELECT
+		"USER_SEQ"
+		FROM "LOGIN_INFO"
+		WHERE "USER_ID" = #{user_id} AND
+		"USER_STATUS" = CAST(#{user_status} AS
+		INTEGER)
+
+	</select>
+
+	<select id="rcvNote" parameterType="Map" resultType="Note">
+		SELECT
+		n."NOTE_SN",
+		n."BFR_NOTE_SN",
+		n."SNDPTY_SEQ",
+		n."RCVR_SEQ",
+		n."DSPTCH_DT",
+		n."RCPTN_DT",
+		n."NOTE_TTL",
+		n."NOTE_CN",
+		n."SNDPTY_NOTE_YN",
+		n."RCVR_NOTE_YN",
+		u."USER_NAME" AS "sender_name", --
+		발신자의 이름
+		r."USER_NAME" AS "receiver_name" -- 수신자의 이름
+		FROM
+		"NOTE" n
+		LEFT
+		JOIN
+		"USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ" -- 발신자 조인
+		LEFT JOIN
+		"USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ" -- 수신자 조인
+		WHERE
+		n."SNDPTY_SEQ" = #{user_seq};
+	</select>
+
+	<select id="getSentNotes" parameterType="Map" resultType="Note">
+		SELECT
+		n."NOTE_SN",
+		n."BFR_NOTE_SN",
+		n."SNDPTY_SEQ",
+		n."RCVR_SEQ",
+		n."DSPTCH_DT",
+		n."RCPTN_DT",
+		n."NOTE_TTL",
+		n."NOTE_CN",
+		n."SNDPTY_NOTE_YN",
+		n."RCVR_NOTE_YN",
+		u."USER_NAME" AS "sender_name", --
+		발신자의 이름
+		r."USER_NAME" AS "receiver_name" -- 수신자의 이름
+		FROM
+		"NOTE" n
+		LEFT
+		JOIN
+		"USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ" -- 발신자 조인
+		LEFT JOIN
+		"USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ" -- 수신자 조인
+		WHERE
+		n."RCVR_SEQ" = #{user_seq};
+
+
+	</select>
+
+	<select id="getNote" parameterType="Int" resultType="Note">
+
+		SELECT
+		n."NOTE_SN",
+		n."BFR_NOTE_SN",
+		n."SNDPTY_SEQ",
+		n."RCVR_SEQ",
+		n."DSPTCH_DT",
+		n."RCPTN_DT",
+		n."NOTE_TTL",
+		n."NOTE_CN",
+		n."SNDPTY_NOTE_YN",
+		n."RCVR_NOTE_YN",
+		u."USER_NAME" AS "sender_name", --
+		발신자의 이름
+		r."USER_NAME" AS "receiver_name" -- 수신자의 이름
+		FROM
+		"NOTE" n
+		LEFT
+		JOIN
+		"USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ" -- 발신자 조인
+		LEFT JOIN
+		"USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ" -- 수신자 조인
+		WHERE
+		n."NOTE_SN" = #{note_sn}
+	</select>
+
+	<insert id="createNote" parameterType="Note">
+
+		INSERT INTO "NOTE"
+		("NOTE_SN", "BFR_NOTE_SN", "SNDPTY_SEQ", "RCVR_SEQ",
+		"DSPTCH_DT",
+		"RCPTN_DT", "NOTE_TTL", "NOTE_CN", "SNDPTY_NOTE_YN",
+		"RCVR_NOTE_YN")
+		VALUES (NEXTVAL('note_sn_seq'), #{bfr_note_sn},
+		#{sndpty_seq},#{rcvr_seq},LOCALTIMESTAMP(0), #{rcptn_dt}, #{note_ttl},
+		#{note_cn}, #{sndpty_note_yn}, #{rcvr_note_yn})
+
+
+	</insert>
+
+	<select id="getMyLectures" parameterType="int"
+		resultType="Lecture">
+		SELECT
+		l."LCTR_ID",
+		l."LCTR_NAME"
+		FROM
+		"COURSE_REGISTRATION" cr
+		JOIN
+		"LECTURE" l ON cr."LCTR_ID" = l."LCTR_ID"
+		WHERE
+		cr."USER_SEQ" =
+		#{user_seq};
+
+	</select>
+	<select id="getSameLeceture" parameterType="int"
+		resultType="Lecture">
+		SELECT
+		u_student."USER_NAME" AS student_name,
+		u_student."USER_SEQ" AS student_seq,
+		NULL AS instructor_name,
+		NULL AS instructor_seq
+		FROM
+		"LECTURE" l
+		JOIN
+		"COURSE_REGISTRATION" cr ON l."LCTR_ID" = cr."LCTR_ID"
+		JOIN
+		"USER_INFO" u_student ON cr."USER_SEQ" = u_student."USER_SEQ" -- 학생 정보
+		WHERE
+		l."LCTR_ID" = '0001'
+
+		UNION ALL
+
+		SELECT
+		NULL AS student_name,
+		NULL AS student_seq,
+		u_instructor."USER_NAME" AS instructor_name,
+		u_instructor."USER_SEQ" AS instructor_seq
+		FROM
+		"LECTURE" l
+		JOIN
+		"USER_INFO" u_instructor ON l."USER_SEQ" = u_instructor."USER_SEQ" -- 강사 정보
+		WHERE
+		l."LCTR_ID" = #{lectureId};
+
+
 	</select>
 
 </mapper>

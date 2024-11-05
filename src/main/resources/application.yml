@@ -5,6 +5,7 @@ spring:
   #File Size
   servlet:
     multipart:
+      enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
       
@@ -64,4 +65,4 @@ youtube:
     key: "AIzaSyDB-l20C9L1cR8XYmyN9Olb-8TZ07ZPbd0"
     base-url: "https://www.googleapis.com/youtube/v3/"
 
- 
+
