@@ -118,32 +118,6 @@ body {
         });
     }
     
-    //마지막위치에서 재생
-    function loadFinalTime(videoId) {
-    console.log('Loading final time for videoId:', videoId); // videoId가 올바른지 로그로 확인
-    if (!videoId) {
-        console.error("videoId is missing!"); // videoId가 없을 경우 에러 로그
-        return; // videoId가 없으면 함수를 종료
-    } 
-
-    fetch(`/api/progress/${videoId}`) // videoId가 올바르게 삽입되었는지 확인
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data); // 반환되는 데이터 출력
-            const savedTime = data.conts_final;
-            if (savedTime && savedTime > 0) {
-                player.seekTo(savedTime, true);
-                conts_final = savedTime; // 불러온 시간으로 conts_final 업데이트
-            }
-        })
-        .catch(error => console.error("시청 시간을 불러오지 못했습니다:", error));
-	}
-    
 
     // 북마크(비디오가 준비된 후 이벤트 리스너 설정)
     function onPlayerReady(event) {
@@ -172,6 +146,32 @@ body {
     }
     
 
+    //마지막위치에서 재생
+    function loadFinalTime(videoId) {
+    console.log('Loading final time for videoId:', videoId); // videoId가 올바른지 로그로 확인
+    if (!videoId) {
+        console.error("videoId is missing!"); // videoId가 없을 경우 에러 로그
+        return; // videoId가 없으면 함수를 종료
+    } 
+
+    fetch(`/api/progress/${videoId}`) // videoId가 올바르게 삽입되었는지 확인
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // 반환되는 데이터 출력
+            const savedTime = data.conts_final;
+            if (savedTime && savedTime > 0) {
+                player.seekTo(savedTime, true);
+                conts_final = savedTime; // 불러온 시간으로 conts_final 업데이트
+            }
+        })
+        .catch(error => console.error("시청 시간을 불러오지 못했습니다:", error));
+	}
+    
 
   	//재생시간 체크(현재 재생시간을 10ms마다 업뎃해서 conts_final과 watchedTime을 저장)
     function checkPlayerTime() {

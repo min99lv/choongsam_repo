@@ -121,7 +121,7 @@ public class HmsController {
 	    }   		
 	    System.out.println("mscontroller dataSave class_schedule->"+class_schedule);
 		
-		return "view_Hms/test";
+		return "view_Hms/test"; //성희가 만든 강의 목록으로 redirect:/할 예정
 	}
 	
 	//마지막 위치 가져오기
