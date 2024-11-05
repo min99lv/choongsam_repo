@@ -56,6 +56,7 @@ public class LjmController {
 			// 회원 아이디, 회원 분류를 세션에 저장
 			session.setAttribute("user", login_info.getUser_id()); // 새로운 세션에 회원 아이디 저장
 			session.setAttribute("usertype", login_info.getUser_status()); // 새로운 세션에 회원 분류 저장
+			session.setAttribute("user_seq", login_info.getUser_seq()); // 새로운 세션에 회원 분류 저장
 			session.setMaxInactiveInterval(60 * 60); // 60분 동안 활동이 없으면 세션 만료
 			
 			System.out.println("로그인 성공");
