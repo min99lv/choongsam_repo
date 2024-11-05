@@ -142,8 +142,8 @@ td:hover, .selected {
 			<div class="form-group">
 				<label>대면 여부</label> 
 				<select name="onoff">
-					<option value="on">대면</option>
-					<option value="off">비대면</option>
+					<option value="0">대면</option>
+					<option value="1">비대면</option>
 				</select>
 			</div>
 			<div class="form-group">
@@ -185,7 +185,7 @@ td:hover, .selected {
 
 			<!-- 선택한 시간 표시 -->
 			<p id="selectionDisplay">선택한 시간:</p>
-			<input type="hidden" id="selectedTimesInput" name="selectedTimes" />
+			<input type="hidden" id="selectedTimesInput" name="lctr_schd" />
 			<input type="submit" value="확인">
 		</form>
 
