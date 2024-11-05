@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.postgre.choongsam.dto.User_Info;
 
+
 public interface HjhDao {
 
 	List<User_Info> teastdlist(Map<String, Object> params);
