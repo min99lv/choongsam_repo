@@ -145,7 +145,7 @@
 	       </div>
 	        	
 	        	<div class="btnSection" align="center" style="margin-bottom: 20px;">
-					<input id="btnNext" type="button" onclick="location.href='login'"value="로그인 화면으로">
+					<input id="btnNext" type="button" onclick="location.href='loginForm'"value="로그인 화면으로">
 	            </div>
 	      </form>
 		</main>

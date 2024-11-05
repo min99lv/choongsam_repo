@@ -111,18 +111,18 @@
 					<input type="text" name="user_id" value="${user_id }" placeholder="아이디">
 					<p>				
 					<input type="password" name="password" placeholder="비밀번호">
+					<p>
+					<input id="btnLogin" type="submit" value="로그인">
 					
 				<div class="find">
 					<a href="findId">아이디 찾기 | </a>
 					<a href="findPw">비밀번호 찾기 | </a>
 					<a href="signup1">회원가입</a>
-				</div>
-				<br>
-				<input id="btnLogin" type="submit" value="로그인">
-	            </div>
-	            
+				</div>				
+	            </div>	            
 	        </div>
 	      </form>
+	      	USER_SEQ : ${user_seq } <p>
 	   		USER_ID : ${user } <p>
 	   		USER_STATUS : ${usertype }
 	      
