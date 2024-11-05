@@ -123,6 +123,7 @@ public class SjmController {
 		return "view_Sjm/noteList";
 	}
 
+
 	// NOTE - 안읽은 쪽지 목록
 	@GetMapping(value = "/api/notes/unread")
 	@ResponseBody
@@ -228,4 +229,5 @@ public class SjmController {
 	    return ResponseEntity.ok(lectures);
 	}
 	
+
 }
