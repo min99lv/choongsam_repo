@@ -21,14 +21,21 @@ public class LjmDaoImpl implements LjmDao {
 		Login_Info login_info = new Login_Info();
 		
 		try {
-			login_info.setUser_id(user_id);
-			
+			login_info.setUser_id(user_id);			
 			login_info = session.selectOne("login", user_id);
 			
 		} catch (Exception e) {
 			System.out.println("LjmDaoImpl login() Error ->" + e.getMessage() );
 		}
 		return login_info;
+	}
+
+	// 회원가입
+	@Override
+	public int signup(Login_Info login_Info) {
+		System.out.println("LjmDaoImpl signup() start...");
+		int signupResult = session.insert("signup", login_Info);
+		return signupResult;
 	}
 	
 }

@@ -64,15 +64,15 @@
         <div class="header__logo"><a href="/view_Sjm/noteBox">로고</a></div>
         <div class="header__navBar">
             <a href="#">수강신청</a>
-          <c:choose>
-			    <c:when test="${user.user_status == 1001}">
-			        <a href="/view_Hjh/myPageStd">마이페이지</a>
+           <c:choose>
+			    <c:when test="${user.usertype == 1001}">
+			        <a href="view_Hjh/myPageStd.jsp">마이페이지</a>
 			    </c:when>
-			    <c:when test="${user.user_status == 1002}">
-			        <a href="/view_Hjh/myPageTeacher">마이페이지</a>
+			    <c:when test="${user.usertype == 1002}">
+			        <a href="view_Hjm/myPageTeacher.jsp">마이페이지</a>
 			    </c:when>
 			    <c:otherwise>
-			        <a href="/view_Ljm/loginForm">마이페이지</a>
+			        <a href="view_Ljm/loginForm">마이페이지</a>
 			    </c:otherwise>
 			</c:choose>
             <a href="/api/notice">공지사항</a>
