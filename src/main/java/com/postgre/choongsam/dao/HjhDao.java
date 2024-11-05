@@ -13,4 +13,12 @@ public interface HjhDao {
 
 	User_Info detailProfile(String user_id);
 
+	int userProfile1(User_Info info);
+
+	List<User_Info> profileupdate(String user_id);
+
+	User_Info detailProfileuser(String userId);
+
+
+
 }
