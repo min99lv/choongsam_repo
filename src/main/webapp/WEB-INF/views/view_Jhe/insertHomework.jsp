@@ -14,8 +14,12 @@
 </head>
 <body>
 	<h2>나는 과제 등록 (강사)</h2>
-	<form action="/Jhe/insertHomework" method="post" id="insertHWForm">
+	<form action="/Jhe/insertHomework" method="post" id="insertHomework">
 		<table>
+			<tr>
+				<th>강의명</th>
+				<td>${findByLctrName.lctr_name}</td>
+			</tr>
 			<tr>
 				<th>과제명</th>
 				<td><input type="text" name="ASMT_NM" required></td>
