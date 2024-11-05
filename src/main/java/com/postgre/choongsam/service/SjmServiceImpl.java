@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dao.SjmDao;
-import com.postgre.choongsam.dto.Filegroup;
+import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Note;
 import com.postgre.choongsam.dto.Notice;
@@ -66,13 +66,13 @@ public class SjmServiceImpl implements SjmService {
 	@Transactional
 	public int noticeCreate(Notice notice,MultipartFile[] files, HttpServletRequest request) {
 	   
-		List<Filegroup> uploadFiles = new ArrayList<>();
+		List<File_Group> uploadFiles = new ArrayList<>();
 
 	    // 파일 리스트를 순회하며 업로드
 	    for (MultipartFile file : files) {
 	        if (file != null && !file.isEmpty()) {
 	            try {
-	                Filegroup uploadFile = uploadFile(file, request);
+	                File_Group uploadFile = uploadFile(file, request);
 	                if (uploadFile != null) {
 	                    uploadFiles.add(uploadFile);
 	                }
@@ -89,7 +89,7 @@ public class SjmServiceImpl implements SjmService {
 	}
 
 	// 업로드된 파일을 처리하는 메서드
-	public Filegroup uploadFile(MultipartFile file, HttpServletRequest request) throws IOException {
+	public File_Group uploadFile(MultipartFile file, HttpServletRequest request) throws IOException {
 	    // 파일 정보 변수 선언
 		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String idntf_no = UUID.randomUUID().toString() + "_" + timestamp;
@@ -124,7 +124,7 @@ public class SjmServiceImpl implements SjmService {
 	            }
 
 	            // 파일 객체 생성 및 반환
-	            Filegroup uploadFile = new Filegroup(); // Filegroup 클래스 생성
+	            File_Group uploadFile = new File_Group(); // Filegroup 클래스 생성
 	            uploadFile.setIdntf_no(idntf_no);
 	            uploadFile.setFile_nm(file_nm);
 	            uploadFile.setFile_extn_nm(file_extn_nm);
