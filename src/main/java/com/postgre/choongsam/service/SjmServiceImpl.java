@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -141,17 +140,19 @@ public class SjmServiceImpl implements SjmService {
 	    return null; // 파일이 없는 경우 null 반환
 	}
 
-	@Override
-	public int getUserSeq(Map<String, Object> params) {
-		
-		int user_seq = 0;
-		
-		return user_seq = sd.getUserSeq(params);
-	}
+// ##################
+// ##################
+// ##################
+// ##################
+// 쪽지 ------------------------------------------------------------------
+// ##################
+// ##################
+// ##################
+// ##################
 	
 	@Override
-	public List<Note> noteList(Map<String, Object> params) {
-		List<Note> noteList = sd.noteList(params);
+	public List<Note> getNotesReceived(Map<String, Object> params) {
+		List<Note> noteList = sd.getNotesReceived(params);
 		return noteList;
 	}
 
@@ -165,8 +166,8 @@ public class SjmServiceImpl implements SjmService {
 	}
 
 	@Override
-	public List<Note> getSentNotes(Map<String, Object> params) {
-		List<Note> noteList = sd.getSentNotes(params);
+	public List<Note> getNotesSend(Map<String, Object> params) {
+		List<Note> noteList = sd.getNotesSend(params);
 		return noteList;
 	}
 
@@ -194,9 +195,9 @@ public class SjmServiceImpl implements SjmService {
 
 	@Override
 
-	public List<Lecture> getSameLeceture(int lectureId) {
-		List<Lecture> lectures = sd.getSameLeceture(lectureId);
-		return lectures;
+	public List<Note> getSameLeceture(String lectureId) {
+		 List<Note> note = sd.getSameLeceture(lectureId);
+		return note;
 	}
 
 

@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>공지사항 상세</title>
+    <title>쪽지 상세</title>
     <style>
         body {
             margin: 0;
@@ -113,7 +113,7 @@
 
     async function fetchNoteDetail() {
         try {
-            const response = await fetch(`/api/note/${note_sn}`);
+            const response = await fetch(`/api/notes/${note_sn}`);
             if (!response.ok) {
                 throw new Error(`Error fetching notice: ${response.status}`);
             }
@@ -155,7 +155,7 @@
     
     <div class="container">
         <div class="contents">
-            <h1>공지사항 작성</h1>
+            <h1>쪽지</h1>
         </div>
             <table class="list">
                 <tr>

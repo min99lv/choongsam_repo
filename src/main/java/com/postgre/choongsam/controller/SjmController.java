@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dto.Lecture;
-import com.postgre.choongsam.dto.Login_Info;
 import com.postgre.choongsam.dto.Note;
 import com.postgre.choongsam.dto.Notice;
 import com.postgre.choongsam.dto.Paging;
@@ -76,7 +76,6 @@ public class SjmController {
 		System.out.println("작성 시작");
 		System.out.println("받은 파일 수: " + files.length); // 파일 수 출력
 
-		// TODO : 1. 1102 공지사항 insert 2. 파일 넣기
 		System.out.println("notice-->" + notice);
 		int result = ss.noticeCreate(notice, files, request);
 
@@ -102,46 +101,47 @@ public class SjmController {
 		return notice;
 	}
 
+	// ##################
+	// ##################
+	// ##################
+	// ##################
 	// 쪽지 ------------------------------------------------------------------
+	// ##################
+	// ##################
+	// ##################
+	// ##################
 
-	// 쪽지 목록 조회 화면
-	@GetMapping(value = "/notes")
-	public String noteBoxForm(HttpSession session) {
-		System.out.println("쪽지함 화면");
+	// 받은 쪽지 화면
+	@GetMapping(value = "/notes/received")
+	public String ShowNoteReceived(HttpSession session) {
+		System.out.println("SjmController.ShowNoteSend() start.....");
+		System.out.println("SjmController.ShowNoteSend() 받은 쪽지 화면 ---> " + session.getAttribute("user_seq"));
 
-		System.out.println("쪽지함 화면");
-
-		// 세션에서 user_seq 가져오기 (null 여부 확인)
-		Integer user_seq = (Integer) session.getAttribute("user_seq");
-
-		if (user_seq == null || user_seq == 0) {
-			System.out.println("로그인 하시오");
-			return "redirect:/view_Ljm/loginForm";
-		}
-
-		System.out.println(user_seq);
-		return "view_Sjm/noteList";
+		return "view_Sjm/noteReceived";
 	}
 
+	// 보낸 쪽지 화면
+	@GetMapping(value = "/notes/sent")
+	public String ShowNoteSend(HttpSession session) {
+		System.out.println("SjmController.ShowNoteSend() start.....");
+		System.out.println("SjmController.ShowNoteSend() 보낸 쪽지 화면 ---> " + session.getAttribute("user_seq"));
 
-	// NOTE - 안읽은 쪽지 목록
-	@GetMapping(value = "/api/notes/unread")
+		return "view_Sjm/noteSent";
+	}
+
+	// NOTE - 받은 쪽지 목록
+	@GetMapping(value = "/api/notes/received")
 	@ResponseBody
-	public List<Note> rcvrnoteList(HttpSession session) {
+	public List<Note> getNotesReceived(HttpSession session) {
 
-		 System.out.println("text is of type: " + session.getAttribute("user_seq").getClass().getSimpleName());
+		System.out.println("SjmController.rcvrnoteList() ");
+		// System.out.println("text is of type: " +
+		// session.getAttribute("user_seq").getClass().getSimpleName());
+
 		Map<String, Object> params = new HashMap<>();
+		params.put("user_seq", 10001);
 
-		params.put("user_id", session.getAttribute("user"));
-		params.put("user_status", session.getAttribute("usertype"));
-
-		int user_seq = ss.getUserSeq(params);
-
-		System.out.println("user.getUser_seq() " + user_seq);
-
-		params.put("user_seq", user_seq);
-
-		List<Note> noteList = ss.noteList(params);
+		List<Note> noteList = ss.getNotesReceived(params);
 
 		return noteList;
 	}
@@ -149,20 +149,13 @@ public class SjmController {
 	// NOTE - 보낸 쪽지 목록
 	@GetMapping(value = "/api/notes/sent")
 	@ResponseBody
-	public List<Note> noteList(HttpSession session) {
+	public List<Note> getNotesSend(HttpSession session) {
 
 		Map<String, Object> params = new HashMap<>();
 
-		params.put("user_id", session.getAttribute("user"));
-		params.put("user_status", session.getAttribute("usertype"));
+		params.put("user_seq", 10001);
 
-		int user_seq = ss.getUserSeq(params);
-
-		System.out.println("user.getUser_seq() " + user_seq);
-
-		params.put("user_seq", user_seq);
-
-		List<Note> noteList = ss.getSentNotes(params);
+		List<Note> noteList = ss.getNotesSend(params);
 
 		return noteList;
 	}
@@ -179,14 +172,13 @@ public class SjmController {
 	@GetMapping(value = "/api/notes/{note_sn}")
 	@ResponseBody
 	public Note getNote(@PathVariable("note_sn") int note_sn) {
-
 		System.out.println("상세 쪽지 시작");
 
 		Note note = ss.getNote(note_sn);
 		return note;
 	}
 
-	//  쪽지 전송 화면
+	// 쪽지 전송 화면
 	@GetMapping(value = "/notes/new")
 	public String CreateNoteForm() {
 		System.out.println("쪽지전송화면");
@@ -198,36 +190,46 @@ public class SjmController {
 	@PostMapping(value = "/api/notes")
 	@ResponseBody
 	public int createNote(Note note, HttpSession session) {
+		System.out.println(note);
+		
+		
+	    // rcvr_seq가 int 타입이지만, 이를 String으로 변환 후 ','로 나누어 배열로 처리
+	    String[] receiverSeqs = Integer.toString(note.getRcvr_seq()).split(",");
 
-		System.out.println("Note" + note);
+	    // 각 수신자에 대해 쪽지를 삽입
+	    for (String receiverSeq : receiverSeqs) {
+	        int receiverSeqInt = Integer.parseInt(receiverSeq);  // String을 int로 변환
+	        note.setRcvr_seq(receiverSeqInt);  // 수신자 설정
+	        int result = ss.createNote(note);  // 쪽지 생성
+	        if (result == 0) {
+	            return 0; // 실패 시 종료
+	        }
+	    }
 
-		// note.setRcvr_seq( (int) session.getAttribute("user_seq"));
-
-		int result = ss.createNote(note);
-
-		return result;
-
+	    return 1; // 성공 시
 	}
-	
+
 	// NOTE - 내가 듣는 강의 목록
-	@GetMapping(value="/api/lectures/my")
+	@GetMapping(value = "/api/lectures/my")
 	@ResponseBody
-	public ResponseEntity<List<Lecture>> getMyLectures(@RequestParam("user_seq") Integer user_seq) {
-       System.out.println("내가 듣는 강의 목록 불러오기 ");
-	
-		List<Lecture> lectures = ss.getMyLectures(user_seq);
-        return ResponseEntity.ok(lectures);
-    }
-	
-	// NOTE - 같은 강의를 듣는 사람들 + 강사 목록
-	@GetMapping(value="/api/lectures/{lectureId}/recipients") // 경로 변수로 lectureId를 받습니다.
-	@ResponseBody
-	public ResponseEntity<List<Lecture>> getMyLectures(@PathVariable("lectureId") int lectureId) {
-	    System.out.println("내가 듣는 강의 목록 불러오기 for lectureId: " + lectureId);
-	    
-	    List<Lecture> lectures = ss.getSameLeceture(lectureId);
-	    return ResponseEntity.ok(lectures);
+	public ResponseEntity<?> getMyLectures(@RequestParam(value = "user_seq", required = false) Integer userSeq) {
+		if (userSeq == null) {
+			return ResponseEntity.badRequest().body("user_seq is required");
+		}
+		System.out.println("내가 듣는 강의 목록 불러오기 ");
+		System.out.println("SjmController.getMyLectures() user_seq");
+		List<Lecture> lectures = ss.getMyLectures(userSeq);
+		return ResponseEntity.ok(lectures);
 	}
-	
+
+
+	@GetMapping(value = "/api/lectures/recipients")
+	@ResponseBody
+	public ResponseEntity<?> getMyLectures(@RequestParam("lctr_id") String lctr_id) {
+		System.out.println("내가 듣는 강의 목록 불러오기 같은 강의를 듣는 사람들->" + lctr_id);
+
+		List<Note> note = ss.getSameLeceture(lctr_id);
+		return ResponseEntity.ok(note);
+	}
 
 }

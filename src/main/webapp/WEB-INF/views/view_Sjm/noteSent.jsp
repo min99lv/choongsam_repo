@@ -160,63 +160,10 @@ td a:hover {
 </head>
 <script type="text/javascript">
 		
-		/*  document.addEventListener('DOMContentLoaded', function() {
-		        // 페이지 로드 시 쪽지 목록을 가져오는 함수
-		        fetchNotes();
-
-		        function fetchNotes() {
-		            fetch('/api/newNote')
-		                .then(response => {
-		                    if (!response.ok) {
-		                        throw new Error('네트워크 오류 발생');
-		                    }
-		                    return response.json();
-		                })
-		                .then(data => {
-		                    // 테이블에 데이터를 추가하는 함수 호출
-		                    populateNoteTable(data);
-		                })
-		                .catch(error => console.error('에러:', error));
-		        }
-
-		        function populateNoteTable(notes) {
-		            const tableBody = document.querySelector('.list tbody');
-		            tableBody.innerHTML = ''; // 기존 데이터 초기화
-		            
-		            if (notes.length === 0) {
-		                const emptyRow = `<tr><td colspan="3" style="text-align: center;">등록된 쪽지가 없습니다.</td></tr>`;
-		                tableBody.innerHTML = emptyRow;
-		                return;
-		            }
-
-		            let rows = '';
-		            notes.forEach((note, index) => {
-		            	 console.log(note); // 각 노트 객체 확인
-		            	 rows += `
-		            	        <tr>
-		            	            <td>`+ note.note_sn +`</td>
-		            	            <td>`+note.note_ttl+`</td>
-		            	            <td>`+note.user_name+`</td> <!-- note_cn으로 수정 -->
-		            	        </tr>
-		            	    `;
-		            });
-		            tableBody.innerHTML = rows; // 모든 행을 한 번에 추가
-		        }
-
-		    }); */
-		    
-		    document.addEventListener('DOMContentLoaded', function() {
+		   
+		document.addEventListener('DOMContentLoaded', function() {
 		        // 페이지 로드 시 기본적으로 받은쪽지 목록을 가져온다
 		        fetchNotes('/api/notes/sent');
-
-		        // 버튼 클릭 이벤트 리스너
-		        document.getElementById('receivedNotesBtn').addEventListener('click', function() {
-		            fetchNotes('/api/notes/sent');
-		        });
-
-		        document.getElementById('sentNotesBtn').addEventListener('click', function() {
-		            fetchNotes('/api/notes/unread');
-		        });
 
 		        function fetchNotes(apiUrl) {
 		            fetch(apiUrl)
@@ -235,13 +182,7 @@ td a:hover {
 		        function populateNoteTable(notes, apiUrl) {
 		            const tableBody = document.querySelector('.list tbody');
 		            tableBody.innerHTML = ''; // 기존 데이터 초기화
-		            
-		            
-
-		            // 헤더 업데이트 (보낸사람 또는 받는사람)
-		            const isReceived = apiUrl.includes('unread');
-		            const headerCell = document.querySelector('#senderHeader');
-		            headerCell.textContent = isReceived ? '받은사람' : '보낸사람';
+		           
 
 		            if (notes.length === 0) {
 		                const emptyRow = `<tr><td colspan="3" style="text-align: center;">등록된 쪽지가 없습니다.</td></tr>`;
@@ -256,7 +197,7 @@ td a:hover {
 		                	  <tr>
             	            <td>`+ note.note_sn +`</td>
             	            <td><a href="/note/` + note.note_sn + `">` + note.note_ttl + `</a> </td> <!-- 제목에 a태그 추가 -->
-            	            <td>`+note.sender_name+`</td> 
+            	            <td>`+note.receiver_name+`</td> 
             	        </tr>
 		                `;
 		            });
@@ -274,17 +215,6 @@ td a:hover {
 	</header>
 
 	<div class="container">
-
-		<div class="sidebar">
-			<h2>네비게이션</h2>
-			<ul>
-				<li><button id="receivedNotesBtn">받은쪽지</button></li>
-				<li><button id="sentNotesBtn">보낸쪽지</button></li>
-				<li><a href="/notes/new">쪽지 보내기</a></li>
-				<!-- 추가적인 링크를 여기 추가할 수 있습니다. -->
-			</ul>
-		</div>
-
 
 		<div class="contents">
 			<h1>쪽지함</h1>
@@ -312,8 +242,7 @@ td a:hover {
 				<tr>
 					<th>번호</th>
 					<th>제목</th>
-					<th id="senderHeader">보낸사람</th>
-					<!-- 헤더에 id 추가 -->
+					<th>받은사람</th>
 				</tr>
 			</thead>
 			<tbody>
