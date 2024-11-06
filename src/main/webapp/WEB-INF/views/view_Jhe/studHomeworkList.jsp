@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ include file="../header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,33 +29,33 @@
 			<c:if test="${homeworkList.lctr_name != previousName}">
 				<tr>
 					<td>${homeworkList.lctr_name}</td>
-					<td>${homeworkList.profName}</td>
-					<td><a href="/Jhe/submitHomework?ASMT_NO=${homeworkList.ASMT_NO}">${homeworkList.ASMT_NM}</a></td>
+					<td>${homeworkList.prof_name}</td>
+					<td><a href="/Jhe/submitHomework?ASMT_NO=${homeworkList.asmt_no}">${homeworkList.asmt_nm}</a></td>
 					<td>${homeworkList.asmtStatus}</td>
 					<td><c:choose>
 						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">제출</c:when>
 						<c:when test="${homeworkList.sbmsn_yn == 'N'}">미제출</c:when>
 					</c:choose></td>
-					<td>${homeworkList.SBMSN_END_YMD}</td>
+					<td>${homeworkList.sbmsn_end_ymd}</td>
 				</tr>
 				<c:set var="previousName" value="${homeworkList.lctr_name}" />
-				<c:set var="previousprofNm" value="${homeworkList.user_name}" />
-				<c:set var="previousAsmtNm" value="${homeworkList.ASMT_NM}" />
+				<c:set var="previousprofNm" value="${homeworkList.prof_name}" />
+				<c:set var="previousAsmtNm" value="${homeworkList.asmt_nm}" />
 			</c:if>
 			<c:if
-				test="${homeworkList.lctr_name == previousName && homeworkList.user_name == previousprofNm && homeworkList.ASMT_NM != previousAsmtNm}">
+				test="${homeworkList.lctr_name == previousName && homeworkList.prof_name == previousprofNm && homeworkList.asmt_nm != previousAsmtNm}">
 				<tr>
 					<td></td>
 					<td></td>
-					<td><a href="/Jhe/submitHomework?ASMT_NO=${homeworkList.ASMT_NO}">${homeworkList.ASMT_NM}</a></td>
+					<td><a href="/Jhe/submitHomework?ASMT_NO=${homeworkList.asmt_no}">${homeworkList.asmt_nm}</a></td>
 					<td>${homeworkList.asmtStatus}</td>
 					<td><c:choose>
 						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">제출</c:when>
 						<c:when test="${homeworkList.sbmsn_yn == 'N'}">미제출</c:when>
 					</c:choose></td>
-					<td>${homeworkList.SBMSN_END_YMD}</td>
+					<td>${homeworkList.sbmsn_end_ymd}</td>
 				</tr>
-				<c:set var="previousAsmtNm" value="${homeworkList.ASMT_NM}" />
+				<c:set var="previousAsmtNm" value="${homeworkList.asmt_nm}" />
 			</c:if>
 		</c:forEach>
 	</table>
