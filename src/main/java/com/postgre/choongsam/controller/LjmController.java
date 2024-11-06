@@ -85,6 +85,9 @@ public class LjmController {
 			// 유저 이름 가져오기
 			String user_name = ljs.getUserName(login_info.getUser_seq());
 
+			int user_seq = (int) session.getAttribute("user_seq");
+			
+			
 			session.setMaxInactiveInterval(60 * 60); // 60분 동안 활동이 없으면 세션 만료
 			session.setAttribute("user_name",user_name);
 			System.out.println("user_namme -->"+user_name);
