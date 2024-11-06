@@ -32,6 +32,7 @@ import com.postgre.choongsam.service.JshService;
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 
@@ -42,7 +43,7 @@ public class JshController {
 	private final JshService service;
 	
 	
-	//교수
+	//교수**********************************************************************
 	
 	@GetMapping("/sh_lecture_teacher")
 	public String sh_lecture_teacher(Model model,
@@ -54,11 +55,14 @@ public class JshController {
 		
 		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
 		
-		String lectName = contsList.stream()
+		//강사정보, 강의이름 가져오기
+				List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
+		
+		String lectName = name.stream()
 		                .map(Class_ScheduleAddVideo::getLctr_name)
 		                .findFirst()
 		                .orElse("");
-		String teacherName = contsList.stream()
+		String teacherName = name.stream()
 		                .map(Class_ScheduleAddVideo::getUser_name)
 		                .findFirst()
 		                .orElse("");
@@ -75,26 +79,29 @@ public class JshController {
 		return "view_Jsh/teaLecture";
 	}
 	
-	//폼에 정보를 띄워주기 위함
+	//강의 등록 폼에 정보를 띄워주기 위함
 	@GetMapping("/contsUploadForm")
 	public String contsUploadForm(Model model,
 							  @RequestParam String lctr_id,
-							  @RequestParam int user_seq) {
+							  @RequestParam int user_seq,
+							  Class_ScheduleAddVideo csad) {
 		
 		System.out.println("contsUploadForm lctr_id >> "+lctr_id);
 		System.out.println("contsUploadForm user_seq >> "+user_seq);
 		
 		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
 				
-		String lectName = contsList.stream()
+		//강사정보, 강의이름 가져오기
+		List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
+		
+		String lectName = name.stream()
 		                .map(Class_ScheduleAddVideo::getLctr_name)
 		                .findFirst()
 		                .orElse("");
-		String teacherName = contsList.stream()
+		String teacherName = name.stream()
 		                .map(Class_ScheduleAddVideo::getUser_name)
 		                .findFirst()
 		                .orElse("");
-		
 		
 		List<Class_ScheduleAddVideo> startInfo = service.getStartDay(lctr_id);
 		System.out.println("startInfo >> "+startInfo);
@@ -338,7 +345,8 @@ public class JshController {
 	 	@GetMapping("/sh_lecture_student")
 		public String StudentLecture(Model model,
 									 @RequestParam String lctr_id,
-									 @RequestParam int user_seq) {
+									 @RequestParam int user_seq,
+									 Class_ScheduleAddVideo csad) {
 			System.out.println("JshController StudentLecture start...");
 			System.out.println("JshController StudentLecture lctr_id >> "+lctr_id);
 			System.out.println("JshController StudentLecture user_seq >> "+user_seq);
@@ -346,15 +354,19 @@ public class JshController {
 			List<Class_ScheduleAddVideo> contentList = service.studentLecture(lctr_id, user_seq);
 			System.out.println("JshController StudentLecture contentList >> "+contentList);
 			
+			//강사정보, 강의이름 가져오기
+			List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
+			
 			//강사의 이름만 필터링해서 꺼내는 동작
-			String lectName = contentList.stream()
+			String lectName = name.stream()
 									                  .map(Class_ScheduleAddVideo::getLctr_name)
 									                  .findFirst()
 									                  .orElse("");
-			String teacherName = contentList.stream()
+			String teacherName = name.stream()
 									                  .map(Class_ScheduleAddVideo::getUser_name)
 									                  .findFirst()
 									                  .orElse("");
+			
 			System.out.println("강의명 >> "+lectName);
 			System.out.println("강사명 >> "+teacherName);
 			

@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,6 +21,27 @@
 		    width: 320px;
 		  }
 	}
+	
+	a {
+		color: white;
+		text-decoration: none;
+	}
+	
+	.detail {
+		margin-left: 50px;
+	}
+	
+	.butt{
+		width: 320px;
+		height: 90px;
+		font-size: 30px;
+		color: white;
+	}
+	
+	.info{
+		margin-top: 50px;
+		margin-bottom: 50px;
+	}
 </style>
 
 </head>
@@ -29,20 +50,29 @@
 
 <nav>
 	<div class="nav">
-		<ol>
-			<li>
+	
+		<div class="detail">
+			<div class="info">
+				<label class="user">사용자 정보 </label>
+				<div class="userName">
+					<c:out value="${sessionScope.username}" />
+				</div>
+			</div>
+		
+			<div class="butt">
 				<a href="">내 강의실</a>
-			</li>
-			<li>
+			</div>
+			<div class="butt">
 				<a href="">출석</a>
-			</li>
-			<li>
+			</div>
+			<div class="butt">
 				<a href="">과제</a>
-			</li>
-			<li>
+			</div>
+			<div class="butt">
 				<a href="">공지사항</a>
-			</li>
-		</ol>
+			</div>
+		</div>
+		
 	</div>
 </nav>
 

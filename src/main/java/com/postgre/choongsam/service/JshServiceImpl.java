@@ -113,7 +113,7 @@ public class JshServiceImpl implements JshService {
 
 	@Override
 	public int classScheChk(String chashi, String conts_id, String lctr_id, String user_seq) {
-		System.out.println("JshService cassScheChk start  차시 >> "+chashi+"강의번호 >> "+lctr_id+" 영상번호 >> "+conts_id+ " 유저번호 >> "+user_seq);
+		System.out.println("JshService classScheChk start  차시 >> "+chashi+"강의번호 >> "+lctr_id+" 영상번호 >> "+conts_id+ " 유저번호 >> "+user_seq);
 		
 		int result = 0;
 		Integer search = 0;
@@ -140,6 +140,12 @@ public class JshServiceImpl implements JshService {
 		System.out.println("JshService cassScheChk start info >> "+info);
 		
 		return info;
+	}
+
+	@Override
+	public List<Class_ScheduleAddVideo> LectureName(String lctr_id) {
+		List<Class_ScheduleAddVideo> name = Dao.LectureName(lctr_id);
+		return name;
 	}
 
 }

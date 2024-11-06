@@ -98,6 +98,7 @@ public class JshDaoImpl implements JshDao {
 		int chashi = info.getLctr_no();
 		int file_group = info.getFile_group();
 		int lctr_no = info.getLctr_no();
+		String lctr_id = info.getLctr_id();
 		
 		Map<String, Object> lectureInfo = new HashMap<>();
 		
@@ -109,6 +110,7 @@ public class JshDaoImpl implements JshDao {
 		lectureInfo.put("chashi", chashi);
 		lectureInfo.put("file_group", file_group);
 		lectureInfo.put("lctr_no", lctr_no);
+		lectureInfo.put("lctr_id", lctr_id);
 		
 		
 		try {
@@ -133,6 +135,7 @@ public class JshDaoImpl implements JshDao {
 		Integer vdo_length = info.getVdo_length();
 		int chashi = info.getLctr_no();
 		int lctr_no = info.getLctr_no();
+		String lctr_id = info.getLctr_id();
 		
 		Map<String, Object> lectureInfo = new HashMap<>();
 		
@@ -143,6 +146,7 @@ public class JshDaoImpl implements JshDao {
 		lectureInfo.put("vdo_length", vdo_length);
 		lectureInfo.put("chashi", chashi);
 		lectureInfo.put("lctr_no", lctr_no);
+		lectureInfo.put("lctr_id", lctr_id);
 		
 		try {
 			result = session.insert("lectureVideoUpload", lectureInfo);
@@ -295,6 +299,14 @@ public class JshDaoImpl implements JshDao {
 		}
 		
 		return info;
+	}
+
+	@Override
+	public List<Class_ScheduleAddVideo> LectureName(String lctr_id) {
+		//System.out.println("dddddddddddddddddd >> "+lctr_id);
+		List<Class_ScheduleAddVideo> name = session.selectList("LectureName", lctr_id);
+		//System.out.println("name >>>>>>>>>>>>>>>>>" +name);
+		return name;
 	}
 
 }
