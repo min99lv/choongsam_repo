@@ -31,7 +31,7 @@
 	 	SELECT "USER_ID"
 	 	FROM "USER_INFO" 
 	 	WHERE "USER_NAME" = #{user_name} AND "EMAIL" = #{email} 
-	</select>
+	</select>	
 	
 	<select id="getUserName" parameterType="int" resultType="String">
 	
