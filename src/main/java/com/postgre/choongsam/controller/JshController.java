@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.http.codec.multipart.Part;
@@ -31,6 +32,7 @@ import com.postgre.choongsam.service.JshService;
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 
@@ -41,13 +43,35 @@ public class JshController {
 	private final JshService service;
 	
 	
-	//교수
+	//교수**********************************************************************
 	
 	@GetMapping("/sh_lecture_teacher")
 	public String sh_lecture_teacher(Model model,
-									 @RequestParam String lctr_id,
-									 @RequestParam int user_seq) {
+														   Class_ScheduleAddVideo info,
+														   @RequestParam String lctr_id,
+														   @RequestParam int user_seq) {
 		
+		System.out.println("JshController sh_lecture_teacher start...");
+		
+		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
+		
+		//강사정보, 강의이름 가져오기
+				List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
+		
+		String lectName = name.stream()
+		                .map(Class_ScheduleAddVideo::getLctr_name)
+		                .findFirst()
+		                .orElse("");
+		String teacherName = name.stream()
+		                .map(Class_ScheduleAddVideo::getUser_name)
+		                .findFirst()
+		                .orElse("");
+		System.out.println("강의명 >> "+lectName);
+		System.out.println("강사명 >> "+teacherName);
+		
+		model.addAttribute("lectName", lectName);
+		model.addAttribute("teacherName", teacherName);
+		model.addAttribute("contentList", contsList);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("user_seq", user_seq);
 		
@@ -55,16 +79,32 @@ public class JshController {
 		return "view_Jsh/teaLecture";
 	}
 	
-	//폼에 정보를 띄워주기 위함
+	//강의 등록 폼에 정보를 띄워주기 위함
 	@GetMapping("/contsUploadForm")
 	public String contsUploadForm(Model model,
 							  @RequestParam String lctr_id,
-							  @RequestParam int user_seq) {
+							  @RequestParam int user_seq,
+							  Class_ScheduleAddVideo csad) {
 		
 		System.out.println("contsUploadForm lctr_id >> "+lctr_id);
 		System.out.println("contsUploadForm user_seq >> "+user_seq);
 		
+		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
+				
+		//강사정보, 강의이름 가져오기
+		List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
+		
+		String lectName = name.stream()
+		                .map(Class_ScheduleAddVideo::getLctr_name)
+		                .findFirst()
+		                .orElse("");
+		String teacherName = name.stream()
+		                .map(Class_ScheduleAddVideo::getUser_name)
+		                .findFirst()
+		                .orElse("");
+		
 		List<Class_ScheduleAddVideo> startInfo = service.getStartDay(lctr_id);
+		System.out.println("startInfo >> "+startInfo);
 		
 		Optional<String> startDay = startInfo.stream()
 					                .map(Class_ScheduleAddVideo::getLctr_start_date)
@@ -75,9 +115,16 @@ public class JshController {
 		Optional<Integer> chongChashi = startInfo.stream()
 	               .map(Class_ScheduleAddVideo::getLctr_cntschd)
 	               .findFirst();
+		
 		Optional<String> viewing_period = startInfo.stream()
-	               .map(Class_ScheduleAddVideo::getViewing_period)
-	               .findFirst();
+			    .map(Class_ScheduleAddVideo::getViewing_period)
+			    .filter(Objects::nonNull) // null 값 필터링
+			    .findFirst();
+		
+		// viewing_period가 비어있을 경우 startDay를 사용
+		if (!viewing_period.isPresent()) {
+		    viewing_period = startDay;
+		}
 		
 		String endDay = "";
 		
@@ -95,6 +142,8 @@ public class JshController {
 			System.out.println(endDay);
 		}
 		
+		model.addAttribute("lectName", lectName);
+		model.addAttribute("teacherName", teacherName);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("max_lctr_no", max_lctr_no.get());
 		model.addAttribute("user_seq", user_seq);
@@ -296,7 +345,8 @@ public class JshController {
 	 	@GetMapping("/sh_lecture_student")
 		public String StudentLecture(Model model,
 									 @RequestParam String lctr_id,
-									 @RequestParam int user_seq) {
+									 @RequestParam int user_seq,
+									 Class_ScheduleAddVideo csad) {
 			System.out.println("JshController StudentLecture start...");
 			System.out.println("JshController StudentLecture lctr_id >> "+lctr_id);
 			System.out.println("JshController StudentLecture user_seq >> "+user_seq);
@@ -304,15 +354,19 @@ public class JshController {
 			List<Class_ScheduleAddVideo> contentList = service.studentLecture(lctr_id, user_seq);
 			System.out.println("JshController StudentLecture contentList >> "+contentList);
 			
+			//강사정보, 강의이름 가져오기
+			List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
+			
 			//강사의 이름만 필터링해서 꺼내는 동작
-			String lectName = contentList.stream()
+			String lectName = name.stream()
 									                  .map(Class_ScheduleAddVideo::getLctr_name)
 									                  .findFirst()
 									                  .orElse("");
-			String teacherName = contentList.stream()
+			String teacherName = name.stream()
 									                  .map(Class_ScheduleAddVideo::getUser_name)
 									                  .findFirst()
 									                  .orElse("");
+			
 			System.out.println("강의명 >> "+lectName);
 			System.out.println("강사명 >> "+teacherName);
 			
