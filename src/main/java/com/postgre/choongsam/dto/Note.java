@@ -17,4 +17,10 @@ public class Note { // 쪽지
 	
 	private String sender_name; // 수신자 이름
 	private String receiver_name; // 발신자 이름
+
+	private int std_seq;
+	private int inst_seq;
+	private String std_name;
+	private String inst_name;
+
 }

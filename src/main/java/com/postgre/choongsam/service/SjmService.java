@@ -21,15 +21,24 @@ public interface SjmService {
 
     Notice noticeDetail(int ntc_mttr_sn);
 
-	List<Note> noteList(Map<String, Object> params);
+	int noticeCreate(Notice notice, MultipartFile[] files,HttpServletRequest request);
+	
+	
+// ##################
+// ##################
+// ##################
+// ##################
+// 쪽지 ------------------------------------------------------------------
+// ##################
+// ##################
+// ##################
+// ##################
 
 	int countNote(Map<String, Object> params);
+	
+	List<Note> getNotesReceived(Map<String, Object> params);
 
-	int noticeCreate(Notice notice, MultipartFile[] files,HttpServletRequest request);
-
-	int getUserSeq(Map<String, Object> params);
-
-	List<Note> getSentNotes(Map<String, Object> params);
+	List<Note> getNotesSend(Map<String, Object> params);
 
 	Note getNote(int note_sn);
 
@@ -37,6 +46,6 @@ public interface SjmService {
 
 	List<Lecture> getMyLectures(int user_seq);
 
-	List<Lecture> getSameLeceture(int lectureId);
+	List<Note> getSameLeceture(String lectureId);
 
 }
