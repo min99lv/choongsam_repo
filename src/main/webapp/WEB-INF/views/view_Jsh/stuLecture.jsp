@@ -9,6 +9,8 @@
 <title>Insert title here</title>
 </head>
 
+<%@ include file="../myStudyHomeNav.jsp" %>
+
 <style>
 
 	a{
@@ -63,20 +65,20 @@
 	}
 	
 	#thumbnail {
-		height: 180px;
+		height: 170px;
 		border-radius: 17px;
 	}
 	
 	.vdoInfor {
 		width: 566px;
 		display: flex;
-		margin-left: 25px;
+		margin-left: 90px;
 	}
 	
 	.buttStatus {
 		width: 240px;
 		height: 86px;
-		margin-left: 110px;
+		margin-left: 50px;
 		font-size: 25px;
 		font-weight: bold;
 	}
@@ -176,29 +178,31 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
-	function chkClassSche() {
-	    $.ajax({
-	        type: "POST",
-	        url: "/classScheChk",
-	        data: { 
-	            "chashi": $('#chashiHidden').val(),
-	            "conts_id": $('#contsIdHidden').val(),
-	            "user_seq": $('#userSeqHidden').val(),
-	            "lctr_id": $('#lctrIdHidden').val()
-	        },
-	        success: function(result) {
-	            if (result == 0) { 
-	                console.log('입력 실패');
-	            } else {
-	                console.log('입력 성공');
-	            }
-	        },
-	        error: function() {
-	            alert('서버 오류가 발생했습니다. 나중에 다시 시도해주세요.');
-	            return 0;
-	        }
-	    });
-	};
+		function chkClassSche(event, url, contsId, userSeq, chashi, lctrId) {
+		    event.preventDefault(); // 링크 기본 동작 일시 중지
+		    
+		    $.ajax({
+		        type: "POST",
+		        url: "/classScheChk",
+		        data: { 
+		            "chashi": chashi,
+		            "conts_id": contsId,
+		            "user_seq": userSeq,
+		            "lctr_id": lctrId
+		        },
+		        success: function(result) {
+		            if (result === 0) {
+		                console.log('입력 실패');
+		            } else {
+		                console.log('입력 성공');
+		                window.location.href = url; // AJAX 성공 시 링크로 이동
+		            }
+		        },
+		        error: function() {
+		            alert('서버 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+		        }
+		    });
+		}
 	
 	// 페이지 로드 후 상태에 따라 클래스 추가하는 함수
 	document.addEventListener("DOMContentLoaded", function() {
@@ -235,7 +239,7 @@
 		<c:forEach var="conts" items="${contentList}">
 			<div class="list">
 				<div class="thumbnailDiv">
-					<img id="thumbnail" alt="유튜브 썸네일" src="https://img.youtube.com/vi/${conts.vdo_url_addr }/default.jpg">
+					<img id="thumbnail" alt="유튜브 썸네일" src="https://img.youtube.com/vi/${conts.vdo_url_addr }/maxresdefault.jpg">
 				</div>
 				
 				<div class="vdoInfor">
@@ -282,31 +286,28 @@
 					</div>
 					
 					<div class="buttStatus">
-						<div class="state 
-		                        <c:choose>
-		                            <c:when test="${conts.view_status == '출석'}">
-		                                chulseokDiv
-		                            </c:when>
-		                            <c:when test="${conts.view_status == '결석'}">
-		                                gyeolseokDiv
-		                            </c:when>
-		                            <c:otherwise>
-		                                misugangDiv
-		                            </c:otherwise>
-		                        </c:choose>
-		                    ">
-		                    <span class=stateTxt>
-		                        ${conts.view_status }
-		                    </span>
-		                </div>
-						<a href="/video-details?lctr_id=${conts.lctr_id }&user_seq=${conts.user_seq }&lctr_no=${conts.lctr_no }" onclick="chkClassSche()">
-						<!-- <button onclick="chkClassSche()"> -->
-							<div id="startDiv">
-								<span id="startTxt"><div id="start">학습 시작</div></span>
-							</div>
-						</a>
-						<!-- </button> -->
-					</div>
+			            <div class="state 
+			                    <c:choose>
+			                        <c:when test="${conts.view_status == '출석'}">
+			                            chulseokDiv
+			                        </c:when>
+			                        <c:when test="${conts.view_status == '결석'}">
+			                            gyeolseokDiv
+			                        </c:when>
+			                        <c:otherwise>
+			                            misugangDiv
+			                        </c:otherwise>
+			                    </c:choose>
+			                ">
+			                <span class="stateTxt">${conts.view_status}</span>
+			            </div>
+			            <a href="/video-details?videoId=${conts.conts_id }&user_seq=${conts.user_seq }" 
+			               onclick="chkClassSche(event, this.href, '${conts.conts_id}', '${conts.user_seq}', '${conts.lctr_no}', '${conts.lctr_id}')">
+			                <div id="startDiv">
+			                    <span id="startTxt"><div id="start">학습 시작</div></span>
+			                </div>
+			            </a>
+			        </div>
 					
 				</div>
 			</div>
