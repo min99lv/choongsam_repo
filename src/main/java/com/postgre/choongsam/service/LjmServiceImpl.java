@@ -78,4 +78,10 @@ public class LjmServiceImpl implements LjmService {
 		return user_id;
 	}
 
+	@Override
+	public String getUserName(int user_seq) {
+		String user_name = ljd.getUserName(user_seq);
+		return user_name;
+	}
+
 }
