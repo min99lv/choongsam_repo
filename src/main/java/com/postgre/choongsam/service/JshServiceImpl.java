@@ -8,6 +8,7 @@ import com.postgre.choongsam.dao.JshDao;
 import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Class_ScheduleAddVideo;
 
+import jakarta.mail.Session;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -60,6 +61,7 @@ public class JshServiceImpl implements JshService {
 			
 			result = 0;
 			result = Dao.fileLectureVideoUpload(info);
+			System.out.println("*************************************************************");
 			if(result==0) {
 				System.out.println("JshService fileLectureVideoUpload 강의영상 등록 실패...");
 			}
@@ -71,6 +73,7 @@ public class JshServiceImpl implements JshService {
 			//첨부파일이 없는 경우 업로드
 			result = 0;
 			result = Dao.lectureVideoUpload(info);
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			if(result==0) {
 				System.out.println("JshService lectureVideoUpload 강의영상 등록 실패...");
 			}
@@ -110,7 +113,7 @@ public class JshServiceImpl implements JshService {
 
 	@Override
 	public int classScheChk(String chashi, String conts_id, String lctr_id, String user_seq) {
-		System.out.println("JshService cassScheChk start  차시 >> "+chashi+"강의번호 >> "+lctr_id+" 영상번호 >> "+conts_id+ " 유저번호 >> "+user_seq);
+		System.out.println("JshService classScheChk start  차시 >> "+chashi+"강의번호 >> "+lctr_id+" 영상번호 >> "+conts_id+ " 유저번호 >> "+user_seq);
 		
 		int result = 0;
 		Integer search = 0;
@@ -127,6 +130,22 @@ public class JshServiceImpl implements JshService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public List<Class_ScheduleAddVideo> searchTeachConts(String lctr_id, int user_seq) {
+		System.out.println("JshService cassScheChk start  과목번호 >> "+lctr_id+" 강사번호 >> "+user_seq);
+		List<Class_ScheduleAddVideo> info = Dao.searchTeachConts(lctr_id, user_seq);
+		
+		System.out.println("JshService cassScheChk start info >> "+info);
+		
+		return info;
+	}
+
+	@Override
+	public List<Class_ScheduleAddVideo> LectureName(String lctr_id) {
+		List<Class_ScheduleAddVideo> name = Dao.LectureName(lctr_id);
+		return name;
 	}
 
 }

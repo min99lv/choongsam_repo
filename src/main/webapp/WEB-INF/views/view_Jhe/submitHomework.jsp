@@ -14,7 +14,7 @@
 	<form action="/Jhe/submitHomework" method="post" id="submitHomework">
 		<table>
 			<tr>
-				<th><input type="hidden" name="ASMT_NO" value="${upHomework.ASMT_NO}">
+				<th><input type="hidden" name="ASMT_NO" value="${upHomework.asmt_no}">
 					강의명</th>
 				<td>${upHomework.lctr_name}</td>
 			</tr>
@@ -24,11 +24,11 @@
 			</tr>
 			<tr>
 				<th>과제명</th>
-				<td>${upHomework.ASMT_NM}</td>
+				<td>${upHomework.asmt_nm}</td>
 			</tr>
 			<tr>
 				<th>마감일</th>
-				<td>${upHomework.SBMSN_END_YMD}</td>
+				<td>${upHomework.sbmsn_end_ymd}</td>
 			</tr>
 			<tr>
 				<th>첨부파일</th>
