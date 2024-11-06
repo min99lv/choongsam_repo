@@ -15,6 +15,11 @@
         height: 100vh;
         margin: 0;
     }
+
+    h1{
+        text-align: center;
+
+    }
     header {
         grid-column: 1 / span 2;
         background-color: #236147;
@@ -23,28 +28,30 @@
         text-align: center;
     }
     nav {
-        background-color: #7F7F7F;
+        background-color: #FdFdFd;
+        box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
         padding: 30px;
-        color: white; /* 글씨 색상 변경 */
+        color: black; /* 글씨 색상 변경 */
     }
     nav ul {
         list-style-type: none;
         padding: 0;
     }
     nav li {
-        margin: 50px 0; /* 항목 간의 간격 */
+        margin: 25px 0; /* 항목 간의 간격 */
         cursor: pointer;
         font-size: 20px; /* 상위 메뉴 글자 크기 */
         transition: background-color 0.3s, transform 0.3s; /* 배경색 및 크기 전환 효과 */
         display: flex; /* 플렉스 박스 사용 */
-        justify-content: center; /* 수평 중앙 정렬 */
+        justify-content: left; /* 수평 중앙 정렬 */
         align-items: center; /* 수직 중앙 정렬 */
-        height: 40px; /* 항목 높이 설정 (필요 시 조정) */
+        color: black;
+        font-weight: bold;
     }
     nav li:hover {
         background-color: #a0d5a7; /* 마우스 오버 시 배경색 */
         color: white; /* 글자색 변경 (선택 사항) */
-        transform: scale(1.2); /* 마우스 오버 시 크기 확대 */
+        transform: scale(1.1); /* 마우스 오버 시 크기 확대 */
     }
     nav .submenu {
         display: none;
@@ -72,7 +79,9 @@
 
 </head>
 <body>
-
+    <header>
+        <%@ include file="../header.jsp" %>
+    </header>
 <header>
     <div class="logo"></div>
     <h1>마이페이지</h1>
@@ -107,9 +116,9 @@
         </ul>
       <li onclick="toggleSubMenu('zzji')">쪽지함</li>
         <ul class="submenu" id="zzji">
-           <li style="font-size: 13px;">받은쪽지</li>
-           <li style="font-size: 13px;">보낸쪽지</li>
-           <li style="font-size: 13px;">휴지통</li>
+           <li style="font-size: 13px;"onclick="location.href='/notes'">받은쪽지</li>
+           <li style="font-size: 13px;"onclick="location.href='/notes'">보낸쪽지</li>
+           <li style="font-size: 13px;"onclick="location.href='/notes'">휴지통</li>
         </ul>
     </ul>
 </nav>
