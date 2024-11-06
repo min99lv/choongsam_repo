@@ -81,7 +81,7 @@
 
 <nav>
     <ul>
-    <h1>학생</h1>
+    <h1>${user_name}학생</h1>
         <li onclick="toggleSubMenu('myClassroomSubmenu')">나의 강의실</li>
         <ul class="submenu" id="myClassroomSubmenu">
             <li style="font-size: 13px;">현재 수강 중인 강의</li>

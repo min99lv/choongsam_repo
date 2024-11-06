@@ -32,6 +32,11 @@
             <div class="main_contents"><a href="/sh_lecture_student?lctr_id=0010&user_seq=10012">학생강의실</a></div>
             <div class="main_contents"><a href="/sh_lecture_teacher?lctr_id=0010&user_seq=10011">교수강의실</a></div>
             
+            <p>
+            USER_SEQ : ${user_seq } <p>
+	   		USER_ID : ${user } <p>
+	   		USER_STATUS : ${usertype }
+            
         </div>
 
         <footer>
