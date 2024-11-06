@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dto.Login_Info;
 import com.postgre.choongsam.dto.User_Info;
-import com.postgre.choongsam.service.LjmEmailService;
 import com.postgre.choongsam.service.LjmService;
 
 import jakarta.mail.internet.MimeMessage;
@@ -31,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 public class LjmController {
 	
 	private final LjmService ljs;
-	private final LjmEmailService les;
 	private final JavaMailSender mailSender;
 	
 		// 로그인 페이지 이동
@@ -105,7 +103,7 @@ public class LjmController {
 		// 아이디 찾기 페이지 이동
 		@GetMapping(value =  "view_Ljm/findId")
 		public String findIdPage() {
-			return "view_Ljm/findId";
+			return "view_Ljm/findId"; 
 		}
 		
 		// 아이디 찾기
@@ -159,10 +157,11 @@ public class LjmController {
 			//String user_id = ljs.findId(user_info);
 			
 			if (user_id != null) {
-				model.addAttribute("find_id", user_id);
-				model.addAttribute("userCheckMessage", "회원님의 정보로 가입된 아이디는 아래와 같습니다.");
+				//String newPw = ljs.clearPw(user_id);
+				//ljs.sendPwMail(user_id, newPw);
+				model.addAttribute("userCheckMessage", "입력하신 이메일로 임시 비밀번호를 전송하였습니다.");
 			} else {
-				model.addAttribute("userCheckMessage", "입력하신 회원 정보와 일치하는 아이디가 존재하지 않습니다.");
+				model.addAttribute("userCheckMessage", "입력하신 회원 정보가 존재하지 않습니다.");
 			}
 			
 			return "view_Ljm/findIdResult";			
