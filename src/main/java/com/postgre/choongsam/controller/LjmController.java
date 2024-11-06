@@ -80,9 +80,13 @@ public class LjmController {
 			session.setAttribute("user", login_info.getUser_id()); // 세션에 회원 아이디 저장
 			session.setAttribute("usertype", login_info.getUser_status()); // 세션에 회원 분류 저장
 			
+
 			// 유저 이름 가져오기
 			String user_name = ljs.getUserName(login_info.getUser_seq());
 
+		
+			
+			
 			session.setMaxInactiveInterval(60 * 60); // 60분 동안 활동이 없으면 세션 만료
 			session.setAttribute("user_name",user_name);
 			System.out.println("user_namme -->"+user_name);

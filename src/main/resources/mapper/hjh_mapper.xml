@@ -4,15 +4,19 @@
 <mapper namespace="com.postgre.choongsam.mapper.hjh">
 
 		<select id="teastdlist" resultType="User_Info" parameterType="Map">
-	    SELECT * 
-	    FROM "USER_INFO"
-	    WHERE 
-			#{keyword} IS NULL
-        OR
-            ("USER_NAME" ILIKE '%' || #{keyword} || '%'
-            OR "USER_ID" ILIKE '%' || #{keyword} || '%')
-			LIMIT #{rowPage} OFFSET #{start};
-    	</select>
+		    SELECT 
+		        ui.*,
+		        li."USER_STATUS"
+		    FROM "USER_INFO" ui
+		    LEFT JOIN "LOGIN_INFO" li ON ui."USER_ID" = li."USER_ID"
+		    WHERE 
+		        #{keyword} IS NULL
+		    OR
+		        (ui."USER_NAME" ILIKE '%' || #{keyword} || '%'
+		        OR ui."USER_ID" ILIKE '%' || #{keyword} || '%')
+		    ORDER BY ui."USER_NAME" ASC
+		    LIMIT #{rowPage} OFFSET #{start};
+		</select>
 		
 		
 		<select id="totalusercount" resultType="int" parameterType="String">
@@ -25,32 +29,40 @@
 					OR "USER_ID" ILIKE '%' || #{keyword} || '%')
 
 		</select>
-	<select id="detailProfile" parameterType="Map" resultType="User_Info">
-	    SELECT *
-	    FROM "USER_INFO"
-	    WHERE "USER_ID" = #{USER_ID}
-	</select>
+		
+		<select id="detailProfile" parameterType="Map" resultType="User_Info">
+		    SELECT *
+		    FROM "USER_INFO"
+		    WHERE "USER_ID" = #{USER_ID}
+		</select>
 	
 
 			
 		<update id="userProfile1" parameterType="User_Info">
 			UPDATE public."USER_INFO"
-			    SET   "USER_NAME"= #{user_name}
+			    SET   "USER_NAME"= #{user_name},
+			   		  "EMAIL" = #{email},
+			   		  "ADDRESS" = #{address},
+			   		  "PROFILE_NAME" = #{profile_name},
+			   		  "PROFILE_ADDR" = #{profile_addr},
+			   		  "PHONE_NUM" = #{phone_num},
+			   		  "BIRTH" = #{birth}
 			    WHERE "USER_ID" = #{user_id}
 		</update>
 
 		
-	<select id="profileupdate" resultType="User_Info" >
-	    SELECT * 
-	    FROM "USER_INFO"
-	    WHERE "USER_ID" = #{USER_ID}
-
-    	</select>
+		<select id="profileupdate" resultType="User_Info" >
+		    SELECT * 
+		    FROM "USER_INFO"
+		    WHERE "USER_ID" = #{USER_ID}
+	
+	    	</select>
+    	
     	
     	<select id="detailProfileuser" parameterType="String" resultType="User_Info">
 		    SELECT *
-	    FROM "USER_INFO"
-	    WHERE "USER_ID" = #{user_id}
+	   		 FROM "USER_INFO"
+	   		 WHERE "USER_ID" = #{user_id}
 		</select>
 		
 
