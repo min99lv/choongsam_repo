@@ -2,10 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="headerStd.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+
 <title>학생 관리 시스템</title>
 <style>
     body {
@@ -77,20 +79,19 @@
 </script>
 
 
-</head>
 <body>
-    <header>
-        <%@ include file="../header.jsp" %>
-    </header>
+
 <header>
     <div class="logo"></div>
     <h1>마이페이지</h1>
 
-</header>
+  </header>
+
+
 
 <nav>
     <ul>
-    <h1>학생</h1>
+    <h1>${user_name}학생</h1>
         <li onclick="toggleSubMenu('myClassroomSubmenu')">나의 강의실</li>
         <ul class="submenu" id="myClassroomSubmenu">
             <li style="font-size: 13px;">현재 수강 중인 강의</li>
@@ -104,6 +105,7 @@
         </ul>
         <li onclick="toggleSubMenu('userInfoSubmenu')">회원정보</li>
         <ul class="submenu" id="userInfoSubmenu">
+
 
             <li style="font-size: 13px;" onclick="location.href='updateProfile?user=${user}'">개인정보 수정</li>
             <li style="font-size: 13px;">비밀번호 변경</li>
@@ -122,6 +124,7 @@
         </ul>
     </ul>
 </nav>
+
 
 
 

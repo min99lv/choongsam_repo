@@ -14,8 +14,8 @@ public class User_Info {	// 회원정보
 	private String 	email;				//메일
 	private String 	phone_num;			//전화번호
 	private String 	del_state;			//삭제여부
-  private int    	file_group;      	//파일그룹	
-  private String  addr_detail;		//상세주소
-    
+	private int    	file_group;      	//파일그룹	
+	private String  addr_detail;		//상세주소
+	private int    	USER_STATUS;
 
 }

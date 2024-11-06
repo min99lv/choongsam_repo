@@ -12,5 +12,7 @@ public interface LjmDao {
 	int confirmId(String user_id);
 
 	String findId(User_Info user_info);
+
+	String getUserName(int user_seq);
 	
 }
