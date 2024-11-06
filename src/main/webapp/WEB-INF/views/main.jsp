@@ -29,8 +29,17 @@
             <div class="main_contents"><a href="/notes/sent">보낸쪽지</a></div>
             <div class="main_contents"><a href="/notes/trash">휴지통</a></div>
             <div class="main_contents"><a href="/asks/">문의사항</a></div>
-            <div class="main_contents"><a href="/sh_lecture_student?lctr_id=0010&user_seq=10012">학생강의실</a></div>
-            <div class="main_contents"><a href="/sh_lecture_teacher?lctr_id=0010&user_seq=10011">교수강의실</a></div>
+                       <div class="main_contents"><a href="/sh_lecture_student?lctr_id=0001&user_seq=10012">학생강의실</a></div>  이것은 비즈니스
+            <div class="main_contents"><a href="/sh_lecture_student?lctr_id=9&user_seq=10012">학생강의실</a></div> 이것은 테스트
+            <!-- <div class="main_contents"><a href="/sh_lecture_teacher?lctr_id=0001&user_seq=10050">교수강의실</a></div> -->
+            <div class="main_contents"><a href="/sh_lecture_teacher?lctr_id=0001&user_seq=10050">교수강의실</a></div> 이것은 비즈니스
+            <div class="main_contents"><a href="/sh_lecture_teacher?lctr_id=9&user_seq=10041">교수강의실</a></div> 이것은 테스트
+            
+            <p>
+            USER_SEQ : ${user_seq } <p>
+	   		USER_ID : ${user } <p>
+	   		USER_STATUS : ${usertype }
+
             
         </div>
 

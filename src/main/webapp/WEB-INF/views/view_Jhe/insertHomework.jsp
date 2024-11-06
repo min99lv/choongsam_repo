@@ -14,7 +14,7 @@
 </head>
 <body>
 	<h2>나는 과제 등록 (강사)</h2>
-	<form action="/Jhe/insertHomework" method="post" id="insertHomework">
+	<form action="/Jhe/insertHomework" method="post" id="insertHomework" enctype="multipart/form-data">
 		<table>
 			<tr>
 				<th>강의명</th>
@@ -22,27 +22,28 @@
 			</tr>
 			<tr>
 				<th>과제명</th>
-				<td><input type="text" name="ASMT_NM" required></td>
+				<td><input type="text" name="asmt_nm" required></td>
 			</tr>
 			<tr>
 				<th>시작일</th>
-				<td><input type="text" name="SBMSN_BGNG_YMD" required></td>
+				<td><input type="text" name="sbmsn_bgng_ymd" required></td>
 			</tr>
 			<tr>
 				<th>마감일</th>
-				<td><input type="text" name="SBMSN_END_YMD"></td>
+				<td><input type="text" name="sbmsn_end_ymd"></td>
 			</tr>
 			<tr>
 				<th>첨부파일</th>
-				<td><input type="text" name="addFile" value="attach"></td>
+				<td><input type="file" name="file_nm" accept="application/pdf, image/*, .doc, .docx, .txt"></td>
 			</tr>
 			<tr>
 				<th>과제내용</th>
-				<td><textarea name="ASMT_CN"></textarea></td>
+				<td><textarea name="asmt_cn"></textarea>
+				<input type="hidden" name="LCTR_ID" value="${findByLctrName.lctr_id}"></td>
 			</tr>
 		</table>
 		<input type="submit" value="등록">
-		<a href="../Jhe/profHomeworkList"><button type="button">취소</button></a>
+		<a href="../Jhe/profHomeworkList?LCTR_ID=${findByLctrName.lctr_id}"><button type="button">취소</button></a>
 	</form>
 </body>
 </html>
