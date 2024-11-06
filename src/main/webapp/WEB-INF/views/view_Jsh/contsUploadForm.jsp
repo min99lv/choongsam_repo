@@ -108,11 +108,23 @@
 	    display: flex;            /* Flexbox 사용 */
 	    align-items: center;     /* 수직 중앙 정렬 */
    		justify-content: center;  /* 수평 중앙 정렬 */
-		border-radius: 8px;
 		font-size: 25px;
 		border: none;
 		float: right;
 		margin-right: 50px;
+	}
+	
+	#vdo_url_addr {
+		width: 650px;
+	}
+	
+	#idInput {
+		margin-left:15px;
+		height: 26px;
+		width: 150px;
+		border: none;
+		background-color: #00664F;
+		color: white;
 	}
         
     </style>
@@ -272,7 +284,15 @@
 
             <div class="oneLine">
                 <div class="tb"><label class="text">차시</label></div>
-                <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
+                <c:choose>
+		            <c:when test="${max_lctr_no == 1}">
+		               <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
+		            </c:when>
+		            <c:otherwise>
+		               <input type="text" name="lctr_no" value="${max_lctr_no+1 }" readonly="readonly">
+		            </c:otherwise>
+		        </c:choose>
+                
             </div>
             
             <!-- <div class="oneLine">
@@ -341,10 +361,13 @@
                 </div>
             </div>
             
-            <div class="file">
-                <div class="tb"><label class="text">첨부파일</label></div>
-                <input type="file" name="file">
+            <div class="oneLine">
+            	<div class="file">
+	                <div class="tb"><label class="text">첨부파일</label></div>
+	                <input type="file" name="file">
+	            </div>
             </div>
+            
             
             <input type="hidden" name="lctr_id" value="${lctr_id}">
     		<input type="hidden" name="user_seq" value="${user_seq}">
