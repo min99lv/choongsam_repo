@@ -55,7 +55,7 @@
 	
 	<select id="FileDown" parameterType="String" resultType="String">
 		SELECT "FILE_PATH_NM"
-		FROM "FILEGROUP"
+		FROM "FILE_GROUP"
 		WHERE "FILE_NM"= #{filename}
 	</select>
 	

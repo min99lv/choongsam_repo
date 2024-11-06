@@ -91,22 +91,22 @@ public class SjmDaoImpl implements SjmDao {
 		Integer maxFileSeq = session.selectOne("com.postgre.choongsam.mapper.sjm.getMaxFileSeq", fileGroupId);
 		return (maxFileSeq == null) ? 1 : maxFileSeq + 1; // maxFileSeq가 null이면 1을 반환
 	}
+	
+	
+// ##################
+// ##################
+// ##################
+// ##################
+// 쪽지 ------------------------------------------------------------------
+// ##################
+// ##################
+// ##################
+// ##################
 
-	// NOTE - user_seq 가져오기
 	@Override
-	public int getUserSeq(Map<String, Object> params) {
+	public List<Note> getNotesReceived(Map<String, Object> params) {
 
-		System.out.println("dao도착 params" + params);
-
-		int user_seq = session.selectOne("com.postgre.choongsam.mapper.sjm.getUserSeq", params);
-
-		return user_seq;
-	}
-
-	@Override
-	public List<Note> noteList(Map<String, Object> params) {
-
-		List<Note> noteList = session.selectList("com.postgre.choongsam.mapper.sjm.rcvNote", params);
+		List<Note> noteList = session.selectList("com.postgre.choongsam.mapper.sjm.getNotesReceived", params);
 
 		System.out.println("쪽지 리스트 다오임 " + noteList);
 		return noteList;
@@ -126,8 +126,8 @@ public class SjmDaoImpl implements SjmDao {
 	}
 
 	@Override
-	public List<Note> getSentNotes(Map<String, Object> params) {
-		List<Note> noteList = session.selectList("com.postgre.choongsam.mapper.sjm.getSentNotes", params);
+	public List<Note> getNotesSend(Map<String, Object> params) {
+		List<Note> noteList = session.selectList("com.postgre.choongsam.mapper.sjm.getNotesSend", params);
 
 		System.out.println("쪽지 리스트 다오임 " + noteList);
 		return noteList;
@@ -171,17 +171,17 @@ public class SjmDaoImpl implements SjmDao {
 	}
 
 	@Override
-	public List<Lecture> getSameLeceture(int lectureId) {
+	public List<Note> getSameLeceture(String lectureId) {
 		System.out.println("내가 듣는 강의 리스트 가져오기"+ lectureId);
-		List<Lecture> lectures = null;
+		List<Note> note = null;
 		
 		try {
-			lectures= session.selectList("com.postgre.choongsam.mapper.sjm.getSameLeceture",lectureId);
-			System.out.println("내가 듣는 강의 : "+lectures);
+			note= session.selectList("com.postgre.choongsam.mapper.sjm.getSameLeceture",lectureId);
+			System.out.println("내가 듣는 강의 : "+note);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return lectures;
+		return note;
 	}
 
 }
