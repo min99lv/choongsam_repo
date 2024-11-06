@@ -49,7 +49,7 @@
             margin: 0 125px;
         }
         
-        .header_login a, .header_join a {
+        .header_login a, .header_join a, .header_logout a {
         	text-decoration: none;
             color: black;
         }
@@ -79,8 +79,20 @@
             <a href="/api/notice">공지사항</a>
             <a href="/video-details?videoId=H8BqV91Mhe0&userId=user48">문의사항</a>
         </div>
-            <div class="header_login"><a href="/view_Ljm/loginForm">로그인</a></div>
-            <div class="header_join"><a href="/view_Ljm/signup1">회원가입</a></div>
+        
+            <!-- 로그인 여부에 따라 버튼 표시 -->
+            <c:choose>
+                <c:when test="${not empty sessionScope.user}">
+                    <!-- 로그인된 경우: '로그인', '회원가입' 버튼을 숨기고 '로그아웃' 버튼을 표시 -->
+                    <div class="header_logout"><a href="/view_Ljm/logout">로그아웃</a></div>
+                </c:when>
+                <c:otherwise>
+                    <!-- 로그인되지 않은 경우: '로그인', '회원가입' 버튼 표시 -->
+                    <div class="header_login"><a href="/view_Ljm/loginForm">로그인</a></div>
+                    <div class="header_join"><a href="/view_Ljm/signup1">회원가입</a></div>
+                </c:otherwise>
+            </c:choose>
+  
         </div>
     </div>
 </body>

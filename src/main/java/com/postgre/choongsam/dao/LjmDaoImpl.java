@@ -76,5 +76,12 @@ public class LjmDaoImpl implements LjmDao {
 
 		return user_id;
 	}
+
+	@Override
+	public String getUserName(int user_seq) {
+		String user_name = session.selectOne("getUserName",user_seq);
+		System.out.println("username--->"+user_name);
+		return user_name;
+	}
 	
 }
