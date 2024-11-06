@@ -66,7 +66,7 @@
 				<a href="">출석</a>
 			</div>
 			<div class="butt">
-				<a href="">과제</a>
+				<a href="/Jhe/studHomeworkList">과제</a>
 			</div>
 			<div class="butt">
 				<a href="">공지사항</a>
