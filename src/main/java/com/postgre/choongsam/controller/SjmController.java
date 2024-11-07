@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -123,14 +124,15 @@ public class SjmController {
 		// 파일 그룹 ID에 해당하는 파일 리스트를 가져옴
 		System.out.println("파일 리스트 가져오기");
 		List<File_Group> files = ss.getFilesByGroup(file_group);
-		System.out.println("file--->"+files);
+		System.out.println("file--->" + files);
 		return files;
 	}
 
 	@GetMapping(value = "/api/files/{fileGroup}/{fileSeq}")
-	public ResponseEntity<Resource> downloadFile(@PathVariable("fileGroup") int fileGroup,
-	        @PathVariable("fileSeq") int fileSeq) {
-
+	public ResponseEntity<Resource> downloadFile(
+	        @PathVariable("fileGroup") int fileGroup,
+	        @PathVariable("fileSeq") int fileSeq,
+	        HttpServletRequest request) {  // HttpServletRequest 추가
 	    System.out.println("다운로드 시작");
 
 	    try {
@@ -144,12 +146,11 @@ public class SjmController {
 	        // 파일 경로 디코딩 및 설정
 	        String filePathStr = URLDecoder.decode(file.getFile_path_nm(), "UTF-8");
 
-	     // 파일명과 확장자 결합
+	        // 파일명과 확장자 결합
 	        String fullFileName = file.getFile_nm() + "." + file.getFile_extn_nm(); // 파일명과 확장자를 결합
 
-	        
 	        // 경로를 Path 객체로 변환 (경로 구분자 처리)
-	        Path filePath = Paths.get(filePathStr).normalize();
+	        Path filePath = Paths.get(request.getSession().getServletContext().getRealPath(filePathStr)).normalize();
 
 	        // 디버깅: 최종 경로 출력
 	        System.out.println("File path (final): " + filePath);
@@ -164,10 +165,8 @@ public class SjmController {
 	        Resource resource = new UrlResource(filePath.toUri());
 
 	        // 파일명을 UTF-8로 인코딩하여 Content-Disposition 헤더에 사용
-	        String encodedFileName = URLEncoder.encode(fullFileName, "UTF-8")
-	                .replaceAll("\\+", "%20") // + 기호를 공백으로 변경
-	                .replaceAll("%28", "(")
-	                .replaceAll("%29", ")");
+	        String encodedFileName = URLEncoder.encode(fullFileName, "UTF-8").replaceAll("\\+", "%20") // + 기호를 공백으로 변경
+	                .replaceAll("%28", "(").replaceAll("%29", ")");
 
 	        // 디버깅: 리소스 생성 확인
 	        System.out.println("Resource created: " + resource.getFilename());
@@ -182,6 +181,7 @@ public class SjmController {
 	        return ResponseEntity.badRequest().build();
 	    }
 	}
+
 
 	// ##################
 	// ##################
@@ -262,10 +262,23 @@ public class SjmController {
 
 	// 쪽지 전송 화면
 	@GetMapping(value = "/notes/new")
-	public String CreateNoteForm() {
-		System.out.println("쪽지전송화면");
+	public String CreateNoteForm(@RequestParam(value = "note_sn", required = false) Integer note_sn, 
+	        @RequestParam(value = "user_seq", required = false) Integer user_seq, 
+	        Model model) {
+	    
+	    System.out.println("쪽지전송화면");
 
-		return "view_Sjm/noteCreate";
+	    // note_sn이 존재하면 모델에 추가
+	    if (note_sn != null) {
+	        model.addAttribute("note_sn", note_sn);
+	    }
+
+	    // user_seq가 존재하면 모델에 추가
+	    if (user_seq != null) {
+	        model.addAttribute("user_seq", user_seq);
+	    }
+
+	    return "view_Sjm/noteCreate";
 	}
 
 	@RequestMapping(value = "/api/notes", method = RequestMethod.POST)

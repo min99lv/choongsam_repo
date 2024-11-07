@@ -137,6 +137,15 @@
             console.log('userSeq:', userSeq); // userSeq 출력
             console.log('note.sndpty_seq:', note.sndpty_seq); // sndpty_seq 출력
 
+            // 답장하기 버튼의 링크를 동적으로 설정
+            const replyButton = document.getElementById("replyButton");
+            replyButton.onclick = function() {
+            	
+            	const note_sn = note.note_sn;
+            	const  sndpty_seq =note.sndpty_seq;
+                location.href = '/notes/new?note_sn='+ note_sn + '&sndpty_seq=' + sndpty_seq;
+            };
+            
             const senderReceiverRow = document.getElementById('sender_receiver');
 
             if (userSeq === note.sndpty_seq) {
@@ -144,6 +153,8 @@
             } else {
                 senderReceiverRow.innerHTML = `<th>받은사람</th><td>` + note.receiver_name + `</td>`;
             }
+            
+            
         } catch (error) {
             console.error('Error:', error);
             document.getElementById('note_ttl').textContent = "쪽지를 불러올 수 없습니다.";
@@ -179,7 +190,7 @@
             </table>
             <div class="NavBtn">
             <button onclick="history.back();">목록</button>
-            <button onclick="location.href='/notes/new'">답장하기</button>
+            <button id="replyButton">답장하기</button>
             
             </div>
     </div>
