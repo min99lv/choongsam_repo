@@ -29,6 +29,7 @@
 	
 	.detail {
 		margin-left: 50px;
+		margin-top: 100px;
 	}
 	
 	.butt{

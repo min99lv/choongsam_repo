@@ -1,5 +1,6 @@
 package com.postgre.choongsam.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,11 @@ public class JshDaoImpl implements JshDao {
 		try {
 			startday = session.selectList("getStartDay",lctr_id);
 			System.out.println("JshDao getStartDay startday 아니 왜 null인데 너가 나와>> " + startday);
+			
+			if (startday == null || startday.isEmpty()) {
+	            startday = session.selectList("getStartDay1", lctr_id);
+	        }
+			
 		} catch (Exception e) {
 			System.out.println("JshDao getStartDay exception>> "+e.getMessage());
 		}
@@ -307,6 +313,25 @@ public class JshDaoImpl implements JshDao {
 		List<Class_ScheduleAddVideo> name = session.selectList("LectureName", lctr_id);
 		//System.out.println("name >>>>>>>>>>>>>>>>>" +name);
 		return name;
+	}
+
+	@Override
+	public List<Class_Schedule> classSchedule(String lctr_id, int user_seq) {
+		System.out.println("JshDao classSchedule start...");
+		
+		List<Class_Schedule> classSchedule = null;
+		
+		Map<String, Object> info = new HashMap<>();
+		info.put("lctr_id", lctr_id);
+		info.put("user_seq", user_seq);
+		
+		try {
+			classSchedule = session.selectList("classSchedule", info);
+			System.out.println("JshDao classSchedule inft >> "+info);
+		} catch (Exception e) {
+			System.out.println("JshDao classSchedule exception >> "+e.getMessage());
+		}
+		return classSchedule;
 	}
 
 }

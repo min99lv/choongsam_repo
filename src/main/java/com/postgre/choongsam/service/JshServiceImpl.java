@@ -148,4 +148,11 @@ public class JshServiceImpl implements JshService {
 		return name;
 	}
 
+	@Override
+	public List<Class_Schedule> classSchedule(String lctr_id, int user_seq) {
+		System.out.println("JshService classSchedule start  과목번호 >> "+lctr_id+" 강사번호 >> "+user_seq);
+		List<Class_Schedule> classSchedule = Dao.classSchedule(lctr_id, user_seq);
+		return classSchedule;
+	}
+
 }
