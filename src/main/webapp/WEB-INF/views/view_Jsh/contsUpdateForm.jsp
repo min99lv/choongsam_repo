@@ -163,7 +163,7 @@
 			</div>
 		</div>
 
-    <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data" onsubmit="return submitChk()">
+    <form action="contsUpdateForm" class="form" method="post" enctype="multipart/form-data" onsubmit="return submitChk()">
 	    <c:forEach var="info" items="${info }">
 	        <div id="inserts">
 	            <div class="oneLine">
@@ -201,54 +201,58 @@
 	            <div class="video"></div>
 	
 	
-				<c:forEach var="chap" items="${chapInfo}">
 		            <div id="chapter">
 		                <div class="chapterTime">
 		                    <div class="oneLine">
 		                    	<div class="tb"><label class="text">챕터시간1 입력</label></div>
 		                    	<input type="text" name="chp_str1" maxlength="6" oninput="hypenTime(this)" 
-		                    		placeholder="00:00:00 형식으로 입력" class="tbViewing" value="">
+		                    		placeholder="00:00:00 형식으로 입력" class="tbViewing" value="${chpTime1 }">
 		                    </div>
 		                    <div class="oneLine">
 		                    	<div class="tb"><label class="text">챕터내용1 입력</label></div>
-		                    	<input type="text" name="conts_chpttl" value="${chap.conts_chpttl }">
+		                    	<input type="text" name="conts_chpttl" value="${chpTtl1}">
 		                    </div>
 		                </div>
 		                
 		                <div class="chapterTime">
 		                    <div class="oneLine">
 		                    	<div class="tb"><label class="text">챕터시간2 입력</label></div>
-		                    	<input type="text" name="chp_str2" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
+		                    	<input type="text" name="chp_str2" maxlength="6" oninput="hypenTime(this)" 
+		                    		placeholder="00:00:00 형식으로 입력" class="tbViewing" value="${chpTime2 }">
 		                    </div>
 		                    <div class="oneLine">
 		                    	<div class="tb"><label class="text">챕터내용2 입력</label></div>
-		                    	<input type="text" name="conts_chpttl2" value="${chap.conts_chpttl }">
+		                    	<input type="text" name="conts_chpttl2" value="${chpTtl2}">
 		                    </div>
 		                </div>
 		                
 		                <div class="chapterTime">
 		                    <div class="oneLine">
 		                    	<div class="tb"><label class="text">챕터시간3 입력</label></div>
-		                    	<input type="text" name="chp_str3" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
+		                    	<input type="text" name="chp_str3" maxlength="6" oninput="hypenTime(this)" 
+		                    		placeholder="00:00:00 형식으로 입력" class="tbViewing"  value="${chpTime3 }">
 		                    </div>
 		                    <div class="oneLine">
 		                    	<div class="tb"><label class="text">챕터내용3 입력</label></div>
-		                    	<input type="text" name="conts_chpttl3" value="${chap.conts_chpttl }">
+		                    	<input type="text" name="conts_chpttl3" value="${chpTtl3}">
 		                    </div>
 		                </div>
 		            </div>
-	            </c:forEach>
 	            
 	            <div class="oneLine">
 	            	<div class="file">
 		                <div class="tb"><label class="text">첨부파일</label></div>
-		                <input type="file" name="file" value="${info.file_extn_nm }">
+		                <div id="fileName">
+		                	<label id="fileNameText">이전에 올린 첨부파일 명: ${info.file_nm }.${ info.file_extn_nm}</label>
+		                </div>
+		                <input type="file" name="file">
 		            </div>
 	            </div>
 	            
 	            
 	            <input type="hidden" name="lctr_id" value="${info.lctr_id}">
 	    		<input type="hidden" name="user_seq" value="${info.user_seq}">
+	    		<input type="hidden" name="conts_id" value="${info.conts_id}">
 	            
 	             <button type="submit" id="subBut">수업 등록</button>
 	
