@@ -30,6 +30,7 @@
 	.detail {
 	width:300px;
 		margin-left: 50px;
+		margin-top: 100px;
 	}
 	
 	.butt{

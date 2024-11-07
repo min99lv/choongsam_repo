@@ -16,10 +16,10 @@
         .header__{
             display: block;
             width: 1920px;
-            background-color:white;
+            background-color:#00664F;
             height: 70px;
             font-size: 20px;
-            color: black;
+            color: white;
             position: static;
         }
 

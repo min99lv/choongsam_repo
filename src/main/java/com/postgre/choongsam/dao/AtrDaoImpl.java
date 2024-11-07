@@ -52,6 +52,27 @@ public class AtrDaoImpl implements AtrDao {
 		return lectureList;
 	}
 
+	@Override
+	public Lecture getLectureDetail(String lctr_id) {
+		Lecture lecture =new Lecture();
+		try {
+			lecture=session.selectOne("trGetLectureDetail",lctr_id);
+		} catch (Exception e) {
+			System.out.println("trGetLectureDetail"+e.getMessage());
+		}
+		return lecture;
+	}
+
+	@Override
+	public void addClassRoomForm(String lctr_id, String schd) {
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+
 	
 	
 }

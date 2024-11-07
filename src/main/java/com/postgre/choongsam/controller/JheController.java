@@ -1,7 +1,7 @@
 package com.postgre.choongsam.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.postgre.choongsam.dto.Attendance;
+import com.postgre.choongsam.dto.Attendance_Check;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.service.JheService;
@@ -38,6 +38,16 @@ public class JheController {
 		System.out.println("lectureHomeworkList" + lectureHomeworkList);
 		model.addAttribute("homeworkList", lectureHomeworkList);
 		return "view_Jhe/lectureHomeworkList";
+	}
+
+	@GetMapping(value = "/lectureManagement")
+	public String lectureManagement(@RequestParam("LCTR_ID") String LCTR_ID, Model model) {
+		System.out.println("강의 메인보드 컨트롤러");
+		List<Lecture> profLectureList = hes.getProfLectureInfo(LCTR_ID);
+		System.out.println("profLectureList: " + profLectureList);
+		model.addAttribute("profLectureList", profLectureList);
+		model.addAttribute("LCTR_ID", LCTR_ID);
+		return "view_Jhe/lectureManagement";
 	}
 
 	@GetMapping(value = "/profHomeworkList")
@@ -116,8 +126,8 @@ public class JheController {
 	@GetMapping(value = "/studHomeworkList")
 	public String getStudHomeworkList(HttpSession session, Model model) {
 		System.out.println("학생 강의 과제 리스트 깐따삐아");
-		int USER_SEQ = 10051;
-		List<Homework> studHomeworkList = hes.getStudHomeworkList(USER_SEQ);
+		int user_seq = (int) session.getAttribute("user_seq");
+		List<Homework> studHomeworkList = hes.getStudHomeworkList(user_seq);
 		System.out.println(studHomeworkList);
 		model.addAttribute("homeworkList", studHomeworkList);
 		return "view_Jhe/studHomeworkList";
@@ -133,24 +143,45 @@ public class JheController {
 	}
 
 	@PostMapping(value = "/submitHomework")
-	public String updatesubmitHomework(@ModelAttribute Homework homework) {
+	public String updatesubmitHomework(@ModelAttribute Homework homework, HttpSession session) {
 		System.out.println("과제 제출 포오스트");
 		System.out.println("ASMT_NO: " + homework.getAsmt_no());
-		int upSubmitHomework = hes.updatesubmitHomework(homework);
+		int user_seq = (int) session.getAttribute("user_seq");
+//		int upSubmitHomework = hes.updatesubmitHomework(homework, user_seq);
+		hes.updatesubmitHomework(homework, user_seq);
 		return "redirect:/Jhe/studHomeworkList";
 	}
 
-	@GetMapping(value = "/studAttByLecture")
-	public String studAttByLecture(Model model) {
-		System.out.println("강좌별 수강생 출결 현황");
-//		List<Attendance> studAttByLecture = hes.getStudAttByLecture();
-		return "";
+	@GetMapping("/profAttMain")
+	public String profAttMain(@RequestParam("LCTR_ID") String LCTR_ID, Model model) {
+		System.out.println("차시별 출석 현황");
+		List<Attendance_Check> profAttMainList = hes.profAttMain(LCTR_ID);
+		System.out.println("profAttMainList: " + profAttMainList);
+		model.addAttribute("profAttMainList", profAttMainList);
+		return "view_Jhe/profAttMain";
 	}
 
 	@GetMapping(value = "/insertStudAtt")
-	public String insertStudAtt(@RequestParam("LCTR_ID") String LCTR_ID) {
-		System.out.println("차시별 출석 입력 컨트롤러");
-		
+	public String getStudAtt(@RequestParam("LCTR_ID") String LCTR_ID,
+							 @RequestParam int LCTR_NO, Model model) {
+		System.out.println("차시별 수강생 출석 호출 컨트롤러");
+		List<Lecture> getStudAttList = hes.getStudAtt(LCTR_ID);
+		System.out.println("getStudAttList: " + getStudAttList);
+		model.addAttribute("getStudAttList", getStudAttList);
+		model.addAttribute("LCTR_ID", LCTR_ID);
+		model.addAttribute("LCTR_NO", LCTR_NO);
 		return "view_Jhe/insertStudAtt";
+	}
+
+	@PostMapping(value = "/insertStudAtt")
+	public String insertStudAtt(@RequestParam("LCTR_ID") String LCTR_ID,
+								@RequestParam int LCTR_NO,
+								@RequestParam List<Integer> user_seq,
+								@RequestParam Map<String, String> att_status, Model model) {
+		System.out.println("차시별 출석 입력 컨트롤러");
+		System.out.println("LCTR_ID: " + LCTR_ID);
+		System.out.println("LCTR_NO: " + LCTR_NO);
+		hes.insertStudAtt(LCTR_ID, LCTR_NO, user_seq, att_status);
+		return "redirect:/Jhe/profAttMain?LCTR_ID=" + LCTR_ID;
 	}
 }

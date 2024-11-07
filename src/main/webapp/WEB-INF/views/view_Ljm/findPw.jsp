@@ -112,7 +112,7 @@
 
                     <br><br>
                     <!-- 임시 비밀번호 발급 버튼 -->
-                    <input id="btnfindPw" type="button" value="임시 비밀번호 발급"  style="margin-right: 10px;">
+                    <input id="btnfindPw" type="submit" value="임시 비밀번호 발급"  style="margin-right: 10px;">
                 </div>
             </div>
         </form>
