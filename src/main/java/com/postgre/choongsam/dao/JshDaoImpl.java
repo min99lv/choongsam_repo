@@ -236,12 +236,17 @@ public class JshDaoImpl implements JshDao {
 		chpInfo.put("chp_time", chp_time);
 		chpInfo.put("cap_ttl", cap_ttl);
 		
+		int value = 1;
+		chpInfo.put("value", value);
+		
 		try {
 			if(update == null) {
 				result = session.insert("chpTimeUpload", chpInfo);
 				
 				if(chp_time2!=null&&chp_time2!=0) {
 					result = 0;
+					value = 2;
+					chpInfo.put("value", value);
 					chpInfo.put("chp_time", chp_time2);
 					chpInfo.put("cap_ttl", cap_ttl2);
 					
@@ -249,6 +254,8 @@ public class JshDaoImpl implements JshDao {
 				}
 				else if(chp_time3!=null&&chp_time3!=0) {
 					result=0;
+					value = 3;
+					chpInfo.put("value", value);
 					chpInfo.put("chp_time", chp_time3);
 					chpInfo.put("cap_ttl", cap_ttl3);
 					
@@ -259,6 +266,8 @@ public class JshDaoImpl implements JshDao {
 					result = session.update("chpTimeUpdate", chpInfo);
 					
 					if(chp_time2!=null&&chp_time2!=0) {
+						value = 2;
+						chpInfo.put("value", value);
 						result = 0;
 						chpInfo.put("chp_time", chp_time2);
 						chpInfo.put("cap_ttl", cap_ttl2);
@@ -266,6 +275,8 @@ public class JshDaoImpl implements JshDao {
 						result = session.update("chpTimeUpdate", chpInfo);
 					}
 					else if(chp_time3!=null&&chp_time3!=0) {
+						value = 3;
+						chpInfo.put("value", value);
 						result=0;
 						chpInfo.put("chp_time", chp_time3);
 						chpInfo.put("cap_ttl", cap_ttl3);

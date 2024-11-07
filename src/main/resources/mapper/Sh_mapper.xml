@@ -88,12 +88,9 @@ LIMIT 1
 	</update>
 	
 	<insert id="chpTimeUpload" parameterType="map">
-		INSERT INTO "CLASS_BOOKMARK"("CONTS_ID", "CONTS_CHPTIME", "CONTS_CHPTTL")
-				VALUES (currval('conts_id_seq'),  #{chp_time}, #{cap_ttl})
+		INSERT INTO "CLASS_BOOKMARK"("CONTS_ID", "CONTS_CHPTIME", "CONTS_CHPTTL", "CHP_SN")
+				VALUES (currval('conts_id_seq'),  #{chp_time}, #{cap_ttl}, #{value})
 	</insert>
-	
-	
-	
 	
 	<select id="studentLecture" parameterType="map" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
 		SELECT DISTINCT ON (lv."LCTR_NO")
@@ -107,13 +104,7 @@ LIMIT 1
 		    cs."LCTR_NO",
 		    cs."USER_SEQ",
 			cs."CONTS_MAX",
-		    COALESCE(
-		        CASE 
-		            WHEN lv."LCTR_NO" = 1 THEN l."LCTR_START_DATE"
-		            ELSE lv_prev."VIEWING_PERIOD"
-		        END,
-		        NULL
-		    ) AS "befor_period",
+		    TO_CHAR(lv."VIEWING_PERIOD"::DATE - INTERVAL '7 days', 'YYYY-MM-DD') AS "befor_period",
 		    CASE 
 		        WHEN TO_DATE(lv."VIEWING_PERIOD", 'YYYY-MM-DD') &lt; CURRENT_DATE THEN 
 		            CASE 
@@ -142,7 +133,6 @@ LIMIT 1
 					) 
 		cs ON s."LCTR_NO" = cs."LCTR_NO" AND cs."USER_SEQ" = #{user_seq}
 		LEFT JOIN "LECTURE_VIDEO" lv ON s."CONTS_ID" = lv."CONTS_ID"
-		LEFT JOIN "LECTURE_VIDEO" lv_prev ON lv."LCTR_NO" = lv_prev."LCTR_NO" + 1
 		WHERE c."USER_SEQ" = #{user_seq}
 		  AND l."LCTR_ID" = #{lctr_id}
 		  AND lv."CONTS_ID" IS NOT NULL
@@ -170,23 +160,17 @@ LIMIT 1
 		    l.*,
 		    s.*,
 		    lv.*,
-		    COALESCE(
-		        CASE 
-		            WHEN lv."LCTR_NO" = 1 THEN l."LCTR_START_DATE"
-		            ELSE lv_prev."VIEWING_PERIOD"
-		        END,
-		        NULL
-		    ) AS "befor_period"
+		    TO_CHAR(lv."VIEWING_PERIOD"::DATE - INTERVAL '7 days', 'YYYY-MM-DD') AS "befor_period"
 		FROM "USER_INFO" u
 		JOIN "LECTURE" l
-		ON u."USER_SEQ" = l."USER_SEQ"
+		    ON u."USER_SEQ" = l."USER_SEQ"
 		JOIN "SYLLABUS" s
-		ON s."LCTR_ID" = l."LCTR_ID"
+		    ON s."LCTR_ID" = l."LCTR_ID"
 		JOIN "LECTURE_VIDEO" lv
-		ON s."CONTS_ID" = lv."CONTS_ID"
-		LEFT JOIN "LECTURE_VIDEO" lv_prev ON lv."LCTR_NO" = lv_prev."LCTR_NO" + 1
+		    ON s."CONTS_ID" = lv."CONTS_ID"
 		WHERE l."LCTR_ID" = #{lctr_id}
-		AND u."USER_SEQ" = #{user_seq}
+		    AND u."USER_SEQ" = #{user_seq}
+
 	</select>
 	
 	<select id="LectureName" parameterType="String" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
@@ -210,13 +194,7 @@ LIMIT 1
 		    s.*,
 		    lv.*,
 			f.*,
-		    COALESCE(
-		        CASE 
-		            WHEN lv."LCTR_NO" = 1 THEN l."LCTR_START_DATE"
-		            ELSE lv_prev."VIEWING_PERIOD"
-		        END,
-		        NULL
-		    ) AS "befor_period"
+		    TO_CHAR(lv."VIEWING_PERIOD"::DATE - INTERVAL '7 days', 'YYYY-MM-DD') AS "befor_period"
 		FROM "USER_INFO" u
 		JOIN "LECTURE" l
 			ON u."USER_SEQ" = l."USER_SEQ"
@@ -224,8 +202,6 @@ LIMIT 1
 			ON s."LCTR_ID" = l."LCTR_ID"
 		JOIN "LECTURE_VIDEO" lv
 			ON s."CONTS_ID" = lv."CONTS_ID"
-		LEFT JOIN "LECTURE_VIDEO" lv_prev 
-			ON lv."LCTR_NO" = lv_prev."LCTR_NO" + 1
 		LEFT JOIN "FILE_GROUP" f 
 			ON lv."FILE_GROUP" = f."FILE_GROUP"
 		WHERE s."CONTS_ID" = #{conts_id}
@@ -247,7 +223,6 @@ LIMIT 1
 	        "LCTR_ID" = #{lctr_id}
 	    WHERE "CONTS_ID" = #{conts_id}
 </update>
-
 	
 	<update id="lectureVideoUpdate" parameterType="map">
 	    UPDATE "LECTURE_VIDEO"
@@ -274,7 +249,8 @@ LIMIT 1
 	    SET 
 	        "CONTS_CHPTIME" = #{chp_time},
 	        "CONTS_CHPTTL" = #{cap_ttl}
-	    WHERE "CONTS_ID" =#{conts_id}
+	    WHERE "CONTS_ID" = #{conts_id}
+	    AND "CHP_SN" = #{value}
 	</update>
 
 
