@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.eclipse.tags.shaded.org.apache.bcel.generic.Select;
 import org.springframework.stereotype.Repository;
 
+import com.postgre.choongsam.dto.Class_Bookmark;
 import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Class_ScheduleAddVideo;
 
@@ -92,7 +93,7 @@ public class JshDaoImpl implements JshDao {
 	}
 
 	@Override
-	public int fileLectureVideoUpload(Class_ScheduleAddVideo info) {
+	public int fileLectureVideoUpload(Class_ScheduleAddVideo info, String update) {
 		System.out.println("JshDao fileLectureVideoUpload start...");
 		
 		int result = 0;
@@ -121,7 +122,13 @@ public class JshDaoImpl implements JshDao {
 		
 		
 		try {
-			result = session.insert("fileLectureVideoUpload", lectureInfo);
+			if(update == null) {
+				result = session.insert("fileLectureVideoUpload", lectureInfo);
+			}
+			else {
+				result= session.update("fileLectureVideoUpdate", lectureInfo);
+			}
+			
 		} catch (Exception e) {
 			System.out.println("JshDao lectureVideoUpload exception >> "+e.getMessage());
 		}
@@ -130,7 +137,7 @@ public class JshDaoImpl implements JshDao {
 	}
 
 	@Override
-	public int lectureVideoUpload(Class_ScheduleAddVideo info) {
+	public int lectureVideoUpload(Class_ScheduleAddVideo info, String update) {
 		System.out.println("JshDao lectureVideoUpload start...");
 		
 		int result = 0;
@@ -156,7 +163,12 @@ public class JshDaoImpl implements JshDao {
 		lectureInfo.put("lctr_id", lctr_id);
 		
 		try {
-			result = session.insert("lectureVideoUpload", lectureInfo);
+			if(update == null) {
+				result = session.insert("lectureVideoUpload", lectureInfo);
+			}
+			else {
+				result = session.update("lectureVideoUpdate", lectureInfo);
+			}
 		} catch (Exception e) {
 			System.out.println("JshDao lectureVideoUpload exception >> "+e.getMessage());
 		}
@@ -165,7 +177,7 @@ public class JshDaoImpl implements JshDao {
 	}
 
 	@Override
-	public int syllabusUpload(Class_ScheduleAddVideo info) {
+	public int syllabusUpload(Class_ScheduleAddVideo info, String update) {
 		System.out.println("JshDao lectureVideoUpload start...");
 		int result = 0;
 		
@@ -188,7 +200,12 @@ public class JshDaoImpl implements JshDao {
 		System.out.println("conts_id >> "+conts_id);
 		
 		try {
-			result = session.update("syllabusUpload", syllabusInfo);
+			if(update==null) {
+				result = session.update("syllabusUpload", syllabusInfo);
+			}
+			else {
+				result = session.update("syllabusUpdate", syllabusInfo);
+			}
 		} catch (Exception e) {
 			System.out.println("JshDao syllabusUpload exception >> "+e.getMessage());
 		}
@@ -198,7 +215,7 @@ public class JshDaoImpl implements JshDao {
 	}
 
 	@Override
-	public int chpTimeUpload(Class_ScheduleAddVideo info) {
+	public int chpTimeUpload(Class_ScheduleAddVideo info, String update) {
 		System.out.println("JshDao chpTimeUpload start...");
 		int result = 0;
 		
@@ -220,21 +237,41 @@ public class JshDaoImpl implements JshDao {
 		chpInfo.put("cap_ttl", cap_ttl);
 		
 		try {
-			result = session.insert("chpTimeUpload", chpInfo);
-			
-			if(chp_time2!=null&&chp_time2!=0) {
-				result = 0;
-				chpInfo.put("chp_time", chp_time2);
-				chpInfo.put("cap_ttl", cap_ttl2);
-				
+			if(update == null) {
 				result = session.insert("chpTimeUpload", chpInfo);
+				
+				if(chp_time2!=null&&chp_time2!=0) {
+					result = 0;
+					chpInfo.put("chp_time", chp_time2);
+					chpInfo.put("cap_ttl", cap_ttl2);
+					
+					result = session.insert("chpTimeUpload", chpInfo);
+				}
+				else if(chp_time3!=null&&chp_time3!=0) {
+					result=0;
+					chpInfo.put("chp_time", chp_time3);
+					chpInfo.put("cap_ttl", cap_ttl3);
+					
+					result = session.insert("chpTimeUpload", chpInfo);
+				}
 			}
-			else if(chp_time3!=null&&chp_time3!=0) {
-				result=0;
-				chpInfo.put("chp_time", chp_time3);
-				chpInfo.put("cap_ttl", cap_ttl3);
-				
-				result = session.insert("chpTimeUpload", chpInfo);
+			else {
+					result = session.update("chpTimeUpdate", chpInfo);
+					
+					if(chp_time2!=null&&chp_time2!=0) {
+						result = 0;
+						chpInfo.put("chp_time", chp_time2);
+						chpInfo.put("cap_ttl", cap_ttl2);
+						
+						result = session.update("chpTimeUpdate", chpInfo);
+					}
+					else if(chp_time3!=null&&chp_time3!=0) {
+						result=0;
+						chpInfo.put("chp_time", chp_time3);
+						chpInfo.put("cap_ttl", cap_ttl3);
+						
+						result = session.update("chpTimeUpdate", chpInfo);
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("JshDao chpTimeUpload exception >> "+e.getMessage());
@@ -353,10 +390,10 @@ public class JshDaoImpl implements JshDao {
 
 
 	@Override
-	public List<Class_ScheduleAddVideo> getcontsChp(String conts_id) {
+	public List<Class_Bookmark> getcontsChp(String conts_id) {
 		System.out.println("JshDao getcontsChp start...");
 		
-		List<Class_ScheduleAddVideo> info = null;
+		List<Class_Bookmark> info = null;
 		
 		try {
 			info = session.selectList("getcontsChp", conts_id);
