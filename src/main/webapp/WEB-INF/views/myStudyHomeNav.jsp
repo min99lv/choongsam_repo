@@ -9,7 +9,7 @@
 <style type="text/css">
 	.nav{
 		  position: fixed;
-		  width: 320px;
+		  width: auto;
 		  top:0;
 		  height: 100vh;
 		  z-index: 1;
@@ -28,12 +28,13 @@
 	}
 	
 	.detail {
+	width:300px;
 		margin-left: 50px;
 		margin-top: 100px;
 	}
 	
 	.butt{
-		width: 320px;
+		width: auto;
 		height: 90px;
 		font-size: 30px;
 		color: white;
