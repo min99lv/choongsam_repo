@@ -61,7 +61,7 @@
 
 	<insert id="FileUpload" parameterType="File_Group">
 		INSERT INTO
-		"FILEGROUP"
+		"FILE_GROUP"
 		("FILE_GROUP","FILE_SEQ","IDNTF_NO","FILE_NM","FILE_EXTN_NM","FILE_SZ","FILE_PATH_NM")
 		VALUES
 		(#{file_group},#{file_seq},#{idntf_no},#{file_nm},#{file_extn_nm},#{file_sz},#{file_path_nm})
@@ -76,9 +76,10 @@
 	<!-- 특정 file_group에 대한 최대 file_seq 가져오기 -->
 	<select id="getMaxFileSeq" parameterType="int"
 		resultType="java.lang.Integer">
-		SELECT COALESCE(MAX("FILE_SEQ"), 0) FROM "FILEGROUP" WHERE
-		"FILE_GROUP" =
-		#{file_group}
+		SELECT COALESCE(MAX("FILE_SEQ"), 0) 
+		FROM "FILE_GROUP" 
+		WHERE
+		"FILE_GROUP" = #{file_group}
 	</select>
 
 
@@ -232,6 +233,46 @@ WHERE
 		u_instructor."USER_SEQ" -- 강사 정보
 		WHERE
 		l."LCTR_ID" = #{lectureId}
+	</select>
+	
+	
+	<insert id="postAsk" parameterType="Ask">
+
+	INSERT INTO "ASK"
+	("DSCSN_SN", "USER_SEQ",
+	"DSCSN_TTL", "DSCSN_CN", "DSCSN_REG_DT", "DSCSN_ANS_YN")
+	VALUES
+	(NEXTVAL('dscsn_sn_seq'),#{user_seq},#{dscsn_ttl},
+	#{dscsn_cn},LOCALTIMESTAMP(0),'N')
+
+
+
+	</insert>
+	
+	<select id="getAsksMy" resultType="Ask" parameterType="Map">
+		SELECT *
+		FROM "ASK"
+		WHERE "USER_SEQ" = #{user_seq}
+	
+	
+	</select>
+	
+	<select id="getAsk" resultType="Ask" parameterType="Int">
+	SELECT *
+	FROM "ASK"
+	WHERE "DSCSN_SN" = #{dscsn_sn}
+	</select>
+	
+	<select id="getFile" parameterType="Map" resultType="File_Group">
+	SELECT *
+	FROM "FILE_GROUP"
+	WHERE "FILE_GROUP"=#{file_group} AND "FILE_SEQ" =#{file_seq}
+	</select>
+	
+	<select id="getFilesByGroup" parameterType="Int" resultType="File_Group">
+	SELECT *
+	FROM "FILE_GROUP"
+	WHERE "FILE_GROUP"=#{file_group} 
 	</select>
 
 </mapper>

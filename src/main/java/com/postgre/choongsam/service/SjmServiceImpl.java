@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dao.SjmDao;
+import com.postgre.choongsam.dto.Ask;
 import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Note;
@@ -139,6 +140,21 @@ public class SjmServiceImpl implements SjmService {
 	    }
 	    return null; // 파일이 없는 경우 null 반환
 	}
+	
+	
+	// NOTE - 파일 다운로드 진행
+	@Override
+	public File_Group getFile(int fileGroup, int fileSeq) {
+		return sd.getFile(fileGroup, fileSeq);
+	}
+	
+	
+	// NOTE - 파일 리스트 가져오기
+	@Override
+	public List<File_Group> getFilesByGroup(int file_group) {
+		return sd.getFilesByGroup(file_group);
+	}
+
 
 // ##################
 // ##################
@@ -199,6 +215,32 @@ public class SjmServiceImpl implements SjmService {
 		 List<Note> note = sd.getSameLeceture(lectureId);
 		return note;
 	}
+
+	
+	// NOTE - 문의사항 작성
+	@Override
+	public int postAsks(Ask ask) {
+		int result = sd.postAsk(ask);
+		return result;
+	}
+
+	
+	// NOTE - 문의사항 목록(마이페이지)
+	@Override
+	public List<Ask> getAsksMy(Map<String, Object> params) {
+		List<Ask> ask = sd.getAsksMy(params);
+		return ask;
+	}
+
+	// NOTE - 문의사항 상세
+	@Override
+	public Ask getAsk(int dscsn_sn) {
+		Ask ask = sd.getAsk(dscsn_sn);
+		return ask;
+	}
+
+	
+
 
 
 

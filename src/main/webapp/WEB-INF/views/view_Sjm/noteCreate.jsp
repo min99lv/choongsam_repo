@@ -18,7 +18,7 @@ body {
 	position: relative;
 	background-color: #fdfdfd;
 	top: 120px;
-	width: 1320px;
+	width: 1220px;
 	margin: 0 auto;
 	box-sizing: border-box;
 	height: auto;
@@ -259,110 +259,112 @@ async function fetchRecipients(lctr_id) {
     }
 }
 	
-	// 수신자를 표시하는 함수
-	function displayRecipients(recipients, lctr_id) {
-		const selectedRecipientCell = document.getElementById(`selectedRecipient-${lctr_id}`);
-		selectedRecipientCell.innerHTML = ''; // 기존 수신자 초기화
-	
-		// 각 수신자를 div로 생성하여 표시
-		recipients.forEach(recipient => {
-			const recipientDiv = document.createElement('div');
-			recipientDiv.textContent = recipient.inst_name || recipient.std_name;
-			recipientDiv.setAttribute('data-user-seq', recipient.inst_seq || recipient.std_seq);
-	
-			const checkbox = document.createElement('input');
-			checkbox.type = 'checkbox';
-			checkbox.setAttribute('data-user-seq', recipient.inst_seq || recipient.std_seq);
-			recipientDiv.appendChild(checkbox);
-	
-			checkbox.style.width = '15px';  // 체크박스 크기 설정
-			checkbox.style.height = '15px'; // 체크박스 크기 설정
-			
-			selectedRecipientCell.appendChild(recipientDiv);
-		});
-	
-		// 수신자가 한 명 이상일 경우 버튼 표시
-		const sendMessageButton = document.getElementById('sendMessageButton');
-		sendMessageButton.style.display = recipients.length > 0 ? 'block' : 'none';
-	}
-	
-	
-	// 수신자를 선택하여 받는사람 필드에 추가하는 함수
-	function selectRecipient() {
-	    const selectedRecipients = [];
-	    const receiversInput = document.getElementById("receivers");
+function displayRecipients(recipients, lctr_id) {
+    const selectedRecipientCell = document.getElementById(`selectedRecipient-${lctr_id}`);
+    selectedRecipientCell.innerHTML = ''; // 기존 수신자 초기화
 
-	    // 체크된 수신자를 모아 selectedRecipients 배열에 추가
-	    document.querySelectorAll('#lectureTable input[type="checkbox"]:checked').forEach(checkbox => {
-	        const userSeq = checkbox.getAttribute('data-user-seq'); // 수신자 seq 가져오기
-	        const userName = checkbox.parentElement.textContent.trim(); // 수신자 이름 가져오기
-	        selectedRecipients.push({ userSeq, userName }); // 이름과 seq 객체로 저장
-	    });
+    // 각 수신자를 div로 생성하여 표시
+    recipients.forEach(recipient => {
+        const recipientDiv = document.createElement('div');
+        recipientDiv.style.display = 'flex';  // 이름과 체크박스를 가로로 정렬
+        recipientDiv.style.alignItems = 'center';  // 체크박스를 수평 가운데로 정렬
+        recipientDiv.style.marginBottom = '10px';  // 각 수신자 항목 간의 간격을 설정
 
-	    // 선택된 수신자가 없을 때 경고 메시지 표시
-	    if (selectedRecipients.length === 0) {
-	        alert("수신자를 선택해주세요.");
-	        return;
-	    }
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.setAttribute('data-user-seq', recipient.inst_seq || recipient.std_seq);
+        checkbox.style.width = '15px';  // 체크박스 크기 설정
+        checkbox.style.height = '15px'; // 체크박스 크기 설정
 
-	    // 선택된 수신자 이름을 문자열로 결합하여 "받는 사람" 필드에 추가
-	    receiversInput.value = selectedRecipients.map(r => r.userName).join(', ');
+        recipientDiv.appendChild(checkbox); // 체크박스를 먼저 추가
 
-	    // 모달 닫기
-	    closeModal();
-	    
-	    // 수신자 seq 반환 (다른 함수에서 사용될 수 있도록)
-	    return selectedRecipients;
-	}
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = recipient.inst_name || recipient.std_name;
+        nameSpan.style.marginLeft = '10px';  // 체크박스와 이름 간의 간격
 
-	// 메시지 전송 함수
-	function sendMessage() {
-	    const noteTitle = document.querySelector('[name="note_ttl"]').value; // 제목
-	    if (!noteTitle) {
-	        alert('제목을 입력해주세요.');
-	        return;
-	    }
+        recipientDiv.appendChild(nameSpan); // 이름을 나중에 추가
 
-	    const noteContent = document.querySelector('[name="note_cn"]').value;
-	    const receivers = document.getElementById('receivers').value;
-	    const sndptySeq = document.querySelector('[name="sndpty_seq"]').value;
-	    const sndptyNoteYn = document.querySelector('[name="sndpty_note_yn"]').value;
-	    const rcvrNoteYn = document.querySelector('[name="rcvr_note_yn"]').value;
+        selectedRecipientCell.appendChild(recipientDiv);
+    });
 
-	    // selectRecipient 호출하여 선택된 수신자 가져오기
-	    const selectedRecipients = selectRecipient();
-	    if (!selectedRecipients) return; // 선택된 수신자가 없다면 종료
+    // 수신자가 한 명 이상일 경우 버튼 표시
+    const sendMessageButton = document.getElementById('sendMessageButton');
+    sendMessageButton.style.display = recipients.length > 0 ? 'block' : 'none';
+}
+//수신자를 선택하여 받는사람 필드에 추가하는 함수
+function selectRecipient() {
+    const selectedRecipients = [];
+    const receiversInput = document.getElementById("receivers");
 
-	    const messageData = {
-	        sndpty_seq: sndptySeq,
-	        rcvr_seq: selectedRecipients.join(','),
-	        note_ttl: noteTitle,
-	        note_cn: noteContent,
-	        sndpty_note_yn: sndptyNoteYn,
-	        rcvr_note_yn: rcvrNoteYn
-	    };
+    // 체크된 수신자를 모아 selectedRecipients 배열에 추가
+    document.querySelectorAll('#lectureTable input[type="checkbox"]:checked').forEach(checkbox => {
+        const userSeq = checkbox.getAttribute('data-user-seq'); // 수신자 seq 가져오기
+        const userName = checkbox.parentElement.textContent.trim(); // 수신자 이름 가져오기
+        selectedRecipients.push({ userSeq, userName }); // 이름과 seq 객체로 저장
+    });
 
-	    console.log("messageData:", messageData); // messageData가 제대로 설정되었는지 확인
+    // 선택된 수신자가 없을 때 경고 메시지 표시
+    if (selectedRecipients.length === 0) {
+        alert("수신자를 선택해주세요.");
+        return;
+    }
 
-	    // Ajax 요청 코드 (예시)
-	    fetch('/api/notes', {
-	        method: 'POST',
-	        headers: {
-	            'Content-Type': 'application/json',
-	        },
-	        body: JSON.stringify(messageData)
-	    })
-	    .then(response => response.json())
-	    .then(data => {
-	        if (data === 1) {
-	            alert('쪽지가 전송되었습니다.');
-	        } else {
-	            alert('쪽지 전송에 실패했습니다.');
-	        }
-	    })
-	    .catch(error => console.error('Error:', error));
-	}
-	
+    // 선택된 수신자 이름을 문자열로 결합하여 "받는 사람" 필드에 추가
+    receiversInput.value = selectedRecipients.map(r => r.userName).join(', ');
+
+    // 모달 닫기
+    closeModal();
+    
+    // 수신자 seq 배열 반환 (다른 함수에서 사용될 수 있도록)
+    return selectedRecipients;
+}
+
+// 메시지 전송 함수
+function sendMessage() {
+    const noteTitle = document.querySelector('[name="note_ttl"]').value; // 제목
+    if (!noteTitle) {
+        alert('제목을 입력해주세요.');
+        return;
+    }
+
+    const noteContent = document.querySelector('[name="note_cn"]').value;
+    const sndptySeq = document.querySelector('[name="sndpty_seq"]').value;
+    const sndptyNoteYn = document.querySelector('[name="sndpty_note_yn"]').value;
+    const rcvrNoteYn = document.querySelector('[name="rcvr_note_yn"]').value;
+
+    // selectRecipient 호출하여 선택된 수신자 가져오기
+    const selectedRecipients = selectRecipient();
+    if (!selectedRecipients) return; // 선택된 수신자가 없다면 종료
+
+    const messageData = {
+    	    sndpty_seq: sndptySeq,
+    	    rcvr_seq: selectedRecipients.map(r => r.userSeq).join(','), // 수신자 seq만 추출하여 콤마로 구분된 문자열로 변환
+    	    note_ttl: noteTitle,
+    	    note_cn: noteContent,
+    	    sndpty_note_yn: sndptyNoteYn,
+    	    rcvr_note_yn: rcvrNoteYn
+    	};
+
+    console.log("messageData:", messageData); // messageData가 제대로 설정되었는지 확인
+
+    // Ajax 요청 코드 (예시)
+    fetch('/api/notes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data === 1) {
+            alert('쪽지가 전송되었습니다.');
+        } else {
+            alert('쪽지 전송에 실패했습니다.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 	// 모달 닫기 함수
 	function closeModal() {
 	    document.getElementById('recipientModal').style.display = 'none'; // 모달 숨기기
