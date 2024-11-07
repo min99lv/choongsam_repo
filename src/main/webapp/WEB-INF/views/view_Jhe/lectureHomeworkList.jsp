@@ -19,14 +19,10 @@
 		</tr>
 		<c:forEach var="homeworkList" items="${homeworkList}">
 				<tr>
-					<td><a href="/Jhe/profHomeworkList?LCTR_ID=${homeworkList.lctr_id}">${homeworkList.lctr_name}</a></td>
+					<td><a href="/Jhe/lectureManagement?LCTR_ID=${homeworkList.lctr_id}">${homeworkList.lctr_name}</a></td>
 					<td>${homeworkList.user_name}</td>
-					<td><input type="checkbox" name="lctr_id" value="${homeworkList.lctr_id}"></td>
 				<tr>
 		</c:forEach>
 	</table>
-	<button>과제</button>
-	<button>출석</button>
-	<button>성적</button>
 </body>
 </html>
