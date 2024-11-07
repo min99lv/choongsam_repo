@@ -21,4 +21,8 @@ public interface JshService {
 
 	List<Class_Schedule> classSchedule(String lctr_id, int user_seq);
 
+	List<Class_ScheduleAddVideo> getcontsInfo(String conts_id);
+
+	List<Class_ScheduleAddVideo> getcontsChp(String conts_id);
+
 }

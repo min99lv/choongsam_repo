@@ -203,5 +203,40 @@ LIMIT 1
 		AND "USER_SEQ" = #{user_seq}
 	</select>
 	
+	<select id="getcontsInfo" parameterType="string" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
+		SELECT DISTINCT ON (lv."LCTR_NO")
+		    u."USER_NAME",
+		    l.*,
+		    s.*,
+		    lv.*,
+			f.*,
+		    COALESCE(
+		        CASE 
+		            WHEN lv."LCTR_NO" = 1 THEN l."LCTR_START_DATE"
+		            ELSE lv_prev."VIEWING_PERIOD"
+		        END,
+		        NULL
+		    ) AS "befor_period"
+		FROM "USER_INFO" u
+		JOIN "LECTURE" l
+			ON u."USER_SEQ" = l."USER_SEQ"
+		JOIN "SYLLABUS" s
+			ON s."LCTR_ID" = l."LCTR_ID"
+		JOIN "LECTURE_VIDEO" lv
+			ON s."CONTS_ID" = lv."CONTS_ID"
+		LEFT JOIN "LECTURE_VIDEO" lv_prev 
+			ON lv."LCTR_NO" = lv_prev."LCTR_NO" + 1
+		LEFT JOIN "FILE_GROUP" f 
+			ON lv."FILE_GROUP" = f."FILE_GROUP"
+		WHERE s."CONTS_ID" = #{conts_id}
+	</select>
+	
+	<select id="getcontsChp" parameterType="String" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
+		SELECT *
+		FROM "CLASS_BOOKMARK"
+		WHERE "CONTS_ID" = #{conts_id}
+		ORDER BY "CONTS_CHPTIME"
+	</select>
+	
 	
 </mapper>

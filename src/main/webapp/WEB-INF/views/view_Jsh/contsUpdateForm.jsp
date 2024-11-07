@@ -164,107 +164,97 @@
 		</div>
 
     <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data" onsubmit="return submitChk()">
-        <div id="inserts">
-            <div class="oneLine">
-               <div class="tb"> <label class="text">강의 제목 입력</label></div>
-                <input type="text" placeholder="강의 제목을 입력해주세요" name="vdo_file_nm" required="required">
-            </div>
-
-            <div class="oneLine">
-                <div class="tb"><label class="text">차시</label></div>
-                <c:choose>
-		            <c:when test="${max_lctr_no == 1}">
-		               <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
-		            </c:when>
-		            <c:otherwise>
-		               <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
-		            </c:otherwise>
-		        </c:choose>
-                
-            </div>
-            
-            <!-- <div class="oneLine">
-                <div class="tb"><label class="text">강의개요</label></div>
-                <input type="text" name="lctr_otln" placeholder="강의개요를 입력해주세요">
-            </div> -->
-
-            <div class="twoLine">
-			    <div class="tb"><label class="text">출석 인정 기간 설정</label></div>
-			    <c:choose>
-			    	<c:when test="{lctr_no == 1}">
-			    		<input type="text" name="minDate" value="${startDay}" readonly="readonly" class="tbViewing">~
-			        	<input type="text" name="viewing_period" value="${endDay}" readonly="readonly" class="tbViewing">
-			    	</c:when>
-			   		<c:otherwise>
-			   			<input type="text" name="minDate" value="${viewing_period}" readonly="readonly" class="tbViewing">~
-			        	<input type="text" name="viewing_period" value="${endDay}" readonly="readonly" class="tbViewing">
-			   		</c:otherwise>
-			    </c:choose>
-			</div>
-
-            <div class="twoLine">
-			    <div class="tb"><label class="text">유튜브 ID</label></div>
-			    <input type="text" name="vdo_url_addr" id="vdo_url_addr">
-			    <input type="hidden" name="vdo_length" id="vdo_length" required="required">
-			    <div>
-			        <button type="button" id="idInput" onclick="videoChk()">영상 확인</button>
-			        <input type="hidden" id="contsTest" value="0">
-			    </div>
-			</div>
-
-            <div class="video"></div>
-
-            <div id="chapter">
-                <div class="chapterTime">
-                    <div class="oneLine">
-                    	<div class="tb"><label class="text">챕터시간1 입력</label></div>
-                    	<input type="text" name="chp_str1" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
-                    </div>
-                    <div class="oneLine">
-                    	<div class="tb"><label class="text">챕터내용1 입력</label></div>
-                    	<input type="text" name="conts_chpttl">
-                    </div>
-                </div>
-                
-                <div class="chapterTime">
-                    <div class="oneLine">
-                    	<div class="tb"><label class="text">챕터시간2 입력</label></div>
-                    	<input type="text" name="chp_str2" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
-                    </div>
-                    <div class="oneLine">
-                    	<div class="tb"><label class="text">챕터내용2 입력</label></div>
-                    	<input type="text" name="conts_chpttl2">
-                    </div>
-                </div>
-                
-                <div class="chapterTime">
-                    <div class="oneLine">
-                    	<div class="tb"><label class="text">챕터시간3 입력</label></div>
-                    	<input type="text" name="chp_str3" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
-                    </div>
-                    <div class="oneLine">
-                    	<div class="tb"><label class="text">챕터내용3 입력</label></div>
-                    	<input type="text" name="conts_chpttl3">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="oneLine">
-            	<div class="file">
-	                <div class="tb"><label class="text">첨부파일</label></div>
-	                <input type="file" name="file">
+	    <c:forEach var="info" items="${info }">
+	        <div id="inserts">
+	            <div class="oneLine">
+	               <div class="tb"> <label class="text">강의 제목 입력</label></div>
+	                <input type="text" placeholder="강의 제목을 입력해주세요" name="vdo_file_nm" required="required" value="${info.vdo_file_nm }">
 	            </div>
-            </div>
-            
-            
-            <input type="hidden" name="lctr_id" value="${lctr_id}">
-    		<input type="hidden" name="user_seq" value="${user_seq}">
-            
-             <button type="submit" id="subBut">수업 등록</button>
-
-        
-    	</div>
-        
+	
+	            <div class="oneLine">
+	                <div class="tb"><label class="text">차시</label></div>
+	                <input type="text" name="lctr_no" value="${info.lctr_no }" readonly="readonly">
+	                
+	            </div>
+	            
+	            <!-- <div class="oneLine">
+	                <div class="tb"><label class="text">강의개요</label></div>
+	                <input type="text" name="lctr_otln" placeholder="강의개요를 입력해주세요">
+	            </div> -->
+	
+	            <div class="twoLine">
+				    <div class="tb"><label class="text">출석 인정 기간 설정</label></div>
+				    	<input type="text" name="minDate" value="${info.befor_period}" readonly="readonly" class="tbViewing">~
+				     	<input type="text" name="viewing_period" value="${info.viewing_period}" readonly="readonly" class="tbViewing">
+				</div>
+	
+	            <div class="twoLine">
+				    <div class="tb"><label class="text">유튜브 ID</label></div>
+				    <input type="text" name="vdo_url_addr" id="vdo_url_addr" value="${info.vdo_url_addr}">
+				    <input type="hidden" name="vdo_length" id="vdo_length" required="required">
+				    <div>
+				        <button type="button" id="idInput" onclick="videoChk()">영상 확인</button>
+				        <input type="hidden" id="contsTest" value="0">
+				    </div>
+				</div>
+	
+	            <div class="video"></div>
+	
+	
+				<c:forEach var="chap" items="${chapInfo}">
+		            <div id="chapter">
+		                <div class="chapterTime">
+		                    <div class="oneLine">
+		                    	<div class="tb"><label class="text">챕터시간1 입력</label></div>
+		                    	<input type="text" name="chp_str1" maxlength="6" oninput="hypenTime(this)" 
+		                    		placeholder="00:00:00 형식으로 입력" class="tbViewing" value="">
+		                    </div>
+		                    <div class="oneLine">
+		                    	<div class="tb"><label class="text">챕터내용1 입력</label></div>
+		                    	<input type="text" name="conts_chpttl" value="${chap.conts_chpttl }">
+		                    </div>
+		                </div>
+		                
+		                <div class="chapterTime">
+		                    <div class="oneLine">
+		                    	<div class="tb"><label class="text">챕터시간2 입력</label></div>
+		                    	<input type="text" name="chp_str2" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
+		                    </div>
+		                    <div class="oneLine">
+		                    	<div class="tb"><label class="text">챕터내용2 입력</label></div>
+		                    	<input type="text" name="conts_chpttl2" value="${chap.conts_chpttl }">
+		                    </div>
+		                </div>
+		                
+		                <div class="chapterTime">
+		                    <div class="oneLine">
+		                    	<div class="tb"><label class="text">챕터시간3 입력</label></div>
+		                    	<input type="text" name="chp_str3" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
+		                    </div>
+		                    <div class="oneLine">
+		                    	<div class="tb"><label class="text">챕터내용3 입력</label></div>
+		                    	<input type="text" name="conts_chpttl3" value="${chap.conts_chpttl }">
+		                    </div>
+		                </div>
+		            </div>
+	            </c:forEach>
+	            
+	            <div class="oneLine">
+	            	<div class="file">
+		                <div class="tb"><label class="text">첨부파일</label></div>
+		                <input type="file" name="file" value="${info.file_extn_nm }">
+		            </div>
+	            </div>
+	            
+	            
+	            <input type="hidden" name="lctr_id" value="${info.lctr_id}">
+	    		<input type="hidden" name="user_seq" value="${info.user_seq}">
+	            
+	             <button type="submit" id="subBut">수업 등록</button>
+	
+	        
+	    	</div>
+	        </c:forEach>
     </form>
 </div>
 

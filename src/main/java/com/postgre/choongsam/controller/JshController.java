@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.eclipse.tags.shaded.org.apache.bcel.generic.SWITCH;
 import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -338,6 +339,84 @@ public class JshController {
 	
 	 		return result;
 	 	}
+	 	
+	 	
+	 	//교수 강의 업데이트
+	 	@GetMapping("/contsUpdateForm")
+	 	public String contsUpdateForm(
+	 														@RequestParam String conts_id
+	 														,@RequestParam String lctr_id
+	 														,Model model,
+	 														Class_ScheduleAddVideo csa) {
+	 		
+	 		System.out.println("JshController contsUpdateForm start...");
+	 		System.out.println("JshController contsUpdateForm 영상번호 >> "+conts_id + " 강의번호 >> "+lctr_id);
+	 		
+	 		//강사정보, 강의이름 가져오기
+			List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
+			
+			String lectName = name.stream()
+			                .map(Class_ScheduleAddVideo::getLctr_name)
+			                .findFirst()
+			                .orElse("");
+			String teacherName = name.stream()
+			                .map(Class_ScheduleAddVideo::getUser_name)
+			                .findFirst()
+			                .orElse("");
+			
+			
+			//강의정보 가져옴
+			List<Class_ScheduleAddVideo> info =service.getcontsInfo(conts_id);
+	 		
+	 		List<Class_ScheduleAddVideo> chapInfo = service.getcontsChp(conts_id);
+	 		System.out.println("JshController contsUpdateForm 222222222 >> "+chapInfo);
+	 		
+	 		String chpTtl1 = null;
+	 		String chpTtl2 = null;
+	 		String chpTtl3 = null;
+	 		Integer chpTime1 = null;
+	 		Integer chpTime2 = null;
+	 		Integer chpTime3 = null;
+	 		
+	 		for (int i = 0; i < chapInfo.size(); i++) {
+	 		    Class_ScheduleAddVideo chap = chapInfo.get(i);
+	 		    switch (i) {
+				case 1: {
+					chpTtl1 = chap.getConts_chpttl();
+					chpTime1 = chap.getConts_chptime();
+					System.out.println("chp_tltle1: " + chpTtl1);
+		 		    System.out.println("chpTime1: " + chpTime1);
+		 		    break;
+				}
+				case 2: {
+					chpTtl2 = chap.getConts_chpttl();
+					chpTime2 = chap.getConts_chptime();
+					System.out.println("chp_tltle2: " + chpTtl2);
+		 		    System.out.println("chpTime2: " + chpTime2);
+		 		   break;
+				}
+				case 3:{
+					chpTtl3 = chap.getConts_chpttl();
+					chpTime3 = chap.getConts_chptime();
+					System.out.println("chp_tltle3: " + chpTtl3);
+		 		    System.out.println("chpTime3: " + chpTime3);
+		 		   break;
+				}
+				}
+	 		}
+	 		
+	 		
+	 		model.addAttribute("lectName", lectName);
+	 		model.addAttribute("teacherName", teacherName);
+	 		
+	 		model.addAttribute("info", info);
+	 		model.addAttribute("chapInfo", chapInfo);
+	 		
+	 		return "view_Jsh/contsUpdateForm";
+	 	}
+	 	
+	 	
+	 	
     
 	 	
 	 	//************************************************************************************************************
