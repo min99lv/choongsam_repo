@@ -155,4 +155,24 @@ public class JshServiceImpl implements JshService {
 		return classSchedule;
 	}
 
+	@Override
+	public List<Class_ScheduleAddVideo> getcontsInfo(String conts_id) {
+		System.out.println("JshService getcontsInfo start  강사번호 >> "+conts_id);
+		
+		List<Class_ScheduleAddVideo> info = Dao.getcontsInfo(conts_id);
+		System.out.println("JshService getcontsInfo info >> "+info);
+		
+		return info;
+	}
+
+	@Override
+	public List<Class_ScheduleAddVideo> getcontsChp(String conts_id) {
+		System.out.println("JshService getcontsChp start  강사번호 >> "+conts_id);
+		
+		List<Class_ScheduleAddVideo> info = Dao.getcontsChp(conts_id);
+		System.out.println("JshService getcontsChp info >> "+info);
+		
+		return info;
+	}
+
 }

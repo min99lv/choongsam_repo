@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.eclipse.tags.shaded.org.apache.bcel.generic.Select;
 import org.springframework.stereotype.Repository;
 
 import com.postgre.choongsam.dto.Class_Schedule;
@@ -332,6 +333,39 @@ public class JshDaoImpl implements JshDao {
 			System.out.println("JshDao classSchedule exception >> "+e.getMessage());
 		}
 		return classSchedule;
+	}
+
+	@Override
+	public List<Class_ScheduleAddVideo> getcontsInfo(String conts_id) {
+	    System.out.println("JshDao getcontsInfo start...");
+
+	    List<Class_ScheduleAddVideo> info = null;
+
+	    try {
+	        info = session.selectList("getcontsInfo", conts_id);  // selectList로 수정
+	        System.out.println("JshDao getcontsInfo info >> " + info);
+	    } catch (Exception e) {
+	        System.out.println("JshDao getcontsInfo exception >> " + e.getMessage());
+	    }
+
+	    return info;
+	}
+
+
+	@Override
+	public List<Class_ScheduleAddVideo> getcontsChp(String conts_id) {
+		System.out.println("JshDao getcontsChp start...");
+		
+		List<Class_ScheduleAddVideo> info = null;
+		
+		try {
+			info = session.selectList("getcontsChp", conts_id);
+			System.out.println("JshDao getcontsChp info >> "+info);
+		} catch (Exception e) {
+			System.out.println("JshDao getcontsChp exception >> "+e.getMessage());
+		}
+		
+		return info;
 	}
 
 }

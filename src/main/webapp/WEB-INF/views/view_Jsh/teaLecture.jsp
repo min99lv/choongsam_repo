@@ -280,7 +280,7 @@
 					</div>
 					
 					<div class="buttStatus">
-						<a href="****************************************" id="contsFix">
+						<a href="/contsUpdateForm?conts_id=${conts.conts_id}&lctr_id=${lctr_id }" id="contsFix">
 							<div class="state">
 			                    강의 수정
 			                </div>
