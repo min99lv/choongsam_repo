@@ -8,6 +8,15 @@
 		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
+	<select id="profLectureInfo" resultType="Lecture">
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF", u."USER_SEQ", u."USER_NAME",
+					(SELECT COUNT(*)
+					 FROM	"COURSE_REGISTRATION" AS c
+					 WHERE	c."LCTR_ID" = l."LCTR_ID" AND c."REG_STATE" = '2003') AS reg_count
+		FROM		"LECTURE" AS l
+		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
+		WHERE		l."LCTR_ID" = #{lctr_id}
+	</select>
 	<select id="getProfHomeworkList" resultType="Homework">
 		SELECT		u."USER_NAME" AS prof_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",
 					h."ASMT_NO", h."ASMT_NM", h."ASMT_CN",
@@ -19,9 +28,10 @@
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
 	<select id="findByLCTR" resultType="Lecture">
-		SELECT		"LCTR_ID", "LCTR_NAME", "USER_SEQ"
-		FROM		"LECTURE"
-		WHERE		"LCTR_ID" = #{lctr_id}
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF", u."USER_SEQ", u."USER_NAME"
+		FROM		"LECTURE" AS l
+		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
+		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
 	<insert id="insertHomework" parameterType="Homework">
 		INSERT INTO "HOMEWORK" ("ASMT_NO", "LCTR_ID", "ASMT_NM", "ASMT_CN", "SBMSN_BGNG_YMD", "SBMSN_END_YMD", "FILE_GROUP")
@@ -124,4 +134,31 @@
 		WHERE	hs."USER_SEQ" = #{USER_SEQ}
 		AND		h."LCTR_ID" = #{LCTR_ID}
 	</select>
+	<select id="profAttMain" resultType="Attendance_Check">
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."LCTR_CNTSCHD", l."ONOFF", a."LCTR_NO",
+					COUNT(DISTINCT a."USER_SEQ") AS reg_count,
+					SUM(CASE WHEN a."ATT_STATUS" = 5001 THEN 1 ELSE 0 END) AS present_count,
+					SUM(CASE WHEN a."ATT_STATUS" = 5002 THEN 1 ELSE 0 END) AS late_count,
+					SUM(CASE WHEN a."ATT_STATUS" = 5003 THEN 1 ELSE 0 END) AS absent_count,
+					ROUND(
+						SUM(CASE WHEN a."ATT_STATUS" = 5001 THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT a."USER_SEQ")
+						) AS attendance_rate
+		FROM		"LECTURE" AS l
+		LEFT JOIN	"ATTENDANCE_CHECK" AS a ON l."LCTR_ID" = a."LCTR_ID"
+		WHERE		a."LCTR_ID" = #{lctr_id}
+		GROUP BY	l."LCTR_ID", l."LCTR_NAME", l."LCTR_CNTSCHD", l."ONOFF", a."LCTR_NO"
+	</select>
+	<select id="getStudAtt" resultType="Lecture">
+		SELECT		u."USER_SEQ", u."USER_NAME", a."ATT_STATUS", c."LCTR_ID"
+		FROM		"COURSE_REGISTRATION" AS c
+		JOIN		"USER_INFO" AS u ON c."USER_SEQ" = u."USER_SEQ"
+		LEFT JOIN	"ATTENDANCE_CHECK" AS a ON c."USER_SEQ" = a."USER_SEQ"
+		AND			c."LCTR_ID" = a."LCTR_ID"
+		WHERE		c."LCTR_ID" = #{LCTR_ID}
+		AND			c."REG_STATE" = '2003'
+	</select>
+	<insert id="insertStudAtt" parameterType="Attendance_Check">
+		INSERT INTO "ATTENDANCE_CHECK" ("LCTR_NO" ,"LCTR_ID", "USER_SEQ", "ATT_STATUS")
+		VALUES		(#{lctr_no}, #{lctr_id}, #{user_seq}, #{att_status})
+	</insert>
 </mapper>

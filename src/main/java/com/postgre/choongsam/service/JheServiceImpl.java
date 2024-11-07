@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,12 @@ public class JheServiceImpl implements JheService {
 		System.out.println("getSubmissionRate asmt_no: " + asmt_no);
 		int submittedStudents = hed.getSubmittedStuds(asmt_no);
 		return (totalStudents == 0) ? 0 : (submittedStudents * 100) / totalStudents;
+	}
+
+	@Override
+	public List<Homework> getStudSubmitList(String lctr_id) {
+		List<Homework> studSubmitList = hed.getStudSubmitList(lctr_id);
+		return studSubmitList;
 	}
 
 	@Override
@@ -197,11 +204,11 @@ public class JheServiceImpl implements JheService {
 	}
 
 	@Override
-	public int updatesubmitHomework(Homework homework) {
+	public int updatesubmitHomework(Homework homework, int user_seq) {
 		System.out.println("학생 과제 제출 수정 서비스");
 		Homework_Submission homework_Submission = new Homework_Submission();
 		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		homework_Submission.setUser_seq(10051);
+		homework_Submission.setUser_seq(user_seq);
 		homework_Submission.setAsmt_no(homework.getAsmt_no());
 		homework_Submission.setSbmsn_yn("Y");
 		homework_Submission.setSbmsn_ymd(today);
@@ -211,14 +218,43 @@ public class JheServiceImpl implements JheService {
 	}
 
 	@Override
-	public List<Attendance_Check> studOfflineAtt(int user_seq) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Lecture> getProfLectureInfo(String lctr_id) {
+		System.out.println("강의 메인보드 서비스");
+		List<Lecture> profLectureInfo = hed.getProfLectureInfo(lctr_id);
+		return profLectureInfo;
 	}
 
 	@Override
-	public List<Homework> getStudSubmitList(String lctr_id) {
-		List<Homework> studSubmitList = hed.getStudSubmitList(lctr_id);
-		return studSubmitList;
+	public List<Attendance_Check> profAttMain(String lctr_id) {
+		System.out.println("출석 메인보드 서비스");
+		List<Attendance_Check> profAttMainList = hed.profAttMain(lctr_id);
+		return profAttMainList;
+	}
+
+	@Override
+	public List<Lecture> getStudAtt(String lctr_id) {
+		System.out.println("차시별 출석 학생 호출 서비스");
+		List<Lecture> getStudAttList = hed.getStudAtt(lctr_id);
+		return getStudAttList;
+	}
+
+	@Override
+	public void insertStudAtt(String lctr_id, int lctr_no, List<Integer> user_seq, Map<String, String> att_status) {
+		System.out.println("출석 insert 서비스");
+
+		for (int i = 0; i < user_seq.size(); i++) {
+			Integer userSeq = user_seq.get(i);
+			String  attStatus = att_status.get("att_status_" + userSeq);
+
+			if (attStatus != null) {
+				int attStatusValue = Integer.parseInt(attStatus);
+				Attendance_Check attendance_Check = new Attendance_Check();
+				attendance_Check.setLctr_id(lctr_id);
+				attendance_Check.setLctr_no(lctr_no);
+				attendance_Check.setUser_seq(userSeq);
+				attendance_Check.setAtt_status(attStatusValue);
+				hed.insertStudAtt(attendance_Check);
+			}
+		}
 	}
 }
