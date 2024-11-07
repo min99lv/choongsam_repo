@@ -14,5 +14,11 @@ public interface LjmService {
 	String findId(User_Info user_info);
 
 	String getUserName(int user_seq);
+
+	User_Info findPw(User_Info user_info);
+
+	String createTempPassword(String user_id);
+
+	int sendTempPw(String user_id, String tempPassword);
 	
 }

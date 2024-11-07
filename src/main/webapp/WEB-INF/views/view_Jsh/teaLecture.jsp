@@ -8,6 +8,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<%@ include file="../myStudyHomeNav.jsp" %>
+<%@ include file="../headerGreen.jsp" %>
 
 <style>
 
@@ -16,7 +18,7 @@
 	}
 	
 	#listBody{
-		width: 1560px;
+		width: 1582px;
 		height: 100%;
 		background-color: #F1F1F1;
 		float: right;
@@ -24,8 +26,13 @@
 	
 	.infor {
 		height: 130px;
-		text-align: center;
 		background-color: white;
+		padding: 15px;
+	}
+	
+	#inforText {
+		width: 1400px;
+		text-align:center;
 	}
 	
 	#lectureName {
@@ -170,6 +177,10 @@
 		margin-top: 25px;
 	}
 	
+	#contsFix {
+		color: black;
+	}
+	
 	
 	
 </style>
@@ -219,13 +230,15 @@
 
 	<div id="listBody">
 		<div class="infor">
-			<span id="lectureName">
+			<div id="inforText">
+				<span id="lectureName">
 				${lectName }
 			</span>
 			<div class="teachName">
 				<span id="teachName">
 					${teacherName } 강사님
 				</span>
+			</div>
 			</div>
 		</div>
 		<div class="notice">
@@ -267,7 +280,7 @@
 					</div>
 					
 					<div class="buttStatus">
-						<a href="****************************************">
+						<a href="/contsUpdateForm?conts_id=${conts.conts_id}&lctr_id=${lctr_id }" id="contsFix">
 							<div class="state">
 			                    강의 수정
 			                </div>

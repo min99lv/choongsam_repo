@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.postgre.choongsam.dto.Login_Info;
 import com.postgre.choongsam.dto.User_Info;
 
 import lombok.RequiredArgsConstructor;
@@ -94,6 +95,35 @@ public class HjhDaoImpl implements HjhDao {
 	    
 	    return detailProfileuser;
 	}
+
+	@Override
+	public int deleteStd1(String user_id, String password) {
+	    int deleteStd1 = 0;
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("user_id", user_id);
+	    params.put("password", password);  // 비밀번호는 이미 검증되었으므로 그대로 전달
+
+	    try {
+	        deleteStd1 = session.update("deleteStd1", params);
+	    } catch (Exception e) {
+	        e.printStackTrace();  // 예외 발생 시 출력하여 문제를 추적
+	    }
+
+	    return deleteStd1;
+	}
+
+	@Override
+	public Login_Info getLoginInfo(String userId) {
+	    Login_Info getLoginInfo = null;
+	    try {
+	        // userId를 파라미터로 전달하여 쿼리 실행
+	        getLoginInfo = session.selectOne("getLoginInfo", userId);
+	    } catch (Exception e) {
+	        e.printStackTrace();  // 예외 발생 시 스택 트레이스를 출력하여 원인 파악
+	    }
+	    return getLoginInfo;
+	}
+
 
 
 

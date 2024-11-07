@@ -1,5 +1,6 @@
 package com.postgre.choongsam.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -69,5 +70,37 @@ public class AtrController {
 	    model.addAttribute("paging", paging);
 	    return "view_Atr/courseApproveList";
 	}
+	@RequestMapping(value = "/lectureDetail")
+	public String lectureDetail(HttpServletRequest request, Model model,String lctr_id) {
+		System.out.println("TrlectureDetail Start");
+
+		Lecture lecture = new Lecture();
+		lecture =as.getLectureDetail(lctr_id);
+		model.addAttribute("lecture", lecture);
+		return "view_Atr/lectureDetailAdmin";
+	}
+	@RequestMapping(value = "/addClassRoomForm")
+	public String addClassRoom(HttpServletRequest request, Model model) {
+		System.out.println("TraddClassRoom Start");
+		String lctr_id= request.getParameter("lctr_id");
+		String schd= request.getParameter("lctr_schd");
+		String schdTGemp ="";
+//		as.addClassRoomForm(lctr_id,schd);
+		System.out.println("addClassRoomForm schd->"+schd);
+		List<String> schdList = new ArrayList<>();
+		StringTokenizer st = new StringTokenizer(schd,", ");
+		while (st.hasMoreTokens()) {
+			schdTGemp = st.nextToken();
+			System.out.println(schdTGemp);
+			schdList.add(schdTGemp);
+       }
+		model.addAttribute("lctr_id", lctr_id);
+		model.addAttribute("schdList", schdList);
+ 
+		
+		
+		return "view_Atr/addClassRoomForm";
+	}
+	
 
 }

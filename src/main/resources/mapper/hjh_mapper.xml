@@ -64,7 +64,27 @@
 	   		 FROM "USER_INFO"
 	   		 WHERE "USER_ID" = #{user_id}
 		</select>
+
+			<update id="deleteStd1" parameterType="Map">
+			    UPDATE public."USER_INFO" UI
+			    SET "DEL_STATE" = 1
+			    WHERE UI."USER_ID" = #{user_id}
+			    AND EXISTS (
+			        SELECT 1
+			        FROM public."LOGIN_INFO" LI
+			        WHERE LI."USER_ID" = UI."USER_ID"
+			        AND LI."PASSWORD" = #{password}
+			    )
+			</update>
 		
+
+		<select id="getLoginInfo" parameterType="String" resultType="Login_Info" >
+		    SELECT * 
+		    FROM "LOGIN_INFO"
+		    WHERE "USER_ID" = #{userId}
+	
+	    	</select>
+
 
 
 
