@@ -12,4 +12,8 @@ public interface AtrDao {
 
 	List<Lecture> getAllLectureList();
 
+	Lecture getLectureDetail(String lctr_id);
+
+	void addClassRoomForm(String lctr_id, String schd);
+
 }
