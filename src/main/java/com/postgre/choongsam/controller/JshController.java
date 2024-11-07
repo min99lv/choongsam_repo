@@ -89,8 +89,9 @@ public class JshController {
 		System.out.println("contsUploadForm lctr_id >> "+lctr_id);
 		System.out.println("contsUploadForm user_seq >> "+user_seq);
 		
-		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
-				
+		//List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
+		
+		
 		//강사정보, 강의이름 가져오기
 		List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
 		
@@ -369,6 +370,8 @@ public class JshController {
 			
 			System.out.println("강의명 >> "+lectName);
 			System.out.println("강사명 >> "+teacherName);
+			
+			
 			
 			model.addAttribute("lectName", lectName);
 			model.addAttribute("teacherName", teacherName);

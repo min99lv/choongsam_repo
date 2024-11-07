@@ -29,4 +29,6 @@ public interface JshDao {
 
 	List<Class_ScheduleAddVideo> LectureName(String lctr_id);
 
+	List<Class_Schedule> classSchedule(String lctr_id, int user_seq);
+
 }
