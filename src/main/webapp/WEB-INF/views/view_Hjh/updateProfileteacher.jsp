@@ -210,14 +210,16 @@
 
 <div class="container">
     <div class="user-info">
-    <form action="updateUserInfo1" method="post">
+    <form action="updateUserInfo1" method="post" enctype="multipart/form-data">
         <!-- 프로필 이미지와 아이디, 회원번호 (위 그리드) -->
-        <div class="profile-id-grid">
-            <div class="profile-section">
-                <img id="profilePreview" src="${profile_addr}" alt="${profile_name}" class="profile-preview" style="display: block;">
-                <input type="file" id="profileImage" name="profileImage" accept="image/*" onchange="previewImage(event)">
-            </div>
-
+		<div class="profile-id-grid">
+		    <div class="profile-section">
+		        <!-- 프로필 이미지를 미리보기로 표시하는 이미지 요소 -->
+		        <img id="profilePreview" src="${profile_addr}" alt="${profile_name}" class="profile-preview" style="display: block;">
+		        
+		        <!-- 파일 업로드를 위한 input 태그 -->
+		        <input type="file" id="profileImage" name="profileImage" accept="image/*" onchange="previewImage(event)">
+		    </div>
             <!-- 회원번호와 아이디 -->
             <div class="form-group">
                 <label for="userSeq">회원번호:</label>
