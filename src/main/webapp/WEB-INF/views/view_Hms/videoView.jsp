@@ -18,17 +18,6 @@ body {
 	padding: 10px;
 	box-sizing: border-box; /* padding이 포함된 너비 계산 */
 }
-.container-right {
-	margin-left: 20px;
-	width: 400px;
-	height: 800px;
-	border: 2px solid #ccc;
-	border-radius: 10px;
-	padding: 15px;
-	background-color: aliceblue;
-	display: flex;
-	flex-direction: column;
-}
 .bookmark {
 	padding-top: 100px;
 	padding-left: 50px;
@@ -43,6 +32,86 @@ body {
 	margin-bottom: 50px;
 	text-align: right;
 }
+.container-right {
+    margin-left: 20px;
+    width: 400px;
+    height: 800px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f9f9ff; /* 좀 더 부드러운 배경색 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 요소를 왼쪽 정렬 */
+    gap: 20px; /* 요소 사이 간격 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+/* suganging (수강진행상황) 섹션 */
+.suganging {
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+}
+/* 출석 인정 버튼 스타일 */
+#markAttendance {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+#markAttendance:hover {
+    background-color: #45a049;
+}
+/* exit-container 섹션 */
+.exit-container {
+    margin-top: auto; /* 나가기 버튼을 맨 아래로 이동 */
+    margin-left: auto;
+    text-align: right;
+}
+.exit-container button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+.exit-container img {
+    width: 40px;
+    height: auto;
+    transition: transform 0.2s ease;
+}
+.exit-container img:hover {
+    transform: scale(1.1); /* 확대 효과 */
+}
+/* 강의자료 다운로드 링크 스타일 */
+.container-right a {
+    display: inline-block;
+    padding: 12px 20px;
+    margin-bottom: 20px; /* 위아래 요소와 간격 조정 */
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #4A90E2; /* 파란색 배경 */
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 */
+}
+.container-right a:hover {
+	background-color: #357ABD; /* 호버 시 어두운 파란색 */
+    transform: scale(1.05); /* 약간 확대 효과 */
+}
+.bookmark a {
+    display: block;
+    margin: 5px 0;
+    color: black !important;
+    text-decoration: underline;
+    background-color: transparent;
+}
 </style>
 
 <body>
@@ -51,14 +120,14 @@ body {
 </div>
 
 <div class="container-right">
-	<a href="/api/lectures/download/sjm">강의자료 다운</a>
+	<a href="/api/lectures/download/${filename}">강의자료 다운</a>
+   
    <!-- 북마크 기능 -->
    <div class="bookmark" style="font-size: 20px;">
     <label style="font-weight: 700; font-size: 24px;"><강의 시간 북마크></label><p>
-    <a href="#" id="seekToStart">시작 지점</a><p>
-    <a href="#" id="seekToHalf">잠오는 지점</a><p>
-    <a href="#" id="seekToEnd">다 끝나감</a> 
+    <div id="bookmarkLinks"></div>
    </div>
+   
    <!-- 수강진행상황 -->
    <div class="suganging">
     <label>학습시간</label>
@@ -66,6 +135,8 @@ body {
     <button id="markAttendance">출석인정</button><p>
    		<div id="status"></div>
    	</div>
+   	
+   	<!-- 나가기 -->
    	<div class="exit-container">
    		<form id="exitForm" action="/api/progress/save" method="POST">
    			<input type="hidden" name="videoId" value="">
@@ -80,8 +151,6 @@ body {
    	</form>
    </div>
 </div>
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
     let player;
@@ -90,18 +159,12 @@ body {
     let conts_final = 0; 		//마지막시청시간
     let originalTime; 			//조작한 시간(플레이어 일시정지, 조작 시 원래대로 돌리는 데 사용)
     let isPaused = false;		//일시정지 여부
-    let videoId = "${videoId}";
-    
- 	//videoId가져오기
-    function getDynamicVideoId(){
-    	const urlParams = new URLSearchParams(window.location.search);
-    	console.log('videoId->', videoId);
-    	return urlParams.get('videoId')|| videoId; //기본값 설정
-    }
+    let videoId = "${videoId}"; //유튜브 영상 url
+    let conts_id = "${conts_id}"//강의영상번호
+    let bookmarks =[];
  	
     // youtube IFrame API 호출함수
     function onYouTubeIframeAPIReady() {
-    	videoId = getDynamicVideoId();
     	
         player = new YT.Player('player', {
             videoId: videoId,
@@ -118,33 +181,93 @@ body {
         });
     }
     
-
-    // 북마크(비디오가 준비된 후 이벤트 리스너 설정)
-    function onPlayerReady(event) {
-    	vdo_length = player.getDuration();
-        document.getElementById('vdo_length').innerText = Math.floor(vdo_length / 60) + "분";
-        
-        loadFinalTime(videoId); //마지막 시청 위치 불러오기
-        event.target.playVideo(); //영상을 재생
-        checkPlayerTime();
-
-        document.getElementById('seekToStart').addEventListener('click', () => {
-            if (conts_max >= 0) player.seekTo(0, true);
-            else alert("개요로 이동하기 위해서는 먼저 시청해야 합니다.");
-        });
-
-        document.getElementById('seekToHalf').addEventListener('click', () => {
-            const halfTime = vdo_length / 2;
-            if (conts_max >= halfTime) player.seekTo(halfTime, true);
-            else alert("잠오는 시점으로 이동하기 위해서는 먼저 시청해야 합니다.");
-        });
-
-        document.getElementById('seekToEnd').addEventListener('click', () => {
-            if (conts_max >= vdo_length - 5) player.seekTo(vdo_length, true);
-            else alert("끝으로 이동하기 위해서는 먼저 시청해야 합니다.");
-        });
+    //페이지 로드 ajax 
+    window.onload = function(){
+    	fetch(`/api/lectures/init?conts_id=${conts_id}`)
+    	.then(response => response.json())
+    	.then(data => {
+    		console.log("Response from server:", data);
+    	})
+    	.catch(error => {
+    		console.log("Error:", error);
+    	});
     }
     
+ 	// 데이터베이스에서 북마크 정보를 불러오는 ajax
+    function fetchBookmarks(conts_id) {
+	    $.ajax({
+	        url: `/api/bookmarks/${conts_id}`,
+	        type: 'GET',
+	        dataType: 'json',
+	        success: function(bookmarks) {
+	            console.log("북마크 데이터 로드:", bookmarks);
+	            displayBookmarks(bookmarks); // 화면에 북마크 표시
+	        },
+	        error: function(error) {
+	            console.error('북마크 로딩 오류:', error);
+	        }
+	    });
+	} 
+    document.addEventListener('DOMContentLoaded', function() {
+        // displayBookmarks 함수 호출
+        displayBookmarks(bookmarks);
+    });
+    
+ 	
+    //북마크 데이터를 화면에 표시
+    function displayBookmarks(bookmarks) {
+	    const bookmarkContainer = document.querySelector('.bookmark');
+	    // 기존 내용 초기화
+	    while (bookmarkContainer.firstChild) {
+	        bookmarkContainer.removeChild(bookmarkContainer.firstChild);
+	    }	    
+	    // 북마크 데이터가 없을 경우
+	    if (bookmarks.length === 0) {
+	        const noBookmarksMessage = document.createElement('p');
+	        noBookmarksMessage.innerText = "북마크가 없습니다.";
+	        bookmarkContainer.appendChild(noBookmarksMessage);
+	    }	
+	    // 북마크 데이터 배열을 순회하며 링크를 생성
+	    bookmarks.forEach((bookmark, index) => {
+	        const bookmarkLink = document.createElement('a');
+	        bookmarkLink.href = "#";        
+	        const conts_chptime = Number(bookmark.conts_chptime);  // 숫자 변환
+	        const conts_chpttl = Number(bookmark.conts_chpttl);    // 숫자 변환
+	        const timeText = "북마크" + (index + 1)+ " - " + Math.floor(bookmark.conts_chptime) + "초" + ":" + (bookmark.conts_chpttl);	        
+	        
+	        console.log(timeText);  // 콘솔에 출력하여 확인
+	        console.log(bookmark.conts_chptime);//둘다 나옴	        
+	       
+	        bookmarkLink.innerText = timeText;
+	        bookmarkLink.style.display = "block";
+	        bookmarkLink.style.margin = "5px 0";
+	        bookmarkLink.style.color = "blue";
+	        bookmarkLink.style.textDecoration = "underline";
+	        // 북마크 클릭 시 시청한 시간에 따라 동작
+	        bookmarkLink.addEventListener('click', () => {
+	            if (conts_max >= conts_chptime) {
+	                player.seekTo(conts_chptime, true); // 시청 완료된 지점일 경우 해당 시간으로 이동
+	            } else {
+	                alert("해당지점으로 이동하기 위해서는 먼저 시청해야 합니다."); // 시청하지 않은 지점일 경우 경고
+	            }
+	        });
+	        bookmarkLink.addEventListener('click', () => {
+	            player.seekTo(bookmark.conts_chptime, true);
+	        });
+	        bookmarkContainer.appendChild(bookmarkLink);
+	    });
+	}
+   
+ 	// YouTube 플레이어가 준비된 후 북마크 데이터를 불러오도록 호출
+    function onPlayerReady(event) {
+        vdo_length = player.getDuration();
+        document.getElementById('vdo_length').innerText = Math.floor(vdo_length / 60) + "분";
+
+        loadFinalTime(videoId); // 마지막 시청 위치 불러오기
+        fetchBookmarks(conts_id); // 데이터베이스에서 북마크 불러오기
+        event.target.playVideo(); // 영상 재생
+        checkPlayerTime(); // 재생 시간 체크
+    }
 
     //마지막위치에서 재생
     function loadFinalTime(videoId) {
@@ -172,7 +295,6 @@ body {
         .catch(error => console.error("시청 시간을 불러오지 못했습니다:", error));
 	}
     
-
   	//재생시간 체크(현재 재생시간을 10ms마다 업뎃해서 conts_final과 watchedTime을 저장)
     function checkPlayerTime() {
         setInterval(() => {
@@ -259,17 +381,13 @@ body {
             }
         });
     });
-    
-
-    
-    
+      
     document.getElementById('exitButton').addEventListener('click', () => {
         // 폼의 hidden input 필드에 데이터 설정
         document.querySelector('input[name="conts_final"]').value = Math.floor(conts_final);
         document.querySelector('input[name="conts_max"]').value = Math.floor(conts_max);
         document.querySelector('input[name="vdo_length"]').value = Math.floor(vdo_length);
         document.querySelector('input[name="videoId"]').value = videoId;
-
         console.log('conts_final:', conts_final);
         
         // 폼 제출
