@@ -13,45 +13,43 @@
             padding: 0;
         }
 
-        .header__{
-            display: block;
-            width: 1920px;
-            background-color:#00664F;
-            height: 70px;
-            font-size: 20px;
-            color: white;
-            position: static;
-        }
+        .header__ {
+        	position:relative;
+		    display: flex;
+		    align-items: center; /* 수직 중앙 정렬 */
+		    width: 1920px;
+		    background-color: #00664F;
+		    height: 70px; /* 헤더 전체 높이 */
+		    font-size: 20px;
+		    color: white;
+		    z-index: 3;
+		}
+		
+		.header__color {
+		    width: 100%;
+		}
+		
+		.header__nav {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    padding: 0 50px;
+		    font-weight: bold;
+		    height: inherit; /* 부모 높이와 동일하게 설정 */
+		}
 
-        .header__color{
-            margin: 0;
-            padding: 0;
-            background-color: #00664F;
-            width: 1920px;
-            height: 28px;
-        }
-        
-        .header__nav{
-            display: flex;
-            justify-content: space-between;;
-            align-items: center;
-            padding: 0 50px;
-            font-weight: bold;
-            height: 42px;
-            border-bottom: 0.1px solid rgb(186, 186, 186);
-        }
 
 
         .header__navBar a {
             text-decoration: none;
-            color: black;
+            color: white;
             width: 100px;
             margin: 0 125px;
         }
         
         .header_login a, .header_join a, .header_logout a {
         	text-decoration: none;
-            color: black;
+            color: white;
         }
        
 
@@ -59,7 +57,7 @@
 </head>
 <body>
     <div class="header__">
-        <div class="header__color"></div>
+        <div class="header__color">
         <div class="header__nav">
         <div class="header__logo"><a href="/notes">로고</a></div>
         <div class="header__navBar">
@@ -94,6 +92,9 @@
             </c:choose>
   
         </div>
+        
+        </div>
+        
     </div>
 </body>
 </html>
