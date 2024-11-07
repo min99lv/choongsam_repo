@@ -14,5 +14,11 @@ public interface LjmDao {
 	String findId(User_Info user_info);
 
 	String getUserName(int user_seq);
+
+	String getUserEmail(String user_id);
+
+	User_Info findPw(User_Info user_info);
+
+	void updateTempPw(String user_id, String hashedTempPw);
 	
 }
