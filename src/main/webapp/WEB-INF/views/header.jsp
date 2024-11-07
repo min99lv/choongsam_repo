@@ -16,7 +16,7 @@
         .header__{
             display: block;
             width: 1920px;
-            background-color:#00664F;
+            background-color:white;
             height: 70px;
             font-size: 20px;
             color: white;
