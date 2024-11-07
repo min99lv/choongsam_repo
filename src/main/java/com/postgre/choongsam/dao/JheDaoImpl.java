@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.postgre.choongsam.dto.Attendance_Check;
 import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Homework_Submission;
@@ -208,5 +209,56 @@ public class JheDaoImpl implements JheDao {
 			System.out.println("getStudList error: " + e.getMessage());
 		}
 		return studSubmitList;
+	}
+
+	@Override
+	public List<Lecture> getProfLectureInfo(String lctr_id) {
+		System.out.println("강의 메인보드 다오");
+		List<Lecture> profLectureInfo = null;
+		try {
+			profLectureInfo = session.selectList("profLectureInfo", lctr_id);
+			System.out.println("강의 메인보드 profLectureInfo: " + profLectureInfo);
+		} catch (Exception e) {
+			System.out.println("getProfLectureInfo error: " + e.getMessage());
+		}
+		return profLectureInfo;
+	}
+
+	@Override
+	public List<Attendance_Check> profAttMain(String lctr_id) {
+		System.out.println("출석 메인보드 와따오");
+		List<Attendance_Check> profAttMainList = null;
+		try {
+			profAttMainList = session.selectList("profAttMain", lctr_id);
+		} catch (Exception e) {
+			System.out.println("profAttMain error: " + e.getMessage());
+		}
+		return profAttMainList;
+	}
+
+	@Override
+	public List<Lecture> getStudAtt(String lctr_id) {
+		System.out.println("출석 넣을 학생 부르러 와따오");
+		List<Lecture> getStudAttList = null;
+		try {
+			getStudAttList = session.selectList("getStudAtt", lctr_id);
+			System.out.println("getStudAttList: " + getStudAttList);
+		} catch (Exception e) {
+			System.out.println("getStudAtt error: " + e.getMessage());
+		}
+		return getStudAttList;
+	}
+
+	@Override
+	public int insertStudAtt(Attendance_Check attendance_Check) {
+		System.out.println("출석 넣으러 와따오");
+		System.out.println("attendance_Check: " + attendance_Check);
+		int insStudAtt = 0;
+		try {
+			insStudAtt = session.insert("insertStudAtt", attendance_Check);
+		} catch (Exception e) {
+			System.out.println("insertStudAtt error: " + e.getMessage());
+		}
+		return insStudAtt;
 	}
 }
