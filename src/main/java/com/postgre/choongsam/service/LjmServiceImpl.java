@@ -1,5 +1,9 @@
 package com.postgre.choongsam.service;
 
+import java.util.Random;
+
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +21,7 @@ public class LjmServiceImpl implements LjmService {
 	
 	private final LjmDao ljd;
 	private final BCryptPasswordEncoder passwordEncoder;
+	private final JavaMailSender mailSender;
 	
 	// 로그인 처리
     @Override
@@ -77,11 +82,80 @@ public class LjmServiceImpl implements LjmService {
 
 		return user_id;
 	}
-
+	
+	// 회원 번호를 갖고 회원 이름 가져오기
 	@Override
 	public String getUserName(int user_seq) {
 		String user_name = ljd.getUserName(user_seq);
 		return user_name;
+	}
+	
+	// 비밀번호 찾기 1. 입력한 정보 토대로 사용자 정보 존재 여부 확인
+	@Override
+	public User_Info findPw(User_Info user_info) {
+		System.out.println("LjmServiceImpl findPw() start...");
+		User_Info user = ljd.findPw(user_info);
+		return user;
+	}
+	
+	// 비밀번호 찾기 2. 랜덤 난수로 임시 비밀번호 생성, 암호화
+	@Override
+	public String createTempPassword(String user_id) {
+		String tempPassword = createRandomPw();
+
+		// 비밀번호 해시화
+		String hashedTempPw = passwordEncoder.encode(tempPassword);
+
+		// 비밀번호 DB 업데이트
+		ljd.updateTempPw(user_id, hashedTempPw);
+
+		return tempPassword;
+	}
+	
+	// 랜덤 비밀번호 생성
+	private String createRandomPw() {
+		// 비밀번호 길이 : 8
+		int length = 8;
+		
+		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		
+		Random random = new Random();
+		
+		StringBuilder password = new StringBuilder(length);
+
+		// length 만큼 비밀번호 생성
+		for (int i = 0; i < length; i++) {
+			// chars에서 랜덤으로 하나의 문자를 선택하여 password에 추가
+			password.append(chars.charAt(random.nextInt(chars.length())));
+		}
+		return password.toString();
+	}
+	
+	// 비밀번호 찾기 3. 생성한 임시 비밀번호를 메일로 전송
+	@Override
+	public int sendTempPw(String user_id, String tempPassword) {
+		System.out.println("EmailServiceImpl.sendTempPw start....");
+
+    	String user_email = ljd.getUserEmail(user_id);
+
+    	SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("jxxxmxxn@gmail.com");
+    	message.setTo(user_email);
+    	message.setSubject("중삼대학교 HiVE 임시 비밀번호 발급");
+    	message.setText("회원님의 임시 비밀번호는 " + tempPassword + " 입니다.\n로그인 후 꼭 비밀번호를 변경해주세요.");
+    	 	
+    	int result = 0;
+        
+        try {
+            mailSender.send(message); // 이메일 전송
+            System.out.println("임시 비밀번호가 발송되었습니다.");
+            result = 1;
+            
+        } catch (Exception e) {
+            System.err.println("이메일 전송 실패: " + e.getMessage());
+            result = 0;
+        }
+        return result;
 	}
 
 }

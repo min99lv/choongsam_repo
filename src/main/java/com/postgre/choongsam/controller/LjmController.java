@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dto.Login_Info;
 import com.postgre.choongsam.dto.User_Info;
-import com.postgre.choongsam.service.LjmEmailService;
 import com.postgre.choongsam.service.LjmService;
 
 import jakarta.mail.internet.MimeMessage;
@@ -31,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 public class LjmController {
 	
 	private final LjmService ljs;
-	private final LjmEmailService les;
 	private final JavaMailSender mailSender;
 	
 		// 로그인 페이지 이동
@@ -86,15 +84,34 @@ public class LjmController {
 			// 유저 이름 가져오기
 			String user_name = ljs.getUserName(login_info.getUser_seq());
 
-		
-			
-			
 			session.setMaxInactiveInterval(60 * 60); // 60분 동안 활동이 없으면 세션 만료
 			session.setAttribute("user_name",user_name);
-			System.out.println("user_namme -->"+user_name);
+			System.out.println("user_name -->"+user_name);
 			System.out.println("로그인 성공");
 			return "redirect:/"; // 로그인 성공 시 리다이렉트
 
+		}
+		
+		@RequestMapping(value = "/view_Ljm/extendSession")
+		public String extendSession(HttpSession session, Model model) {
+		    // 세션 만료 시간을 1시간으로 연장
+		    session.setMaxInactiveInterval(60 * 60); // 1시간
+
+		    // 연장 후, 세션 만료까지 남은 시간을 다시 계산해서 모델에 담기
+		    int sessionTimeout = session.getMaxInactiveInterval();
+		    long currentTime = System.currentTimeMillis() / 1000; // 현재 시간을 초 단위로 계산
+		    long sessionExpirationTime = session.getCreationTime() / 1000 + sessionTimeout;
+		    long remainingTime = sessionExpirationTime - currentTime;
+		    
+		    int minutes = (int) ((remainingTime % 3600) / 60);
+		    int seconds = (int) (remainingTime % 60);
+
+		    String remainingTimeFormatted = String.format("%02d:%02d", minutes, seconds);
+		    System.out.println("remainingTimeFormatted -> " + remainingTimeFormatted);
+
+		    model.addAttribute("remainingTime", remainingTimeFormatted);
+
+		    return "redirect:/"; // 원하는 페이지로 리턴 (세션 연장 후 화면 갱신)
 		}
 		
 		// 로그아웃
@@ -109,13 +126,13 @@ public class LjmController {
 		// 아이디 찾기 페이지 이동
 		@GetMapping(value =  "view_Ljm/findId")
 		public String findIdPage() {
-			return "view_Ljm/findId";
+			return "view_Ljm/findId"; 
 		}
 		
 		// 아이디 찾기
 		@RequestMapping(value = "view_Ljm/findIdResult")
 		public String findId(@RequestParam("user_name") String user_name, @RequestParam("email") String email, Model model) {
-			System.out.println("LjmController findId() start....");
+			System.out.println("LjmController findId() start...");
 			
 			System.out.println("LjmController findId() user_name -> " + user_name);
 			System.out.println("LjmController findId() email -> " + email);
@@ -145,31 +162,31 @@ public class LjmController {
 			return "view_Ljm/findPw";
 		}
 		
-		// 비밀번호 찾기 진행중... 아직못함
+		// 비밀번호 찾기
 		@RequestMapping(value = "view_Ljm/findPwResult")
-		@ResponseBody
-		public String findPw(@RequestParam("user_id") String user_id, @RequestParam("email") String email, Model model) {
-			System.out.println("LjmController findPw() start....");
+		public String findPw(@ModelAttribute User_Info user_info, Model model) {
+			System.out.println("LjmController findPw() start...");
 			
-			System.out.println("LjmController findPw() user_name -> " + user_id);
-			System.out.println("LjmController findPw() email -> " + email);
+			System.out.println("LjmController findPw() user_name -> " + user_info.getUser_id());
+			System.out.println("LjmController findPw() email -> " + user_info.getEmail());
 			
-			model.addAttribute("user_id", user_id);
-		    model.addAttribute("email", email);
-		    User_Info user_info = new User_Info();
-			user_info.setUser_id(user_id);
-			user_info.setEmail(email);
-			
-			//String user_id = ljs.findId(user_info);
-			
-			if (user_id != null) {
-				model.addAttribute("find_id", user_id);
-				model.addAttribute("userCheckMessage", "회원님의 정보로 가입된 아이디는 아래와 같습니다.");
+			// 사용자 확인
+			User_Info user = ljs.findPw(user_info);
+			if (user != null) {
+				String user_id = user.getUser_id();
+				String tempPassword = ljs.createTempPassword(user_id);
+				System.out.println("LjmController tempPassword tempPassword : " + tempPassword);
+
+				// 이메일로 비밀번호 발송
+				int result = ljs.sendTempPw(user_id, tempPassword);
+				System.out.println("LjmController tempPassword result >>> " + result);
+				model.addAttribute("user_id", user_id);
+				model.addAttribute("userCheckMessage", "입력하신 이메일로 임시 비밀번호가 발급되었습니다.");
 			} else {
-				model.addAttribute("userCheckMessage", "입력하신 회원 정보와 일치하는 아이디가 존재하지 않습니다.");
+				model.addAttribute("userCheckMessage", "입력하신 회원 정보가 존재하지 않습니다.");
 			}
-			
-			return "view_Ljm/findIdResult";			
+
+			return "view_Ljm/findPwResult";	
 		}
 
 			
@@ -187,7 +204,7 @@ public class LjmController {
 		
 		// 아이디 중복 체크
 		@GetMapping(value = "view_Ljm/confirmId")
-		@ResponseBody // JSON 응답을 위해 추가
+		@ResponseBody // Ajax
 		public int confirmId(@RequestParam("user_id") String user_id) {
 			System.out.println("LjmController confirmId() start...");
 			int result = ljs.confirmId(user_id);
