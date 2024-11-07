@@ -35,4 +35,17 @@ public class AtrServiceImpl implements AtrService {
 		return lectureList;
 	}
 
+	@Override
+	public Lecture getLectureDetail(String lctr_id) {
+		Lecture lecture = new Lecture();
+		lecture=ad.getLectureDetail(lctr_id);
+		return lecture;
+	}
+
+	@Override
+	public void addClassRoomForm(String lctr_id, String schd) {
+		ad.addClassRoomForm(lctr_id,schd);
+		
+	}
+
 }
