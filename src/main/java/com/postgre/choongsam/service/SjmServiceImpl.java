@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dao.SjmDao;
+import com.postgre.choongsam.dto.Ask;
 import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Note;
@@ -110,8 +111,17 @@ public class SjmServiceImpl implements SjmService {
 	            System.out.println("fileSize >> " + file_sz + "바이트");
 
 	            InputStream inputStream = file.getInputStream();
-	            String uploadPath = request.getSession().getServletContext().getRealPath("/WEB-INF/chFile/notice");
+	          //  String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/notice");
 
+	         // 파일이 저장될 경로
+	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/notice");
+
+	            // 경로가 없으면 생성
+	            File uploadDir = new File(uploadPath);
+	            if (!uploadDir.exists()) {
+	                uploadDir.mkdirs(); // 디렉토리 생성
+	            }
+	            
 	            // 파일 저장
 	            File targetFile = new File(uploadPath, idntf_no + "." + file_extn_nm);
 	            try (FileOutputStream outputStream = new FileOutputStream(targetFile)) {
@@ -121,6 +131,8 @@ public class SjmServiceImpl implements SjmService {
 	                    outputStream.write(buffer, 0, bytesRead);
 	                }
 	            }
+	            
+	            String fileUrl = "/chFile/notice/" +idntf_no +"."+ file_extn_nm ;
 
 	            // 파일 객체 생성 및 반환
 	            File_Group uploadFile = new File_Group(); // Filegroup 클래스 생성
@@ -128,7 +140,7 @@ public class SjmServiceImpl implements SjmService {
 	            uploadFile.setFile_nm(file_nm);
 	            uploadFile.setFile_extn_nm(file_extn_nm);
 	            uploadFile.setFile_sz(file_sz);
-	            uploadFile.setFile_path_nm(targetFile.getPath());
+	            uploadFile.setFile_path_nm(fileUrl);
 
 	            return uploadFile; // 업로드된 파일 정보를 반환
 	        } else {
@@ -139,6 +151,21 @@ public class SjmServiceImpl implements SjmService {
 	    }
 	    return null; // 파일이 없는 경우 null 반환
 	}
+	
+	
+	// NOTE - 파일 다운로드 진행
+	@Override
+	public File_Group getFile(int fileGroup, int fileSeq) {
+		return sd.getFile(fileGroup, fileSeq);
+	}
+	
+	
+	// NOTE - 파일 리스트 가져오기
+	@Override
+	public List<File_Group> getFilesByGroup(int file_group) {
+		return sd.getFilesByGroup(file_group);
+	}
+
 
 // ##################
 // ##################
@@ -199,6 +226,32 @@ public class SjmServiceImpl implements SjmService {
 		 List<Note> note = sd.getSameLeceture(lectureId);
 		return note;
 	}
+
+	
+	// NOTE - 문의사항 작성
+	@Override
+	public int postAsks(Ask ask) {
+		int result = sd.postAsk(ask);
+		return result;
+	}
+
+	
+	// NOTE - 문의사항 목록(마이페이지)
+	@Override
+	public List<Ask> getAsksMy(Map<String, Object> params) {
+		List<Ask> ask = sd.getAsksMy(params);
+		return ask;
+	}
+
+	// NOTE - 문의사항 상세
+	@Override
+	public Ask getAsk(int dscsn_sn) {
+		Ask ask = sd.getAsk(dscsn_sn);
+		return ask;
+	}
+
+	
+
 
 
 
