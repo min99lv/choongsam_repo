@@ -3,8 +3,7 @@ package com.postgre.choongsam.dao;
 import java.util.List;
 import java.util.Map;
 
-
-
+import com.postgre.choongsam.dto.Ask;
 import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture;
 
@@ -45,6 +44,16 @@ public interface SjmDao {
 	List<Lecture> getMyLectures(int user_seq);
 
 	List<Note> getSameLeceture(String lectureId);
+
+	int postAsk(Ask ask);
+
+	List<Ask> getAsksMy(Map<String, Object> params);
+
+	Ask getAsk(int dscsn_sn);
+
+	File_Group getFile(int fileGroup, int fileSeq);
+
+	List<File_Group> getFilesByGroup(int file_group);
 
 
 }

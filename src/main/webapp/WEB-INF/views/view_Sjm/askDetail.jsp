@@ -23,7 +23,6 @@
             height: auto;
             padding: 20px; /* 여백 추가 */
             font-size: 20px;
-            margin-bottom: 200px;
         }
 
         .list {
@@ -60,8 +59,10 @@
         
 		.contentsss{
 		    vertical-align: top; /* 내용 위쪽 정렬 */
-		    height: 500px;
+		    height: 200px;
 		    padding: 20px;
+		    overflow-y: auto; /* 세로 스크롤 추가 */
+    		word-wrap: break-word; /* 긴 단어 줄바꿈 */
 		}
 
         .manager_pagination {
@@ -97,61 +98,79 @@
             border-radius: none;
 
         }
-        .NavBtn{
-        	
-        	display: flex;
-       		justify-content: center;
-        
-        }
         
          button {
             width: 200px;
             text-align: center;
             /* 버튼 가운데 정렬을 위한 추가 스타일 */
-            margin: 20px 20px; /* 버튼을 가운데 정렬 */
+            margin: 20px auto; /* 버튼을 가운데 정렬 */
             display: block; /* 블록으로 설정 */
             height: 50px;
             background-color: #00664F;
             border: none;
             color: white;
         }
+       .contentsss {
+		    padding: 20px;
+		    font-size: 16px;
+		    line-height: 1.6; /* 내용의 줄 간격 조정 */
+		    white-space: normal; /* 텍스트 줄바꿈 정상 처리 */
+		    word-wrap: break-word; /* 긴 단어는 자동으로 줄바꿈 처리 */
+		    overflow-wrap: break-word; /* 단어가 길어지면 줄바꿈 처리 */
+		}
+
+        .answer-row {
+            background-color: #f0f8ff;
+        }
+        
+.contentsss, .answer-content {
+  vertical-align: top; /* 내용 위쪽 정렬 */
+    padding: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+    white-space: pre-wrap; /* 텍스트 줄바꿈 자동 처리 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+    height: 200px;
+    
+}
     </style>
     <script type="text/javascript">
-
-    async function fetchNoteDetail() {
+    async function fetchAskDetail() {
         try {
-            const response = await fetch(`/api/notes/${note_sn}`);
+            const response = await fetch(`/api/asks/${dscsn_sn}`);
             if (!response.ok) {
                 throw new Error(`Error fetching notice: ${response.status}`);
             }
             const note = await response.json();
-            
+
             console.log(note); // note 객체를 콘솔에 출력하여 구조 확인
 
-            // 가져온 데이터를 HTML 요소에 넣기
-            document.getElementById('note_ttl').textContent = note.note_ttl;
-            document.getElementById('note_cn').textContent = note.note_cn;
+            // 제목과 내용을 가져와서 표시
+            document.getElementById('dscsn_ttl').textContent = note.dscsn_ttl;
+            document.getElementById('dscsn_cn').textContent = note.dscsn_cn;
 
-            // 보낸사람과 받은사람 설정
-            const userSeq = "${sessionScope.user_seq}"; // JSP에서 세션의 user_seq를 가져옴
-            console.log('userSeq:', userSeq); // userSeq 출력
-            console.log('note.sndpty_seq:', note.sndpty_seq); // sndpty_seq 출력
-
-            const senderReceiverRow = document.getElementById('sender_receiver');
-
-            if (userSeq === note.sndpty_seq) {
-                senderReceiverRow.innerHTML = `<th>보낸사람</th><td>` + note.sender_name + `</td>`;
+            // 답변이 존재하면 답변 표시
+            if (note.dscsn_ans_yn === 'Y' && note.dscsn_ans_cn) {
+                // 답변 내용이 있을 경우에만 보여주기
+                document.getElementById('dscsn_ans_cn').textContent = note.dscsn_ans_cn;
+                // 답변 영역을 보이게 설정
+                document.getElementById('dscsn_ans').style.display = 'table-row'; 
             } else {
-                senderReceiverRow.innerHTML = `<th>받은사람</th><td>` + note.receiver_name + `</td>`;
+                document.getElementById('dscsn_ans_cn').textContent = "답변이 아직 등록되지 않았습니다.";
+                // 답변 영역을 숨김
+                document.getElementById('dscsn_ans').style.display = 'none';
             }
+
         } catch (error) {
             console.error('Error:', error);
-            document.getElementById('note_ttl').textContent = "쪽지를 불러올 수 없습니다.";
-            document.getElementById('note_cn').textContent = error.message;
+            document.getElementById('dscsn_ttl').textContent = "문의사항을 불러올 수 없습니다.";
+            document.getElementById('dscsn_cn').textContent = error.message;
         }
     }
 
-    window.onload = fetchNoteDetail;
+    window.onload = fetchAskDetail;
       </script>
 </head>
 <body>
@@ -162,31 +181,25 @@
     
     <div class="container">
         <div class="contents">
-            <h1>쪽지</h1>
+            <h1>1:1 문의사항</h1>
         </div>
             <table class="list">
                 <tr>
                     <th>제목</th>
-                    <td id="note_ttl"></td>
+                    <td id="dscsn_ttl"></td>
                 </tr>
-               <tr id="sender_receiver">
-                
-            </tr>
                 <tr>
                     <th>내용</th>
-                    <td class="contentsss" id="note_cn" ></td>
+                    <td class="contentsss" id="dscsn_cn" ></td>
                 </tr>
-            </table>
-            <div class="NavBtn">
-            <button onclick="history.back();">목록</button>
-            <button onclick="location.href='/notes/new'">답장하기</button>
+			<tr id="dscsn_ans" class="answer-row" style="display: none;">
+                <th>답변</th>
+                <td class="answer-content" id="dscsn_ans_cn"></td>
+            </tr>
+		</table>
             
-            </div>
+            <button onclick="history.back();">목록</button>
     </div>
     
-    <footer>
-    <%@ include file="../footer.jsp" %>
-    
-    </footer>
 </body>
 </html>

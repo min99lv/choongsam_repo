@@ -1,5 +1,6 @@
 package com.postgre.choongsam.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.postgre.choongsam.dto.Ask;
 import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Note;
@@ -182,6 +184,84 @@ public class SjmDaoImpl implements SjmDao {
 			e.printStackTrace();
 		}
 		return note;
+	}
+
+	@Override
+	public int postAsk(Ask ask) {
+		
+		System.out.println(" 문의사항 작성 다오");
+		 
+		int result = 0;
+		
+		try {
+			result = session.insert("com.postgre.choongsam.mapper.sjm.postAsk",ask);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<Ask> getAsksMy(Map<String, Object> params) {
+		System.out.println("다오시작 문의사항");
+		
+		List<Ask> ask = null;
+		try {
+			ask = session.selectList("com.postgre.choongsam.mapper.sjm.getAsksMy",params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ask;
+	}
+
+	// 문의사항 상세
+	@Override
+	public Ask getAsk(int dscsn_sn) {
+		System.out.println("상세 다오 시작");
+		
+		Ask ask = null;
+		
+		try {
+			ask = session.selectOne("com.postgre.choongsam.mapper.sjm.getAsk",dscsn_sn);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ask;
+	}
+
+	@Override
+	public File_Group getFile(int fileGroup, int fileSeq) {
+		System.out.println("파일 다운로드 진행");
+		
+	File_Group file = null;
+	
+	Map<String, Object> params = new HashMap<>();
+	params.put("file_group", fileGroup);
+	params.put("file_seq", fileSeq);
+	
+	try {
+		file = session.selectOne("com.postgre.choongsam.mapper.sjm.getFile",params);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+		
+		return file;
+	}
+
+	@Override
+	public List<File_Group> getFilesByGroup(int file_group) {
+		System.out.println("file 리스트 가져오기");
+		
+		List<File_Group> files = null;
+		
+		try {
+			files = session.selectList("com.postgre.choongsam.mapper.sjm.getFilesByGroup",file_group);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return files;
 	}
 
 }
