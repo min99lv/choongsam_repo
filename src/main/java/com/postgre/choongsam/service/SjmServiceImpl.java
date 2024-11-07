@@ -111,8 +111,17 @@ public class SjmServiceImpl implements SjmService {
 	            System.out.println("fileSize >> " + file_sz + "바이트");
 
 	            InputStream inputStream = file.getInputStream();
-	            String uploadPath = request.getSession().getServletContext().getRealPath("/WEB-INF/chFile/notice");
+	          //  String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/notice");
 
+	         // 파일이 저장될 경로
+	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/notice");
+
+	            // 경로가 없으면 생성
+	            File uploadDir = new File(uploadPath);
+	            if (!uploadDir.exists()) {
+	                uploadDir.mkdirs(); // 디렉토리 생성
+	            }
+	            
 	            // 파일 저장
 	            File targetFile = new File(uploadPath, idntf_no + "." + file_extn_nm);
 	            try (FileOutputStream outputStream = new FileOutputStream(targetFile)) {
@@ -122,6 +131,8 @@ public class SjmServiceImpl implements SjmService {
 	                    outputStream.write(buffer, 0, bytesRead);
 	                }
 	            }
+	            
+	            String fileUrl = "/chFile/notice/" +idntf_no +"."+ file_extn_nm ;
 
 	            // 파일 객체 생성 및 반환
 	            File_Group uploadFile = new File_Group(); // Filegroup 클래스 생성
@@ -129,7 +140,7 @@ public class SjmServiceImpl implements SjmService {
 	            uploadFile.setFile_nm(file_nm);
 	            uploadFile.setFile_extn_nm(file_extn_nm);
 	            uploadFile.setFile_sz(file_sz);
-	            uploadFile.setFile_path_nm(targetFile.getPath());
+	            uploadFile.setFile_path_nm(fileUrl);
 
 	            return uploadFile; // 업로드된 파일 정보를 반환
 	        } else {
