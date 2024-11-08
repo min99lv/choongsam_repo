@@ -75,6 +75,7 @@ public class JshDaoImpl implements JshDao {
 		String fileSuffix= info.getFile_extn_nm();
 		long file_sz = info.getFile_sz();
 		String file_path = info.getFile_path_nm();
+		String idntf_no = info.getIdntf_no();
 		
 		Map<String, Object> fileInfo = new HashMap<>();
 		
@@ -82,6 +83,7 @@ public class JshDaoImpl implements JshDao {
 		fileInfo.put("fileSuffix", fileSuffix);
 		fileInfo.put("file_sz", file_sz);
 		fileInfo.put("file_path", file_path);
+		fileInfo.put("idntf_no", idntf_no);
 		
 		try {
 			result = session.insert("contsFileUpload",fileInfo);

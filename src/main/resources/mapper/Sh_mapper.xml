@@ -66,8 +66,8 @@
 	
 	
 	<insert id="contsFileUpload" parameterType="map">
-		INSERT INTO "FILE_GROUP" ("FILE_GROUP", "FILE_SEQ", "FILE_NM", "FILE_EXTN_NM", "FILE_SZ", "FILE_PATH_NM" )
-			VALUES (nextval('file_group_seq'),	1, #{fileName}, #{fileSuffix}, #{file_sz}, #{file_path})
+		INSERT INTO "FILE_GROUP" ("FILE_GROUP", "FILE_SEQ", "FILE_NM", "FILE_EXTN_NM", "FILE_SZ", "FILE_PATH_NM" , "IDNTF_NO")
+			VALUES (nextval('file_group_seq'),	1, #{fileName}, #{fileSuffix}, #{file_sz}, #{file_path}, #{idntf_no})
 	</insert>
 	
 	<insert id="fileLectureVideoUpload" parameterType="map">
