@@ -8,8 +8,11 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<<<<<<< HEAD
+=======
 <%@ include file="../myStudyHomeNav.jsp" %>
 <%@ include file="../headerGreen.jsp" %>
+>>>>>>> develop
 
 <style>
 
@@ -18,7 +21,11 @@
 	}
 	
 	#listBody{
+<<<<<<< HEAD
+		width: 1560px;
+=======
 		width: 1582px;
+>>>>>>> develop
 		height: 100%;
 		background-color: #F1F1F1;
 		float: right;
@@ -26,6 +33,10 @@
 	
 	.infor {
 		height: 130px;
+<<<<<<< HEAD
+		text-align: center;
+		background-color: white;
+=======
 		background-color: white;
 		padding: 15px;
 	}
@@ -33,6 +44,7 @@
 	#inforText {
 		width: 1400px;
 		text-align:center;
+>>>>>>> develop
 	}
 	
 	#lectureName {
@@ -62,7 +74,10 @@
 		margin-top: 15px;
 		margin-left: 15px;
 		border-radius: 8px;
+<<<<<<< HEAD
+=======
 		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* 마우스 오버 시 그림자 */
+>>>>>>> develop
 	}
 	
 	.thumbnailDiv {
@@ -154,8 +169,11 @@
 	    justify-content: center;  /* 수평 중앙 정렬 */
 	    text-align: center;      /* 텍스트 중앙 정렬 */
 		border-radius: 8px;
+<<<<<<< HEAD
+=======
 		border: 2px #00664F solid; 
 		color: #00664F;
+>>>>>>> develop
 	}
 	
 	.chulseokDiv {
@@ -180,6 +198,8 @@
 		margin-top: 25px;
 	}
 	
+<<<<<<< HEAD
+=======
 	#contsFix {
 		color: black;
 	}
@@ -195,12 +215,39 @@
 		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); 
 	}
 	
+>>>>>>> develop
 	
 	
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
+<<<<<<< HEAD
+	function chkClassSche() {
+	    $.ajax({
+	        type: "POST",
+	        url: "/classScheChk",
+	        data: { 
+	            "chashi": $('#chashiHidden').val(),
+	            "conts_id": $('#contsIdHidden').val(),
+	            "user_seq": $('#userSeqHidden').val(),
+	            "lctr_id": $('#lctrIdHidden').val()
+	        },
+	        success: function(result) {
+	            if (result == 0) { 
+	                console.log('입력 실패');
+	            } else {
+	                console.log('입력 성공');
+	            }
+	        },
+	        error: function() {
+	            alert('서버 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+	            return 0;
+	        }
+	    });
+	};
+=======
+>>>>>>> develop
 	
 	// 페이지 로드 후 상태에 따라 클래스 추가하는 함수
 	document.addEventListener("DOMContentLoaded", function() {
@@ -217,14 +264,21 @@
 	});
 </script>
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> develop
 <body>
 
 	<div id="listBody">
 		<div class="infor">
+<<<<<<< HEAD
+			<span id="lectureName">
+=======
 			<div id="inforText">
 				<span id="lectureName">
+>>>>>>> develop
 				${lectName }
 			</span>
 			<div class="teachName">
@@ -232,6 +286,15 @@
 					${teacherName } 강사님
 				</span>
 			</div>
+<<<<<<< HEAD
+		</div>
+		<div class="notice">
+			
+		</div>
+	
+	
+		<a href="/contsUploadForm?lctr_id=${lctr_id }&user_seq=${user_seq}">강의등록</a>
+=======
 			</div>
 		</div>
 	
@@ -239,6 +302,7 @@
 		<div class="uploadButt">
 			<a href="/contsUploadForm?lctr_id=${lctr_id }&user_seq=${user_seq}" id="contsInsert">${lectName } 강의 등록</a>
 		</div>
+>>>>>>> develop
 		
 		<c:forEach var="conts" items="${contentList}">
 			<div class="list">
@@ -272,12 +336,20 @@
 					</div>
 					
 					<div class="buttStatus">
+<<<<<<< HEAD
+						<a href="****************************************">
+=======
 						<a href="/contsUpdateForm?conts_id=${conts.conts_id}&lctr_id=${lctr_id }" id="contsFix">
+>>>>>>> develop
 							<div class="state">
 			                    강의 수정
 			                </div>
 			            </a>
+<<<<<<< HEAD
+						<a href="/video-details?lctr_id=${conts.lctr_id }&user_seq=${conts.user_seq }&lctr_no=${conts.lctr_no }" onclick="chkClassSche()">
+=======
 						<a href="/video-details?videoId=${conts.conts_id }&user_seq=${conts.user_seq }">
+>>>>>>> develop
 						<!-- <button onclick="chkClassSche()"> -->
 							<div id="startDiv">
 								<span id="startTxt"><div id="start">학습 시작</div></span>
