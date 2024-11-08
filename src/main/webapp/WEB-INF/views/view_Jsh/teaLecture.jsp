@@ -220,7 +220,6 @@
 
 
 <body>
-
 	<div id="listBody">
 		<div class="infor">
 			<div id="inforText">
