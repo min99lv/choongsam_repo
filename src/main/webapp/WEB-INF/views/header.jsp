@@ -71,6 +71,9 @@
 			    <c:when test="${usertype == 1002}">
 			        <a href="/view_Hjh/myPageTeacher?user=${user}">마이페이지</a>
 			    </c:when>
+			    <c:when test="${usertype == 1003}">
+			        <a href="/view_Hjh/adminPage?user=${user}">관리자페이지</a>
+			    </c:when>			    
 			    <c:otherwise>
 			        <a href="/view_Ljm/loginForm">마이페이지</a>
 			    </c:otherwise>
