@@ -4,17 +4,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.eclipse.tags.shaded.org.apache.bcel.generic.SWITCH;
 import org.springframework.http.codec.multipart.Part;
@@ -251,17 +254,26 @@ public class JshController {
 		        
 		        //**************************************************************************************************************
 		        // Servlet 상속 받지 못했을 떄 realPath 불러 오는 방법
-				String uploadPath = request.getSession().getServletContext().getRealPath("/WEB-INF/chFile/lctrContsFileSh/"+lctr_id+"/"+lctr_no);
-		        		
-		        String result = uploadFile(originFile, inputStream, uploadPath, fileSuffix);
-		        
-		        System.out.println("JshController contsUpload fileUpload result >> "+originFile+" "+result);
-		       
-		        info.setFile_nm(originFileName);		//실제파일명
-		        info.setFile_extn_nm(fileSuffix);			//파일 확장자명
-		        info.setFile_sz(fileSize);						//파일 크기
-		        info.setFile_path_nm(uploadPath+"\\"+originFile);	//파일경로
-		        
+                String uploadPath = request.getSession().getServletContext()
+                        .getRealPath("/chFile/lctrContsFileSh/" + lctr_id + "/" + lctr_no);
+                
+                //UUID 생성
+        		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        		String idntf_no = UUID.randomUUID().toString() + "_" + timestamp;
+
+                String fileUrl = "/chFile/lctrContsFileSh/" + lctr_id + "/" + lctr_no+"/"+  idntf_no+ "."+fileSuffix;
+
+                String result = uploadFile(originFile, inputStream, uploadPath, fileSuffix, idntf_no);
+
+                System.out.println("JshController contsUpload fileUpload result >> " + originFile + " " + result);
+
+                info.setFile_nm(originFileName); // 실제파일명
+                info.setFile_extn_nm(fileSuffix); // 파일 확장자명
+                info.setFile_sz(fileSize); // 파일 크기
+                // info.setFile_path_nm(uploadPath+"\"+originFile); //파일경로
+                info.setFile_path_nm(fileUrl);
+                info.setIdntf_no(idntf_no);
+                
 		    } else {
 		        // 파일 확장자가 없는 경우 처리
 		        System.out.println("파일에 확장자가 없습니다.");
@@ -303,7 +315,8 @@ public class JshController {
 	 	private String uploadFile(String originalName, 
 	 											 InputStream inputStream, 
 	 											 String uploadPath, 
-	 											 String suffix) {
+	 											 String suffix, 
+	 											 String idntf_no) {
 	
 	 		String result = "업로드 실패";
 	 		
@@ -323,7 +336,7 @@ public class JshController {
 	 		}
 	
 	 		// 임시파일 생성
-	 		File tempFile = new File(uploadPath + "\\" + originalName);
+	 		File tempFile = new File(uploadPath + "\\" + idntf_no+"."+suffix);
 	
 	 		// 이미지 업로드
 	 		try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
@@ -535,18 +548,26 @@ public class JshController {
 			        InputStream inputStream = file.getInputStream();
 			        
 			        
-			        //**************************************************************************************************************
-			        // Servlet 상속 받지 못했을 떄 realPath 불러 오는 방법
-					String uploadPath = request.getSession().getServletContext().getRealPath("/WEB-INF/chFile/lctrContsFileSh/"+lctr_id+"/"+lctr_no);
-			        		
-			        String result = uploadFile(originFile, inputStream, uploadPath, fileSuffix);
-			        
-			        System.out.println("JshController contsUpload fileUpload result >> "+originFile+" "+result);
-			       
-			        info.setFile_nm(originFileName);		//실제파일명
-			        info.setFile_extn_nm(fileSuffix);			//파일 확장자명
-			        info.setFile_sz(fileSize);						//파일 크기
-			        info.setFile_path_nm(uploadPath+"\\"+originFile);	//파일경로
+			     // Servlet 상속 받지 못했을 떄 realPath 불러 오는 방법
+	                String uploadPath = request.getSession().getServletContext()
+	                        .getRealPath("/chFile/lctrContsFileSh/" + lctr_id + "/" + lctr_no);
+
+	                //UUID 생성
+	        		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+	        		String idntf_no = UUID.randomUUID().toString() + "_" + timestamp;
+
+	                String fileUrl = "/chFile/lctrContsFileSh/" + lctr_id + "/" + lctr_no+"/"+  idntf_no+ "."+fileSuffix;
+
+	                String result = uploadFile(originFile, inputStream, uploadPath, fileSuffix, idntf_no);
+
+	                System.out.println("JshController contsUpload fileUpload result >> " + originFile + " " + result);
+
+	                info.setFile_nm(originFileName); // 실제파일명
+	                info.setFile_extn_nm(fileSuffix); // 파일 확장자명
+	                info.setFile_sz(fileSize); // 파일 크기
+	                // info.setFile_path_nm(uploadPath+"\"+originFile); //파일경로
+	                info.setFile_path_nm(fileUrl);
+	                info.setIdntf_no(idntf_no);
 			        
 			    } else {
 			        // 파일 확장자가 없는 경우 처리
