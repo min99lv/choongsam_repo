@@ -211,6 +211,9 @@ td a:hover {
 	<header>
 		<%@ include file="../header.jsp"%>
 	</header>
+	
+	<%@ include file="../view_Hjh/headerStd.jsp"%>
+	
 
 	<div class="container">
 

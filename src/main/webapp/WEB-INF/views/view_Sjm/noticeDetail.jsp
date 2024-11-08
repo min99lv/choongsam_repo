@@ -179,6 +179,8 @@ button {
 		<%@ include file="../header.jsp"%>
 	</header>
 
+
+
 	<div class="container">
 		<div class="contents">
 			<h1>공지사항</h1>

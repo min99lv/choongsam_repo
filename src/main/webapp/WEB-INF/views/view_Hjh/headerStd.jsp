@@ -103,14 +103,14 @@
         </ul>
         <li onclick="toggleSubMenu('inquirySubmenu')">1:1 문의</li>
         <ul class="submenu" id="inquirySubmenu">
-           <li style="font-size: 13px;">문의 내역</li>
-           <li style="font-size: 13px;">문의 작성</li>
+           <li style="font-size: 13px;" onclick="location.href='/asks/my'">문의 내역</li>
+           <li style="font-size: 13px;" onclick="location.href='/asks/new'">문의 작성</li>
         </ul>
       <li onclick="toggleSubMenu('zzji')">쪽지함</li>
         <ul class="submenu" id="zzji">
-           <li style="font-size: 13px;">받은쪽지</li>
-           <li style="font-size: 13px;">보낸쪽지</li>
-           <li style="font-size: 13px;">휴지통</li>
+           <li style="font-size: 13px;" onclick="location.href='/notes/received'">받은쪽지</li>
+           <li style="font-size: 13px;" onclick="location.href='/notes/sent'">보낸쪽지</li>
+           <li style="font-size: 13px;" onclick="location.href='/asks/my'">휴지통</li>
         </ul>
     </ul>
 </nav>

@@ -265,32 +265,67 @@ public class SjmDaoImpl implements SjmDao {
 	}
 
 	@Override
-	public int getNoteSendTotal(String keyword) {
+	public int getNoteSendTotal(Map<String, Object> params) {
 		
 		System.out.println("센드리스트 다오 시작");
 		int total = 0;
 		try {
-			 total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteSendTotal",keyword);
-			System.out.println("total---->" +total);
+			 total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteSendTotal",params);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
+		
+		System.out.println("total---->" +total);
+		return total;
+	}
+
+	@Override
+	public int getNoteRcvrTotal(Map<String, Object> params) {
+		System.out.println("리시브리스트 다오 시작");
+		int total = 0;
+		try {
+			 total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteRcvrTotal",params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("total---->" +total);
 		
 		return total;
 	}
 
 	@Override
-	public int getNoteRcvrTotal(String keyword) {
-		System.out.println("리시브리스트 다오 시작");
-		int total = 0;
+	public int updateReceiveDate(int note_sn) {
+		System.out.println("수신자 읽음 처리 다오 시작");
+		int result = 0;
 		try {
-			 total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteRcvrTotal",keyword);
-			System.out.println("total---->" +total);
+			 result = session.selectOne("com.postgre.choongsam.mapper.sjm.updateReceiveDate",note_sn);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		
-		return total;
+	
+		System.out.println("result---->" +result);
+		
+		
+		return result;
+	}
+
+	@Override
+	public int replyUpdateAsks(Ask ask) {
+		System.out.println(" 문의사항 답변작성 다오 시작");
+		int result = 0;
+		try {
+			 result = session.selectOne("com.postgre.choongsam.mapper.sjm.replyUpdateAsks",ask);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	
+		System.out.println("result---->" +result);
+		
+		
+		return result;
 	}
 
 }
