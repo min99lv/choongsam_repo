@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.postgre.choongsam.dao.AtrDao;
+import com.postgre.choongsam.dto.Classroom;
 import com.postgre.choongsam.dto.Lecture;
 
 import lombok.RequiredArgsConstructor;
@@ -42,10 +43,24 @@ public class AtrServiceImpl implements AtrService {
 		return lecture;
 	}
 
+
+
 	@Override
-	public void addClassRoomForm(String lctr_id, String schd) {
-		ad.addClassRoomForm(lctr_id,schd);
+	public boolean overlapCheck(String schd,  String lctr_room) {
+		boolean result =ad.overlapCheck(schd,lctr_room);
+		return result;
+	}
+
+	@Override
+	public void addClassRoom(String parameter, String parameter2, String parameter3) {
+		ad.addClassRoom(parameter, parameter2,parameter3);
 		
+	}
+
+	@Override
+	public List<Classroom> getAllClassRoom() {
+		List<Classroom> classroomList=ad.getAllClassRoom();
+		return classroomList;
 	}
 
 }

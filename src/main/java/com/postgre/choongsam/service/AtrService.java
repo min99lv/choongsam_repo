@@ -2,6 +2,7 @@ package com.postgre.choongsam.service;
 
 import java.util.List;
 
+import com.postgre.choongsam.dto.Classroom;
 import com.postgre.choongsam.dto.Lecture;
 
 public interface AtrService {
@@ -14,6 +15,13 @@ public interface AtrService {
 
 	Lecture getLectureDetail(String lctr_id);
 
-	void addClassRoomForm(String lctr_id, String schd);
+	
+
+	boolean overlapCheck(String schd, String lctr_id);
+
+	void addClassRoom(String parameter, String parameter2, String parameter3);
+
+	List<Classroom> getAllClassRoom();
+
 
 }
