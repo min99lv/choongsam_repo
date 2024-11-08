@@ -131,9 +131,11 @@ public class HmsServiceImpl implements HmsService{
 
 	//현재 max값
 	@Override
-	public long findCurrentMax(String videoId) {
+	public long findCurrentMax(String videoId, int user_seq) {
 		System.out.println("msService findCurrentMax start..");
-		return HD.findCurrentMax(videoId);
+		System.out.println("msService findCurrentMax videoId.."+videoId);
+		System.out.println("msService findCurrentMax user_seq.."+user_seq);
+		return HD.findCurrentMax(videoId,user_seq);
 	}
 
 	//max값 빼고 업뎃
@@ -146,16 +148,17 @@ public class HmsServiceImpl implements HmsService{
 
 	//final
 	@Override
-	public int watchedFinalTime(String videoId) {
+	public int watchedFinalTime(String videoId, int user_seq) {
 		System.out.println("msService watchedFinalTime start...");
 		System.out.println("msService watchedFinalTime videoId..."+videoId);
-		return HD.watchedFinalTime(videoId);
+		System.out.println("msService watchedFinalTime user_seq..."+user_seq);
+		return HD.watchedFinalTime(videoId, user_seq);
 	}
 
 	@Override
-	public String getFilePath(String filename) {
+	public String getFilePath(String conts_id) {
 		System.out.println("msservice getFileName start..");
-		return HD.getFilePath(filename);
+		return HD.getFilePath(conts_id);
 	}
 
 	@Override
