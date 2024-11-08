@@ -1,6 +1,7 @@
 package com.postgre.choongsam.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.hibernate.internal.build.AllowSysOut;
@@ -92,11 +93,11 @@ public class HmsDaoImpl implements HmsDao {
 
 	//max값
 	@Override
-	public long findCurrentMax(String videoId) {
+	public long findCurrentMax(String videoId, int user_seq) {
 		System.out.println("msDao findCurrentMax start..");
 		int currentMax = 0;
 		try {
-			currentMax = session.selectOne("com.postgre.choongsam.mapper.HMS.CurrentMax",videoId);
+			currentMax = session.selectOne("com.postgre.choongsam.mapper.HMS.CurrentMax",Map.of("videoId",videoId,"user_seq",user_seq));
 		} catch (Exception e) {
 			System.out.println("msDao findCurrentMax error->"+e.getMessage());
 			e.printStackTrace();
@@ -106,12 +107,12 @@ public class HmsDaoImpl implements HmsDao {
 
 	//final
 	@Override
-	public int watchedFinalTime(String videoId) {
+	public int watchedFinalTime(String videoId, int user_seq) {
 		System.out.println("msDao watchedFinalTime start..");
 		System.out.println("msDao watchedFinalTime videoId.."+videoId);
 		int result = 0;
 		try {
-			result = session.selectOne("com.postgre.choongsam.mapper.HMS.finalTime",videoId);
+			result = session.selectOne("com.postgre.choongsam.mapper.HMS.finalTime",Map.of("videoId",videoId,"user_seq",user_seq));
 		} catch (Exception e) {
 			System.out.println("msDao watchedFinalTime error->"+e.getMessage());
 		}
@@ -120,18 +121,18 @@ public class HmsDaoImpl implements HmsDao {
 
 	//파일 다운로드
 	@Override
-	public String getFilePath(String filename) {
+	public String getFilePath(String conts_id) {
 	    System.out.println("msDao getFilePath start...");
-	    System.out.println("msDao getFilePath filename..."+filename);
+	    System.out.println("msDao getFilePath filename..." + conts_id);
 	    String result = null;
 	    try {
-	        System.out.println("filename: " + filename);  // filename 출력
-	        result = session.selectOne("com.postgre.choongsam.mapper.HMS.FileDown", filename);
+	        System.out.println("filename: " + conts_id);  // filename 출력
+	        result = session.selectOne("com.postgre.choongsam.mapper.HMS.FileDown", conts_id);
 	        
-	        if (result == null) {
-	            System.out.println("No file path found for filename: " + filename);
+	        if (result == null || result.trim().isEmpty()) {
+	            System.out.println("No file path found for filename: " + conts_id);  // 경로가 없을 경우 로그
 	        } else {
-	            System.out.println("File path retrieved: " + result);
+	            System.out.println("File path retrieved: " + result);  // 경로가 있을 경우 로그
 	        }
 	    } catch (Exception e) {
 	        System.out.println("msDao getFilePath error->" + e.getMessage());
@@ -140,6 +141,7 @@ public class HmsDaoImpl implements HmsDao {
 	    
 	    return result;
 	}
+
 
 	//주소가져오기
 	@Override
