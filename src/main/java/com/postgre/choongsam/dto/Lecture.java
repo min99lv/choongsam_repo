@@ -19,6 +19,5 @@ public class Lecture { // 강의 정보
 	private int 			lctr_cntschd;		// 총 차시
 	private int 			file_group;			// 파일 그룹
 	private String 		lctr_schd;			// 스케쥴
-	private String		user_name;			// 회원 이름
-	private int			reg_count;			// 수강 인원
+
 }
