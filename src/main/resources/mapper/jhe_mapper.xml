@@ -9,7 +9,7 @@
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
 	<select id="profLectureInfo" resultType="Lecture">
-		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF", u."USER_SEQ", u."USER_NAME",
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF", u."USER_SEQ", u."USER_NAME", l."LCTR_CNTSCHD",
 					(SELECT COUNT(*)
 					 FROM	"COURSE_REGISTRATION" AS c
 					 WHERE	c."LCTR_ID" = l."LCTR_ID" AND c."REG_STATE" = '2003') AS reg_count
@@ -141,24 +141,50 @@
 					SUM(CASE WHEN a."ATT_STATUS" = 5002 THEN 1 ELSE 0 END) AS late_count,
 					SUM(CASE WHEN a."ATT_STATUS" = 5003 THEN 1 ELSE 0 END) AS absent_count,
 					ROUND(
-						SUM(CASE WHEN a."ATT_STATUS" = 5001 THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT a."USER_SEQ")
+						SUM(CASE WHEN a."ATT_STATUS" = 5001 OR a."ATT_STATUS" = 5002 
+							THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT a."USER_SEQ")
 						) AS attendance_rate
 		FROM		"LECTURE" AS l
 		LEFT JOIN	"ATTENDANCE_CHECK" AS a ON l."LCTR_ID" = a."LCTR_ID"
 		WHERE		a."LCTR_ID" = #{lctr_id}
 		GROUP BY	l."LCTR_ID", l."LCTR_NAME", l."LCTR_CNTSCHD", l."ONOFF", a."LCTR_NO"
 	</select>
-	<select id="getStudAtt" resultType="Lecture">
-		SELECT		u."USER_SEQ", u."USER_NAME", a."ATT_STATUS", c."LCTR_ID"
+	<select id="getStudAtt" resultType="Attendance_Check">
+		SELECT		u."USER_SEQ", u."USER_NAME", a."ATT_STATUS", l."ONOFF", c."LCTR_ID"
 		FROM		"COURSE_REGISTRATION" AS c
 		JOIN		"USER_INFO" AS u ON c."USER_SEQ" = u."USER_SEQ"
 		LEFT JOIN	"ATTENDANCE_CHECK" AS a ON c."USER_SEQ" = a."USER_SEQ"
 		AND			c."LCTR_ID" = a."LCTR_ID"
+		LEFT JOIN	"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"
 		WHERE		c."LCTR_ID" = #{LCTR_ID}
+		AND			a."LCTR_NO" = #{LCTR_NO}
 		AND			c."REG_STATE" = '2003'
 	</select>
-	<insert id="insertStudAtt" parameterType="Attendance_Check">
-		INSERT INTO "ATTENDANCE_CHECK" ("LCTR_NO" ,"LCTR_ID", "USER_SEQ", "ATT_STATUS")
-		VALUES		(#{lctr_no}, #{lctr_id}, #{user_seq}, #{att_status})
-	</insert>
+	<select id="getOnlineStudAtt" resultType="Attendance_Check">
+		SELECT	a."USER_SEQ", a."LCTR_ID", a."LCTR_NO", a."ATT_STATUS", c."CONTS_PRGRT"
+		FROM	"ATTENDANCE_CHECK" AS a
+		JOIN	"CLASS_SCHEDULE" AS c ON a."LCTR_ID" = c."LCTR_ID"
+		AND		a."LCTR_NO" = c."LCTR_NO"
+		WHERE	a."LCTR_ID" = #{lctr_id}
+	</select>
+	<update id="updateStudAtt" parameterType="Attendance_Check">
+		UPDATE	"ATTENDANCE_CHECK"
+		SET		"ATT_STATUS" = #{att_status}
+		WHERE	"LCTR_NO" = #{lctr_no}
+		AND		"LCTR_ID" = #{lctr_id}
+		AND		"USER_SEQ" = #{user_seq}
+	</update>
+	<update id="upStudOnlineAtt" parameterType="Attendance_Check">
+		UPDATE	"ATTENDANCE_CHECK" AS a
+		SET		"ATT_STATUS" =
+				CASE
+					WHEN c."CONTS_PRGRT" = 100 THEN 5001
+					WHEN c."CONTS_PRGRT" &lt; 100 THEN 5003
+					ELSE a."ATT_STATUS"
+				END
+		FROM	"CLASS_SCHEDULE" AS c
+		WHERE	a."LCTR_NO" = c."LCTR_NO"
+		AND		a."LCTR_ID" = c."LCTR_ID"
+		AND		a."USER_SEQ" = c."USER_SEQ"
+	</update>
 </mapper>

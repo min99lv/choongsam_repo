@@ -32,7 +32,7 @@
 			</tr>
 			<tr>
 				<th>첨부파일</th>
-				<td><input type="text" name="addfile"></td>
+				<td>${upHomework.sbmsn_end_ymd}</td>
 			</tr>
 		</table>
 		<input type="submit" value="제출">
