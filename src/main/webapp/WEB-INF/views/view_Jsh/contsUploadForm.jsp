@@ -13,120 +13,7 @@
 
     <meta charset="UTF-8">
     <title>Insert title here</title>
-<<<<<<< HEAD
-    <style>
-        #listBody {
-            width: 1560px;
-            height: 100%;
-            background-color: #F1F1F1;
-            float: right;
-        }
-        
-        input {
-        	border: solid 2px #00664F;
-        	height: 20px;
-        	width: 800px;
-        }
-
-        .form {
-            width: 1360px;
-            height: auto;
-            background-color: white;
-            margin: 0 auto;
-        }
-
-        #inserts {
-            padding: 15px;
-            vertical-align: middle;
-        }
-
-        #chapter {
-            background-color: white;
-            border: 2px #00664F solid;
-            margin-bottom: 10px; /* 챕터 사이의 간격 추가 */
-            padding: 10px;
-            width: 1000px;
-        }
-        
-        .chapterTitle {
-            margin-bottom: 50px;
-        }
-
-        .video {
-            margin-top: 20px;
-            display: none; /* 처음에 비디오 div를 숨깁니다. */
-            text-align: center;
-        }
-        
-        .oneLine {
-      		display: flex;
-      		margin-bottom: 10px;
-      	}
-        
-      	.twoLine {
-      		display: flex;
-      		margin-bottom: 10px;
-      	}
-      	
-      	.text {
-      		font-size: 20px;
-      	}
-      	
-      	.tb {
-      		width: 200px;
-      	}
-      	
-      	.tbViewing {
-      		width: 150px;
-      	}
-      	
-      	
-      	.infor {
-		height: 130px;
-		text-align: center;
-		background-color: white;
-	}
-	
-	#lectureName {
-		width: 1560px;
-		height: 119px;
-		text-align: center;
-		font-size: 45px;
-	}
-	
-	.teachName {
-		margin-top: 20px;
-	}
-	
-	#teachName {
-		font-size: 25px;
-		color: #A6A6A6;
-		margin-bottom: 20px;
-	}
-	
-	.chapterTime {
-		margin-top: 30px;
-	}
-	
-	#subBut {
-		width:246px;
-		height: 50px;
-		background-color: #00664F;
-		color: white;
-	    display: flex;            /* Flexbox 사용 */
-	    align-items: center;     /* 수직 중앙 정렬 */
-   		justify-content: center;  /* 수평 중앙 정렬 */
-		border-radius: 8px;
-		font-size: 25px;
-		border: none;
-		float: right;
-		margin-right: 50px;
-	}
-        
-    </style>
-=======
     
->>>>>>> develop
     
     <script src="https://www.youtube.com/iframe_api"></script>
     <script type="text/javascript">
@@ -264,17 +151,6 @@
 <div id="listBody">
 
 	<div class="infor">
-<<<<<<< HEAD
-		<span id="lectureName">
-			${lectName }
-		</span>
-		<div class="teachName">
-			<span id="teachName">
-				${teacherName } 강사님
-			</span>
-		</div>
-	</div>
-=======
 			<div id="inforText">
 				<span id="lectureName">
 				${lectName }
@@ -286,7 +162,6 @@
 			</div>
 			</div>
 		</div>
->>>>>>> develop
 
     <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data" onsubmit="return submitChk()">
         <div id="inserts">
@@ -297,9 +172,6 @@
 
             <div class="oneLine">
                 <div class="tb"><label class="text">차시</label></div>
-<<<<<<< HEAD
-                <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
-=======
                 <c:choose>
 		            <c:when test="${max_lctr_no == 1}">
 		               <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
@@ -309,7 +181,6 @@
 		            </c:otherwise>
 		        </c:choose>
                 
->>>>>>> develop
             </div>
             
             <!-- <div class="oneLine">
@@ -378,17 +249,11 @@
                 </div>
             </div>
             
-<<<<<<< HEAD
-            <div class="file">
-                <div class="tb"><label class="text">첨부파일</label></div>
-                <input type="file" name="file">
-=======
             <div class="oneLine">
             	<div class="file">
 	                <div class="tb"><label class="text">첨부파일</label></div>
 	                <input type="file" name="file">
 	            </div>
->>>>>>> develop
             </div>
             
             
