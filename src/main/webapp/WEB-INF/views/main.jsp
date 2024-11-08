@@ -46,6 +46,7 @@
         </div>
         <a href="/courseApproveList">안태랑1</a>
         <a href="/registerCourseForm">안태랑2</a>
+        <a href="/courseApplyList">안태랑3</a>
 
         <footer>
             <%@ include file="footer.jsp" %>

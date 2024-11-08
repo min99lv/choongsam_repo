@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h2>강의 상세</h2>
+	<h2>강의 신청 상세</h2>
 	<table>
 		<tr>
 			<th>강사ID</th>
@@ -53,11 +53,12 @@
 			<th>차시 수</th>
 			<td>${lecture.lctr_cntschd}</td>
 		</tr>
-		</table>
-		<form action="approveOnlineCourse">
-		<input value="${lecture.lctr_id}" name="lctr_id">
-		<input type="submit" value="개설 허가">
-		</form>
+	</table>
+	<form action="applyCourse">
+		<input value="${lecture.lctr_id}" name="lctr_id" hidden="">
+		<input value="10004" name="student_id" hidden="">
+		 <input type="submit" value="신청하기">
+	</form>
 
 </body>
 </html>

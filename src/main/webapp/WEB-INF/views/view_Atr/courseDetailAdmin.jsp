@@ -54,10 +54,6 @@
 			<td>${lecture.lctr_cntschd}</td>
 		</tr>
 		</table>
-		<form action="approveOnlineCourse">
-		<input value="${lecture.lctr_id}" name="lctr_id">
-		<input type="submit" value="개설 허가">
-		</form>
 
 </body>
 </html>
