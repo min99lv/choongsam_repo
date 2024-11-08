@@ -9,7 +9,7 @@
 	display: grid;
 	grid-template-columns: minmax(auto, 1280px);
 	justify-content: center;
-	background-color: #fdfdfd;
+	background-color: #00664F;
 	width: 100%;
 	height: auto;
 	position: relative;

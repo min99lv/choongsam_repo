@@ -111,10 +111,9 @@ public class SjmServiceImpl implements SjmService {
 	            System.out.println("fileSize >> " + file_sz + "바이트");
 
 	            InputStream inputStream = file.getInputStream();
-	          //  String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/notice");
 
 	         // 파일이 저장될 경로
-	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/notice");
+	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/ntice");
 
 	            // 경로가 없으면 생성
 	            File uploadDir = new File(uploadPath);
@@ -248,6 +247,18 @@ public class SjmServiceImpl implements SjmService {
 	public Ask getAsk(int dscsn_sn) {
 		Ask ask = sd.getAsk(dscsn_sn);
 		return ask;
+	}
+
+	@Override
+	public int getNoteSendTotal(String keyword) {
+		
+		return sd.getNoteSendTotal(keyword);
+	}
+
+	@Override
+	public int getNoteRcvrTotal(String keyword) {
+		
+		return sd.getNoteRcvrTotal(keyword);
 	}
 
 	

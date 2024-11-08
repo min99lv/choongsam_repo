@@ -98,7 +98,6 @@ LIMIT 1
 	<select id="studentLecture" parameterType="map" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
 		SELECT DISTINCT ON (lv."LCTR_NO")
 		    c.*,
-		    u.*,
 		    l.*,
 		    s.*,
 		    lv.*,
