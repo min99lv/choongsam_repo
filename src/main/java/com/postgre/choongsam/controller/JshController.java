@@ -284,7 +284,25 @@ public class JshController {
 		
 		service.contsUpload(info);
 		
-		return "view_Jsh/teaLecture";
+		
+		//강사정보, 강의이름 가져오기
+		List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
+		
+		String lectName = name.stream()
+		                .map(Class_ScheduleAddVideo::getLctr_name)
+		                .findFirst()
+		                .orElse("");
+		String teacherName = name.stream()
+		                .map(Class_ScheduleAddVideo::getUser_name)
+		                .findFirst()
+		                .orElse("");
+		
+		model.addAttribute("lectName", lectName);
+		model.addAttribute("teacherName", teacherName);
+		model.addAttribute("lctr_id", lctr_id);
+		model.addAttribute("user_seq", user_seq);
+		
+		return "view_Jsh/uploadSuccess";
 	}
 	
 	
@@ -578,7 +596,26 @@ public class JshController {
 			
 			service.contsUpdate(info);
 			
-			return "view_Jsh/teaLecture";
+			
+			
+			//강사정보, 강의이름 가져오기
+			List<Class_ScheduleAddVideo> name = service.LectureName(lctr_id);
+			
+			String lectName = name.stream()
+			                .map(Class_ScheduleAddVideo::getLctr_name)
+			                .findFirst()
+			                .orElse("");
+			String teacherName = name.stream()
+			                .map(Class_ScheduleAddVideo::getUser_name)
+			                .findFirst()
+			                .orElse("");
+			
+			model.addAttribute("lectName", lectName);
+			model.addAttribute("teacherName", teacherName);
+			model.addAttribute("lctr_id", lctr_id);
+			model.addAttribute("user_seq", user_seq);
+			
+			return "view_Jsh/uploadSuccess";
 		}
 	 	
 	 	
