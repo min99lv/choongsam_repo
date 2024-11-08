@@ -22,23 +22,23 @@
 		  }
 	}
 	
-	.butt:hover {
-        background-color: #00664F; /* 마우스 오버 시 배경색 */
-        color: white; /* 글자색 변경 (선택 사항) */
-        transform: scale(1.1); /* 마우스 오버 시 크기 확대 */
-         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* 마우스 오버 시 그림자 */
-    }
-	
-	.butt { 
+	.butt {
 	    width: 320px;
 	    height: 90px;
 	    font-size: 30px;
 	    color: white;
-	    display: flex;            /* 플렉스박스 사용 */
-	    align-items: center;      /* 수직 중앙 정렬 */
-		 border-bottom: solid 2px white;
+	    display: flex;
+	    align-items: center;
+	    border-bottom: solid 2px white;
+	    transition: background-color 0.2s ease, transform 0.3s ease, box-shadow 0.3s ease;
 	}
-
+	
+	.butt:hover {
+	    background-color: #00664F;
+	    color: white;
+	    transform: scale(1.1);
+	    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+	}
 	
 	.link{
 		margin-left: 50px;

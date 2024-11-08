@@ -5,63 +5,63 @@
 	
 	<select id="getStartDay" parameterType="String" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
 		SELECT 
-    l."LCTR_START_DATE",       -- 시작일
-    lv."CONTS_ID",             -- 영상번호
-    l."LCTR_CNTSCHD",          -- 총차시
-	lv."VIEWING_PERIOD",
-    CASE 
-		WHEN lv."LCTR_NO" = 1 THEN l."LCTR_START_DATE"
-		WHEN lv."LCTR_NO" IS NULL THEN l."LCTR_START_DATE"
-		ELSE lv_prev."VIEWING_PERIOD"
-	END AS "befor_period",				--수강기간
-    CASE
-        WHEN s."LCTR_NO" IS NULL THEN '1'  -- LCTR_NO가 NULL일 때 '1' 반환
-        ELSE s."LCTR_NO"+1                    -- 그렇지 않으면 원래 LCTR_NO 값 사용
-    END AS "LCTR_NO",             -- 차시
-    l."LCTR_ID"                -- 강의번호
-FROM (
-		SELECT *
-		FROM "SYLLABUS"
-		WHERE "LCTR_NO" > 0
-	   ) s
-JOIN "LECTURE" l ON s."LCTR_ID" = l."LCTR_ID"
-LEFT JOIN "LECTURE_VIDEO" lv ON s."CONTS_ID" = lv."CONTS_ID"   -- JOIN 조건
-LEFT JOIN "LECTURE_VIDEO" lv_prev 
-		ON lv."LCTR_NO" = lv_prev."LCTR_NO" + 1 AND lv."LCTR_ID" = lv_prev."LCTR_ID"
-WHERE l."LCTR_ID" = #{lctr_id}
-AND s."CONTS_ID" IS NOT NULL
-ORDER BY s."LCTR_NO" DESC
-LIMIT 1
+		    l."LCTR_START_DATE",
+		    lv."CONTS_ID",
+		    l."LCTR_CNTSCHD",
+			lv."VIEWING_PERIOD",
+		    CASE 
+				WHEN lv."LCTR_NO" = 1 THEN l."LCTR_START_DATE"
+				WHEN lv."LCTR_NO" IS NULL THEN l."LCTR_START_DATE"
+				ELSE lv_prev."VIEWING_PERIOD"
+			END AS "befor_period",
+		    CASE
+		        WHEN s."LCTR_NO" IS NULL THEN '1' 
+		        ELSE s."LCTR_NO"+1
+		    END AS "LCTR_NO", 
+		    l."LCTR_ID" 
+		FROM (
+				SELECT *
+				FROM "SYLLABUS"
+				WHERE "LCTR_NO" > 0
+			   ) s
+		JOIN "LECTURE" l ON s."LCTR_ID" = l."LCTR_ID"
+		LEFT JOIN "LECTURE_VIDEO" lv ON s."CONTS_ID" = lv."CONTS_ID"
+		LEFT JOIN "LECTURE_VIDEO" lv_prev 
+				ON lv."LCTR_NO" = lv_prev."LCTR_NO" + 1 AND lv."LCTR_ID" = lv_prev."LCTR_ID"
+		WHERE l."LCTR_ID" = #{lctr_id}
+		AND s."CONTS_ID" IS NOT NULL
+		ORDER BY s."LCTR_NO" DESC
+		LIMIT 1
 	</select>
 	
 	<select id="getStartDay1"  parameterType="String" resultType="com.postgre.choongsam.dto.Class_ScheduleAddVideo">
 		SELECT 
-    l."LCTR_START_DATE",       -- 시작일
-    lv."CONTS_ID",             -- 영상번호
-    l."LCTR_CNTSCHD",          -- 총차시
-    CASE 
-		WHEN lv."LCTR_NO" = 1 THEN l."LCTR_START_DATE"
-		WHEN lv."LCTR_NO" IS NULL THEN l."LCTR_START_DATE"
-		ELSE lv_prev."VIEWING_PERIOD"
-	END AS "VIEWING_PERIOD",				--수강기간
-    CASE
-        WHEN s."LCTR_NO" IS NULL THEN '1'  -- LCTR_NO가 NULL일 때 '1' 반환
-        ELSE s."LCTR_NO"                    -- 그렇지 않으면 원래 LCTR_NO 값 사용
-    END AS "LCTR_NO",             -- 차시
-    l."LCTR_ID"                -- 강의번호
-FROM (
-		SELECT *
-		FROM "SYLLABUS"
-		WHERE "LCTR_NO" > 0
-	   ) s
-JOIN "LECTURE" l ON s."LCTR_ID" = l."LCTR_ID"
-LEFT JOIN "LECTURE_VIDEO" lv ON s."CONTS_ID" = lv."CONTS_ID"   -- JOIN 조건
-LEFT JOIN "LECTURE_VIDEO" lv_prev 
-		ON lv."LCTR_NO" = lv_prev."LCTR_NO" + 1 AND lv."LCTR_ID" = lv_prev."LCTR_ID"
-WHERE l."LCTR_ID" = #{lctr_id}
-AND s."CONTS_ID" IS NULL
-ORDER BY s."LCTR_NO"
-LIMIT 1
+		    l."LCTR_START_DATE",
+		    lv."CONTS_ID",
+		    l."LCTR_CNTSCHD",
+		    CASE 
+				WHEN lv."LCTR_NO" = 1 THEN l."LCTR_START_DATE"
+				WHEN lv."LCTR_NO" IS NULL THEN l."LCTR_START_DATE"
+				ELSE lv_prev."VIEWING_PERIOD"
+			END AS "VIEWING_PERIOD",
+		    CASE
+		        WHEN s."LCTR_NO" IS NULL THEN '1'
+		        ELSE s."LCTR_NO"
+		    END AS "LCTR_NO",
+		    l."LCTR_ID"
+		FROM (
+				SELECT *
+				FROM "SYLLABUS"
+				WHERE "LCTR_NO" > 0
+			   ) s
+		JOIN "LECTURE" l ON s."LCTR_ID" = l."LCTR_ID"
+		LEFT JOIN "LECTURE_VIDEO" lv ON s."CONTS_ID" = lv."CONTS_ID"
+		LEFT JOIN "LECTURE_VIDEO" lv_prev 
+				ON lv."LCTR_NO" = lv_prev."LCTR_NO" + 1 AND lv."LCTR_ID" = lv_prev."LCTR_ID"
+		WHERE l."LCTR_ID" = #{lctr_id}
+		AND s."CONTS_ID" IS NULL
+		ORDER BY s."LCTR_NO"
+		LIMIT 1
 	</select>
 	
 	
