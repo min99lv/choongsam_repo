@@ -15,4 +15,6 @@ public interface JshService {
 
 	int classScheChk(String chashi, String conts_id, String lctr_id, String user_seq);
 
+	List<Class_ScheduleAddVideo> searchTeachConts(String lctr_id, int user_seq);
+
 }

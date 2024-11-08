@@ -13,6 +13,12 @@
             background-color: #F1F1F1;
             float: right;
         }
+        
+        input {
+        	border: solid 2px #00664F;
+        	height: 20px;
+        	width: 800px;
+        }
 
         .form {
             width: 1360px;
@@ -22,14 +28,16 @@
         }
 
         #inserts {
-            padding: 10px;
+            padding: 15px;
+            vertical-align: middle;
         }
 
         #chapter {
             background-color: white;
-            border: 1px black solid;
+            border: 2px #00664F solid;
             margin-bottom: 10px; /* 챕터 사이의 간격 추가 */
             padding: 10px;
+            width: 1000px;
         }
         
         .chapterTitle {
@@ -42,13 +50,70 @@
             text-align: center;
         }
         
+        .oneLine {
+      		display: flex;
+      		margin-bottom: 10px;
+      	}
+        
       	.twoLine {
       		display: flex;
+      		margin-bottom: 10px;
       	}
       	
       	.text {
-      		font-size: 15px;
+      		font-size: 20px;
       	}
+      	
+      	.tb {
+      		width: 200px;
+      	}
+      	
+      	.tbViewing {
+      		width: 150px;
+      	}
+      	
+      	
+      	.infor {
+		height: 130px;
+		text-align: center;
+		background-color: white;
+	}
+	
+	#lectureName {
+		width: 1560px;
+		height: 119px;
+		text-align: center;
+		font-size: 45px;
+	}
+	
+	.teachName {
+		margin-top: 20px;
+	}
+	
+	#teachName {
+		font-size: 25px;
+		color: #A6A6A6;
+		margin-bottom: 20px;
+	}
+	
+	.chapterTime {
+		margin-top: 30px;
+	}
+	
+	#subBut {
+		width:246px;
+		height: 50px;
+		background-color: #00664F;
+		color: white;
+	    display: flex;            /* Flexbox 사용 */
+	    align-items: center;     /* 수직 중앙 정렬 */
+   		justify-content: center;  /* 수평 중앙 정렬 */
+		border-radius: 8px;
+		font-size: 25px;
+		border: none;
+		float: right;
+		margin-right: 50px;
+	}
         
     </style>
     
@@ -186,39 +251,51 @@
 <body>
 
 <div id="listBody">
+
+	<div class="infor">
+		<span id="lectureName">
+			${lectName }
+		</span>
+		<div class="teachName">
+			<span id="teachName">
+				${teacherName } 강사님
+			</span>
+		</div>
+	</div>
+
     <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data" onsubmit="return submitChk()">
         <div id="inserts">
             <div class="oneLine">
-                <label id="text">강의 제목 입력</label>
+               <div class="tb"> <label class="text">강의 제목 입력</label></div>
                 <input type="text" placeholder="강의 제목을 입력해주세요" name="vdo_file_nm" required="required">
             </div>
 
             <div class="oneLine">
-                <label id="text">차시</label>
-                <input type="text" name="lctr_no" value="${max_lctr_no+1 }" readonly="readonly">
+                <div class="tb"><label class="text">차시</label></div>
+                <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
             </div>
             
-            <div class="oneLine">
-                <label id="text">강의개요</label>
+            <!-- <div class="oneLine">
+                <div class="tb"><label class="text">강의개요</label></div>
                 <input type="text" name="lctr_otln" placeholder="강의개요를 입력해주세요">
-            </div>
+            </div> -->
 
             <div class="twoLine">
-			    <label class="text">출석 인정 기간 설정</label>
+			    <div class="tb"><label class="text">출석 인정 기간 설정</label></div>
 			    <c:choose>
 			    	<c:when test="{lctr_no == 1}">
-			    		<input type="text" name="minDate" value="${startDay}" readonly="readonly">~
-			        	<input type="text" name="viewing_period" value="${endDay}" readonly="readonly">
+			    		<input type="text" name="minDate" value="${startDay}" readonly="readonly" class="tbViewing">~
+			        	<input type="text" name="viewing_period" value="${endDay}" readonly="readonly" class="tbViewing">
 			    	</c:when>
 			   		<c:otherwise>
-			   			<input type="text" name="minDate" value="${viewing_period}" readonly="readonly">~
-			        	<input type="text" name="viewing_period" value="${endDay}" readonly="readonly">
+			   			<input type="text" name="minDate" value="${viewing_period}" readonly="readonly" class="tbViewing">~
+			        	<input type="text" name="viewing_period" value="${endDay}" readonly="readonly" class="tbViewing">
 			   		</c:otherwise>
 			    </c:choose>
 			</div>
 
             <div class="twoLine">
-			    <label class="text">유튜브 ID</label>
+			    <div class="tb"><label class="text">유튜브 ID</label></div>
 			    <input type="text" name="vdo_url_addr" id="vdo_url_addr">
 			    <input type="hidden" name="vdo_length" id="vdo_length" required="required">
 			    <div>
@@ -231,36 +308,48 @@
 
             <div id="chapter">
                 <div class="chapterTime">
-                    <label class="text">챕터시간 입력</label>
-                    <input type="text" name="chp_str1" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력">
-                    <label class="text">챕터내용 입력</label>
-                    <input type="text" name="conts_chpttl">
+                    <div class="oneLine">
+                    	<div class="tb"><label class="text">챕터시간1 입력</label></div>
+                    	<input type="text" name="chp_str1" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
+                    </div>
+                    <div class="oneLine">
+                    	<div class="tb"><label class="text">챕터내용1 입력</label></div>
+                    	<input type="text" name="conts_chpttl">
+                    </div>
                 </div>
                 
                 <div class="chapterTime">
-                    <label class="text">챕터시간 입력</label>
-                    <input type="text" name="chp_str2" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력">
-                    <label class="text">챕터내용 입력</label>
-                    <input type="text" name="conts_chpttl2">
+                    <div class="oneLine">
+                    	<div class="tb"><label class="text">챕터시간2 입력</label></div>
+                    	<input type="text" name="chp_str2" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
+                    </div>
+                    <div class="oneLine">
+                    	<div class="tb"><label class="text">챕터내용2 입력</label></div>
+                    	<input type="text" name="conts_chpttl2">
+                    </div>
                 </div>
                 
                 <div class="chapterTime">
-                    <label class="text">챕터시간 입력</label>
-                    <input type="text" name="chp_str3" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력">
-                    <label class="text">챕터내용 입력</label>
-                    <input type="text" name="conts_chpttl3">
+                    <div class="oneLine">
+                    	<div class="tb"><label class="text">챕터시간3 입력</label></div>
+                    	<input type="text" name="chp_str3" maxlength="6" oninput="hypenTime(this)" placeholder="00:00:00 형식으로 입력" class="tbViewing">
+                    </div>
+                    <div class="oneLine">
+                    	<div class="tb"><label class="text">챕터내용3 입력</label></div>
+                    	<input type="text" name="conts_chpttl3">
+                    </div>
                 </div>
             </div>
             
             <div class="file">
-                <label class="text">첨부파일</label>
+                <div class="tb"><label class="text">첨부파일</label></div>
                 <input type="file" name="file">
             </div>
             
             <input type="hidden" name="lctr_id" value="${lctr_id}">
     		<input type="hidden" name="user_seq" value="${user_seq}">
             
-             <button type="submit">수업 등록</button>
+             <button type="submit" id="subBut">수업 등록</button>
 
         
     	</div>

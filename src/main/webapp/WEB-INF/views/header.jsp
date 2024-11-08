@@ -77,7 +77,7 @@
 			</c:choose>
 			
             <a href="/api/notice">공지사항</a>
-            <a href="/video-details?videoId=H8BqV91Mhe0&userId=user48">문의사항</a>
+            <a href="/video-details?videoId=H8BqV91Mhe0&user_seq=user48">문의사항</a>
         </div>
             <div class="header_login"><a href="/view_Ljm/loginForm">로그인</a></div>
             <div class="header_join"><a href="/view_Ljm/signup1">회원가입</a></div>
