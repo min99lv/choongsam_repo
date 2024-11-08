@@ -299,7 +299,7 @@ public class SjmDaoImpl implements SjmDao {
 		System.out.println("수신자 읽음 처리 다오 시작");
 		int result = 0;
 		try {
-			 result = session.selectOne("com.postgre.choongsam.mapper.sjm.updateReceiveDate",note_sn);
+			 result = session.update("com.postgre.choongsam.mapper.sjm.updateReceiveDate",note_sn);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -316,7 +316,7 @@ public class SjmDaoImpl implements SjmDao {
 		System.out.println(" 문의사항 답변작성 다오 시작");
 		int result = 0;
 		try {
-			 result = session.selectOne("com.postgre.choongsam.mapper.sjm.replyUpdateAsks",ask);
+			 result = session.update("com.postgre.choongsam.mapper.sjm.replyUpdateAsks",ask);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
