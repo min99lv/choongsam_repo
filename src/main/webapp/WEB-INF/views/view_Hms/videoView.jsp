@@ -195,6 +195,8 @@ body {
     
  	// 데이터베이스에서 북마크 정보를 불러오는 ajax
     function fetchBookmarks(conts_id) {
+ 		var conts_id = conts_id;
+ 		console.log('conts_id');
 	    $.ajax({
 	        url: `/api/bookmarks/${conts_id}`,
 	        type: 'GET',

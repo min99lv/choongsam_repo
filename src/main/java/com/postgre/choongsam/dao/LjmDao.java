@@ -20,5 +20,9 @@ public interface LjmDao {
 	User_Info findPw(User_Info user_info);
 
 	void updateTempPw(String user_id, String hashedTempPw);
+
+	Login_Info adminLogin(String user_id);
+
+	User_Info getUserInfo(String user_id);
 	
 }

@@ -10,44 +10,29 @@
 <title>수강생 출결현황</title>
 </head>
 <body>
-	<h2>수강생 출결현황</h2>
-	<table>
-		<tr>
-			<th>강의명</th>
-			<th>총 차시</th>
-			<th>수강인원</th>
-			<th>출석</th>
-			<th>지각</th>
-			<th>결석</th>
-			<th>출석률</th>
-		</tr>
-		<c:forEach var="AttMain" items="${profAttMainList}">
-		<tr>
-			<td>${AttMain.lctr_name}</td>
-			<td>${AttMain.lctr_cntschd}</td>
-			<td>${AttMain.reg_count}</td>
-			<td>${AttMain.present_count}</td>
-			<td>${AttMain.late_count}</td>
-			<td>${AttMain.absent_count}</td>
-			<td>${AttMain.attendance_rate}%</td>
-		</tr>
-		</c:forEach>
-	</table>
-
 	<h2>차시별 수강생 출결현황</h2>
 	<table>
 		<tr>
 			<th>차시</th>
 			<th>출석</th>
+			<c:if test="${onoff != 7002}">
 			<th>지각</th>
+			</c:if>
 			<th>결석</th>
 			<th>출석률</th>
 		</tr>
 		<c:forEach var="AttMain" items="${profAttMainList}">
 		<tr>
-		 	<td><a href="/Jhe/insertStudAtt?LCTR_ID=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}">${AttMain.lctr_no}</a></td>
+		 	<td><c:if test="${onoff != 7002}">
+		 		<a href="/Jhe/insertStudAtt?LCTR_ID=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
+		 		${AttMain.lctr_no}</a>
+		 		</c:if>
+		 		<c:if test="${onoff == 7002}">
+		 			${AttMain.lctr_no}
+		 		</c:if>
+		 	</td>
 			<td>${AttMain.present_count}</td>
-			<td>${AttMain.late_count}</td>
+			<c:if test="${onoff != 7002}"><td>${AttMain.late_count}</td></c:if>
 			<td>${AttMain.absent_count}</td>
 			<td>${AttMain.attendance_rate}%</td>
 		</tr>

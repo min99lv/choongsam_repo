@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.postgre.choongsam.dao.HmsDao;
+import com.postgre.choongsam.dto.Class_Bookmark;
 import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Lecture_Video;
 
@@ -155,6 +156,26 @@ public class HmsServiceImpl implements HmsService{
 	public String getFilePath(String filename) {
 		System.out.println("msservice getFileName start..");
 		return HD.getFilePath(filename);
+	}
+
+	@Override
+	public List<Class_Bookmark> getBookmarksByContsId(String conts_id) {
+		System.out.println("msService bookmark start..");
+		return HD.Bookmark(conts_id);
+	}
+
+	@Override
+	public List<Class_Bookmark> getBookmark(String conts_id) {
+		System.out.println("msService getBookmark start..");
+		System.out.println("msService getBookmark conts_id.."+conts_id);
+		return HD.getBookmark(conts_id);
+	}
+
+	@Override
+	public String getfilename(String conts_id) {
+		System.out.println("msService getfilename start..");
+		System.out.println("msService getfilename conts_id.."+conts_id);	
+		return HD.getfilename(conts_id);
 	}
 
 	

@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.stereotype.Repository;
 
+import com.postgre.choongsam.dto.Class_Bookmark;
 import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Lecture_Video;
 import com.postgre.choongsam.dto.Syllabus;
@@ -78,11 +79,13 @@ public class HmsDaoImpl implements HmsDao {
 	@Override
 	public Syllabus findLctrInfo(String videoId) {
 		System.out.println("msDao findLctrInfo start...");
+		System.out.println("msDao findLctrInfo videoId..."+videoId);
 		Syllabus info = null;
 		try {
 			info = session.selectOne("com.postgre.choongsam.mapper.HMS.findLctrInfo", videoId);
 		} catch (Exception e) {
 			System.out.println("msDao findLctrInfo error->"+e.getMessage());
+			e.printStackTrace();
 		}
 		return info;
 	}
@@ -96,6 +99,7 @@ public class HmsDaoImpl implements HmsDao {
 			currentMax = session.selectOne("com.postgre.choongsam.mapper.HMS.CurrentMax",videoId);
 		} catch (Exception e) {
 			System.out.println("msDao findCurrentMax error->"+e.getMessage());
+			e.printStackTrace();
 		}
 		return currentMax;
 	}
@@ -118,6 +122,7 @@ public class HmsDaoImpl implements HmsDao {
 	@Override
 	public String getFilePath(String filename) {
 	    System.out.println("msDao getFilePath start...");
+	    System.out.println("msDao getFilePath filename..."+filename);
 	    String result = null;
 	    try {
 	        System.out.println("filename: " + filename);  // filename 출력
@@ -134,6 +139,62 @@ public class HmsDaoImpl implements HmsDao {
 	    }
 	    
 	    return result;
+	}
+
+	//주소가져오기
+	@Override
+	public String getURL(String videoId) {
+		System.out.println("msDao getURL start..");
+		String result = null;
+		
+		try {
+			result = session.selectOne("com.postgre.choongsam.mapper.HMS.getURL",videoId);
+			System.out.println("msDao getURL result->"+result);
+		} catch (Exception e) {
+			System.out.println("msDao getURL error->"+e.getMessage());
+		}
+		return result;
+		
+	}
+
+	@Override
+	public List<Class_Bookmark> Bookmark(String conts_id) {
+		System.out.println("msDao bookMark start..");
+		List<Class_Bookmark> bookmark = null;
+		try {
+			bookmark = session.selectList("com.postgre.choongsam.mapper.HMS.bookmark",conts_id);
+		} catch (Exception e) {
+			System.out.println("msDao bookmark error->"+e.getMessage());
+		}
+		return bookmark;
+	}
+
+	//filename
+	@Override
+	public String getfilename(String conts_id) {
+		System.out.println("msDao getfilename start..");
+		System.out.println("msDao getfilename conts_id.."+conts_id);
+		String filename = null;
+		try {
+			filename = session.selectOne("com.postgre.choongsam.mapper.HMS.getfilename",conts_id);
+		} catch (Exception e) {
+			System.out.println("msDao getfilename error->"+e.getMessage());
+		}
+		return filename;
+	}
+
+	@Override
+	public List<Class_Bookmark> getBookmark(String conts_id) {
+		System.out.println("maDao getBookmark start..");
+		System.out.println("maDao getBookmark conts_id.."+conts_id);
+		List<Class_Bookmark> bookmark = null;
+		try {
+			bookmark = session.selectList("com.postgre.choongsam.mapper.HMS.getBookmark",conts_id);
+			System.out.println("maDao getBookmark bookmark.."+bookmark);
+		} catch (Exception e) {
+			System.out.println("msDao getBookmark error->"+e.getMessage());
+		}
+		return bookmark;
 	}
 
 	
