@@ -34,6 +34,36 @@ public class LjmDaoImpl implements LjmDao {
 		}
 		return login_info;
 	}
+	
+	@Override
+	public User_Info getUserInfo(String user_id) {
+		System.out.println("LjmDaoImpl getUserInfo() start...");
+        User_Info user_info = null;
+        try {
+            user_info = session.selectOne("getUserInfo", user_id);
+            System.out.println(user_info);
+        } catch (Exception e) {
+            System.out.println("LjmDaoImpl getUserInfo() Error ->" + e.getMessage());
+        }
+        return user_info;
+    }
+	
+	// 관리자 로그인 처리
+	@Override
+	public Login_Info adminLogin(String user_id) {
+		System.out.println("LjmDaoImpl adminLogin() start...");
+		
+		Login_Info login_info = new Login_Info();
+		
+		try {
+			login_info.setUser_id(user_id);			
+			login_info = session.selectOne("adminLogin", user_id);
+			
+		} catch (Exception e) {
+			System.out.println("LjmDaoImpl adminLogin() Error ->" + e.getMessage() );
+		}
+		return login_info;
+	}
 
 	// 회원가입
 	@Override
@@ -77,4 +107,52 @@ public class LjmDaoImpl implements LjmDao {
 		return user_id;
 	}
 	
+	// 회원 번호를 갖고 회원 이름 가져오기
+	@Override
+	public String getUserName(int user_seq) {
+		String user_name = session.selectOne("getUserName",user_seq);
+		System.out.println("username--->"+user_name);
+		return user_name;
+	}
+	
+	// 비밀번호 찾기 1. 입력한 정보 토대로 사용자 정보 존재 여부 확인
+	@Override
+		public User_Info findPw(User_Info user_info) {
+		System.out.println("LjmDaoImpl findPw() start...");
+		User_Info user = new User_Info();
+		System.out.println(user_info);
+		user = session.selectOne("findPw", user_info);
+		return user;
+	}
+	
+	// 비밀번호 찾기 2. 랜덤 난수로 임시 비밀번호 생성, 암호화
+	@Override
+		public void updateTempPw(String user_id, String hashedTempPw) {
+		System.out.println("LjmDaoImpl updateTempPw() start...");
+		
+		Login_Info login_info = new Login_Info();
+		
+		login_info.setUser_id(user_id);
+		login_info.setPassword(hashedTempPw);
+		
+		int updateTempPw = session.update("updateTempPw", login_info);
+		
+		if (updateTempPw > 0) {
+			System.out.println("LjmDaoImpl updateTempPw() 성공");
+		} else {
+			System.out.println("LjmDaoImpl updateTempPw() 실패");
+		}
+			
+	}
+	
+	// 비밀번호 찾기 3. 생성한 임시 비밀번호를 메일로 전송
+	@Override
+	public String getUserEmail(String user_id) {
+		System.out.println("LjmDaoImpl getUserEmail() start...");
+		
+		String user_email = session.selectOne("getUserEmail", user_id);
+		System.out.println("LjmDaoImpl getUserEmail() user_email -> " + user_email);
+		return user_email;
+	}
+
 }

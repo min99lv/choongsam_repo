@@ -2,8 +2,70 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.postgre.choongsam.mapper.Atr">
-	<select id="trRegisterCourse" parameterType="Lecture" >
-		INSERT INTO "LECTURE" ("LCTR_ID", "USER_SEQ", "ONOFF","LCTR_CATEGORY","LCTR_NAME", "LCTR_COUNT","RCRT_DATE", "LCTR_COST", "LCTR_STATE", "EVAL_CRITERIA", "LCTR_START_DATE", "LCTR_CNTSCHD", "FILE_GROUP", "LCTR_SCHD") 
-		values (NEXTVAL('lctr_id_seq'), 0, #{onoff},#{lctr_category},#{lctr_name},#{lctr_count},#{rcrt_date},#{lctr_cost},#{lctr_state},#{eval_criteria},#{lctr_start_date},#{lctr_cntschd},#{file_group},#{lctr_schd})
+	<insert id="trRegisterCourse" parameterType="Lecture"
+		useGeneratedKeys="true" keyColumn="LCTR_ID" keyProperty="lctr_id">
+		INSERT INTO
+		"LECTURE" ("LCTR_ID", "USER_SEQ", "ONOFF","LCTR_CATEGORY","LCTR_NAME",
+		"LCTR_COUNT","RCRT_DATE", "LCTR_COST", "LCTR_STATE", "EVAL_CRITERIA",
+		"LCTR_START_DATE", "LCTR_CNTSCHD", "FILE_GROUP", "LCTR_SCHD")
+		values (NEXTVAL('lctr_id_seq'), 0,
+		#{onoff},#{lctr_category},#{lctr_name},#{lctr_count},#{rcrt_date},#{lctr_cost},#{lctr_state},#{eval_criteria},#{lctr_start_date},#{lctr_cntschd},#{file_group},#{lctr_schd})
+	</insert>
+	<insert id="trRegisterSyllabus">
+		INSERT INTO "SYLLABUS"
+		("LCTR_NO", "LCTR_ID", "LCTR_OTLN")
+		values (#{lctr_no},#{parameter},#{courseDetail})
+	</insert>
+	<select id="trGetAllLectureList" resultType="Lecture">
+		SELECT
+		l."LCTR_ID",
+		l."USER_SEQ",
+		comm_onoff."CD_NM" AS "onoff",
+		comm_category."CD_NM" AS "lctr_category",
+		l."LCTR_NAME",
+		l."LCTR_COUNT",
+		l."RCRT_DATE",
+		l."LCTR_COST",
+		comm_state."CD_NM" AS "lctr_state",
+		l."EVAL_CRITERIA",
+		l."LCTR_START_DATE",
+		l."LCTR_CNTSCHD",
+		l."FILE_GROUP",
+		l."LCTR_SCHD"
+		FROM
+		"LECTURE" l
+		LEFT JOIN
+		"COMM" comm_onoff ON l."ONOFF" = comm_onoff."CD"
+		LEFT JOIN
+		"COMM" comm_category ON l."LCTR_CATEGORY" = comm_category."CD"
+		LEFT JOIN
+		"COMM" comm_state ON l."LCTR_STATE" = comm_state."CD";
+	</select>
+	<select id="trGetLectureDetail" resultType="Lecture">
+		SELECT
+		l."LCTR_ID",
+		l."USER_SEQ",
+		comm_onoff."CD_NM" AS "onoff",
+		comm_category."CD_NM" AS "lctr_category",
+		l."LCTR_NAME",
+		l."LCTR_COUNT",
+		l."RCRT_DATE",
+		l."LCTR_COST",
+		comm_state."CD_NM" AS "lctr_state",
+		l."EVAL_CRITERIA",
+		l."LCTR_START_DATE",
+		l."LCTR_CNTSCHD",
+		l."FILE_GROUP",
+		l."LCTR_SCHD"
+		FROM
+		"LECTURE" l
+		LEFT JOIN
+		"COMM" comm_onoff ON l."ONOFF" = comm_onoff."CD"
+		LEFT JOIN
+		"COMM" comm_category ON l."LCTR_CATEGORY" = comm_category."CD"
+		LEFT JOIN
+		"COMM" comm_state ON l."LCTR_STATE" = comm_state."CD"
+		WHERE l."LCTR_ID" = #{lctr_id}
+		;
 	</select>
 </mapper>

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>쪽지 작성</title>
+<title>공지사항 작성</title>
 <style>
 body {
 	margin: 0;

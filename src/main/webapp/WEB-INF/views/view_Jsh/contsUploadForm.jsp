@@ -3,9 +3,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
+
 <head>
+
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myStudyHomeNav.jsp" %>
+<link rel="stylesheet" href="../css/shContsUploadForm.css">
+
+
     <meta charset="UTF-8">
     <title>Insert title here</title>
+<<<<<<< HEAD
     <style>
         #listBody {
             width: 1560px;
@@ -116,6 +124,9 @@
 	}
         
     </style>
+=======
+    
+>>>>>>> develop
     
     <script src="https://www.youtube.com/iframe_api"></script>
     <script type="text/javascript">
@@ -253,6 +264,7 @@
 <div id="listBody">
 
 	<div class="infor">
+<<<<<<< HEAD
 		<span id="lectureName">
 			${lectName }
 		</span>
@@ -262,6 +274,19 @@
 			</span>
 		</div>
 	</div>
+=======
+			<div id="inforText">
+				<span id="lectureName">
+				${lectName }
+			</span>
+			<div class="teachName">
+				<span id="teachName">
+					${teacherName } 강사님
+				</span>
+			</div>
+			</div>
+		</div>
+>>>>>>> develop
 
     <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data" onsubmit="return submitChk()">
         <div id="inserts">
@@ -272,7 +297,19 @@
 
             <div class="oneLine">
                 <div class="tb"><label class="text">차시</label></div>
+<<<<<<< HEAD
                 <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
+=======
+                <c:choose>
+		            <c:when test="${max_lctr_no == 1}">
+		               <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
+		            </c:when>
+		            <c:otherwise>
+		               <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
+		            </c:otherwise>
+		        </c:choose>
+                
+>>>>>>> develop
             </div>
             
             <!-- <div class="oneLine">
@@ -341,10 +378,19 @@
                 </div>
             </div>
             
+<<<<<<< HEAD
             <div class="file">
                 <div class="tb"><label class="text">첨부파일</label></div>
                 <input type="file" name="file">
+=======
+            <div class="oneLine">
+            	<div class="file">
+	                <div class="tb"><label class="text">첨부파일</label></div>
+	                <input type="file" name="file">
+	            </div>
+>>>>>>> develop
             </div>
+            
             
             <input type="hidden" name="lctr_id" value="${lctr_id}">
     		<input type="hidden" name="user_seq" value="${user_seq}">

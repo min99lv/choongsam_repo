@@ -1,5 +1,6 @@
 package com.postgre.choongsam.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.postgre.choongsam.dto.Ask;
 import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Note;
@@ -91,22 +93,22 @@ public class SjmDaoImpl implements SjmDao {
 		Integer maxFileSeq = session.selectOne("com.postgre.choongsam.mapper.sjm.getMaxFileSeq", fileGroupId);
 		return (maxFileSeq == null) ? 1 : maxFileSeq + 1; // maxFileSeq가 null이면 1을 반환
 	}
+	
+	
+// ##################
+// ##################
+// ##################
+// ##################
+// 쪽지 ------------------------------------------------------------------
+// ##################
+// ##################
+// ##################
+// ##################
 
-	// NOTE - user_seq 가져오기
 	@Override
-	public int getUserSeq(Map<String, Object> params) {
+	public List<Note> getNotesReceived(Map<String, Object> params) {
 
-		System.out.println("dao도착 params" + params);
-
-		int user_seq = session.selectOne("com.postgre.choongsam.mapper.sjm.getUserSeq", params);
-
-		return user_seq;
-	}
-
-	@Override
-	public List<Note> noteList(Map<String, Object> params) {
-
-		List<Note> noteList = session.selectList("com.postgre.choongsam.mapper.sjm.rcvNote", params);
+		List<Note> noteList = session.selectList("com.postgre.choongsam.mapper.sjm.getNotesReceived", params);
 
 		System.out.println("쪽지 리스트 다오임 " + noteList);
 		return noteList;
@@ -126,8 +128,8 @@ public class SjmDaoImpl implements SjmDao {
 	}
 
 	@Override
-	public List<Note> getSentNotes(Map<String, Object> params) {
-		List<Note> noteList = session.selectList("com.postgre.choongsam.mapper.sjm.getSentNotes", params);
+	public List<Note> getNotesSend(Map<String, Object> params) {
+		List<Note> noteList = session.selectList("com.postgre.choongsam.mapper.sjm.getNotesSend", params);
 
 		System.out.println("쪽지 리스트 다오임 " + noteList);
 		return noteList;
@@ -171,17 +173,95 @@ public class SjmDaoImpl implements SjmDao {
 	}
 
 	@Override
-	public List<Lecture> getSameLeceture(int lectureId) {
+	public List<Note> getSameLeceture(String lectureId) {
 		System.out.println("내가 듣는 강의 리스트 가져오기"+ lectureId);
-		List<Lecture> lectures = null;
+		List<Note> note = null;
 		
 		try {
-			lectures= session.selectList("com.postgre.choongsam.mapper.sjm.getSameLeceture",lectureId);
-			System.out.println("내가 듣는 강의 : "+lectures);
+			note= session.selectList("com.postgre.choongsam.mapper.sjm.getSameLeceture",lectureId);
+			System.out.println("내가 듣는 강의 : "+note);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return lectures;
+		return note;
+	}
+
+	@Override
+	public int postAsk(Ask ask) {
+		
+		System.out.println(" 문의사항 작성 다오");
+		 
+		int result = 0;
+		
+		try {
+			result = session.insert("com.postgre.choongsam.mapper.sjm.postAsk",ask);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<Ask> getAsksMy(Map<String, Object> params) {
+		System.out.println("다오시작 문의사항");
+		
+		List<Ask> ask = null;
+		try {
+			ask = session.selectList("com.postgre.choongsam.mapper.sjm.getAsksMy",params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ask;
+	}
+
+	// 문의사항 상세
+	@Override
+	public Ask getAsk(int dscsn_sn) {
+		System.out.println("상세 다오 시작");
+		
+		Ask ask = null;
+		
+		try {
+			ask = session.selectOne("com.postgre.choongsam.mapper.sjm.getAsk",dscsn_sn);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ask;
+	}
+
+	@Override
+	public File_Group getFile(int fileGroup, int fileSeq) {
+		System.out.println("파일 다운로드 진행");
+		
+	File_Group file = null;
+	
+	Map<String, Object> params = new HashMap<>();
+	params.put("file_group", fileGroup);
+	params.put("file_seq", fileSeq);
+	
+	try {
+		file = session.selectOne("com.postgre.choongsam.mapper.sjm.getFile",params);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+		
+		return file;
+	}
+
+	@Override
+	public List<File_Group> getFilesByGroup(int file_group) {
+		System.out.println("file 리스트 가져오기");
+		
+		List<File_Group> files = null;
+		
+		try {
+			files = session.selectList("com.postgre.choongsam.mapper.sjm.getFilesByGroup",file_group);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return files;
 	}
 
 }

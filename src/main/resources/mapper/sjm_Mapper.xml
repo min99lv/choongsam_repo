@@ -61,7 +61,7 @@
 
 	<insert id="FileUpload" parameterType="File_Group">
 		INSERT INTO
-		"FILEGROUP"
+		"FILE_GROUP"
 		("FILE_GROUP","FILE_SEQ","IDNTF_NO","FILE_NM","FILE_EXTN_NM","FILE_SZ","FILE_PATH_NM")
 		VALUES
 		(#{file_group},#{file_seq},#{idntf_no},#{file_nm},#{file_extn_nm},#{file_sz},#{file_path_nm})
@@ -76,9 +76,10 @@
 	<!-- 특정 file_group에 대한 최대 file_seq 가져오기 -->
 	<select id="getMaxFileSeq" parameterType="int"
 		resultType="java.lang.Integer">
-		SELECT COALESCE(MAX("FILE_SEQ"), 0) FROM "FILEGROUP" WHERE
-		"FILE_GROUP" =
-		#{file_group}
+		SELECT COALESCE(MAX("FILE_SEQ"), 0) 
+		FROM "FILE_GROUP" 
+		WHERE
+		"FILE_GROUP" = #{file_group}
 	</select>
 
 
@@ -95,7 +96,7 @@
 
 	</select>
 
-	<select id="rcvNote" parameterType="Map" resultType="Note">
+	<select id="getNotesReceived" parameterType="Map" resultType="Note">
 		SELECT
 		n."NOTE_SN",
 		n."BFR_NOTE_SN",
@@ -107,73 +108,67 @@
 		n."NOTE_CN",
 		n."SNDPTY_NOTE_YN",
 		n."RCVR_NOTE_YN",
-		u."USER_NAME" AS "sender_name", --
-		발신자의 이름
-		r."USER_NAME" AS "receiver_name" -- 수신자의 이름
+		u."USER_NAME" AS "sender_name",
+		r."USER_NAME" AS "receiver_name"
 		FROM
 		"NOTE" n
-		LEFT
-		JOIN
-		"USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ" -- 발신자 조인
 		LEFT JOIN
-		"USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ" -- 수신자 조인
-		WHERE
-		n."SNDPTY_SEQ" = #{user_seq};
-	</select>
-
-	<select id="getSentNotes" parameterType="Map" resultType="Note">
-		SELECT
-		n."NOTE_SN",
-		n."BFR_NOTE_SN",
-		n."SNDPTY_SEQ",
-		n."RCVR_SEQ",
-		n."DSPTCH_DT",
-		n."RCPTN_DT",
-		n."NOTE_TTL",
-		n."NOTE_CN",
-		n."SNDPTY_NOTE_YN",
-		n."RCVR_NOTE_YN",
-		u."USER_NAME" AS "sender_name", --
-		발신자의 이름
-		r."USER_NAME" AS "receiver_name" -- 수신자의 이름
-		FROM
-		"NOTE" n
-		LEFT
-		JOIN
-		"USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ" -- 발신자 조인
+		"USER_INFO" u ON
+		n."SNDPTY_SEQ" = u."USER_SEQ"
 		LEFT JOIN
-		"USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ" -- 수신자 조인
+		"USER_INFO" r ON n."RCVR_SEQ" =
+		r."USER_SEQ"
 		WHERE
 		n."RCVR_SEQ" = #{user_seq};
+	</select>
 
+	<select id="getNotesSend" parameterType="Map" resultType="Note">
+SELECT
+    n."NOTE_SN",
+    n."BFR_NOTE_SN",
+    n."SNDPTY_SEQ",
+    n."RCVR_SEQ",
+    n."DSPTCH_DT",
+    n."RCPTN_DT",
+    n."NOTE_TTL",
+    n."NOTE_CN",
+    n."SNDPTY_NOTE_YN",
+    n."RCVR_NOTE_YN",
+    u."USER_NAME" AS "sender_name",
+    r."USER_NAME" AS "receiver_name"
+FROM
+    "NOTE" n
+LEFT JOIN
+    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
+LEFT JOIN
+    "USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ"
+WHERE
+    n."SNDPTY_SEQ" = #{user_seq};
 
 	</select>
 
 	<select id="getNote" parameterType="Int" resultType="Note">
-
-		SELECT
-		n."NOTE_SN",
-		n."BFR_NOTE_SN",
-		n."SNDPTY_SEQ",
-		n."RCVR_SEQ",
-		n."DSPTCH_DT",
-		n."RCPTN_DT",
-		n."NOTE_TTL",
-		n."NOTE_CN",
-		n."SNDPTY_NOTE_YN",
-		n."RCVR_NOTE_YN",
-		u."USER_NAME" AS "sender_name", --
-		발신자의 이름
-		r."USER_NAME" AS "receiver_name" -- 수신자의 이름
-		FROM
-		"NOTE" n
-		LEFT
-		JOIN
-		"USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ" -- 발신자 조인
-		LEFT JOIN
-		"USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ" -- 수신자 조인
-		WHERE
-		n."NOTE_SN" = #{note_sn}
+SELECT
+    n."NOTE_SN",
+    n."BFR_NOTE_SN",
+    n."SNDPTY_SEQ",
+    n."RCVR_SEQ",
+    n."DSPTCH_DT",
+    n."RCPTN_DT",
+    n."NOTE_TTL",
+    n."NOTE_CN",
+    n."SNDPTY_NOTE_YN",
+    n."RCVR_NOTE_YN",
+    u."USER_NAME" AS "sender_name",
+    r."USER_NAME" AS "receiver_name"
+FROM
+    "NOTE" n
+LEFT JOIN
+    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
+LEFT JOIN
+    "USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ" 
+WHERE
+    n."NOTE_SN" = #{note_sn}
 	</select>
 
 	<insert id="createNote" parameterType="Note">
@@ -204,37 +199,80 @@
 		#{user_seq};
 
 	</select>
-	<select id="getSameLeceture" parameterType="int"
-		resultType="Lecture">
+	<select id="getSameLeceture" parameterType="String"
+		resultType="Note">
 		SELECT
-		u_student."USER_NAME" AS student_name,
-		u_student."USER_SEQ" AS student_seq,
-		NULL AS instructor_name,
-		NULL AS instructor_seq
+		u_student."USER_NAME" AS std_name,
+		u_student."USER_SEQ" AS std_seq,
+		NULL AS inst_name,
+		NULL AS
+		inst_seq
 		FROM
 		"LECTURE" l
 		JOIN
-		"COURSE_REGISTRATION" cr ON l."LCTR_ID" = cr."LCTR_ID"
+		"COURSE_REGISTRATION" cr ON
+		l."LCTR_ID" = cr."LCTR_ID"
 		JOIN
-		"USER_INFO" u_student ON cr."USER_SEQ" = u_student."USER_SEQ" -- 학생 정보
+		"USER_INFO" u_student ON cr."USER_SEQ" =
+		u_student."USER_SEQ" -- 학생 정보
 		WHERE
-		l."LCTR_ID" = '0001'
+		l."LCTR_ID" = #{lectureId}
 
 		UNION ALL
 
 		SELECT
-		NULL AS student_name,
-		NULL AS student_seq,
-		u_instructor."USER_NAME" AS instructor_name,
-		u_instructor."USER_SEQ" AS instructor_seq
+		NULL AS std_name,
+		NULL AS std_seq,
+		u_instructor."USER_NAME" AS
+		inst_name,
+		u_instructor."USER_SEQ" AS inst_seq
 		FROM
 		"LECTURE" l
 		JOIN
-		"USER_INFO" u_instructor ON l."USER_SEQ" = u_instructor."USER_SEQ" -- 강사 정보
+		"USER_INFO" u_instructor ON l."USER_SEQ" =
+		u_instructor."USER_SEQ" -- 강사 정보
 		WHERE
-		l."LCTR_ID" = #{lectureId};
+		l."LCTR_ID" = #{lectureId}
+	</select>
+	
+	
+	<insert id="postAsk" parameterType="Ask">
+
+	INSERT INTO "ASK"
+	("DSCSN_SN", "USER_SEQ",
+	"DSCSN_TTL", "DSCSN_CN", "DSCSN_REG_DT", "DSCSN_ANS_YN")
+	VALUES
+	(NEXTVAL('dscsn_sn_seq'),#{user_seq},#{dscsn_ttl},
+	#{dscsn_cn},LOCALTIMESTAMP(0),'N')
 
 
+
+	</insert>
+	
+	<select id="getAsksMy" resultType="Ask" parameterType="Map">
+		SELECT *
+		FROM "ASK"
+		WHERE "USER_SEQ" = #{user_seq}
+	
+	
+	</select>
+	
+	<select id="getAsk" resultType="Ask" parameterType="Int">
+	SELECT *
+	FROM "ASK"
+	WHERE "DSCSN_SN" = #{dscsn_sn}
+	</select>
+	
+	<select id="getFile" parameterType="Map" resultType="File_Group">
+	SELECT *
+	FROM "FILE_GROUP"
+	WHERE "FILE_GROUP"=#{file_group} AND "FILE_SEQ" =#{file_seq}
+	</select>
+	
+	<select id="getFilesByGroup" parameterType="Int" resultType="File_Group">
+	SELECT *
+	FROM "FILE_GROUP"
+	WHERE "FILE_GROUP"=#{file_group} 
 	</select>
 
 </mapper>

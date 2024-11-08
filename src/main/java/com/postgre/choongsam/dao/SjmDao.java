@@ -3,9 +3,7 @@ package com.postgre.choongsam.dao;
 import java.util.List;
 import java.util.Map;
 
-
-import org.springframework.web.multipart.MultipartFile;
-
+import com.postgre.choongsam.dto.Ask;
 import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture;
 
@@ -20,15 +18,24 @@ public interface SjmDao {
 
     Notice noticeDetail(int ntc_mttr_sn);
 
-	List<Note> noteList(Map<String, Object> params);
+	
+	int noticeCreate(Notice notice,List<File_Group> uploadFiles);
+	
+	// ##################
+	// ##################
+	// ##################
+	// ##################
+	// 쪽지 ------------------------------------------------------------------
+	// ##################
+	// ##################
+	// ##################
+	// ##################
+	
+	List<Note> getNotesReceived(Map<String, Object> params);
 
 	int countNote(Map<String, Object> params);
 
-	int noticeCreate(Notice notice,List<File_Group> uploadFiles);
-
-	int getUserSeq(Map<String, Object> params);
-
-	List<Note> getSentNotes(Map<String, Object> params);
+	List<Note> getNotesSend(Map<String, Object> params);
 
 	Note getNote(int note_sn);
 
@@ -36,7 +43,17 @@ public interface SjmDao {
 
 	List<Lecture> getMyLectures(int user_seq);
 
-	List<Lecture> getSameLeceture(int lectureId);
+	List<Note> getSameLeceture(String lectureId);
+
+	int postAsk(Ask ask);
+
+	List<Ask> getAsksMy(Map<String, Object> params);
+
+	Ask getAsk(int dscsn_sn);
+
+	File_Group getFile(int fileGroup, int fileSeq);
+
+	List<File_Group> getFilesByGroup(int file_group);
 
 
 }

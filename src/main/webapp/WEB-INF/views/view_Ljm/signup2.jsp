@@ -114,7 +114,7 @@
 	    color: #333;
 	}
 	
-	select, input[type="text"], input[type="password"], input[type="date"] {
+	select, input[type="text"], input[type="password"], input[type="date"], input[type="file"] {
 	    width: calc(100% - 20px);
 	    padding: 10px;
 	    border: 1px solid #ccc;
@@ -166,21 +166,21 @@
 	    height: 18px; /* 높이를 설정하여 줄 바꿈 방지 */
 	}
 	
-	#checkIdMsg, #checkPwMsg1, #checkPwMsg2 {
-		color: red; /* 텍스트 색상 */
-	    font-size: 12px; /* 폰트 크기 */
-	    margin-top: 5px; /* 입력 필드와의 간격 */
-	    height: 18px; /* 높이를 설정하여 줄 바꿈 방지 */
-	}
+	
 
 	/* 각 tr 사이에 여백 추가 */
 	table tr {
     	margin-bottom: 15px; /* tr 사이에 아래쪽 여백 추가 */
 	}
 
-	
+	#checkIdMsg, #checkPwMsg1, #checkPwMsg2 {
+		color: red; /* 텍스트 색상 */
+	    font-size: 12px; /* 폰트 크기 */
+	    margin-top: 5px; /* 입력 필드와의 간격 */
+	    height: 18px; /* 높이를 설정하여 줄 바꿈 방지 */
+	}
      
-     #btnNext {
+    #btnNext {
 		width: 250px;
         height: 36px;
         padding: 5px 10px 5px 10px;
@@ -211,47 +211,72 @@
     margin-bottom: 10px; /* 아래쪽 마진을 줄입니다 */
     margin-top: 20px; /* 위쪽 마진을 추가하여 공간을 조절합니다 */
 }
+ 
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
+$(document).ready(function() {
+    let isIdConfirmed = false; // 아이디 중복 확인 여부
 
-let isIdConfirmed = false; // 아이디 중복 확인 여부
+    //아이디 중복 체크
+    function confirmId() {
+        var userId = $("#user_id").val();
 
-//아이디 중복 체크
-function confirmId() {
-    var userId = $("#user_id").val();
+        // 아이디 유효성 검사
+        var regex = /^[a-zA-Z0-9]{4,12}$/;  // 4~12자의 영문 또는 숫자만 허용
+        if (!regex.test(userId)) {
+            alert("아이디는 4~12자의 영문 또는 숫자만 가능합니다.\n특수문자나 한글은 포함될 수 없습니다.");
+            $("#user_id").val('');  // 아이디 입력 필드 초기화
+            return;  // 유효하지 않으면 중복 확인 로직을 실행하지 않음
+        }
 
-    // 아이디 유효성 검사
-    var regex = /^[a-zA-Z0-9]{4,12}$/;  // 4~12자의 영문 또는 숫자만 허용
-    if (!regex.test(userId)) {
-        alert("아이디는 4~12자의 영문 또는 숫자만 가능합니다.\n특수문자나 한글은 포함될 수 없습니다.");
-        $("#user_id").val('');  // 아이디 입력 필드 초기화
-        return;  // 유효하지 않으면 중복 확인 로직을 실행하지 않음
+        $.ajax({
+            url: '/view_Ljm/confirmId', // 경로 확인
+            type: 'GET',
+            dataType: 'json',
+            data: { 'user_id': userId },
+            success: function (data) {
+                var checkIdMsg = $("#checkIdMsg");
+                if (data === 1) {
+                    // 중복된 아이디
+                    checkIdMsg.text("이미 존재하는 아이디입니다").css("color", "red");
+                    isIdConfirmed = false;
+                } else {
+                    // 사용 가능한 아이디
+                    checkIdMsg.text("사용 가능한 아이디입니다").css("color", "green");
+                    isIdConfirmed = true;
+                }
+            },
+            error: function () {
+                alert("아이디 중복 확인 중 오류가 발생했습니다.");
+            }
+        });
     }
 
-    $.ajax({
-        url: '/view_Ljm/confirmId', // 경로 확인
-        type: 'GET',
-        dataType: 'json',
-        data: { 'user_id': userId },
-        success: function (data) {
-            var checkIdMsg = $("#checkIdMsg");
-            if (data === 1) {
-                // 중복된 아이디
-                checkIdMsg.text("이미 존재하는 아이디입니다").css("color", "red");
-                isIdConfirmed = false;
-            } else {
-                // 사용 가능한 아이디
-                checkIdMsg.text("사용 가능한 아이디입니다").css("color", "green");
-                isIdConfirmed = true;
-            }
-        },
-        error: function () {
-            alert("아이디 중복 확인 중 오류가 발생했습니다.");
+    // 중복 확인 버튼 클릭 시 호출
+    $("#btnCheck").click(function() {
+        confirmId();
+    });
+
+    // 회원가입 버튼 클릭 시 중복 확인 여부 체크
+    $("#btnNext").click(function(event) {
+        // 아이디 중복 확인이 안 된 경우
+        if (!isIdConfirmed) {
+            alert("아이디 중복 확인을 해주세요.");
+            event.preventDefault();  // 폼 제출을 막음
         }
     });
-}
+
+    // 폼 제출 이벤트 처리 (다른 방법으로도 제출될 수 있으므로)
+    $("#signupForm").submit(function(event) {
+        // 아이디 중복 확인이 안 된 경우
+        if (!isIdConfirmed) {
+            alert("아이디 중복 확인을 해주세요.");
+            event.preventDefault();  // 폼 제출을 막음
+        }
+    });
+});
 
 //비밀번호 유효성 검사 및 일치 여부 확인
 function confirmPw() {
@@ -311,7 +336,7 @@ function findAddr() {
         </header>
         
         <main>
-          <form action="signup" method="POST">
+          <form action="signup" method="POST" id="signupForm" enctype="multipart/form-data">
 	        <div class="main_container">
 			<h2 style="color: #00664F ">회원가입</h2>
 			<hr style="width: 400px; margin: 0 auto;">
@@ -412,6 +437,16 @@ function findAddr() {
 	           					<input name="phone_num" type="text" placeholder="000-0000-0000" required="required">
 					           	<div class="message"></div>			
 	           				</td>
+	           			</tr>
+	           			
+	           			<tr>
+	           				<td>프로필 사진</td>
+	                        <td>
+	                            <input type="file" id="profileImage" name="profileImage" accept="image/*" onchange="previewImage(event)">
+	                        </td>
+	                        <td>
+	                            <img id="preview" src="#" alt="이미지를 선택해주세요" style="width: 100px; height: 100px; display:none;">
+	                        </td>	  	           				
 	           			</tr>
 	           				           		           			
 	           		</table>

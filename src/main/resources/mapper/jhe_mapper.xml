@@ -3,32 +3,39 @@
 
 <mapper namespace = "com.postgre.choongsam.dto.jheMapper">
 	<select id="getLectureHomeworkList" resultType="Homework">
-		SELECT		u."USER_NAME", u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",
-					h."ASMT_NO", h."ASMT_NM", h."ASMT_CN",
-					h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD", h."FILE_GROUP"
+		SELECT		u."USER_NAME", u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME"
 		FROM		"USER_INFO" AS u
 		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
-		JOIN		"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
+	<select id="profLectureInfo" resultType="Lecture">
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF", u."USER_SEQ", u."USER_NAME", l."LCTR_CNTSCHD",
+					(SELECT COUNT(*)
+					 FROM	"COURSE_REGISTRATION" AS c
+					 WHERE	c."LCTR_ID" = l."LCTR_ID" AND c."REG_STATE" = '2003') AS reg_count
+		FROM		"LECTURE" AS l
+		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
+		WHERE		l."LCTR_ID" = #{lctr_id}
+	</select>
 	<select id="getProfHomeworkList" resultType="Homework">
-		SELECT		u."USER_NAME", u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",
+		SELECT		u."USER_NAME" AS prof_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",
 					h."ASMT_NO", h."ASMT_NM", h."ASMT_CN",
 					h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD", h."FILE_GROUP"
 		FROM		"USER_INFO" AS u
 		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
 		JOIN		"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
-		WHERE		l."LCTR_ID" = #{LCTR_ID}
+		WHERE		l."LCTR_ID" = #{lctr_id}
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
 	<select id="findByLCTR" resultType="Lecture">
-		SELECT		"LCTR_ID", "LCTR_NAME", "USER_SEQ"
-		FROM		"LECTURE"
-		WHERE		"LCTR_ID" = #{LCTR_ID}
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF", u."USER_SEQ", u."USER_NAME"
+		FROM		"LECTURE" AS l
+		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
+		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
 	<insert id="insertHomework" parameterType="Homework">
 		INSERT INTO "HOMEWORK" ("ASMT_NO", "LCTR_ID", "ASMT_NM", "ASMT_CN", "SBMSN_BGNG_YMD", "SBMSN_END_YMD", "FILE_GROUP")
-		VALUES (NEXTVAL('asmt_no_seq'), #{LCTR_ID}, #{ASMT_NM}, #{ASMT_CN}, #{SBMSN_BGNG_YMD}, #{SBMSN_END_YMD}, null)
+		VALUES (NEXTVAL('asmt_no_seq'), #{lctr_id}, #{asmt_nm}, #{asmt_cn}, #{sbmsn_bgng_ymd}, #{sbmsn_end_ymd}, #{file_group})
 	</insert>
 	<select id="notifyStudents" parameterType="String" resultType="Homework">
 		SELECT	u."USER_SEQ", h."ASMT_NO", h."LCTR_ID"
@@ -53,29 +60,29 @@
 		FROM	"HOMEWORK" AS h
 		JOIN	"LECTURE" AS l ON l."LCTR_ID" = h."LCTR_ID"
 		JOIN	"USER_INFO" AS u ON u."USER_SEQ" = l."USER_SEQ"
-		WHERE	"ASMT_NO" = #{ASMT_NO}
+		WHERE	"ASMT_NO" = #{asmt_no}
 	</select>
 	<update id="updateHomework" parameterType="Homework">
 		UPDATE	"HOMEWORK"
-		SET		"ASMT_NM" = #{ASMT_NM}, "ASMT_CN" = #{ASMT_CN},
-				"SBMSN_BGNG_YMD" = #{SBMSN_BGNG_YMD}, "SBMSN_END_YMD" = #{SBMSN_END_YMD}
-		WHERE	"ASMT_NO" = #{ASMT_NO}
+		SET		"ASMT_NM" = #{asmt_nm}, "ASMT_CN" = #{asmt_cn},
+				"SBMSN_BGNG_YMD" = #{sbmsn_bgng_ymd}, "SBMSN_END_YMD" = #{sbmsn_end_ymd}, "FILE_GROUP" = #{file_group}
+		WHERE	"ASMT_NO" = #{asmt_no}
 	</update>
 	<delete id="delHomeworkSubmission" parameterType="int">
 		DELETE	FROM  "HOMEWORK_SUBMISSION"  WHERE	 "ASMT_NO" = #{asmt_no}
 	</delete>
 	<delete id="delHomework">
-		DELETE	FROM  "HOMEWORK"  WHERE	 "ASMT_NO" = #{ASMT_NO}
+		DELETE	FROM  "HOMEWORK"  WHERE	 "ASMT_NO" = #{asmt_no}
 	</delete>
 	<select id="getStudHomeworkList" resultType="Homework">
-		SELECT		u."USER_NAME" AS profName, l."LCTR_ID", l."LCTR_NAME", hs."SBMSN_YN",
+		SELECT		u."USER_NAME" AS prof_name, l."LCTR_ID", l."LCTR_NAME", hs."SBMSN_YN",
 					h."ASMT_NO", h."ASMT_NM", h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD"
 		FROM		"COURSE_REGISTRATION" AS c
 		JOIN		"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"
 		JOIN		"USER_INFO" u ON l."USER_SEQ" = u."USER_SEQ"
 		JOIN		"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
 		JOIN		"HOMEWORK_SUBMISSION" AS hs ON h."ASMT_NO" = hs."ASMT_NO"
-		WHERE		hs."USER_SEQ" = #{USER_SEQ}
+		WHERE		hs."USER_SEQ" = #{user_seq}
 		AND			TO_DATE(h."SBMSN_END_YMD", 'YYYY-MM-DD') >= CURRENT_DATE
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
@@ -88,12 +95,96 @@
 	<select id="getTotStudInCourse" resultType="int">
 		SELECT	COUNT(*)
 		FROM	"COURSE_REGISTRATION"
-		WHERE	"LCTR_ID" = #{LCTR_ID}
+		WHERE	"LCTR_ID" = #{lctr_ID}
 	</select>
 	<select id="getSubmittedStuds" resultType="int">
 		SELECT	COUNT(*)
 		FROM	"HOMEWORK_SUBMISSION"
-		WHERE	"ASMT_NO" = #{ASMT_NO}
+		WHERE	"ASMT_NO" = #{asmt_no}
 		AND		"SBMSN_YN" = 'Y'
 	</select>
+	<insert id="insertFile" parameterType="File_Group">
+		INSERT INTO FILE ("FILE_NM", "FILE_EXTN_NM", "FILE_SZ", "FILE_PATH_NM")
+		VALUES	(#{file_nm}, #{file_extn_nm}, #{file_sz}, #{file_path_nm})
+	</insert>
+	<select id="getStudSubmitList" resultType="Homework">
+		SELECT		l."LCTR_ID", l."LCTR_NAME", u."USER_NAME" AS profName,
+					ui."USER_NAME" AS stud_name, h."ASMT_NM", h."SBMSN_END_YMD",
+					CASE WHEN hs."SBMSN_YN" = 'Y' THEN '제출'
+						 ELSE '미제출'
+					END	 AS	  SBMSN_YN
+		FROM		"LECTURE" AS l
+		JOIN		"COURSE_REGISTRATION" AS c ON l."LCTR_ID" = c."LCTR_ID"
+		JOIN		"USER_INFO" AS ui ON c."USER_SEQ" = ui."USER_SEQ"
+		JOIN		"HOMEWORK" AS h ON l."LCTR_ID" = h."LCTR_ID"
+		LEFT JOIN	"HOMEWORK_SUBMISSION" AS hs ON ui."USER_SEQ" = hs."USER_SEQ"
+		AND			h."ASMT_NO" = hs."ASMT_NO"
+		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
+		WHERE		l."LCTR_ID" = #{LCTR_ID}
+		AND			l."USER_SEQ" = (SELECT	"USER_SEQ"
+									FROM	"LECTURE"
+									WHERE	"LCTR_ID" = #{LCTR_ID})
+		AND			c."REG_STATE" = '2003'
+		ORDER BY	h."SBMSN_END_YMD" ASC, h."ASMT_NM" ASC, ui."USER_NAME" ASC
+	</select>
+	<select id="getHomeworkStatus" resultType="HOMEWORK_SUBMISSION">
+		SELECT	hs."USER_SEQ", hs."ASMT_NO", hs."SBMSN_YN"
+		FROM	"HOMEWORK_SUBMISSION" AS hs
+		JOIN	"HOMEWORK" h ON hs."ASMT_NO" = h."ASMT_NO"
+		WHERE	hs."USER_SEQ" = #{USER_SEQ}
+		AND		h."LCTR_ID" = #{LCTR_ID}
+	</select>
+	<select id="profAttMain" resultType="Attendance_Check">
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."LCTR_CNTSCHD", l."ONOFF", a."LCTR_NO",
+					COUNT(DISTINCT a."USER_SEQ") AS reg_count,
+					SUM(CASE WHEN a."ATT_STATUS" = 5001 THEN 1 ELSE 0 END) AS present_count,
+					SUM(CASE WHEN a."ATT_STATUS" = 5002 THEN 1 ELSE 0 END) AS late_count,
+					SUM(CASE WHEN a."ATT_STATUS" = 5003 THEN 1 ELSE 0 END) AS absent_count,
+					ROUND(
+						SUM(CASE WHEN a."ATT_STATUS" = 5001 OR a."ATT_STATUS" = 5002 
+							THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT a."USER_SEQ")
+						) AS attendance_rate
+		FROM		"LECTURE" AS l
+		LEFT JOIN	"ATTENDANCE_CHECK" AS a ON l."LCTR_ID" = a."LCTR_ID"
+		WHERE		a."LCTR_ID" = #{lctr_id}
+		GROUP BY	l."LCTR_ID", l."LCTR_NAME", l."LCTR_CNTSCHD", l."ONOFF", a."LCTR_NO"
+	</select>
+	<select id="getStudAtt" resultType="Attendance_Check">
+		SELECT		u."USER_SEQ", u."USER_NAME", a."ATT_STATUS", l."ONOFF", c."LCTR_ID"
+		FROM		"COURSE_REGISTRATION" AS c
+		JOIN		"USER_INFO" AS u ON c."USER_SEQ" = u."USER_SEQ"
+		LEFT JOIN	"ATTENDANCE_CHECK" AS a ON c."USER_SEQ" = a."USER_SEQ"
+		AND			c."LCTR_ID" = a."LCTR_ID"
+		LEFT JOIN	"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"
+		WHERE		c."LCTR_ID" = #{LCTR_ID}
+		AND			a."LCTR_NO" = #{LCTR_NO}
+		AND			c."REG_STATE" = '2003'
+	</select>
+	<select id="getOnlineStudAtt" resultType="Attendance_Check">
+		SELECT	a."USER_SEQ", a."LCTR_ID", a."LCTR_NO", a."ATT_STATUS", c."CONTS_PRGRT"
+		FROM	"ATTENDANCE_CHECK" AS a
+		JOIN	"CLASS_SCHEDULE" AS c ON a."LCTR_ID" = c."LCTR_ID"
+		AND		a."LCTR_NO" = c."LCTR_NO"
+		WHERE	a."LCTR_ID" = #{lctr_id}
+	</select>
+	<update id="updateStudAtt" parameterType="Attendance_Check">
+		UPDATE	"ATTENDANCE_CHECK"
+		SET		"ATT_STATUS" = #{att_status}
+		WHERE	"LCTR_NO" = #{lctr_no}
+		AND		"LCTR_ID" = #{lctr_id}
+		AND		"USER_SEQ" = #{user_seq}
+	</update>
+	<update id="upStudOnlineAtt" parameterType="Attendance_Check">
+		UPDATE	"ATTENDANCE_CHECK" AS a
+		SET		"ATT_STATUS" =
+				CASE
+					WHEN c."CONTS_PRGRT" = 100 THEN 5001
+					WHEN c."CONTS_PRGRT" &lt; 100 THEN 5003
+					ELSE a."ATT_STATUS"
+				END
+		FROM	"CLASS_SCHEDULE" AS c
+		WHERE	a."LCTR_NO" = c."LCTR_NO"
+		AND		a."LCTR_ID" = c."LCTR_ID"
+		AND		a."USER_SEQ" = c."USER_SEQ"
+	</update>
 </mapper>
