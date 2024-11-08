@@ -60,4 +60,8 @@ public interface SjmService {
 
 	List<File_Group> getFilesByGroup(int file_group);
 
+	int getNoteSendTotal(String keyword);
+
+	int getNoteRcvrTotal(String keyword);
+
 }
