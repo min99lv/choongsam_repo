@@ -388,6 +388,9 @@ function sendMessage() {
 		<%@ include file="../header.jsp"%>
 	</header>
 
+<%@ include file="../view_Hjh/headerStd.jsp"%>
+
+
 	<div class="container">
 		<div class="contents">
 			<h1>쪽지 작성</h1>
