@@ -55,9 +55,13 @@ public interface SjmDao {
 
 	List<File_Group> getFilesByGroup(int file_group);
 
-	int getNoteSendTotal(String keyword);
+	int getNoteSendTotal(Map<String, Object> params);
 
-	int getNoteRcvrTotal(String keyword);
+	int getNoteRcvrTotal(Map<String, Object> params);
+
+	int updateReceiveDate(int note_sn);
+
+	int replyUpdateAsks(Ask ask);
 
 
 }

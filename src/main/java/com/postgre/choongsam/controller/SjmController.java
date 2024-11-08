@@ -68,7 +68,7 @@ public class SjmController {
 
 		List<Notice> noticeList = ss.selectNoticeList(params);
 
-		model.addAttribute("keyword",keyword);
+		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", page);
 		model.addAttribute("total", total);
 		model.addAttribute("noticeList", noticeList);
@@ -130,59 +130,56 @@ public class SjmController {
 	}
 
 	@GetMapping(value = "/api/files/{fileGroup}/{fileSeq}")
-	public ResponseEntity<Resource> downloadFile(
-	        @PathVariable("fileGroup") int fileGroup,
-	        @PathVariable("fileSeq") int fileSeq,
-	        HttpServletRequest request) {  // HttpServletRequest 추가
-	    System.out.println("다운로드 시작");
+	public ResponseEntity<Resource> downloadFile(@PathVariable("fileGroup") int fileGroup,
+			@PathVariable("fileSeq") int fileSeq, HttpServletRequest request) { // HttpServletRequest 추가
+		System.out.println("다운로드 시작");
 
-	    try {
-	        // 파일 정보를 조회
-	        File_Group file = ss.getFile(fileGroup, fileSeq);
+		try {
+			// 파일 정보를 조회
+			File_Group file = ss.getFile(fileGroup, fileSeq);
 
-	        // 디버깅: file.getFile_path_nm()과 file.getFile_nm() 출력
-	        System.out.println("File path: " + file.getFile_path_nm());
-	        System.out.println("File name: " + file.getFile_nm());
+			// 디버깅: file.getFile_path_nm()과 file.getFile_nm() 출력
+			System.out.println("File path: " + file.getFile_path_nm());
+			System.out.println("File name: " + file.getFile_nm());
 
-	        // 파일 경로 디코딩 및 설정
-	        String filePathStr = URLDecoder.decode(file.getFile_path_nm(), "UTF-8");
+			// 파일 경로 디코딩 및 설정
+			String filePathStr = URLDecoder.decode(file.getFile_path_nm(), "UTF-8");
 
-	        // 파일명과 확장자 결합
-	        String fullFileName = file.getFile_nm() + "." + file.getFile_extn_nm(); // 파일명과 확장자를 결합
+			// 파일명과 확장자 결합
+			String fullFileName = file.getFile_nm() + "." + file.getFile_extn_nm(); // 파일명과 확장자를 결합
 
-	        // 경로를 Path 객체로 변환 (경로 구분자 처리)
-	        Path filePath = Paths.get(request.getSession().getServletContext().getRealPath(filePathStr)).normalize();
+			// 경로를 Path 객체로 변환 (경로 구분자 처리)
+			Path filePath = Paths.get(request.getSession().getServletContext().getRealPath(filePathStr)).normalize();
 
-	        // 디버깅: 최종 경로 출력
-	        System.out.println("File path (final): " + filePath);
+			// 디버깅: 최종 경로 출력
+			System.out.println("File path (final): " + filePath);
 
-	        // 파일이 존재하는지 확인
-	        if (!Files.exists(filePath)) {
-	            System.out.println("파일을 찾을 수 없습니다: " + filePath); // 디버깅 메시지 추가
-	            return ResponseEntity.notFound().build();
-	        }
+			// 파일이 존재하는지 확인
+			if (!Files.exists(filePath)) {
+				System.out.println("파일을 찾을 수 없습니다: " + filePath); // 디버깅 메시지 추가
+				return ResponseEntity.notFound().build();
+			}
 
-	        // 파일 리소스 생성
-	        Resource resource = new UrlResource(filePath.toUri());
+			// 파일 리소스 생성
+			Resource resource = new UrlResource(filePath.toUri());
 
-	        // 파일명을 UTF-8로 인코딩하여 Content-Disposition 헤더에 사용
-	        String encodedFileName = URLEncoder.encode(fullFileName, "UTF-8").replaceAll("\\+", "%20") // + 기호를 공백으로 변경
-	                .replaceAll("%28", "(").replaceAll("%29", ")");
+			// 파일명을 UTF-8로 인코딩하여 Content-Disposition 헤더에 사용
+			String encodedFileName = URLEncoder.encode(fullFileName, "UTF-8").replaceAll("\\+", "%20") // + 기호를 공백으로 변경
+					.replaceAll("%28", "(").replaceAll("%29", ")");
 
-	        // 디버깅: 리소스 생성 확인
-	        System.out.println("Resource created: " + resource.getFilename());
+			// 디버깅: 리소스 생성 확인
+			System.out.println("Resource created: " + resource.getFilename());
 
-	        // 파일 다운로드를 위한 HTTP 응답 생성
-	        return ResponseEntity.ok()
-	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFileName)
-	                .body(resource);
+			// 파일 다운로드를 위한 HTTP 응답 생성
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFileName)
+					.body(resource);
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return ResponseEntity.badRequest().build();
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
 	}
-
 
 	// ##################
 	// ##################
@@ -215,20 +212,23 @@ public class SjmController {
 	// NOTE - 받은 쪽지 목록
 	@GetMapping(value = "/api/notes/received")
 	@ResponseBody
-	public List<Note> getNotesReceived(Model model, @RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
-			@RequestParam(value = "keyword", required = false) String keyword) {
+	public List<Note> getNotesReceived(Model model,
+			@RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
+			@RequestParam(value = "keyword", required = false) String keyword, HttpSession session) {
 
 		System.out.println("SjmController.rcvrnoteList() ");
 		// System.out.println("text is of type: " +
 		// session.getAttribute("user_seq").getClass().getSimpleName());
 
-		int total = ss.getNoteRcvrTotal(keyword);
-		
 		Map<String, Object> params = new HashMap<>();
-		params.put("user_seq", 10001);
+		params.put("user_seq", session.getAttribute("user_seq"));
+		
+		
+		int total = ss.getNoteRcvrTotal(params);
+
 		Paging page = new Paging(total, currentPage);
 		// Map 객체 생성하여 파라미터 설정
-	
+
 		params.put("start", page.getStart());
 		params.put("rowPage", page.getRowPage());
 		params.put("keyword", keyword);
@@ -240,29 +240,47 @@ public class SjmController {
 	// NOTE - 보낸 쪽지 목록
 	@GetMapping(value = "/api/notes/sent")
 	@ResponseBody
-	public List<Note> getNotesSend(Model model, @RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
-			@RequestParam(value = "keyword", required = false) String keyword) {
-
-		int total = ss.getNoteSendTotal(keyword);
+	public Map<String, Object> getNotesSend(Model model,
+			@RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
+			@RequestParam(value = "keyword", required = false) String keyword, HttpSession session) {
 		
 		Map<String, Object> params = new HashMap<>();
+		params.put("user_seq", session.getAttribute("user_seq"));
+		
+		int total = ss.getNoteSendTotal(params);
 
-		params.put("user_seq", 10001);
+
 		Paging page = new Paging(total, currentPage);
 		// Map 객체 생성하여 파라미터 설정
-	
+
 		params.put("start", page.getStart());
 		params.put("rowPage", page.getRowPage());
 		params.put("keyword", keyword);
 		List<Note> noteList = ss.getNotesSend(params);
 
-		return noteList;
+		Map<String, Object> response = new HashMap<>();
+		response.put("total", total); // 전체 데이터의 수
+		response.put("notes", noteList); // 쪽지 목록
+		response.put("paging", page); // 페이징 정보 (현재 페이지, 전체 페이지 등)
+
+		return response;
 	}
 
 	// 쪽지 상세 화면
 	@GetMapping(value = "/note/{note_sn}")
-	public String noteDetailForm(@PathVariable("note_sn") int note_sn, Model model) {
+	public String noteDetailForm(@PathVariable("note_sn") int note_sn, Model model, HttpSession session) {
 		System.out.println("쪽지 디테일 화면");
+		
+		Note note = ss.getNote(note_sn);
+		
+		int userSeq = (int) session.getAttribute("user_seq");
+		
+		// 수신자일 경우 수신 일시 업데이트
+	    if (note.getRcvr_seq() == userSeq && note.getRcptn_dt() == null) {
+	        int result = ss.updateReceiveDate(note_sn);  // 쪽지 수신 일시 업데이트
+	    }
+		
+		
 		model.addAttribute("note_sn", note_sn);
 		return "view_Sjm/noteDetail"; // view_Sjm/noticeDetail.jsp로 이동
 	}
@@ -279,102 +297,102 @@ public class SjmController {
 
 	// 쪽지 전송 화면
 	@GetMapping(value = "/notes/new")
-	public String CreateNoteForm(@RequestParam(value = "note_sn", required = false) Integer note_sn, 
-	        @RequestParam(value = "sndpty_seq", required = false) Integer sndpty_seq, @RequestParam(value = "sender_name", required = false) String sender_name, 
-	        Model model) {
-	    
-	    System.out.println("쪽지전송화면");
+	public String CreateNoteForm(@RequestParam(value = "note_sn", required = false) Integer note_sn,
+			@RequestParam(value = "sndpty_seq", required = false) Integer sndpty_seq,
+			@RequestParam(value = "sender_name", required = false) String sender_name, Model model) {
 
-	    // note_sn이 존재하면 모델에 추가
-	    if (note_sn != null && sndpty_seq != null && sender_name != null ) {
-	        model.addAttribute("bfr_note_sn", note_sn);
-	        model.addAttribute("rcvr_seq", sndpty_seq);
-	        model.addAttribute("receiver_name", sender_name);
-	    }
+		System.out.println("쪽지전송화면");
 
-	   
+		// note_sn이 존재하면 모델에 추가
+		if (note_sn != null && sndpty_seq != null && sender_name != null) {
+			model.addAttribute("bfr_note_sn", note_sn);
+			model.addAttribute("rcvr_seq", sndpty_seq);
+			model.addAttribute("receiver_name", sender_name);
+		}
 
-	    return "view_Sjm/noteCreate";
+		return "view_Sjm/noteCreate";
 	}
 
 	@RequestMapping(value = "/api/notes", method = RequestMethod.POST)
 	@ResponseBody
 	public int createNote(@RequestBody Map<String, Object> noteData, HttpSession session) {
-	    System.out.println(noteData);
+		System.out.println(noteData);
 
-	    // 수신자 배열 받아오기
-	    Object rcvrSeqObj = noteData.get("rcvr_seq");
+		// 수신자 배열 받아오기
+		Object rcvrSeqObj = noteData.get("rcvr_seq");
 
-	    List<Integer> receiverSeqs = null;
+		List<Integer> receiverSeqs = null;
 
-	    // rcvr_seq가 배열 형태로 넘어온다면 List<Integer>로 변환
-	    if (rcvrSeqObj instanceof List) {
-	        receiverSeqs = (List<Integer>) rcvrSeqObj; // rcvr_seq를 List<Integer>로 변환
-	    } else if (rcvrSeqObj instanceof String) {
-	        // 만약 String 형태로 넘어온다면, ','로 구분된 숫자들이 있을 수 있음
-	        String[] seqArray = ((String) rcvrSeqObj).split(",");
-	        receiverSeqs = new ArrayList<>();
-	        for (String seq : seqArray) {
-	            try {
-	                receiverSeqs.add(Integer.parseInt(seq.trim())); // 각 값을 Integer로 변환 후 추가
-	            } catch (NumberFormatException e) {
-	                // 만약 변환 실패하면 예외 처리
-	                continue;
-	            }
-	        }
-	    }
+		// rcvr_seq가 배열 형태로 넘어온다면 List<Integer>로 변환
+		if (rcvrSeqObj instanceof List) {
+			receiverSeqs = (List<Integer>) rcvrSeqObj; // rcvr_seq를 List<Integer>로 변환
+		} else if (rcvrSeqObj instanceof String) {
+			// 만약 String 형태로 넘어온다면, ','로 구분된 숫자들이 있을 수 있음
+			String[] seqArray = ((String) rcvrSeqObj).split(",");
+			receiverSeqs = new ArrayList<>();
+			for (String seq : seqArray) {
+				try {
+					receiverSeqs.add(Integer.parseInt(seq.trim())); // 각 값을 Integer로 변환 후 추가
+				} catch (NumberFormatException e) {
+					// 만약 변환 실패하면 예외 처리
+					continue;
+				}
+			}
+		}
 
-	    // 수신자가 비어있다면 실패 처리
-	    if (receiverSeqs == null || receiverSeqs.isEmpty()) {
-	        return 0; 
-	    }
+		// 수신자가 비어있다면 실패 처리
+		if (receiverSeqs == null || receiverSeqs.isEmpty()) {
+			return 0;
+		}
 
-	    Note note = new Note();
-	    note.setNote_ttl((String) noteData.get("note_ttl"));
-	    note.setNote_cn((String) noteData.get("note_cn"));
-	    note.setSndpty_note_yn((String) noteData.get("sndpty_note_yn"));
-	    note.setRcvr_note_yn((String) noteData.get("rcvr_note_yn"));
+		Note note = new Note();
+		note.setNote_ttl((String) noteData.get("note_ttl"));
+		note.setNote_cn((String) noteData.get("note_cn"));
+		note.setSndpty_note_yn((String) noteData.get("sndpty_note_yn"));
+		note.setRcvr_note_yn((String) noteData.get("rcvr_note_yn"));
 
-	    // bfr_note_sn이 null일 수 있으므로 기본값 0 처리
-	    Object bfrNoteSnObj = noteData.get("bfr_note_sn");
-	    int bfrNoteSn = (bfrNoteSnObj != null) ? Integer.parseInt(bfrNoteSnObj.toString()) : 0; // Integer로 안전하게 변환
-	    note.setBfr_note_sn(bfrNoteSn);
+		// bfr_note_sn이 null일 수 있으므로 기본값 0 처리
+		Object bfrNoteSnObj = noteData.get("bfr_note_sn");
+		int bfrNoteSn = (bfrNoteSnObj != null) ? Integer.parseInt(bfrNoteSnObj.toString()) : 0; // Integer로 안전하게 변환
+		note.setBfr_note_sn(bfrNoteSn);
 
-	    // sndpty_seq는 String에서 Integer로 변환
-	    try {
-	        Object sndptySeqObj = noteData.get("sndpty_seq");
-	        if (sndptySeqObj != null) {
-	            note.setSndpty_seq(Integer.parseInt(sndptySeqObj.toString())); // String -> Integer 변환
-	        } else {
-	            note.setSndpty_seq(0); // 기본값 0 설정
-	        }
-	    } catch (NumberFormatException e) {
-	        // 변환 실패 시 기본값 0 설정
-	        note.setSndpty_seq(0);
-	    }
+		// sndpty_seq는 String에서 Integer로 변환
+		try {
+			Object sndptySeqObj = noteData.get("sndpty_seq");
+			if (sndptySeqObj != null) {
+				note.setSndpty_seq(Integer.parseInt(sndptySeqObj.toString())); // String -> Integer 변환
+			} else {
+				note.setSndpty_seq(0); // 기본값 0 설정
+			}
+		} catch (NumberFormatException e) {
+			// 변환 실패 시 기본값 0 설정
+			note.setSndpty_seq(0);
+		}
 
-	    // 각 수신자에 대해 쪽지 삽입
-	    for (int receiverSeq : receiverSeqs) {
-	        note.setRcvr_seq(receiverSeq);
-	        // 직접 쪽지 생성하는 로직
-	        int result = ss.createNote(note);
-	        if (result == 0) {
-	            return 0; // 실패 시 종료
-	        }
-	    }
+		// 각 수신자에 대해 쪽지 삽입
+		for (int receiverSeq : receiverSeqs) {
+			note.setRcvr_seq(receiverSeq);
+			// 직접 쪽지 생성하는 로직
+			int result = ss.createNote(note);
+			if (result == 0) {
+				return 0; // 실패 시 종료
+			}
+		}
 
-	    return 1; // 성공 시
+		return 1; // 성공 시
 	}
 
 	// NOTE - 내가 듣는 강의 목록
 	@GetMapping(value = "/api/lectures/my")
 	@ResponseBody
-	public ResponseEntity<?> getMyLectures(@RequestParam(value = "user_seq", required = false) Integer userSeq) {
+	public ResponseEntity<?> getMyLectures(@RequestParam(value = "user_seq", required = false) Integer userSeq ) {
 		if (userSeq == null) {
 			return ResponseEntity.badRequest().body("user_seq is required");
 		}
 		System.out.println("내가 듣는 강의 목록 불러오기 ");
-		System.out.println("SjmController.getMyLectures() user_seq");
+		
+	
+		
 		List<Lecture> lectures = ss.getMyLectures(userSeq);
 		return ResponseEntity.ok(lectures);
 	}
@@ -418,7 +436,7 @@ public class SjmController {
 		return "view_Sjm/askMyList";
 	}
 
-	//
+	// 문의사항 리스트 
 	@GetMapping(value = "/api/asks/my")
 	@ResponseBody
 	public List<Ask> getAsksMy(HttpSession session) {
@@ -451,5 +469,13 @@ public class SjmController {
 		System.out.println("ask-->" + ask);
 		return ask;
 	}
-
+	
+	// NOTE - 문의사항 답변 작성 
+	@PostMapping(value = "/api/asks/reply")
+	public ResponseEntity<Integer> replyUpdateAsks(Ask ask, HttpSession session) {
+		System.out.println("답변작성 시작 -->" + ask);
+		int result = ss.replyUpdateAsks(ask);
+	
+		return ResponseEntity.ok(result);
+	}
 }

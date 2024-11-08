@@ -97,7 +97,7 @@
 			</c:choose>
 			
             <a href="/api/notice">공지사항</a>
-            <a href="/video-details?videoId=H8BqV91Mhe0&user_seq=user48">문의사항</a>
+            <a href="/asks/new">문의사항</a>
         </div>
         
             <!-- 로그인 여부에 따라 버튼 표시 -->
