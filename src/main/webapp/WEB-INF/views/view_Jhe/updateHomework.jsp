@@ -12,37 +12,39 @@
 </head>
 <body>
 	<h2>진행중인 강의 과제 수정 (강사)</h2>
-	<form action="/Jhe/updateHomework" method="post" id="updateHomework">
+	<form action="/Jhe/updateHomework" method="post" id="updateHomework" enctype="multipart/form-data">
 		<table>
 			<tr>
-				<th><input type="hidden" name="ASMT_NO" value="${upHomework.ASMT_NO}">
+				<th><input type="hidden" name="asmt_no" value="${upHomework.asmt_no}">
 					강의명</th>
 				<td>${upHomework.lctr_name}</td>
 			</tr>
 			<tr>
 				<th>과제명</th>
-				<td><input type="text" name="ASMT_NM" value="${upHomework.ASMT_NM}" required></td>
+				<td><input type="text" name="asmt_nm" value="${upHomework.asmt_nm}" required></td>
 			</tr>
 			<tr>
 				<th>과제 시작일</th>
-				<td><input type="text" name="SBMSN_BGNG_YMD" value="${upHomework.SBMSN_BGNG_YMD}" required></td>
+				<td><input type="text" name="sbmsn_bgng_ymd" value="${upHomework.sbmsn_bgng_ymd}" required></td>
 			</tr>
 			<tr>
 				<th>과제 마감일</th>
-				<td><input type="text" name="SBMSN_END_YMD" value="${upHomework.SBMSN_END_YMD}" required></td>
+				<td><input type="text" name="sbmsn_end_ymd" value="${upHomework.sbmsn_end_ymd}" required></td>
 			</tr>
 			<tr>
 				<th>첨부파일</th>
-				<td>
-					<input type="text" name="FILE_GROUP" value="${upHomework.FILE_GROUP}"></td>
+				<td><c:if test="${not empty upHomework.fileName}">
+					<a href="/Jhe/downloadFile?fileId=${upHomework.fileId}">${upHomework.fileName}</a></c:if>
+					<input type="file" name="file_nm" accept="application/pdf, image/*, .doc, .docx, .txt"></td>
 			</tr>
 			<tr>
 				<th>과제 내용</th>
-				<td><textarea name="ASMT_CN">${upHomework.ASMT_CN}</textarea></td>
+				<td><textarea name="asmt_cn">${upHomework.asmt_cn}</textarea>
+				<input type="hidden" name="LCTR_ID" value="${upHomework.lctr_id}"></td>
 			</tr>
 		</table>
 			<button type="submit">수정</button>
-			<a href="../Jhe/profHomeworkList"><button type="button">취소</button></a>
+			<a href="../Jhe/profHomeworkList?LCTR_ID=${upHomework.lctr_id}"><button type="button">취소</button></a>
 	</form>
 </body>
 </html>

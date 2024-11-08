@@ -12,5 +12,17 @@ public interface LjmService {
 	int confirmId(String user_id);
 
 	String findId(User_Info user_info);
+
+	String getUserName(int user_seq);
+
+	User_Info findPw(User_Info user_info);
+
+	String createTempPassword(String user_id);
+
+	int sendTempPw(String user_id, String tempPassword);
+
+	Login_Info adminLogin(String user_id, String password);
+
+	User_Info getUserStatus(String user_id);
 	
 }

@@ -1,123 +1,199 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="headerTeacher.jsp"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>학생 관리 시스템</title>
+<title>사용자 정보 수정</title>
+
 <style>
     body {
-        display: grid;
-        grid-template-rows: auto 1fr;
-        grid-template-columns: 200px 1fr;
-        height: 100vh;
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f9;
         margin: 0;
-    }
-    header {
-        grid-column: 1 / span 2;
-        background-color: #236147;
-        color: white;
-        padding: 10px;
-        text-align: center;
-    }
-    nav {
-        background-color: #7F7F7F;
-        padding: 30px;
-        color: white;
-    }
-    nav ul {
-        list-style-type: none;
         padding: 0;
     }
-    nav li {
-        margin: 50px 0;
-        cursor: pointer;
-        font-size: 20px;
-        transition: background-color 0.3s, transform 0.3s;
+
+    .container {
         display: flex;
         justify-content: center;
-        align-items: center;
-        height: 40px;
-    }
-    nav li:hover {
-        background-color: #a0d5a7;
-        color: white;
-        transform: scale(1.2);
-    }
-    nav .submenu {
-        display: none;
-        padding-left: 25px;
-        margin-top: 0px;
-        border-left: 2px solid #236147;
-        padding-left: 10px;
-        color: #fff;
-    }
-    main {
+        align-items: flex-start;
+        height: 100vh;
         padding: 20px;
+    }
+
+    .user-info {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        max-width: 900px;
+        margin: 40px;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 프로필 이미지 스타일 */
+    .profile-section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         gap: 20px;
     }
-    .form-group {
-        display: flex;
-        flex-direction: column;
+
+    .profile-preview {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        border: 2px solid #ccc;
     }
+
+    .profile-section input[type="file"] {
+        margin-top: 10px;
+    }
+
+    /* 사용자 정보 폼 스타일 */
+    .form-section {
+        display: grid;
+        grid-template-columns: 1fr; /* 기본 1열로 시작 */
+        gap: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #236147;
+    }
+
     label {
+        font-size: 16px;
+        color: #333;
         margin-bottom: 5px;
-        font-weight: bold;
     }
-    input[type="text"], input[type="email"], input[type="date"], input[type="file"] {
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="file"],
+    input[type="button"] {
+        width: 100%;
         padding: 10px;
+        margin: 10px 0 20px 0;
         border: 1px solid #ccc;
         border-radius: 5px;
+        font-size: 14px;
     }
+
+    input[type="file"] {
+        width: auto;
+        display: inline-block;
+    }
+
     button {
-        padding: 5px 10px; /* 크기 조정 */
+        width: 100%;
+        padding: 12px;
         background-color: #236147;
         color: white;
         border: none;
         border-radius: 5px;
+        font-size: 16px;
         cursor: pointer;
-        font-size: 14px; /* 폰트 크기 조정 */
+        transition: background-color 0.3s ease;
     }
+
     button:hover {
         background-color: #a0d5a7;
     }
-    h2 {
-        margin-bottom: 60px;
+
+    /* 전화번호 입력 박스 스타일 */
+    .phone-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
     }
-        .dashed-border {
-        border: 2px dashed #7F7F7F; /* 점선 테두리 */
-        padding: 50px; /* 내부 여백 */
-        border-radius: 5px; /* 모서리 둥글게 */
-        margin-bottom: 20px; /* 아래쪽 여백 */
+
+    .address-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
-        .save-button {
-        margin-top: 40px; /* 상단 마진 추가 */
+
+    .address-container input {
+        width: 85%;
     }
+
+    .address-container button {
+        width: 12%;
+    }
+
+    /* 프로필과 아이디, 회원번호를 한 줄로 배치 */
+    .profile-id-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .profile-id-grid .form-group {
+        margin: 0;
+    }
+
+    /* 이름, 생년월일, 전화번호, 주소, 이메일을 길게 배치 */
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    /* 저장 버튼 위치 */
+    .form-section button {
+        grid-column: span 2;
+    }
+
+    /* 아이디와 회원번호를 오른쪽에 배치 */
+    .profile-id-grid .form-group {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
 </style>
-<script>
-    function toggleSubMenu(menuId) {
-        const submenu = document.getElementById(menuId);
-        submenu.style.display = submenu.style.display === "block" ? "none" : "block";
-    }
-</script>
-<script>
-    function formatPhoneNumber(input) {
-        let value = input.value.replace(/[^0-9]/g, '');
-        if (value.length > 3) {
-            value = value.slice(0, 3) + '-' + value.slice(3);
-        }
-        if (value.length > 8) {
-            value = value.slice(0, 8) + '-' + value.slice(8);
-        }
-        input.value = value;
-    }
-</script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.getElementById('profilePreview');
+            img.src = e.target.result;
+            img.style.display = 'block'; // 이미지를 보이게 설정
+        }
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function formatPhoneNumber(input) {
+        let value = input.value.replace(/[^0-9]/g, "");  // 숫자만 남기기
+        if (value.length < 4) {
+            input.value = value;  // 3자리까지만 입력
+        } else if (value.length < 7) {
+            input.value = value.slice(0, 3) + "-" + value.slice(3);  // 3-4자리
+        } else if (value.length < 11) {
+            input.value = value.slice(0, 3) + "-" + value.slice(3, 7) + "-" + value.slice(7);  // 3-4-4자리
+        } else {
+            input.value = value.slice(0, 3) + "-" + value.slice(3, 7) + "-" + value.slice(7, 11);  // 3-4-4자리까지
+        }
+    }
+
     function findAddr() {
         new daum.Postcode({
             oncomplete: function (data) {
@@ -128,112 +204,72 @@
         }).open();
     }
 </script>
-<script>
-    function updateEmail() {
-        const emailInput = document.getElementById('email');
-        const emailDomain = document.getElementById('emailDomain').value;
-        if (emailDomain) {
-            emailInput.value = emailInput.value.split('@')[0] + emailDomain;
-        }
-    }
-</script>
+
 </head>
 <body>
-<header>
-    <div class="logo"></div>
-    <h1>마이페이지</h1>
-    <div class="user-info"></div>
-</header>
 
-<nav>
-    <ul>
-    <h1>강사</h1>
-        <li onclick="toggleSubMenu('myClassroomSubmenu')">나의 강의실</li>
-        <ul class="submenu" id="myClassroomSubmenu">
-            <li style="font-size: 13px;">현재 수업 중인 강의</li>
-            <li style="font-size: 13px;">강의 목록</li>
-        </ul>
-        <li onclick="toggleSubMenu('gradeManagementSubmenu')">성적 관리</li>
-        <ul class="submenu" id="gradeManagementSubmenu">
-            <li style="font-size: 13px;">하은</li>
-            <li style="font-size: 13px;">하은</li>
-            <li style="font-size: 13px;">하은</li>
-        </ul>
-        <li onclick="toggleSubMenu('userInfoSubmenu')">회원정보</li>
-        <ul class="submenu" id="userInfoSubmenu">
-            <li style="font-size: 13px;" onclick="location.href='updateProfileteacher'">개인정보 수정</li>
 
-            <li style="font-size: 13px;">비밀번호 변경</li>
-           <li style="font-size: 13px;" onclick="location.href='deleteUser?user=${user}'">회원 탈퇴</li>
-        </ul>
-        <li onclick="toggleSubMenu('inquirySubmenu')">1:1 문의</li>
-        <ul class="submenu" id="inquirySubmenu">
-           <li style="font-size: 13px;">문의 내역</li>
-           <li style="font-size: 13px;">문의 작성</li>
-        </ul>
-      <li onclick="toggleSubMenu('zzji')">쪽지함</li>
-        <ul class="submenu" id="zzji">
-           <li style="font-size: 13px;">받은쪽지</li>
-           <li style="font-size: 13px;">보낸쪽지</li>
-           <li style="font-size: 13px;">휴지통</li>
-        </ul>
-    </ul>
-    
-</nav>
-
-<main style="display: flex; justify-content: center; align-items: center; height: 100%;">
-    <div class="dashed-border"> <!-- 점선 테두리 추가 -->
-    <form action="updateProfile" method="post" enctype="multipart/form-data" style="max-width: 600px; width: 100%; display: flex; flex-direction: column; align-items: center;">
-        <h2>개인정보수정</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%;">
-            <div class="form-group" style="text-align: center;">
-                <c:choose>
-                    <c:when test="${not empty profileImage}">
-                        <img id="profilePreview" src="${profileImage}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px; margin-bottom: 10px; margin-left: 20px; border: 2px solid #ccc;">
-                    </c:when>
-                    <c:otherwise>
-                        <img id="profilePreview" src="upload/face.png" style="width: 200px; height: 200px; border-radius: 75px; margin-bottom: 30px; margin-left: 30px; border: 2px solid #ccc;">
-                    </c:otherwise>
-                </c:choose>
-                <input type="file" id="profileImage" name="profileImage" accept="image/*">
+<div class="container">
+    <div class="user-info">
+    <form action="updateUserInfo1" method="post" enctype="multipart/form-data">
+    			    <input type="hidden" value="${profile_addr}" name="profile_addr">
+			    <input type="hidden" value="${profile_name}" name="profile_name">
+        <!-- 프로필 이미지와 아이디, 회원번호 (위 그리드) -->
+		<div class="profile-id-grid">
+		    <div class="profile-section">
+		        <!-- 프로필 이미지를 미리보기로 표시하는 이미지 요소 -->
+		        <img id="profilePreview" src="${profile_addr}" alt="${profile_name}" class="profile-preview" style="display: block;">
+		        
+		        <!-- 파일 업로드를 위한 input 태그 -->
+		        <input type="file" id="profileImage" name="profileImage" accept="image/*" onchange="previewImage(event)">
+		    </div>
+            <!-- 회원번호와 아이디 -->
+            <div class="form-group">
+                <label for="userSeq">회원번호:</label>
+                <input type="text" id="userSeq" name="user_seq" value="${user_seq}" readonly>
             </div>
 
-			<div class="form-group" style="margin-top: 50px;"> <!-- 상단 마진 추가 -->
-			    <label for="userStatus">회원 상태</label>
-			    <span id="userStatus" style="margin-bottom: 50px; display: block;">[회원 분류 값]</span>
-			    <input type="hidden" name="user_status" value="[회원 분류 값]" />
-			    <label for="userId">아이디</label>
-			    <span id="userIdDisplay">[아이디 값]</span>
-			    <input type="hidden" name="user_id" value="user_id" />
-			</div>
-
             <div class="form-group">
-                <label for="userName">성명</label>
-                <input type="text" id="userName" name="user_name" required>
-            </div>
-            <div class="form-group">
-                <label for="birthDate">생년월일</label>
-                <input type="date" id="birthDate" name="birth" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">전화번호</label>
-                <input type="text" id="phone" name="phone_num" oninput="formatPhoneNumber(this)" placeholder="010-xxxx-xxxx">
-            </div>
-            <div class="form-group">
-                <label for="email">이메일</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="address">주소</label>
-                <input type="text" id="address" name="address" placeholder="주소 입력" required>
-                <button type="button" onclick="findAddr()">주소 찾기</button>
+                <label for="userId">아이디:</label>
+                <input type="text" id="userId" name="user_id" value="${user_id}" readonly>
             </div>
         </div>
-	<button type="submit" class="save-button">저장</button>
-    </form>
-</main>
+
+        <!-- 이름, 생년월일, 전화번호, 주소, 이메일 (아래 그리드) -->
+        <div class="details-grid">
+            <div class="form-group">
+                <label for="userName">이름:</label>
+                <input type="text" id="userName" name="user_name" value="${user_name}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="birthDate">생년월일:</label>
+                <input type="date" id="birthDate" name="birth" value="${birth}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">전화번호:</label>
+                <input type="text" id="phone" name="phone_num" value="${phone_num}" oninput="formatPhoneNumber(this)" placeholder="010-xxxx-xxxx" required>
+            </div>
+            <div class="form-group address-container">
+                <label for="address">주소:</label>
+                
+                <input type="text" id="address" name="address" value="${address}" placeholder="주소 입력" required>
+                <button type="button" onclick="findAddr()">주소 찾기</button>
+            </div>
+
+            <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email" value="${email}" required>
+            </div>
+        </div>
+
+        <!-- 저장 버튼 -->
+        <button type="submit">저장</button>
+        </form>
+    </div>
+    
+</div>
 
 </body>
 </html>
-
-                

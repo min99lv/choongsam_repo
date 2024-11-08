@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="../myStudyHomeNav.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,8 @@
 <title>Insert title here</title>
 </head>
 
+<%@ include file="../myStudyHomeNav.jsp" %>
+<%@ include file="../headerGreen.jsp" %>
 
 <style>
 
@@ -17,7 +20,7 @@
 	}
 	
 	#listBody{
-		width: 1560px;
+		width: 1582px;
 		height: 100%;
 		background-color: #F1F1F1;
 		float: right;
@@ -25,8 +28,13 @@
 	
 	.infor {
 		height: 130px;
-		text-align: center;
 		background-color: white;
+		padding: 15px;
+	}
+	
+	#inforText {
+		width: 1400px;
+		text-align:center;
 	}
 	
 	#lectureName {
@@ -56,6 +64,7 @@
 		margin-top: 15px;
 		margin-left: 15px;
 		border-radius: 8px;
+		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* 마우스 오버 시 그림자 */
 	}
 	
 	.thumbnailDiv {
@@ -119,7 +128,7 @@
 		color: white;
 	    display: flex;            /* Flexbox 사용 */
 	    align-items: center;     /* 수직 중앙 정렬 */
-   		justify-content: center;  
+   		justify-content: center;  /* 수평 중앙 정렬 */
 		border-radius: 8px;
 	}
 	
@@ -222,13 +231,15 @@
 
 	<div id="listBody">
 		<div class="infor">
-			<span id="lectureName">
+			<div id="inforText">
+				<span id="lectureName">
 				${lectName }
 			</span>
 			<div class="teachName">
 				<span id="teachName">
 					${teacherName } 강사님
 				</span>
+			</div>
 			</div>
 		</div>
 		<div class="notice">
@@ -300,7 +311,7 @@
 			                ">
 			                <span class="stateTxt">${conts.view_status}</span>
 			            </div>
-			            <a href="/video-details?videoId=${conts.conts_id }&user_seq=${conts.user_seq }&filename=${conts.file_nm}" 
+			            <a href="/video-details?videoId=${conts.conts_id }&user_seq=${conts.user_seq }" 
 			               onclick="chkClassSche(event, this.href, '${conts.conts_id}', '${conts.user_seq}', '${conts.lctr_no}', '${conts.lctr_id}')">
 			                <div id="startDiv">
 			                    <span id="startTxt"><div id="start">학습 시작</div></span>

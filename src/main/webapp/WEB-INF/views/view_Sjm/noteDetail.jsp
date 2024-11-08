@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>공지사항 상세</title>
+    <title>쪽지 상세</title>
     <style>
         body {
             margin: 0;
@@ -23,6 +23,7 @@
             height: auto;
             padding: 20px; /* 여백 추가 */
             font-size: 20px;
+            margin-bottom: 200px;
         }
 
         .list {
@@ -96,12 +97,18 @@
             border-radius: none;
 
         }
+        .NavBtn{
+        	
+        	display: flex;
+       		justify-content: center;
+        
+        }
         
          button {
             width: 200px;
             text-align: center;
             /* 버튼 가운데 정렬을 위한 추가 스타일 */
-            margin: 20px auto; /* 버튼을 가운데 정렬 */
+            margin: 20px 20px; /* 버튼을 가운데 정렬 */
             display: block; /* 블록으로 설정 */
             height: 50px;
             background-color: #00664F;
@@ -113,7 +120,7 @@
 
     async function fetchNoteDetail() {
         try {
-            const response = await fetch(`/api/note/${note_sn}`);
+            const response = await fetch(`/api/notes/${note_sn}`);
             if (!response.ok) {
                 throw new Error(`Error fetching notice: ${response.status}`);
             }
@@ -130,6 +137,15 @@
             console.log('userSeq:', userSeq); // userSeq 출력
             console.log('note.sndpty_seq:', note.sndpty_seq); // sndpty_seq 출력
 
+            // 답장하기 버튼의 링크를 동적으로 설정
+            const replyButton = document.getElementById("replyButton");
+            replyButton.onclick = function() {
+            	
+            	const note_sn = note.note_sn;
+            	const  sndpty_seq =note.sndpty_seq;
+                location.href = '/notes/new?note_sn='+ note_sn + '&sndpty_seq=' + sndpty_seq;
+            };
+            
             const senderReceiverRow = document.getElementById('sender_receiver');
 
             if (userSeq === note.sndpty_seq) {
@@ -137,6 +153,8 @@
             } else {
                 senderReceiverRow.innerHTML = `<th>받은사람</th><td>` + note.receiver_name + `</td>`;
             }
+            
+            
         } catch (error) {
             console.error('Error:', error);
             document.getElementById('note_ttl').textContent = "쪽지를 불러올 수 없습니다.";
@@ -155,7 +173,7 @@
     
     <div class="container">
         <div class="contents">
-            <h1>공지사항 작성</h1>
+            <h1>쪽지</h1>
         </div>
             <table class="list">
                 <tr>
@@ -170,9 +188,16 @@
                     <td class="contentsss" id="note_cn" ></td>
                 </tr>
             </table>
-            
+            <div class="NavBtn">
             <button onclick="history.back();">목록</button>
+            <button id="replyButton">답장하기</button>
+            
+            </div>
     </div>
     
+    <footer>
+    <%@ include file="../footer.jsp" %>
+    
+    </footer>
 </body>
 </html>

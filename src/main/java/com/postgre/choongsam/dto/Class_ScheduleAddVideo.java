@@ -9,8 +9,9 @@ public class Class_ScheduleAddVideo {
 	private	String	conts_id;		// 영상 번호
 	private 	int		user_seq;		// 학생 번호
 	private	Integer		conts_final;	// FINAL 위치
-	private	Integer	conts_max;	// MAX 위치
+	private	Integer		conts_max;	// MAX 위치
 	private int		conts_prgrt;	// 강의진행율
+	
 	
 	private	String	vdo_file_nm;	// 영상 제목
 	private	String	vdo_url_addr;	// 영상 URL 주소
@@ -54,6 +55,7 @@ public class Class_ScheduleAddVideo {
 	private String 	file_extn_nm; 			// 확장자
 	private long 		file_sz; 				// 파일 크기
 	private String 	file_path_nm; 			// 파일 경로
+	private String		idntf_no;				//UUID
 	
 	private String chp_str1;			//스트링챕터시간
 	private String chp_str2;			//스트링챕터시간
@@ -62,6 +64,8 @@ public class Class_ScheduleAddVideo {
 	private String befor_period;		//이전차시 수강기간
 	
 	private String view_status;		//출석, 결석여부 확인
+	
+	public Class_Schedule classSchedule;
 	
 	
 }
