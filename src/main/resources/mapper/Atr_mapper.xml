@@ -19,7 +19,7 @@
 	<select id="trGetAllLectureList" resultType="Lecture">
 		SELECT
 			l."LCTR_ID",
-			user_info_name."USER_NAME" AS "user_seq", 
+			user_info_name."USER_NAME" AS "user_name", 
 			comm_onoff."CD_NM" AS "onoff",
 			comm_category."CD_NM" AS "lctr_category",
 			l."LCTR_NAME",
@@ -43,10 +43,39 @@
 		LEFT JOIN
 			"USER_INFO" user_info_name ON l."USER_SEQ" = user_info_name."USER_SEQ";
 	</select>
+	<select id="trGetRecruitLectureList" resultType="Lecture">
+		SELECT
+			l."LCTR_ID",
+			user_info_name."USER_NAME" AS "user_name", 
+			comm_onoff."CD_NM" AS "onoff",
+			comm_category."CD_NM" AS "lctr_category",
+			l."LCTR_NAME",
+			l."LCTR_COUNT",
+			l."RCRT_DATE",
+			l."LCTR_COST",
+			comm_state."CD_NM" AS "lctr_state",
+			l."EVAL_CRITERIA",
+			l."LCTR_START_DATE",
+			l."LCTR_CNTSCHD",
+			l."FILE_GROUP",
+			l."LCTR_SCHD",
+			l."REGISTER_COUNT" 
+		FROM
+			"LECTURE" l
+		LEFT JOIN
+			"COMM" comm_onoff ON l."ONOFF" = comm_onoff."CD"
+		LEFT JOIN
+			"COMM" comm_category ON l."LCTR_CATEGORY" = comm_category."CD"
+		LEFT JOIN
+			"COMM" comm_state ON l."LCTR_STATE" = comm_state."CD"
+		LEFT JOIN
+			"USER_INFO" user_info_name ON l."USER_SEQ" = user_info_name."USER_SEQ"
+		WHERE l."LCTR_STATE" = '4003';
+	</select>
 	<select id="trGetLectureDetail" resultType="Lecture">
 		SELECT
 			l."LCTR_ID",
-			user_info_name."USER_NAME" AS "user_seq", 
+			user_info_name."USER_NAME" AS "user_name", 
 			comm_onoff."CD_NM" AS "onoff",
 			comm_category."CD_NM" AS "lctr_category",
 			l."LCTR_NAME",
@@ -84,5 +113,18 @@
 	<select  id="trGetAllClassRoom"  resultType="Classroom">
 	SELECT * FROM "CLASSROOM"
 	</select>
+	<update id="trApproveCourse">
+	UPDATE "LECTURE"
+	SET "LCTR_STATE" = '4002' 
+	WHERE "LCTR_ID" = #{parameter}
+	</update>
+	<update id="trRaiseRegisterCount">
+	UPDATE "LECTURE" 
+	SET "REGISTER_COUNT" = "REGISTER_COUNT"+1
+	</update>
+	<insert id="trApplyCourse">
+		INSERT INTO "COURSE_REGISTRATION" ("LCTR_ID","USER_SEQ","APLY_DATE","REG_STATE","PAY_STATE")
+		 VALUES (#{lctr_id},#{student_id},TO_CHAR( NOW(), 'YYMMDD'),'2001','N')
+	</insert>
 	
 </mapper>

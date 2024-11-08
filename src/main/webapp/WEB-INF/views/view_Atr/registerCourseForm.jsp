@@ -92,12 +92,7 @@ td:hover, .selected {
 <script>
         function homeworkEval() {
             const selectedValue = parseInt(document.getElementById("attendanceEval").value);
-            document.getElementById("displayValue").innerText = (selectedValue % 10) * 10;
-            if (selectedValue === 100) {
-                document.getElementById("displayValue").innerText = 0;
-            } else if (selectedValue === 0) {
-                document.getElementById("displayValue").innerText = 100;
-            }
+            document.getElementById("displayValue").innerText = 100-selectedValue;
         }
 
         // 선택한 시간을 저장할 배열
@@ -158,13 +153,8 @@ td:hover, .selected {
 			<div class="form-group">
 				<label>평가기준: 출석</label>
 				 <select id="attendanceEval"	name="attendanceEval" onchange="homeworkEval()">
-					<c:forEach var="i" begin="0" end="100" step="10">
-						<c:if test="${i != 100 }">
-							<option value="${100 - i + i/10}">${100 - i}%</option>
-						</c:if>
-						<c:if test="${i eq 100 }">
-							<option value="0">0%</option>
-						</c:if>
+					<c:forEach var="i" begin="0" end="100" step="10">						
+							<option value="${100 - i}">${100 - i}%</option>
 					</c:forEach>
 				</select>
 			</div>
