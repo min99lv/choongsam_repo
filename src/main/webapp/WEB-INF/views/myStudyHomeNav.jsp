@@ -13,7 +13,7 @@
 		  top:0;
 		  height: 100vh;
 		  z-index: 1;
-		  background-color: #7B7B7B;
+		  background-color: #304742;
 		  overflow:hidden;
 		  transition:width .3s ease;
 		  cursor:pointer;
@@ -22,27 +22,44 @@
 		  }
 	}
 	
+	.butt:hover {
+        background-color: #00664F; /* 마우스 오버 시 배경색 */
+        color: white; /* 글자색 변경 (선택 사항) */
+        transform: scale(1.1); /* 마우스 오버 시 크기 확대 */
+         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* 마우스 오버 시 그림자 */
+    }
+	
+	.butt { 
+	    width: 320px;
+	    height: 90px;
+	    font-size: 30px;
+	    color: white;
+	    display: flex;            /* 플렉스박스 사용 */
+	    align-items: center;      /* 수직 중앙 정렬 */
+		 border-bottom: solid 2px white;
+	}
+
+	
+	.link{
+		margin-left: 50px;
+	}
+	
 	a {
 		color: white;
 		text-decoration: none;
 	}
 	
 	.detail {
-	width:300px;
-		margin-left: 50px;
+		width:300px;
+		/* margin-left: 50px; */
 		margin-top: 100px;
-	}
-	
-	.butt{
-		width: auto;
-		height: 90px;
-		font-size: 30px;
-		color: white;
 	}
 	
 	.info{
 		margin-top: 50px;
 		margin-bottom: 50px;
+		margin-left: 50px;
+		color: white;
 	}
 </style>
 
@@ -62,16 +79,16 @@
 			</div>
 		
 			<div class="butt">
-				<a href="">내 강의실</a>
+				<a href="" class="link">내 강의실</a>
 			</div>
 			<div class="butt">
-				<a href="">출석</a>
+				<a href="" class="link">출석</a>
 			</div>
 			<div class="butt">
-				<a href="/Jhe/studHomeworkList">과제</a>
+				<a href="/Jhe/studHomeworkList" class="link">과제</a>
 			</div>
 			<div class="butt">
-				<a href="">공지사항</a>
+				<a href="" class="link">공지사항</a>
 			</div>
 		</div>
 		

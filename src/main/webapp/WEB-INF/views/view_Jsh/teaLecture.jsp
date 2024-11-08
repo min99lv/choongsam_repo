@@ -62,6 +62,7 @@
 		margin-top: 15px;
 		margin-left: 15px;
 		border-radius: 8px;
+		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* 마우스 오버 시 그림자 */
 	}
 	
 	.thumbnailDiv {
@@ -153,6 +154,8 @@
 	    justify-content: center;  /* 수평 중앙 정렬 */
 	    text-align: center;      /* 텍스트 중앙 정렬 */
 		border-radius: 8px;
+		border: 2px #00664F solid; 
+		color: #00664F;
 	}
 	
 	.chulseokDiv {
@@ -181,35 +184,23 @@
 		color: black;
 	}
 	
+	.uploadButt {
+		margin: 20px 165px 20px 0px;
+		float: right;
+		background-color: #00664F;
+		color: white;
+		font-size: 20px;
+		padding: 20px;
+		border-radius: 8px;
+		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); 
+	}
+	
 	
 	
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
-	function chkClassSche() {
-	    $.ajax({
-	        type: "POST",
-	        url: "/classScheChk",
-	        data: { 
-	            "chashi": $('#chashiHidden').val(),
-	            "conts_id": $('#contsIdHidden').val(),
-	            "user_seq": $('#userSeqHidden').val(),
-	            "lctr_id": $('#lctrIdHidden').val()
-	        },
-	        success: function(result) {
-	            if (result == 0) { 
-	                console.log('입력 실패');
-	            } else {
-	                console.log('입력 성공');
-	            }
-	        },
-	        error: function() {
-	            alert('서버 오류가 발생했습니다. 나중에 다시 시도해주세요.');
-	            return 0;
-	        }
-	    });
-	};
 	
 	// 페이지 로드 후 상태에 따라 클래스 추가하는 함수
 	document.addEventListener("DOMContentLoaded", function() {
@@ -226,6 +217,8 @@
 	});
 </script>
 
+
+
 <body>
 
 	<div id="listBody">
@@ -241,12 +234,11 @@
 			</div>
 			</div>
 		</div>
-		<div class="notice">
-			
+	
+		
+		<div class="uploadButt">
+			<a href="/contsUploadForm?lctr_id=${lctr_id }&user_seq=${user_seq}" id="contsInsert">${lectName } 강의 등록</a>
 		</div>
-	
-	
-		<a href="/contsUploadForm?lctr_id=${lctr_id }&user_seq=${user_seq}">강의등록</a>
 		
 		<c:forEach var="conts" items="${contentList}">
 			<div class="list">
@@ -285,7 +277,7 @@
 			                    강의 수정
 			                </div>
 			            </a>
-						<a href="/video-details?lctr_id=${conts.lctr_id }&user_seq=${conts.user_seq }&lctr_no=${conts.lctr_no }" onclick="chkClassSche()">
+						<a href="/video-details?videoId=${conts.conts_id }&user_seq=${conts.user_seq }">
 						<!-- <button onclick="chkClassSche()"> -->
 							<div id="startDiv">
 								<span id="startTxt"><div id="start">학습 시작</div></span>

@@ -4,24 +4,28 @@
 
 
     <style>
-   
-
+   		
+   		.main_container{
+   			height: 511px;
+   		}
 
     </style>
 
 		
+		
+		 
     <head>
         <meta charset="UTF-8">
         <title>Insert title here</title>
     </head>
 
-	
+	      
 
     <body>
         
         <header>
-	       <%@ include file="header.jsp" %>
-	   </header>
+         	<%@ include file="header.jsp" %>
+        </header>
 
         <div class="main_container">
 
@@ -41,15 +45,30 @@
             USER_SEQ : ${user_seq } <p>
 	   		USER_ID : ${user } <p>
 	   		USER_STATUS : ${usertype }
+	   		
+	   		<a href="/courseApproveList">안태랑1</a>
+        	<a href="/registerCourseForm">안태랑2</a>
 
             
         </div>
-        <a href="/courseApproveList">안태랑1</a>
-        <a href="/registerCourseForm">안태랑2</a>
+        
+        
+       	<!-- 하단의 div는 메인페이지를 이미지로 넣지않고 따로 만드는경우 사용하는 것으로 함 -->
+        <div class="main">
+        	<div class="lectureList">
+        		
+        	</div>
+        	<div class="noticeGongji">
+        		
+        	</div>
+        </div>
+        
 
-        <footer>
+        
+    </body>
+    
+    	<footer>
             <%@ include file="footer.jsp" %>
         </footer>
-    </body>
 
     </html>

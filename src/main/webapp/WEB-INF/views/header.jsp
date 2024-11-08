@@ -13,15 +13,17 @@
             padding: 0;
         }
 
-        .header__{
-            display: block;
-            width: 1920px;
-            background-color:white;
-            height: 70px;
-            font-size: 20px;
-            color: white;
-            position: static;
-        }
+        .header__ {
+		    position: relative; /* position 변경 */
+		    width: 100%;
+		    background-color: white;
+		    height: 70px;
+		    font-size: 20px;
+		    color: white;
+		    z-index: 1000; /* 다른 요소 위로 올라오게 함 */
+		    padding-bottom: 30px; /* 헤더 아래에 여백 추가 */
+		}
+
 
         .header__color{
             margin: 0;
@@ -37,7 +39,7 @@
             align-items: center;
             padding: 0 50px;
             font-weight: bold;
-            height: 42px;
+            height: 70px;
             border-bottom: 0.1px solid rgb(186, 186, 186);
         }
 
@@ -53,6 +55,17 @@
         	text-decoration: none;
             color: black;
         }
+        
+        .header__logo {
+        	display: flex;            /* Flexbox 사용 */
+	    	align-items: center;     /* 수직 중앙 정렬 */
+	    	
+        }
+       
+       #logo{
+       	height: 50px;
+       }
+       
        
 
     </style>
@@ -61,7 +74,11 @@
     <div class="header__">
         <div class="header__color"></div>
         <div class="header__nav">
-        <div class="header__logo"><a href="/">로고</a></div>
+        <div class="header__logo">
+        	<a href="/">
+        		<img alt="로고" src="../image/headerLogoWhite.png" id="logo">
+        	</a>
+        </div>
         <div class="header__navBar">
             <a href="#">수강신청</a>
 			<c:choose>
