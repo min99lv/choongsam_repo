@@ -22,8 +22,9 @@ public interface JheService {
 	void			deleteHomeworkList(List<Integer> delCheck);
 	List<Homework>	getStudHomeworkList(int user_seq);
 	void			notifyStudents(String lctr_id);
-	int				updatesubmitHomework(Homework homework, int user_seq);
 	List<Attendance_Check> profAttMain(String lctr_id);
-	List<Lecture>	getStudAtt(String lctr_id);
-	void			insertStudAtt(String lctr_id, int lctr_no, List<Integer> user_seq, Map<String, String> att_status);
+	List<Attendance_Check> getStudAtt(String lctr_id, int lctr_no);
+	List<Attendance_Check> getOnlineStudAtt(String lctr_id);
+	int				updatesubmitHomework(Homework homework, int user_seq);
+	void			updateStudAtt(String lctr_id, int lctr_no, List<Integer> user_seq, Map<String, String> att_status, int onoff);
 }
