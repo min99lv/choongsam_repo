@@ -1,6 +1,7 @@
 package com.postgre.choongsam.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,19 @@ public class JheDaoImpl implements JheDao {
 			System.out.println("getLectureHomeworkList error: " + e.getMessage());
 		}
 		return lectureHomeworkList;
+	}
+
+	@Override
+	public List<Lecture> getProfLectureInfo(String lctr_id) {
+		System.out.println("강의 메인보드 다오");
+		List<Lecture> profLectureInfo = null;
+		try {
+			profLectureInfo = session.selectList("profLectureInfo", lctr_id);
+			System.out.println("강의 메인보드 profLectureInfo: " + profLectureInfo);
+		} catch (Exception e) {
+			System.out.println("getProfLectureInfo error: " + e.getMessage());
+		}
+		return profLectureInfo;
 	}
 
 	@Override
@@ -212,19 +226,6 @@ public class JheDaoImpl implements JheDao {
 	}
 
 	@Override
-	public List<Lecture> getProfLectureInfo(String lctr_id) {
-		System.out.println("강의 메인보드 다오");
-		List<Lecture> profLectureInfo = null;
-		try {
-			profLectureInfo = session.selectList("profLectureInfo", lctr_id);
-			System.out.println("강의 메인보드 profLectureInfo: " + profLectureInfo);
-		} catch (Exception e) {
-			System.out.println("getProfLectureInfo error: " + e.getMessage());
-		}
-		return profLectureInfo;
-	}
-
-	@Override
 	public List<Attendance_Check> profAttMain(String lctr_id) {
 		System.out.println("출석 메인보드 와따오");
 		List<Attendance_Check> profAttMainList = null;
@@ -237,11 +238,11 @@ public class JheDaoImpl implements JheDao {
 	}
 
 	@Override
-	public List<Lecture> getStudAtt(String lctr_id) {
-		System.out.println("출석 넣을 학생 부르러 와따오");
-		List<Lecture> getStudAttList = null;
+	public List<Attendance_Check> getStudAtt(String lctr_id, int lctr_no) {
+		System.out.println("오프라인 수강생 출석 부르러 와따오");
+		List<Attendance_Check> getStudAttList = null;
 		try {
-			getStudAttList = session.selectList("getStudAtt", lctr_id);
+			getStudAttList = session.selectList("getStudAtt", Map.of("LCTR_ID", lctr_id, "LCTR_NO", lctr_no));
 			System.out.println("getStudAttList: " + getStudAttList);
 		} catch (Exception e) {
 			System.out.println("getStudAtt error: " + e.getMessage());
@@ -250,15 +251,44 @@ public class JheDaoImpl implements JheDao {
 	}
 
 	@Override
-	public int insertStudAtt(Attendance_Check attendance_Check) {
-		System.out.println("출석 넣으러 와따오");
-		System.out.println("attendance_Check: " + attendance_Check);
-		int insStudAtt = 0;
+	public List<Attendance_Check> getOnlineStudAtt(String lctr_id) {
+		System.out.println("온라인 수강생 출석 부르러 와따오");
+		System.out.println("lctr_id: " + lctr_id);
+		List<Attendance_Check> onlineStudAttList = null;
 		try {
-			insStudAtt = session.insert("insertStudAtt", attendance_Check);
+			onlineStudAttList = session.selectList("getOnlineStudAtt", lctr_id);
+			System.out.println("onlineStudAttList: " + onlineStudAttList);
 		} catch (Exception e) {
-			System.out.println("insertStudAtt error: " + e.getMessage());
+			System.out.println("getOnlineStudAtt error: " + e.getMessage());
+			System.out.println("onlineStudAttList: " + onlineStudAttList);
 		}
-		return insStudAtt;
+		return onlineStudAttList;
+	}
+
+	@Override
+	public int updateStudAtt(Attendance_Check attendance_Check) {
+		System.out.println("오프라인 출석 넣으러 와따오");
+		System.out.println("attendance_Check: " + attendance_Check);
+		int upStudAtt = 0;
+		try {
+			upStudAtt = session.insert("updateStudAtt", attendance_Check);
+		} catch (Exception e) {
+			System.out.println("updateStudAtt error: " + e.getMessage());
+		}
+		return upStudAtt;
+	}
+
+	@Override
+	public int upStudOnlineAtt(Attendance_Check attendance_Check) {
+		System.out.println("온라인 출석 넣으러 와따오");
+		System.out.println("attendance_Check: " + attendance_Check);
+		int upStudOnAtt = 0;
+		try {
+			upStudOnAtt = session.insert("upStudOnlineAtt", attendance_Check);
+			System.out.println("upStudOnAtt: " + upStudOnAtt);
+		} catch (Exception e) {
+			System.out.println("upStudOnlineAtt error: " + e.getMessage());
+		}
+		return upStudOnAtt;
 	}
 }

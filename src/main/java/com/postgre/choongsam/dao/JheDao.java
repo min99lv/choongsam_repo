@@ -27,6 +27,8 @@ public interface JheDao {
 	void			insertFile(File_Group file_Group);
 	List<Homework>	getStudSubmitList(String lctr_id);
 	List<Attendance_Check> profAttMain(String lctr_id);
-	List<Lecture>	getStudAtt(String lctr_id);
-	int				insertStudAtt(Attendance_Check attendance_Check);
+	List<Attendance_Check> getStudAtt(String lctr_id, int lctr_no);
+	List<Attendance_Check> getOnlineStudAtt(String lctr_id);
+	int				updateStudAtt(Attendance_Check attendance_Check);
+	int upStudOnlineAtt(Attendance_Check attendance_Check);
 }

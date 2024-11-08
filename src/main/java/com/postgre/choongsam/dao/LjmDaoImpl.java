@@ -34,6 +34,36 @@ public class LjmDaoImpl implements LjmDao {
 		}
 		return login_info;
 	}
+	
+	@Override
+	public User_Info getUserInfo(String user_id) {
+		System.out.println("LjmDaoImpl getUserInfo() start...");
+        User_Info user_info = null;
+        try {
+            user_info = session.selectOne("getUserInfo", user_id);
+            System.out.println(user_info);
+        } catch (Exception e) {
+            System.out.println("LjmDaoImpl getUserInfo() Error ->" + e.getMessage());
+        }
+        return user_info;
+    }
+	
+	// 관리자 로그인 처리
+	@Override
+	public Login_Info adminLogin(String user_id) {
+		System.out.println("LjmDaoImpl adminLogin() start...");
+		
+		Login_Info login_info = new Login_Info();
+		
+		try {
+			login_info.setUser_id(user_id);			
+			login_info = session.selectOne("adminLogin", user_id);
+			
+		} catch (Exception e) {
+			System.out.println("LjmDaoImpl adminLogin() Error ->" + e.getMessage() );
+		}
+		return login_info;
+	}
 
 	// 회원가입
 	@Override
@@ -125,7 +155,4 @@ public class LjmDaoImpl implements LjmDao {
 		return user_email;
 	}
 
-	
-	
-	
 }

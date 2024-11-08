@@ -25,6 +25,8 @@ public interface HjhService {
 
 	Login_Info getLoginInfo(String user_id);
 
+	int updateCountAdmin(User_Info info);
+
 
 
 

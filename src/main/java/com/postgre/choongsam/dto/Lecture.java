@@ -6,7 +6,7 @@ import lombok.Data;
 public class Lecture { // 강의 정보
 	
 	private String 		lctr_id;				// 강의번호
-	private int 			user_seq;			// 회원번호(강사)
+	private String 			user_seq;			// 회원번호(강사)
 	private String 		onoff;				// 대면 여부
 	private String 		lctr_category;		// 강의구분명
 	private String 		lctr_name;			// 강의명

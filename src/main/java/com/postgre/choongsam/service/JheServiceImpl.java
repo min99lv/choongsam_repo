@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -232,14 +233,29 @@ public class JheServiceImpl implements JheService {
 	}
 
 	@Override
-	public List<Lecture> getStudAtt(String lctr_id) {
-		System.out.println("차시별 출석 학생 호출 서비스");
-		List<Lecture> getStudAttList = hed.getStudAtt(lctr_id);
+	public List<Attendance_Check> getStudAtt(String lctr_id, int lctr_no) {
+		System.out.println("차시별 수강생 출석 호출 서비스");
+		List<Attendance_Check> getStudAttList = hed.getStudAtt(lctr_id, lctr_no);
 		return getStudAttList;
 	}
 
 	@Override
-	public void insertStudAtt(String lctr_id, int lctr_no, List<Integer> user_seq, Map<String, String> att_status) {
+	public List<Attendance_Check> getOnlineStudAtt(String lctr_id) {
+		System.out.println("차시별 온라인 수강생 출석 호출 서비스");
+		List<Attendance_Check> onlineStudAttList = hed.getOnlineStudAtt(lctr_id);
+
+		for (Attendance_Check attendance : onlineStudAttList) {
+			updateStudAtt(attendance.getLctr_id(), attendance.getLctr_no(),
+						  Arrays.asList(attendance.getUser_seq()),
+						  Map.of("att_status_" + attendance.getUser_seq(), String.valueOf(attendance.getAtt_status())),
+						  7002);
+		}
+		return onlineStudAttList;
+	}
+
+	@Override
+	public void updateStudAtt(String lctr_id, int lctr_no,
+							  List<Integer> user_seq, Map<String, String> att_status, int onoff) {
 		System.out.println("출석 insert 서비스");
 
 		for (int i = 0; i < user_seq.size(); i++) {
@@ -253,7 +269,12 @@ public class JheServiceImpl implements JheService {
 				attendance_Check.setLctr_no(lctr_no);
 				attendance_Check.setUser_seq(userSeq);
 				attendance_Check.setAtt_status(attStatusValue);
-				hed.insertStudAtt(attendance_Check);
+
+				if (onoff == 7001) {
+					hed.updateStudAtt(attendance_Check);
+				} else if (onoff == 7002) {
+					hed.upStudOnlineAtt(attendance_Check);
+				}
 			}
 		}
 	}

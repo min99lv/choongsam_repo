@@ -87,6 +87,12 @@ public class HjhServiceImpl implements HjhService {
 		return getLoginInfo;
 	}
 
+	@Override
+	public int updateCountAdmin(User_Info info) {
+		int updateCountAdmin = hjhdao.updateCountAdmin(info);
+		return updateCountAdmin;
+	}
+
 
 
 
