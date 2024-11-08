@@ -74,7 +74,7 @@
 <header>
     <div class="logo"></div>
     <h1>관리자</h1>
-    <div class="user-info"></div>
+
 </header>
 
 <nav>
