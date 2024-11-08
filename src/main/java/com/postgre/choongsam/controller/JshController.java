@@ -460,7 +460,6 @@ public class JshController {
 	 		
 	 		model.addAttribute("info", info);
 	 		model.addAttribute("chapInfo", chapInfo);
-	 		
 	 		return "view_Jsh/contsUpdateForm";
 	 	}
 	 	
