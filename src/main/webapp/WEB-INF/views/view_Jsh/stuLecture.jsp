@@ -64,6 +64,7 @@
 		margin-top: 15px;
 		margin-left: 15px;
 		border-radius: 8px;
+		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* 마우스 오버 시 그림자 */
 	}
 	
 	.thumbnailDiv {
