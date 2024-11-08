@@ -21,6 +21,7 @@
 		AND "CLASS_SCHEDULE"."CONTS_ID" = (	SELECT "CONTS_ID"
 											FROM "LECTURE_VIDEO"
 											WHERE "VDO_URL_ADDR" = #{conts_id})
+		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}
 	</update>
 	
 	<update id="noMaxUpdate" parameterType="com.postgre.choongsam.dto.Class_Schedule">
@@ -35,6 +36,7 @@
 		AND "CLASS_SCHEDULE"."CONTS_ID" = (	SELECT "CONTS_ID"
 											FROM "LECTURE_VIDEO"
 											WHERE "VDO_URL_ADDR" = #{conts_id})
+		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}
 	</update>
 	
 	<select id="findLctrInfo" parameterType="String" resultType="SYLLABUS">
@@ -47,26 +49,35 @@
 	
 
 	
-	<select id="CurrentMax" parameterType="String" resultType="int">
+	<select id="CurrentMax" parameterType="map" resultType="int">
 		SELECT "CONTS_MAX"
 		FROM "CLASS_SCHEDULE"
 		WHERE "CONTS_ID" = (SELECT "CONTS_ID"
 							FROM "LECTURE_VIDEO"
 							WHERE "VDO_URL_ADDR" = #{videoId})
+		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}
+							
+							
+							
 	</select>
 	
-	<select id="finalTime" parameterType="String" resultType="int">
+	<select id="finalTime" parameterType="map" resultType="int">
 		SELECT "CONTS_FINAL"
 		FROM "CLASS_SCHEDULE"
 		WHERE "CONTS_ID" = (SELECT "CONTS_ID"
 							FROM "LECTURE_VIDEO"
 							WHERE "VDO_URL_ADDR" = #{videoId})
+		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}
 	</select>
 	
 	<select id="FileDown" parameterType="String" resultType="String">
 		SELECT "FILE_PATH_NM"
 		FROM "FILE_GROUP"
-		WHERE "FILE_NM"= #{filename}
+		WHERE "FILE_GROUP" = (
+								SELECT "FILE_GROUP"
+								FROM "LECTURE_VIDEO"
+								WHERE "CONTS_ID"= #{conts_id}
+								)
 	</select>
 	
 	<select id="getURL" parameterType="String" resultType="String">

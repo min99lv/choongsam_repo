@@ -120,7 +120,7 @@ body {
 </div>
 
 <div class="container-right">
-	<a href="/api/lectures/download/${filename}">강의자료 다운</a>
+	<a href="/api/lectures/download/${conts_id}">강의자료 다운</a>
    
    <!-- 북마크 기능 -->
    <div class="bookmark" style="font-size: 20px;">
@@ -140,10 +140,11 @@ body {
    	<div class="exit-container">
    		<form id="exitForm" action="/api/progress/save" method="POST">
    			<input type="hidden" name="videoId" value="">
-   			<input type="hidden" name="userId" value="user50">
+   			<input type="hidden" name="userId" value="">
    			<input type="hidden" name="conts_final" value="">
    			<input type="hidden" name="conts_max" value="">
    			<input type="hidden" name="vdo_length" value="">
+   			<input type="hidden" name="user_seq" value="${user_seq}">
             강의실 나가기
             <button type="button" id="exitButton">
                 <img src="../image/나가기.png" style="width: 50px; height: auto;">
@@ -154,14 +155,18 @@ body {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
     let player;
-    let vdo_length = 0; 		//영상길이
-    let conts_max = 0; 	        //최대시청시간
-    let conts_final = 0; 		//마지막시청시간
-    let originalTime; 			//조작한 시간(플레이어 일시정지, 조작 시 원래대로 돌리는 데 사용)
-    let isPaused = false;		//일시정지 여부
-    let videoId = "${videoId}"; //유튜브 영상 url
-    let conts_id = "${conts_id}"//강의영상번호
+    let vdo_length = 0; 		  //영상길이
+    let conts_max = 0; 	          //최대시청시간
+    let conts_final = 0; 		  //마지막시청시간
+    let originalTime; 			  //조작한 시간(플레이어 일시정지, 조작 시 원래대로 돌리는 데 사용)
+    let isPaused = false;		  //일시정지 여부
+    let videoId = "${videoId}";   //유튜브 영상 url
+    let conts_id = "${conts_id}"; //강의영상번호
     let bookmarks =[];
+ 	let user_seq = "${user_seq}";
+ 	
+ 	
+ 	
  	
     // youtube IFrame API 호출함수
     function onYouTubeIframeAPIReady() {
@@ -183,6 +188,7 @@ body {
     
     //페이지 로드 ajax 
     window.onload = function(){
+    	console.log("user_seq ->"+ user_seq);
     	fetch(`/api/lectures/init?conts_id=${conts_id}`)
     	.then(response => response.json())
     	.then(data => {
@@ -192,6 +198,8 @@ body {
     		console.log("Error:", error);
     	});
     }
+    
+
     
  	// 데이터베이스에서 북마크 정보를 불러오는 ajax
     function fetchBookmarks(conts_id) {
@@ -272,14 +280,14 @@ body {
     }
 
     //마지막위치에서 재생
-    function loadFinalTime(videoId) {
+    function loadFinalTime(videoId, user_seq) {
     console.log('Loading final time for videoId:', videoId); // videoId가 올바른지 로그로 확인
     if (!videoId) {
         console.error("videoId is missing!"); // videoId가 없을 경우 에러 로그
         return; // videoId가 없으면 함수를 종료
     } 
 
-    fetch(`/api/progress/${videoId}`) // videoId가 올바르게 삽입되었는지 확인
+    fetch(`/api/progress/${videoId}?user_seq=${user_seq}`) // videoId가 올바르게 삽입되었는지 확인
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
