@@ -42,7 +42,7 @@ public class HjhController {
 		return "view_Hjh/adminPage";
 
 	}
-
+	
 	@RequestMapping(value = "/myPageTeacher")
 	public String myPageTeacher(HttpSession session) {
 
@@ -147,7 +147,9 @@ public class HjhController {
 		params.put("rowPage", page.getRowPage());
 		params.put("keyword", keyword);
 		List<User_Info> userList = hjh.userList(params);
+		System.out.println("userList"+userList);
 
+		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", page);
 		model.addAttribute("totaluser", totaluser);
 		model.addAttribute("userList", userList);
@@ -169,12 +171,11 @@ public class HjhController {
 	 model.addAttribute("phone_num", user_Info.getPhone_num()); 
 	 model.addAttribute("birth", user_Info.getBirth());
 	 model.addAttribute("user_id", user_Info.getUser_id());
-	 
-	 
+		model.addAttribute("profile_name", user_Info.getProfile_name());
+		model.addAttribute("profile_addr", user_Info.getProfile_addr());
 	 }
 	 else { // 사용자
 	
-	 
 	 model.addAttribute("error", "사용자 정보를 찾을 수 없습니다."); }
 	 
 	 return "view_Hjh/detailProfile"; 
@@ -185,15 +186,13 @@ public class HjhController {
 	@RequestMapping("/detailProfileEdit")
 	public String userProfile1(@ModelAttribute User_Info info) {
 		System.out.println("detailProfileEdit");
-		int updateCount = hjh.userProfile1(info);
+		int updateCountAdmin = hjh.updateCountAdmin(info);
 		// 수정 작업 수행 System.out.println("updateCount"+updateCount); // 수정 결과에 따라 다르게처리할 수
 		// 있습니다.
 		System.out.println("zz");
 		return "redirect:/view_Hjh/updateProfileAdmin";
 	}
-
-
-
+  
 	//강사 개인정보수정
 	@RequestMapping("updateUserInfo1")
 	public String updateUserInfo1(@ModelAttribute User_Info info, 
@@ -203,7 +202,7 @@ public class HjhController {
 	    System.out.println("updateUserInfo1 Start...");
 
 	    // 프로필 사진 파일을 업로드할 경로 지정 (서버의 실제 경로 사용)
-	    String uploadDir = request.getServletContext().getRealPath("/webapp/uploads/");
+	    String uploadDir = request.getServletContext().getRealPath("/chFile/user/");
 
 	    // 파일이 선택되지 않은 경우 처리
 	    if (profileImage != null && !profileImage.isEmpty()) {
@@ -228,7 +227,7 @@ public class HjhController {
 	        String uniqueFileName = UUID.randomUUID().toString() + fileExtension;  // UUID + 확장자
 
 	        // 파일 경로 설정
-	        String profileAddr = "/webapp/uploads/" + uniqueFileName;  // 파일 경로
+	        String profileAddr = "/chFile/user/" + uniqueFileName;  // 파일 경로
 
 	        // 파일을 저장할 디렉토리 생성
 	        File dir = new File(uploadDir);
@@ -276,7 +275,7 @@ public class HjhController {
 	    System.out.println("updateUserInfo Start...");
 
 	    // 프로필 사진 파일을 업로드할 경로 지정 (서버의 실제 경로 사용)
-	    String uploadDir = request.getServletContext().getRealPath("/webapp/uploads/");
+	    String uploadDir = request.getServletContext().getRealPath("/chFile/user/");
 
 	    // 파일이 선택되지 않은 경우 처리
 	    if (profileImage != null && !profileImage.isEmpty()) {
@@ -301,7 +300,7 @@ public class HjhController {
 	        String uniqueFileName = UUID.randomUUID().toString() +   fileExtension;  // UUID + 확장자
 
 	        // 파일 경로 설정
-	        String profileAddr = "/webapp/uploads/" + uniqueFileName;  // 파일 경로
+	        String profileAddr = "/chFile/user/" + uniqueFileName;  // 파일 경로
 
 	        // 파일을 저장할 디렉토리 생성
 	        File dir = new File(uploadDir);
@@ -393,7 +392,7 @@ public class HjhController {
 	        // 회원 탈퇴가 성공했으면, 세션 해제 (로그아웃)
 	        session.invalidate();  // 세션 무효화
 	        model.addAttribute("msg", "회원 탈퇴가 완료되었습니다.");
-	        return "redirect:/view_Hjh/myPageStd";  // 탈퇴 후 마이페이지로 리다이렉트
+	        return "main";  // 탈퇴 후 마이페이지로 리다이렉트
 	    } else if (result == 0) {
 	        model.addAttribute("msg", "비밀번호가 일치하지 않거나 회원 정보가 없습니다.");
 	        return "view_Hjh/deleteStd";  // 실패 메시지와 함께 탈퇴 페이지로 이동
@@ -402,7 +401,17 @@ public class HjhController {
 	        return "view_Hjh/deleteStd";  // 탈퇴 실패 시 다시 탈퇴 페이지로 이동
 	    }
 	}
+	@GetMapping("changePW")
+	public String changePW(HttpSession session, Model model) {
+	    // 세션에서 사용자 아이디를 가져옵니다.
+	    String userId = (String) session.getAttribute("user"); // 세션에 저장된 사용자 아이디
 
+	    // 사용자 아이디를 모델에 추가
+	    model.addAttribute("userId", userId);
+
+	    // 비밀번호 변경 페이지를 반환
+	    return "view_Hjh/changePW";
+	}
 
 
 }
