@@ -69,12 +69,7 @@
 			    UPDATE public."USER_INFO" UI
 			    SET "DEL_STATE" = 1
 			    WHERE UI."USER_ID" = #{user_id}
-			    AND EXISTS (
-			        SELECT 1
-			        FROM public."LOGIN_INFO" LI
-			        WHERE LI."USER_ID" = UI."USER_ID"
-			        AND LI."PASSWORD" = #{password}
-			    )
+
 			</update>
 		
 
@@ -84,7 +79,15 @@
 		    WHERE "USER_ID" = #{userId}
 	
 	    	</select>
-
+				<update id="updateCountAdmin" parameterType="User_Info">
+			UPDATE public."USER_INFO"
+			    SET   "USER_NAME"= #{user_name},
+			   		  "EMAIL" = #{email},
+			   		  "ADDRESS" = #{address},
+			   		  "PHONE_NUM" = #{phone_num},
+			   		  "BIRTH" = #{birth}
+			    WHERE "USER_ID" = #{user_id}
+		</update>
 
 
 

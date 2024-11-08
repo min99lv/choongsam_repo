@@ -36,6 +36,8 @@ public class LjmServiceImpl implements LjmService {
             System.out.println("사용자를 찾을 수 없습니다.");
             return null; // 사용자 ID가 없으면 null 반환
         }
+        
+       
 
         // 비밀번호 확인
         if (passwordEncoder.matches(password, login_Info.getPassword())) {
@@ -46,6 +48,42 @@ public class LjmServiceImpl implements LjmService {
             return null; // 비밀번호가 일치하지 않으면 null 반환
         }
     }
+    
+    @Override
+	public User_Info getUserStatus(String user_id) {
+    	User_Info user_Info = ljd.getUserInfo(user_id);
+    	System.out.println("www");
+		return user_Info;
+	}	
+    
+    // 관리자 로그인 처리
+    @Override
+	public Login_Info adminLogin(String user_id, String password) {
+    	System.out.println("LjmServiceImpl adminLogin() start....");
+
+        // 사용자 정보를 데이터베이스에서 조회
+        Login_Info login_Info = ljd.adminLogin(user_id);
+        
+        // 로그인 실패 처리
+        if (login_Info == null) {
+            System.out.println("사용자를 찾을 수 없습니다.");
+            return null; // 사용자 ID가 없으면 null 반환
+        }
+        
+        if (login_Info.getUser_status() != 1003) {
+        	 System.out.println("관리자만 로그인 가능합니다.");
+             return null; // 회원 상태가 1003이 아니면 null 반환
+        }
+
+        // 비밀번호 확인
+        if (passwordEncoder.matches(password, login_Info.getPassword())) {
+            System.out.println(user_id + " 로그인 성공");
+            return login_Info; // 로그인 성공
+        } else {
+            System.out.println("비밀번호가 일치하지 않습니다.");
+            return null; // 비밀번호가 일치하지 않으면 null 반환
+        }
+	}
     
     // 회원가입
 	@Override
@@ -157,5 +195,7 @@ public class LjmServiceImpl implements LjmService {
         }
         return result;
 	}
+
+	
 
 }

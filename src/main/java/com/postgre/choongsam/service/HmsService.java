@@ -2,6 +2,7 @@ package com.postgre.choongsam.service;
 
 import java.util.List;
 
+import com.postgre.choongsam.dto.Class_Bookmark;
 import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Lecture_Video;
 
@@ -14,6 +15,9 @@ public interface HmsService {
 	void saveWatchTimeNoMaxUpdate(Class_Schedule class_schedule);
 	int watchedFinalTime(String videoId);
 	String getFilePath(String filename);
+	List<Class_Bookmark> getBookmarksByContsId(String conts_id);
+	List<Class_Bookmark> getBookmark(String conts_id);
+	String getfilename(String conts_id);
 
 
 }
