@@ -142,8 +142,11 @@
             replyButton.onclick = function() {
             	
             	const note_sn = note.note_sn;
-            	const  sndpty_seq =note.sndpty_seq;
-                location.href = '/notes/new?note_sn='+ note_sn + '&sndpty_seq=' + sndpty_seq;
+            	const sndpty_seq =note.sndpty_seq;
+            	const sender_name = note.sender_name
+            	
+            	
+                location.href = '/notes/new?note_sn='+ note_sn + '&sndpty_seq=' + sndpty_seq +'&sender_name=' +sender_name ;
             };
             
             const senderReceiverRow = document.getElementById('sender_receiver');

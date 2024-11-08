@@ -88,13 +88,16 @@
 			    <c:when test="${usertype == 1002}">
 			        <a href="/view_Hjh/myPageTeacher?user=${user}">마이페이지</a>
 			    </c:when>
+			    <c:when test="${usertype == 1003}">
+			        <a href="/view_Hjh/adminPage?user=${user}">관리자페이지</a>
+			    </c:when>			    
 			    <c:otherwise>
 			        <a href="/view_Ljm/loginForm">마이페이지</a>
 			    </c:otherwise>
 			</c:choose>
 			
             <a href="/api/notice">공지사항</a>
-            <a href="/video-details?videoId=H8BqV91Mhe0&userId=user48">문의사항</a>
+            <a href="/video-details?videoId=H8BqV91Mhe0&user_seq=user48">문의사항</a>
         </div>
         
             <!-- 로그인 여부에 따라 버튼 표시 -->

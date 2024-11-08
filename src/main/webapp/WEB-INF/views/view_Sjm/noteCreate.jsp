@@ -296,13 +296,22 @@ function selectRecipient() {
     const selectedRecipients = [];
     const receiversInput = document.getElementById("receivers");
 
-    // 체크된 수신자를 모아 selectedRecipients 배열에 추가
-    document.querySelectorAll('#lectureTable input[type="checkbox"]:checked').forEach(checkbox => {
-        const userSeq = checkbox.getAttribute('data-user-seq'); // 수신자 seq 가져오기
-        const userName = checkbox.parentElement.textContent.trim(); // 수신자 이름 가져오기
-        selectedRecipients.push({ userSeq, userName }); // 이름과 seq 객체로 저장
-    });
+    // 모델에 저장된 값 가져오기
+    const rcvrSeqElement = document.querySelector('input[name="rcvr_seq"]');
+    const modelSeq = rcvrSeqElement ? rcvrSeqElement.value : null;  // 요소가 존재하면 값 가져오기, 아니면 null
+    const modelName = receiversInput ? receiversInput.value : null;  // receiversInput이 null일 경우 처리
 
+    // 모델에 값이 있으면 배열에 추가
+    if (modelSeq && modelName) {
+        selectedRecipients.push({ userSeq: modelSeq, userName: modelName });
+    } else {
+        // 체크된 수신자를 모아 selectedRecipients 배열에 추가
+        document.querySelectorAll('#lectureTable input[type="checkbox"]:checked').forEach(checkbox => {
+            const userSeq = checkbox.getAttribute('data-user-seq'); // 수신자 seq 가져오기
+            const userName = checkbox.parentElement.textContent.trim(); // 수신자 이름 가져오기
+            selectedRecipients.push({ userSeq, userName }); // 이름과 seq 객체로 저장
+        });
+    }
     // 선택된 수신자가 없을 때 경고 메시지 표시
     if (selectedRecipients.length === 0) {
         alert("수신자를 선택해주세요.");
@@ -331,7 +340,9 @@ function sendMessage() {
     const sndptySeq = document.querySelector('[name="sndpty_seq"]').value;
     const sndptyNoteYn = document.querySelector('[name="sndpty_note_yn"]').value;
     const rcvrNoteYn = document.querySelector('[name="rcvr_note_yn"]').value;
-
+    const bfrNoteSnElement = document.querySelector('[name="bfr_note_sn"]');
+    const bfrNoteSn = bfrNoteSnElement ? bfrNoteSnElement.value : null;
+    
     // selectRecipient 호출하여 선택된 수신자 가져오기
     const selectedRecipients = selectRecipient();
     if (!selectedRecipients) return; // 선택된 수신자가 없다면 종료
@@ -342,7 +353,8 @@ function sendMessage() {
     	    note_ttl: noteTitle,
     	    note_cn: noteContent,
     	    sndpty_note_yn: sndptyNoteYn,
-    	    rcvr_note_yn: rcvrNoteYn
+    	    rcvr_note_yn: rcvrNoteYn,
+    	    bfr_note_sn:bfrNoteSn
     	};
 
     console.log("messageData:", messageData); // messageData가 제대로 설정되었는지 확인
@@ -388,12 +400,24 @@ function sendMessage() {
 			<input type="hidden"	name="sndpty_note_yn" value="N"> 
 			<input type="hidden" name="rcvr_note_yn" value="N">
 
+	
 			<table class="list">
 				<tr>
 					<th>받는사람</th>
-					<td><input type="text" id="receivers" name="receivers" readonly>
-						<button type="button" onclick="openRecipientModal()">추가</button> <span>user_seq-${sessionScope.user_seq}</span>
+					<td>
+					<c:choose>
+						    <c:when test="${not empty rcvr_seq}">
+						        <input type="hidden" name="rcvr_seq" value="${rcvr_seq}">
+						        <input type="text" id="receivers" name="receivers" value="${receiver_name}" readonly>
+						        <input type="hidden" name="bfr_note_sn" value="${bfr_note_sn}">
+						    </c:when>
+						    <c:otherwise>
+						        <input type="text" id="receivers" name="receivers" readonly>
+						<button type="button" onclick="openRecipientModal()">추가</button> 
 						<!-- 값을 직접 확인 --></td>
+						    </c:otherwise>
+						</c:choose>
+						<span>user_seq-${sessionScope.user_seq}</span>
 				</tr>
 				<tr>
 					<th>제목</th>

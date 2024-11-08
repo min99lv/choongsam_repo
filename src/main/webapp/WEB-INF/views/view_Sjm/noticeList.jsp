@@ -264,7 +264,7 @@ td a:hover {
 							</c:when>
 							<c:otherwise>
 								<a id="page" class="pagination_a"
-									href=/api/notice?currentPage=${i}&total=${total}&keyword=${keyword}>${i}</a>
+									href="/api/notice?currentPage=${i}&total=${total}&keyword=${keyword}">${i}</a>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.postgre.choongsam.dao.HmsDao;
+import com.postgre.choongsam.dto.Class_Bookmark;
 import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Lecture_Video;
 import com.postgre.choongsam.dto.Syllabus;
@@ -37,6 +38,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @Controller
@@ -50,21 +53,33 @@ public class HmsController {
 	
 	//영상불러오기 api
 	@GetMapping("/video-details")
-	public String getVideoDetails(@RequestParam String videoId, Model model) {
+	public String getVideoDetails(@RequestParam String videoId, Model model,
+			@RequestParam int user_seq) {
 		System.out.println("hmsController youtube api start..");
 		System.out.println("Received videoId:"+ videoId);
+		System.out.println("Received user_seq:"+ user_seq);
+		//System.out.println("Received filename:"+ filename);
+		
+		String URL = HD.getURL(videoId); //videoId를 이용해서 Addr 다시 불러오기
+		System.out.println("msController getURL ->"+ URL);
+		
+		String result = HS.getVideoDetails(URL);		
+		System.out.println("mscontroller getVideoDetails result->"+result);
 		
 		//Lecture_video 객체 생성
 		Lecture_Video lectureVideo =  new Lecture_Video();
 		lectureVideo.setConts_id(videoId);
 		
-		//유튜브 url 생성
-		String videoUrl = "http://www.youtube.com/embed/" + videoId;
-		System.out.println("hmsController videoUrl:"+videoUrl);
+		//유튜브 url 생성 (addr로 변경)
+		String videoUrl = "http://www.youtube.com/embed/" + URL;
+		System.out.println("hmsController videoUrl:"+videoUrl);		
 		model.addAttribute("videoUrl", videoUrl);
-		model.addAttribute("videoId",videoId);
+		model.addAttribute("videoId",URL); //videoId에 URL 주소값 넣어서 보내기.
+		model.addAttribute("conts_id",videoId); //0101 등 영상번호
 		
-		HS.getVideoDetails(videoId);
+		String filename= HD.getfilename(videoId);
+		
+		model.addAttribute("filename",filename);
 		
 		return "view_Hms/videoView";
 	}
@@ -92,6 +107,7 @@ public class HmsController {
 		System.out.println("conts_max 방금 재생한 currentmax값->"+conts_max);
 	
 		Syllabus lctrInfo = HD.findLctrInfo(videoId);
+		System.out.println("msController datasave lctrInfo->"+lctrInfo);
 		Class_Schedule class_schedule = new Class_Schedule();
 		
 		//현재 DB의 conts_max값 조회
@@ -101,8 +117,7 @@ public class HmsController {
 		class_schedule.setConts_final(conts_final);		
 		class_schedule.setConts_id(videoId);
 		class_schedule.setLctr_id(lctrInfo.getLctr_id());
-		class_schedule.setLctr_no(lctrInfo.getLctr_no());
-		class_schedule.setUser_seq(lctrInfo.getUser_seq());	 
+		class_schedule.setLctr_no(lctrInfo.getLctr_no()); 
 
 		// conts_max가 현재 값보다 큰 경우에만 업데이트
 	    if (conts_max > currentContsMax) {
@@ -120,8 +135,8 @@ public class HmsController {
 	        HS.saveWatchTimeNoMaxUpdate(class_schedule); // conts_max 없이 업데이트
 	    }   		
 	    System.out.println("mscontroller dataSave class_schedule->"+class_schedule);
-		
-		return "view_Hms/test"; //성희가 만든 강의 목록으로 redirect:/할 예정
+	
+		return "view_Jsh/stuLecture";//강의목록으로
 	}
 	
 	//마지막 위치 가져오기
@@ -141,7 +156,16 @@ public class HmsController {
 	    return ResponseEntity.ok(response);
 	}
 	
-	
+	//파일이름
+	@GetMapping("/api/lectures/init")
+	public String getfilename(@RequestParam String conts_id, Model model) {
+		System.out.println("mscontroller getfilename start..");
+		System.out.println("mscontroller getfilename conts_id.."+conts_id);
+		String filename = HS.getfilename(conts_id);
+		System.out.println("mscontroller getfilename filename->"+filename);
+		model.addAttribute("filename",filename);
+		return "view_Hms/videoView";
+	}
 
 	//강의자료 다운로드
 	@GetMapping("/api/lectures/download/{filename}")
@@ -185,6 +209,23 @@ public class HmsController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
+	
+	//북마크
+	@GetMapping("/api/bookmarks/{conts_id}")
+	public  ResponseEntity< List<Class_Bookmark>> getBookmark(@PathVariable("conts_id") String conts_id,Model model) {
+		System.out.println("msController getBookmark start...");
+		System.out.println("msController getBookmark conts_id..."+conts_id);
+		List<Class_Bookmark> bookmark = HS.getBookmark(conts_id);
+		System.out.println("msController getBookmark bookmark..."+bookmark);
+		model.addAttribute("bookmark",bookmark);
+		model.addAttribute("conts_id");
+		if(bookmark !=null) {
+			return ResponseEntity.ok(bookmark);
+		}else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
 	
 	
 	

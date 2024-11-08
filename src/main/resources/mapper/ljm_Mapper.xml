@@ -6,7 +6,20 @@
 		SELECT * 
 		FROM "LOGIN_INFO" 
 		WHERE "USER_ID" = #{user_id}
-		
+  		AND ("USER_STATUS" = 1001 OR "USER_STATUS" = 1002);	
+  	</select>
+	
+	 <select id="getUserInfo" resultType="User_Info">
+        SELECT "USER_SEQ", "USER_ID", "DEL_STATE"
+        FROM "USER_INFO"
+        WHERE "USER_ID" = #{user_id}
+    </select>
+	
+	<select id="adminLogin" parameterType="Login_Info" resultType="Login_Info">
+		SELECT * 
+		FROM "LOGIN_INFO" 
+		WHERE "USER_ID" = #{user_id}
+		AND "USER_STATUS" = 1003		
 	</select>
 	
 	<insert id="loginSignup" parameterType="Login_Info">
