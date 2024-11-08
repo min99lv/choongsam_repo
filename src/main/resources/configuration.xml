@@ -22,9 +22,8 @@
 		<typeAlias alias="File_Group" type="com.postgre.choongsam.dto.File_Group"/>
 		<typeAlias alias="Course_Registration" type="com.postgre.choongsam.dto.Course_Registration"/>
 		<typeAlias alias="Homework_Submission" type="com.postgre.choongsam.dto.Homework_Submission"/>
+		<typeAlias alias="Class_Bookmark" type="com.postgre.choongsam.dto.Class_Bookmark"/>
 		<typeAlias alias="Ask" type="com.postgre.choongsam.dto.Ask"/>
 		<typeAlias alias="Attendance_Check" type="com.postgre.choongsam.dto.Attendance_Check"/>
-
-
 	</typeAliases>
 </configuration>

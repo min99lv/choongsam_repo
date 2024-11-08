@@ -2,6 +2,7 @@ package com.postgre.choongsam.dao;
 
 import java.util.List;
 
+import com.postgre.choongsam.dto.Class_Bookmark;
 import com.postgre.choongsam.dto.Class_Schedule;
 import com.postgre.choongsam.dto.Lecture_Video;
 import com.postgre.choongsam.dto.Syllabus;
@@ -22,6 +23,14 @@ public interface HmsDao {
 	int watchedFinalTime(String videoId);
 
 	String getFilePath(String filename);
+
+	String getURL(String videoId);
+
+	List<Class_Bookmark> Bookmark(String conts_id);
+
+	String getfilename(String conts_id);
+
+	List<Class_Bookmark> getBookmark(String conts_id);
 
 
 
