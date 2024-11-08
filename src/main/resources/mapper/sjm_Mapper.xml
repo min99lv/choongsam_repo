@@ -97,54 +97,71 @@
 	</select>
 
 	<select id="getNotesReceived" parameterType="Map" resultType="Note">
-		SELECT
-		n."NOTE_SN",
-		n."BFR_NOTE_SN",
-		n."SNDPTY_SEQ",
-		n."RCVR_SEQ",
-		n."DSPTCH_DT",
-		n."RCPTN_DT",
-		n."NOTE_TTL",
-		n."NOTE_CN",
-		n."SNDPTY_NOTE_YN",
-		n."RCVR_NOTE_YN",
-		u."USER_NAME" AS "sender_name",
-		r."USER_NAME" AS "receiver_name"
-		FROM
-		"NOTE" n
-		LEFT JOIN
-		"USER_INFO" u ON
-		n."SNDPTY_SEQ" = u."USER_SEQ"
-		LEFT JOIN
-		"USER_INFO" r ON n."RCVR_SEQ" =
-		r."USER_SEQ"
-		WHERE
-		n."RCVR_SEQ" = #{user_seq};
+SELECT
+        n."NOTE_SN",
+        n."BFR_NOTE_SN",
+        n."SNDPTY_SEQ",
+        n."RCVR_SEQ",
+        n."DSPTCH_DT",
+        n."RCPTN_DT",
+        n."NOTE_TTL",
+        n."NOTE_CN",
+        n."SNDPTY_NOTE_YN",
+        n."RCVR_NOTE_YN",
+        u."USER_NAME" AS "sender_name",
+        r."USER_NAME" AS "receiver_name"
+    FROM
+        "NOTE" n
+    LEFT JOIN
+        "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
+    LEFT JOIN
+        "USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ"
+    WHERE
+        n."RCVR_SEQ" = #{user_seq}
+        <if test="keyword != null and keyword != ''">
+            AND (
+                n."NOTE_TTL" ILIKE '%' || #{keyword} || '%' 
+                OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
+                OR r."USER_NAME" ILIKE '%' || #{keyword} || '%'
+            )
+        </if>
+    ORDER BY "DSPTCH_DT" DESC
+    LIMIT #{rowPage}
+    OFFSET #{start};
 	</select>
 
 	<select id="getNotesSend" parameterType="Map" resultType="Note">
-SELECT
-    n."NOTE_SN",
-    n."BFR_NOTE_SN",
-    n."SNDPTY_SEQ",
-    n."RCVR_SEQ",
-    n."DSPTCH_DT",
-    n."RCPTN_DT",
-    n."NOTE_TTL",
-    n."NOTE_CN",
-    n."SNDPTY_NOTE_YN",
-    n."RCVR_NOTE_YN",
-    u."USER_NAME" AS "sender_name",
-    r."USER_NAME" AS "receiver_name"
-FROM
-    "NOTE" n
-LEFT JOIN
-    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
-LEFT JOIN
-    "USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ"
-WHERE
-    n."SNDPTY_SEQ" = #{user_seq};
-
+ SELECT
+        n."NOTE_SN",
+        n."BFR_NOTE_SN",
+        n."SNDPTY_SEQ",
+        n."RCVR_SEQ",
+        n."DSPTCH_DT",
+        n."RCPTN_DT",
+        n."NOTE_TTL",
+        n."NOTE_CN",
+        n."SNDPTY_NOTE_YN",
+        n."RCVR_NOTE_YN",
+        u."USER_NAME" AS "sender_name",
+        r."USER_NAME" AS "receiver_name"
+    FROM
+        "NOTE" n
+    LEFT JOIN
+        "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
+    LEFT JOIN
+        "USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ"
+    WHERE
+        n."SNDPTY_SEQ" = #{user_seq}
+        <if test="keyword != null and keyword != ''">
+            AND (
+                n."NOTE_TTL" ILIKE '%' || #{keyword} || '%' 
+                OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
+                OR r."USER_NAME" ILIKE '%' || #{keyword} || '%'
+            )
+        </if>
+    ORDER BY "DSPTCH_DT" DESC
+    LIMIT #{rowPage}
+    OFFSET #{start};
 	</select>
 
 	<select id="getNote" parameterType="Int" resultType="Note">
@@ -184,6 +201,40 @@ WHERE
 
 
 	</insert>
+	
+	<select id="getNoteSendTotal">
+			SELECT
+			    COUNT(*)
+			FROM
+			    "NOTE" n
+			JOIN
+			    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
+			WHERE
+			    (
+			        #{keyword} IS NULL OR #{keyword} = ''
+			    ) 
+			    OR (
+			        n."NOTE_TTL" ILIKE '%' || #{keyword} || '%'
+			        OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
+			    );
+	</select>
+	<select id="getNoteRcvrTotal">
+	SELECT
+			    COUNT(*)
+			FROM
+			    "NOTE" n
+			JOIN
+			    "USER_INFO" u ON n."RCVR_SEQ" = u."USER_SEQ"
+			WHERE
+			    (
+			        #{keyword} IS NULL OR #{keyword} = ''
+			    ) 
+			    OR (
+			        n."NOTE_TTL" ILIKE '%' || #{keyword} || '%'
+			        OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
+			    );
+	</select>
+	
 
 	<select id="getMyLectures" parameterType="int"
 		resultType="Lecture">
