@@ -75,6 +75,7 @@ public class JshDaoImpl implements JshDao {
 		String fileSuffix= info.getFile_extn_nm();
 		long file_sz = info.getFile_sz();
 		String file_path = info.getFile_path_nm();
+		String idntf_no = info.getIdntf_no();
 		
 		Map<String, Object> fileInfo = new HashMap<>();
 		
@@ -82,6 +83,7 @@ public class JshDaoImpl implements JshDao {
 		fileInfo.put("fileSuffix", fileSuffix);
 		fileInfo.put("file_sz", file_sz);
 		fileInfo.put("file_path", file_path);
+		fileInfo.put("idntf_no", idntf_no);
 		
 		try {
 			result = session.insert("contsFileUpload",fileInfo);
@@ -236,12 +238,17 @@ public class JshDaoImpl implements JshDao {
 		chpInfo.put("chp_time", chp_time);
 		chpInfo.put("cap_ttl", cap_ttl);
 		
+		int value = 1;
+		chpInfo.put("value", value);
+		
 		try {
 			if(update == null) {
 				result = session.insert("chpTimeUpload", chpInfo);
 				
 				if(chp_time2!=null&&chp_time2!=0) {
 					result = 0;
+					value = 2;
+					chpInfo.put("value", value);
 					chpInfo.put("chp_time", chp_time2);
 					chpInfo.put("cap_ttl", cap_ttl2);
 					
@@ -249,6 +256,8 @@ public class JshDaoImpl implements JshDao {
 				}
 				else if(chp_time3!=null&&chp_time3!=0) {
 					result=0;
+					value = 3;
+					chpInfo.put("value", value);
 					chpInfo.put("chp_time", chp_time3);
 					chpInfo.put("cap_ttl", cap_ttl3);
 					
@@ -259,6 +268,8 @@ public class JshDaoImpl implements JshDao {
 					result = session.update("chpTimeUpdate", chpInfo);
 					
 					if(chp_time2!=null&&chp_time2!=0) {
+						value = 2;
+						chpInfo.put("value", value);
 						result = 0;
 						chpInfo.put("chp_time", chp_time2);
 						chpInfo.put("cap_ttl", cap_ttl2);
@@ -266,6 +277,8 @@ public class JshDaoImpl implements JshDao {
 						result = session.update("chpTimeUpdate", chpInfo);
 					}
 					else if(chp_time3!=null&&chp_time3!=0) {
+						value = 3;
+						chpInfo.put("value", value);
 						result=0;
 						chpInfo.put("chp_time", chp_time3);
 						chpInfo.put("cap_ttl", cap_ttl3);

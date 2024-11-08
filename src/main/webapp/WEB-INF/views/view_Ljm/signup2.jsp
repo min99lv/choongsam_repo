@@ -166,21 +166,21 @@
 	    height: 18px; /* 높이를 설정하여 줄 바꿈 방지 */
 	}
 	
-	#checkIdMsg, #checkPwMsg1, #checkPwMsg2 {
-		color: red; /* 텍스트 색상 */
-	    font-size: 12px; /* 폰트 크기 */
-	    margin-top: 5px; /* 입력 필드와의 간격 */
-	    height: 18px; /* 높이를 설정하여 줄 바꿈 방지 */
-	}
+	
 
 	/* 각 tr 사이에 여백 추가 */
 	table tr {
     	margin-bottom: 15px; /* tr 사이에 아래쪽 여백 추가 */
 	}
 
-	
+	#checkIdMsg, #checkPwMsg1, #checkPwMsg2 {
+		color: red; /* 텍스트 색상 */
+	    font-size: 12px; /* 폰트 크기 */
+	    margin-top: 5px; /* 입력 필드와의 간격 */
+	    height: 18px; /* 높이를 설정하여 줄 바꿈 방지 */
+	}
      
-     #btnNext {
+    #btnNext {
 		width: 250px;
         height: 36px;
         padding: 5px 10px 5px 10px;
@@ -211,6 +211,7 @@
     margin-bottom: 10px; /* 아래쪽 마진을 줄입니다 */
     margin-top: 20px; /* 위쪽 마진을 추가하여 공간을 조절합니다 */
 }
+ 
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

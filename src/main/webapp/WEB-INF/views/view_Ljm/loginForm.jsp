@@ -76,7 +76,7 @@
 
      }
      
-     #btnLogin {
+     #btnLogin, #btnAdminLogin {
 		width: 250px;
         height: 36px;
         padding: 5px 10px 5px 10px;
@@ -103,42 +103,54 @@
         
         <main>
 			
-<form action="login" method="post" id="myForm">
-  <div class="main_container">
-    <h2 style="color: #00664F ">로그인</h2>
-    <hr style="width: 400px; margin: 0 auto;">
-    <br>
-    <p>
-      <div class="login_section">
-        <c:if test="${not empty loginError}">
-          <p class="errMessage">${loginError}</p>
-        </c:if>
-        <p>
-          <select name="user_status" class="select" id="user_status">
-            <option disabled selected>로그인 할 회원 유형을 선택하세요</option>
-            <option value="1001">학생</option>
-            <option value="1002">강사</option>
-          </select>
-        </p>
-        <p>
-          <input type="text" name="user_id" value="${user_id }" placeholder="아이디">
-        </p>
-        <p>
-          <input type="password" name="password" placeholder="비밀번호">
-        </p>
-        <p>
-          <input id="btnLogin" type="submit" value="로그인">
-        </p>
-
-        <div class="find">
-          <a href="findId">아이디 찾기 | </a>
-          <a href="findPw">비밀번호 찾기 | </a>
-          <a href="signup1">회원가입</a>
-        </div>
-      </div>
-    </div>
-  </form>
-
+		<form action="login" method="post" id="myForm">
+		  <div class="main_container">
+		    <h2 style="color: #00664F ">로그인</h2>
+		    <hr style="width: 400px; margin: 0 auto;">
+		    <br>
+		    <p>
+		      <div class="login_section">
+		        <c:if test="${not empty loginError}">
+		          <p class="errMessage">${loginError}</p>
+		        </c:if>
+		        
+		        <c:if test="${not empty loginError2}">
+		          <p class="errMessage">${loginError2}</p>
+		        </c:if>
+		        <p>
+		          <select name="user_status" class="select" id="user_status">
+		            <option disabled selected>로그인 할 회원 유형을 선택하세요</option>
+		            <option value="1001">학생</option>
+		            <option value="1002">강사</option>
+		          </select>
+		        </p>
+		        <p>
+		          <input type="text" name="user_id" value="${user_id }" placeholder="아이디">
+		        </p>
+		        <p>
+		          <input type="password" name="password" placeholder="비밀번호">
+		        </p>
+		        <p>
+		          <input id="btnLogin" type="submit" value="로그인">
+		        </p>
+		
+		        <div class="find">
+		          <a href="findId">아이디 찾기 | </a>
+		          <a href="findPw">비밀번호 찾기 | </a>
+		          <a href="signup1">회원가입</a>
+		        </div>
+		      </div>
+		    </div>
+		  </form>
+		  <br>
+		  <br>
+		  <br>
+		  <div class="main_container">
+		  <form action="adminLoginForm" method="post">
+		  	<input id="btnAdminLogin" type="submit" value="관리자 로그인">
+		  </form>
+		  </div>
+	</main>
   <script>
     // DOMContentLoaded 이벤트를 사용하여 DOM이 완전히 로드된 후 실행되게 설정
     document.addEventListener('DOMContentLoaded', function() {
