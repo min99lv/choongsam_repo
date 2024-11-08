@@ -169,11 +169,15 @@ public class JshDaoImpl implements JshDao {
 		syllabusInfo.put("lctr_no", lctr_no);
 		syllabusInfo.put("lctr_id", lctr_id);
 		syllabusInfo.put("conts_id", conts_id);
-		syllabusInfo.put("user_seq", user_seq);
-		syllabusInfo.put("lctr_otln", lctr_otln);
+		//syllabusInfo.put("user_seq", user_seq);
+		//syllabusInfo.put("lctr_otln", lctr_otln);
+		
+		System.out.println("lctr_no >> "+lctr_no);
+		System.out.println("lctr_id >> "+lctr_id);
+		System.out.println("conts_id >> "+conts_id);
 		
 		try {
-			result = session.insert("syllabusUpload", syllabusInfo);
+			result = session.update("syllabusUpload", syllabusInfo);
 		} catch (Exception e) {
 			System.out.println("JshDao syllabusUpload exception >> "+e.getMessage());
 		}
@@ -271,6 +275,26 @@ public class JshDaoImpl implements JshDao {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public List<Class_ScheduleAddVideo> searchTeachConts(String lctr_id, int user_seq) {
+		System.out.println("JshDao searchTeachConts start...");
+		
+		List<Class_ScheduleAddVideo> info = null;
+		Map<String, Object> value = new HashMap<>();
+		
+		value.put("lctr_id", lctr_id);
+		value.put("user_seq", user_seq);
+		
+		try {
+			info = session.selectList("searchTeachConts", value);
+			
+		} catch (Exception e) {
+			System.out.println("JshDao searchTeachConts exception >> "+e.getMessage());
+		}
+		
+		return info;
 	}
 
 }

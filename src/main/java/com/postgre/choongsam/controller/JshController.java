@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.http.codec.multipart.Part;
@@ -45,9 +46,28 @@ public class JshController {
 	
 	@GetMapping("/sh_lecture_teacher")
 	public String sh_lecture_teacher(Model model,
-									 @RequestParam String lctr_id,
-									 @RequestParam int user_seq) {
+														   Class_ScheduleAddVideo info,
+														   @RequestParam String lctr_id,
+														   @RequestParam int user_seq) {
 		
+		System.out.println("JshController sh_lecture_teacher start...");
+		
+		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
+		
+		String lectName = contsList.stream()
+		                .map(Class_ScheduleAddVideo::getLctr_name)
+		                .findFirst()
+		                .orElse("");
+		String teacherName = contsList.stream()
+		                .map(Class_ScheduleAddVideo::getUser_name)
+		                .findFirst()
+		                .orElse("");
+		System.out.println("강의명 >> "+lectName);
+		System.out.println("강사명 >> "+teacherName);
+		
+		model.addAttribute("lectName", lectName);
+		model.addAttribute("teacherName", teacherName);
+		model.addAttribute("contentList", contsList);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("user_seq", user_seq);
 		
@@ -64,7 +84,20 @@ public class JshController {
 		System.out.println("contsUploadForm lctr_id >> "+lctr_id);
 		System.out.println("contsUploadForm user_seq >> "+user_seq);
 		
+		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
+				
+		String lectName = contsList.stream()
+		                .map(Class_ScheduleAddVideo::getLctr_name)
+		                .findFirst()
+		                .orElse("");
+		String teacherName = contsList.stream()
+		                .map(Class_ScheduleAddVideo::getUser_name)
+		                .findFirst()
+		                .orElse("");
+		
+		
 		List<Class_ScheduleAddVideo> startInfo = service.getStartDay(lctr_id);
+		System.out.println("startInfo >> "+startInfo);
 		
 		Optional<String> startDay = startInfo.stream()
 					                .map(Class_ScheduleAddVideo::getLctr_start_date)
@@ -75,9 +108,16 @@ public class JshController {
 		Optional<Integer> chongChashi = startInfo.stream()
 	               .map(Class_ScheduleAddVideo::getLctr_cntschd)
 	               .findFirst();
+		
 		Optional<String> viewing_period = startInfo.stream()
-	               .map(Class_ScheduleAddVideo::getViewing_period)
-	               .findFirst();
+			    .map(Class_ScheduleAddVideo::getViewing_period)
+			    .filter(Objects::nonNull) // null 값 필터링
+			    .findFirst();
+		
+		// viewing_period가 비어있을 경우 startDay를 사용
+		if (!viewing_period.isPresent()) {
+		    viewing_period = startDay;
+		}
 		
 		String endDay = "";
 		
@@ -95,6 +135,8 @@ public class JshController {
 			System.out.println(endDay);
 		}
 		
+		model.addAttribute("lectName", lectName);
+		model.addAttribute("teacherName", teacherName);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("max_lctr_no", max_lctr_no.get());
 		model.addAttribute("user_seq", user_seq);
@@ -134,10 +176,8 @@ public class JshController {
 							  ) throws IOException {
 		
 		String lctr_id = syllabus.getLctr_id();
-		int user_seq = syllabus.getUser_seq();
 		
-		System.out.println("contsUpload lctr_id >> "+lctr_id);
-		System.out.println("contsUpload user_seq >> "+user_seq);
+		System.out.println("contsUpload lctr_id >> "+lctr_id); 
 		
 		
 		String title = video.getVdo_file_nm(); 									//강의영상제목 가져오기
@@ -296,10 +336,12 @@ public class JshController {
 	 	@GetMapping("/sh_lecture_student")
 		public String StudentLecture(Model model,
 									 @RequestParam String lctr_id,
-									 @RequestParam int user_seq) {
+									 @RequestParam int user_seq,
+									 Class_ScheduleAddVideo info) {
 			System.out.println("JshController StudentLecture start...");
 			System.out.println("JshController StudentLecture lctr_id >> "+lctr_id);
 			System.out.println("JshController StudentLecture user_seq >> "+user_seq);
+			System.out.println("JshController StudentLecture info >> "+info);
 			
 			List<Class_ScheduleAddVideo> contentList = service.studentLecture(lctr_id, user_seq);
 			System.out.println("JshController StudentLecture contentList >> "+contentList);
@@ -319,6 +361,11 @@ public class JshController {
 			model.addAttribute("lectName", lectName);
 			model.addAttribute("teacherName", teacherName);
 			model.addAttribute("contentList", contentList);
+			
+			
+			
+			model.addAttribute("file_nm", info.getFile_nm());//filename 필요
+			model.addAttribute("user_seq", user_seq); //페이지 넘길 때 필요
 			
 			return "view_Jsh/stuLecture";
 		}
