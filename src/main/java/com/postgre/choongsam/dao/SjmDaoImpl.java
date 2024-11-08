@@ -264,4 +264,33 @@ public class SjmDaoImpl implements SjmDao {
 		return files;
 	}
 
+	@Override
+	public int getNoteSendTotal(String keyword) {
+		
+		System.out.println("센드리스트 다오 시작");
+		int total = 0;
+		try {
+			 total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteSendTotal",keyword);
+			System.out.println("total---->" +total);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return total;
+	}
+
+	@Override
+	public int getNoteRcvrTotal(String keyword) {
+		System.out.println("리시브리스트 다오 시작");
+		int total = 0;
+		try {
+			 total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteRcvrTotal",keyword);
+			System.out.println("total---->" +total);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return total;
+	}
+
 }

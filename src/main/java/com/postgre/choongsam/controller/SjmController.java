@@ -68,6 +68,7 @@ public class SjmController {
 
 		List<Notice> noticeList = ss.selectNoticeList(params);
 
+		model.addAttribute("keyword",keyword);
 		model.addAttribute("page", page);
 		model.addAttribute("total", total);
 		model.addAttribute("noticeList", noticeList);
@@ -214,15 +215,23 @@ public class SjmController {
 	// NOTE - 받은 쪽지 목록
 	@GetMapping(value = "/api/notes/received")
 	@ResponseBody
-	public List<Note> getNotesReceived(HttpSession session) {
+	public List<Note> getNotesReceived(Model model, @RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
+			@RequestParam(value = "keyword", required = false) String keyword) {
 
 		System.out.println("SjmController.rcvrnoteList() ");
 		// System.out.println("text is of type: " +
 		// session.getAttribute("user_seq").getClass().getSimpleName());
 
+		int total = ss.getNoteRcvrTotal(keyword);
+		
 		Map<String, Object> params = new HashMap<>();
 		params.put("user_seq", 10001);
-
+		Paging page = new Paging(total, currentPage);
+		// Map 객체 생성하여 파라미터 설정
+	
+		params.put("start", page.getStart());
+		params.put("rowPage", page.getRowPage());
+		params.put("keyword", keyword);
 		List<Note> noteList = ss.getNotesReceived(params);
 
 		return noteList;
@@ -231,12 +240,20 @@ public class SjmController {
 	// NOTE - 보낸 쪽지 목록
 	@GetMapping(value = "/api/notes/sent")
 	@ResponseBody
-	public List<Note> getNotesSend(HttpSession session) {
+	public List<Note> getNotesSend(Model model, @RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
+			@RequestParam(value = "keyword", required = false) String keyword) {
 
+		int total = ss.getNoteSendTotal(keyword);
+		
 		Map<String, Object> params = new HashMap<>();
 
 		params.put("user_seq", 10001);
-
+		Paging page = new Paging(total, currentPage);
+		// Map 객체 생성하여 파라미터 설정
+	
+		params.put("start", page.getStart());
+		params.put("rowPage", page.getRowPage());
+		params.put("keyword", keyword);
 		List<Note> noteList = ss.getNotesSend(params);
 
 		return noteList;
@@ -263,20 +280,19 @@ public class SjmController {
 	// 쪽지 전송 화면
 	@GetMapping(value = "/notes/new")
 	public String CreateNoteForm(@RequestParam(value = "note_sn", required = false) Integer note_sn, 
-	        @RequestParam(value = "user_seq", required = false) Integer user_seq, 
+	        @RequestParam(value = "sndpty_seq", required = false) Integer sndpty_seq, @RequestParam(value = "sender_name", required = false) String sender_name, 
 	        Model model) {
 	    
 	    System.out.println("쪽지전송화면");
 
 	    // note_sn이 존재하면 모델에 추가
-	    if (note_sn != null) {
-	        model.addAttribute("note_sn", note_sn);
+	    if (note_sn != null && sndpty_seq != null && sender_name != null ) {
+	        model.addAttribute("bfr_note_sn", note_sn);
+	        model.addAttribute("rcvr_seq", sndpty_seq);
+	        model.addAttribute("receiver_name", sender_name);
 	    }
 
-	    // user_seq가 존재하면 모델에 추가
-	    if (user_seq != null) {
-	        model.addAttribute("user_seq", user_seq);
-	    }
+	   
 
 	    return "view_Sjm/noteCreate";
 	}
@@ -284,55 +300,70 @@ public class SjmController {
 	@RequestMapping(value = "/api/notes", method = RequestMethod.POST)
 	@ResponseBody
 	public int createNote(@RequestBody Map<String, Object> noteData, HttpSession session) {
-		System.out.println(noteData);
+	    System.out.println(noteData);
 
-		// 수신자 배열 받아오기
-		Object rcvrSeqObj = noteData.get("rcvr_seq");
+	    // 수신자 배열 받아오기
+	    Object rcvrSeqObj = noteData.get("rcvr_seq");
 
-		List<Integer> receiverSeqs = null;
+	    List<Integer> receiverSeqs = null;
 
-		// rcvr_seq가 배열 형태로 넘어온다면 List<Integer>로 변환
-		if (rcvrSeqObj instanceof List) {
-			receiverSeqs = (List<Integer>) rcvrSeqObj; // rcvr_seq를 List<Integer>로 변환
-		} else if (rcvrSeqObj instanceof String) {
-			// 만약 String 형태로 넘어온다면, ','로 구분된 숫자들이 있을 수 있음
-			String[] seqArray = ((String) rcvrSeqObj).split(",");
-			receiverSeqs = new ArrayList<>();
-			for (String seq : seqArray) {
-				receiverSeqs.add(Integer.parseInt(seq.trim())); // 각 값을 Integer로 변환 후 추가
-			}
-		}
+	    // rcvr_seq가 배열 형태로 넘어온다면 List<Integer>로 변환
+	    if (rcvrSeqObj instanceof List) {
+	        receiverSeqs = (List<Integer>) rcvrSeqObj; // rcvr_seq를 List<Integer>로 변환
+	    } else if (rcvrSeqObj instanceof String) {
+	        // 만약 String 형태로 넘어온다면, ','로 구분된 숫자들이 있을 수 있음
+	        String[] seqArray = ((String) rcvrSeqObj).split(",");
+	        receiverSeqs = new ArrayList<>();
+	        for (String seq : seqArray) {
+	            try {
+	                receiverSeqs.add(Integer.parseInt(seq.trim())); // 각 값을 Integer로 변환 후 추가
+	            } catch (NumberFormatException e) {
+	                // 만약 변환 실패하면 예외 처리
+	                continue;
+	            }
+	        }
+	    }
 
-		if (receiverSeqs == null || receiverSeqs.isEmpty()) {
-			return 0; // 수신자가 비어있다면 실패 처리
-		}
+	    // 수신자가 비어있다면 실패 처리
+	    if (receiverSeqs == null || receiverSeqs.isEmpty()) {
+	        return 0; 
+	    }
 
-		Note note = new Note();
-		note.setNote_ttl((String) noteData.get("note_ttl"));
-		note.setNote_cn((String) noteData.get("note_cn"));
-		note.setSndpty_note_yn((String) noteData.get("sndpty_note_yn"));
-		note.setRcvr_note_yn((String) noteData.get("rcvr_note_yn"));
+	    Note note = new Note();
+	    note.setNote_ttl((String) noteData.get("note_ttl"));
+	    note.setNote_cn((String) noteData.get("note_cn"));
+	    note.setSndpty_note_yn((String) noteData.get("sndpty_note_yn"));
+	    note.setRcvr_note_yn((String) noteData.get("rcvr_note_yn"));
 
-		// sndpty_seq는 Integer로 변환 (String에서 Integer로 변환)
-		try {
-			note.setSndpty_seq(Integer.parseInt((String) noteData.get("sndpty_seq")));
-		} catch (NumberFormatException e) {
-			// 만약 변환이 실패하면 0을 설정하거나 오류 처리
-			note.setSndpty_seq(0);
-			return 0; // 실패 처리
-		}
+	    // bfr_note_sn이 null일 수 있으므로 기본값 0 처리
+	    Object bfrNoteSnObj = noteData.get("bfr_note_sn");
+	    int bfrNoteSn = (bfrNoteSnObj != null) ? Integer.parseInt(bfrNoteSnObj.toString()) : 0; // Integer로 안전하게 변환
+	    note.setBfr_note_sn(bfrNoteSn);
 
-		// 각 수신자에 대해 쪽지를 삽입
-		for (int receiverSeq : receiverSeqs) {
-			note.setRcvr_seq(receiverSeq);
-			// 직접 쪽지 생성하는 로직
-			int result = ss.createNote(note);
-			if (result == 0) {
-				return 0; // 실패 시 종료
-			}
-		}
+	    // sndpty_seq는 String에서 Integer로 변환
+	    try {
+	        Object sndptySeqObj = noteData.get("sndpty_seq");
+	        if (sndptySeqObj != null) {
+	            note.setSndpty_seq(Integer.parseInt(sndptySeqObj.toString())); // String -> Integer 변환
+	        } else {
+	            note.setSndpty_seq(0); // 기본값 0 설정
+	        }
+	    } catch (NumberFormatException e) {
+	        // 변환 실패 시 기본값 0 설정
+	        note.setSndpty_seq(0);
+	    }
 
-		return 1; // 성공 시
+	    // 각 수신자에 대해 쪽지 삽입
+	    for (int receiverSeq : receiverSeqs) {
+	        note.setRcvr_seq(receiverSeq);
+	        // 직접 쪽지 생성하는 로직
+	        int result = ss.createNote(note);
+	        if (result == 0) {
+	            return 0; // 실패 시 종료
+	        }
+	    }
+
+	    return 1; // 성공 시
 	}
 
 	// NOTE - 내가 듣는 강의 목록

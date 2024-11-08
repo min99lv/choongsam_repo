@@ -171,10 +171,7 @@ button[type="submit"] {
 
 }
 </style>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
-<script
-	src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
 
 
 </head>

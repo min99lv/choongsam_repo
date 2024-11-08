@@ -45,6 +45,12 @@ public class JheController {
 		System.out.println("강의 메인보드 컨트롤러");
 		List<Lecture> profLectureList = hes.getProfLectureInfo(LCTR_ID);
 		System.out.println("profLectureList: " + profLectureList);
+
+		if (!profLectureList.isEmpty()) {
+			Lecture lecture = profLectureList.get(0);
+			model.addAttribute("onoff", lecture.getOnoff());
+		}
+
 		model.addAttribute("profLectureList", profLectureList);
 		model.addAttribute("LCTR_ID", LCTR_ID);
 		return "view_Jhe/lectureManagement";
@@ -147,41 +153,49 @@ public class JheController {
 		System.out.println("과제 제출 포오스트");
 		System.out.println("ASMT_NO: " + homework.getAsmt_no());
 		int user_seq = (int) session.getAttribute("user_seq");
-//		int upSubmitHomework = hes.updatesubmitHomework(homework, user_seq);
 		hes.updatesubmitHomework(homework, user_seq);
 		return "redirect:/Jhe/studHomeworkList";
 	}
 
 	@GetMapping("/profAttMain")
-	public String profAttMain(@RequestParam("LCTR_ID") String LCTR_ID, Model model) {
+	public String profAttMain(@RequestParam("LCTR_ID") String LCTR_ID, @RequestParam int onoff, Model model) {
 		System.out.println("차시별 출석 현황");
+
+		if (onoff == 7002) {
+			hes.getOnlineStudAtt(LCTR_ID);
+		}
+
 		List<Attendance_Check> profAttMainList = hes.profAttMain(LCTR_ID);
 		System.out.println("profAttMainList: " + profAttMainList);
+		model.addAttribute("onoff", onoff);
 		model.addAttribute("profAttMainList", profAttMainList);
 		return "view_Jhe/profAttMain";
 	}
 
 	@GetMapping(value = "/insertStudAtt")
 	public String getStudAtt(@RequestParam("LCTR_ID") String LCTR_ID,
-							 @RequestParam int LCTR_NO, Model model) {
+							 @RequestParam int LCTR_NO,
+							 @RequestParam int onoff, Model model) {
 		System.out.println("차시별 수강생 출석 호출 컨트롤러");
-		List<Lecture> getStudAttList = hes.getStudAtt(LCTR_ID);
+		List<Attendance_Check> getStudAttList = hes.getStudAtt(LCTR_ID, LCTR_NO);
 		System.out.println("getStudAttList: " + getStudAttList);
 		model.addAttribute("getStudAttList", getStudAttList);
 		model.addAttribute("LCTR_ID", LCTR_ID);
 		model.addAttribute("LCTR_NO", LCTR_NO);
+		model.addAttribute("onoff", onoff);
 		return "view_Jhe/insertStudAtt";
 	}
 
 	@PostMapping(value = "/insertStudAtt")
 	public String insertStudAtt(@RequestParam("LCTR_ID") String LCTR_ID,
-								@RequestParam int LCTR_NO,
+								@RequestParam int LCTR_NO, @RequestParam int onoff,
 								@RequestParam List<Integer> user_seq,
 								@RequestParam Map<String, String> att_status, Model model) {
 		System.out.println("차시별 출석 입력 컨트롤러");
 		System.out.println("LCTR_ID: " + LCTR_ID);
 		System.out.println("LCTR_NO: " + LCTR_NO);
-		hes.insertStudAtt(LCTR_ID, LCTR_NO, user_seq, att_status);
-		return "redirect:/Jhe/profAttMain?LCTR_ID=" + LCTR_ID;
+
+		hes.updateStudAtt(LCTR_ID, LCTR_NO, user_seq, att_status, onoff);
+		return "redirect:/Jhe/profAttMain?LCTR_ID=" + LCTR_ID + "&onoff=" + onoff;
 	}
 }
