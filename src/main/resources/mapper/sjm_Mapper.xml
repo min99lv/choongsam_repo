@@ -202,52 +202,65 @@ WHERE
 
 	</insert>
 	
-	<select id="getNoteSendTotal">
-			SELECT
-			    COUNT(*)
-			FROM
-			    "NOTE" n
-			JOIN
-			    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
-			WHERE
-			    (
-			        #{keyword} IS NULL OR #{keyword} = ''
-			    ) 
-			    OR (
-			        n."NOTE_TTL" ILIKE '%' || #{keyword} || '%'
-			        OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
-			    );
+	<select id="getNoteSendTotal" resultType="Int" parameterType="Map">
+SELECT
+    COUNT(*)
+FROM
+    "NOTE" n
+JOIN
+    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
+WHERE
+    n."SNDPTY_SEQ" = #{user_seq}
+    AND n."SNDPTY_NOTE_YN" = 'N'
+    <if test="keyword != null and keyword != ''">
+        AND (
+            n."NOTE_TTL" ILIKE '%' || #{keyword} || '%' 
+            OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
+        )
+    </if>
 	</select>
-	<select id="getNoteRcvrTotal">
-	SELECT
-			    COUNT(*)
-			FROM
-			    "NOTE" n
-			JOIN
-			    "USER_INFO" u ON n."RCVR_SEQ" = u."USER_SEQ"
-			WHERE
-			    (
-			        #{keyword} IS NULL OR #{keyword} = ''
-			    ) 
-			    OR (
-			        n."NOTE_TTL" ILIKE '%' || #{keyword} || '%'
-			        OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
-			    );
+	<select id="getNoteRcvrTotal" resultType="Int" parameterType="Map">
+SELECT
+    COUNT(*)
+FROM
+    "NOTE" n
+JOIN
+    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
+WHERE
+    n."RCVR_SEQ" = #{user_seq}
+    AND n."SNDPTY_NOTE_YN" = 'N'
+    <if test="keyword != null and keyword != ''">
+        AND (
+            n."NOTE_TTL" ILIKE '%' || #{keyword} || '%' 
+            OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
+        )
+        </if>
 	</select>
 	
 
 	<select id="getMyLectures" parameterType="int"
 		resultType="Lecture">
 		SELECT
-		l."LCTR_ID",
-		l."LCTR_NAME"
-		FROM
-		"COURSE_REGISTRATION" cr
-		JOIN
-		"LECTURE" l ON cr."LCTR_ID" = l."LCTR_ID"
-		WHERE
-		cr."USER_SEQ" =
-		#{user_seq};
+    CASE
+        WHEN li."USER_STATUS" = 1001 THEN cr."LCTR_ID"   
+        WHEN li."USER_STATUS" = 1002 THEN l."LCTR_ID"    
+        ELSE NULL
+    END AS "LCTR_ID",
+    CASE
+        WHEN li."USER_STATUS" = 1001 THEN lec."LCTR_NAME" 
+        WHEN li."USER_STATUS" = 1002 THEN l."LCTR_NAME"  
+        ELSE NULL
+    END AS "LCTR_NAME"
+FROM 
+    "LOGIN_INFO" li
+LEFT JOIN 
+    "COURSE_REGISTRATION" cr ON cr."USER_SEQ" = li."USER_SEQ"  
+LEFT JOIN 
+    "LECTURE" l ON li."USER_SEQ" = l."USER_SEQ"  
+LEFT JOIN
+    "LECTURE" lec ON cr."LCTR_ID" = lec."LCTR_ID"  
+WHERE 
+    li."USER_SEQ" = ${user_seq}
 
 	</select>
 	<select id="getSameLeceture" parameterType="String"
@@ -325,5 +338,22 @@ WHERE
 	FROM "FILE_GROUP"
 	WHERE "FILE_GROUP"=#{file_group} 
 	</select>
+	
+	<update id="updateReceiveDate" parameterType="Int" >
+		UPDATE "NOTE"
+		SET "RCPTN_DT" = LOCALTIMESTAMP(0)
+		WHERE "NOTE_SN" = #{note_sn};
 
+	</update>
+	
+	
+	<update id="replyUpdateAsks" parameterType="Ask" >
+		UPDATE "ASK"
+		SET "DSCSN_ANS_SEQ"= #{dscsn_ans_seq} ,"DSCSN_ANS_CN"= #{dscsn_ans_cn},"DSCSN_ANS_DT" = LOCALTIMESTAMP(0),
+					"DSCSN_ANS_YN"= #{dscsn_ans_yn}
+		WHERE "DSCSN_SN" = #{dscsn_sn};
+
+	</update>
+	
+	
 </mapper>

@@ -250,15 +250,27 @@ public class SjmServiceImpl implements SjmService {
 	}
 
 	@Override
-	public int getNoteSendTotal(String keyword) {
+	public int getNoteSendTotal(Map<String, Object> params) {
 		
-		return sd.getNoteSendTotal(keyword);
+		return sd.getNoteSendTotal(params);
 	}
 
 	@Override
-	public int getNoteRcvrTotal(String keyword) {
+	public int getNoteRcvrTotal(Map<String, Object> params) {
 		
-		return sd.getNoteRcvrTotal(keyword);
+		return sd.getNoteRcvrTotal(params);
+	}
+
+	@Override
+	public int updateReceiveDate(int note_sn) {
+		
+		return sd.updateReceiveDate(note_sn);
+	}
+
+	@Override
+	public int replyUpdateAsks(Ask ask) {
+		
+		return sd.replyUpdateAsks(ask);
 	}
 
 	
