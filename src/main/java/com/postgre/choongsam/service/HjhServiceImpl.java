@@ -7,6 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.postgre.choongsam.dao.HjhDao;
+import com.postgre.choongsam.dto.Course_Registration;
+import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Login_Info;
 import com.postgre.choongsam.dto.User_Info;
 
@@ -91,6 +93,59 @@ public class HjhServiceImpl implements HjhService {
 	public int updateCountAdmin(User_Info info) {
 		int updateCountAdmin = hjhdao.updateCountAdmin(info);
 		return updateCountAdmin;
+	}
+	@Override
+	public int changePW(String password, String user_id) {
+	    int changePW = 0;
+
+	    // 로그인 정보 조회 (사용자의 비밀번호를 가져옴)
+	    Login_Info loginInfo = hjhdao.getLoginInfo(user_id);  // 사용자 ID로 DB에서 로그인 정보 조회
+
+	    System.out.println("로그인 정보: " + loginInfo);
+
+	    if (loginInfo != null) {
+	        // BCryptPasswordEncoder 객체를 메소드 안에서 생성
+	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	        
+	        // 입력된 비밀번호와 DB에 저장된 비밀번호를 비교
+	        if (passwordEncoder.matches(password, loginInfo.getPassword())) {
+	            // 비밀번호가 일치하면 새 비밀번호를 암호화
+	            String hashedNewPassword = passwordEncoder.encode(password);  // 새 비밀번호 암호화
+
+	            // 새 비밀번호를 DB에 업데이트
+	            changePW = hjhdao.changePW(hashedNewPassword, user_id);  // DB 업데이트
+
+	        } else {
+	            // 비밀번호가 일치하지 않으면 0 반환
+	            System.out.println("비밀번호가 일치하지 않습니다.");
+	            changePW = 0;  // 실패
+	        }
+	    } else {
+	        // 로그인 정보가 없을 때 처리
+	        System.out.println("로그인 정보가 없습니다.");
+	        changePW = 0;  // 실패
+	    }
+
+	    return changePW;  // 비밀번호 변경 결과 (성공이면 1, 실패면 0)
+	}
+
+	@Override
+	public Login_Info changepassword(String userId) {
+		Login_Info changepassword = hjhdao.changepassword(userId);
+		return changepassword;
+	}
+
+	@Override
+	public List<Lecture> lectureList(int userSeq) {
+		List<Lecture> lectureList = hjhdao.lectureList(userSeq);
+		return lectureList;
+	}
+
+	@Override
+	public List<Course_Registration> sugangStu(int userSeq) {
+		List<Course_Registration> sugangStu = hjhdao.sugangStu(userSeq);
+		System.out.println("서비스"+sugangStu);
+		return sugangStu;
 	}
 
 
