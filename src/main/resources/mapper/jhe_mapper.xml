@@ -2,10 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace = "com.postgre.choongsam.dto.jheMapper">
-	<select id="getLectureHomeworkList" resultType="Homework">
-		SELECT		u."USER_NAME", u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME"
+	<select id="getLectureHomeworkList" resultType="Lecture">
+		SELECT		u."USER_NAME" AS user_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME"
 		FROM		"USER_INFO" AS u
 		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
+		WHERE		l."USER_SEQ" = #{user_seq}
+		AND			l."LCTR_STATE" = 4005
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
 	<select id="profLectureInfo" resultType="Lecture">
@@ -56,7 +58,7 @@
 		VALUES (#{user_seq}, #{asmt_no}, 'N')
 	</insert>
 	<select id="findById" parameterType="Homework" resultType="Homework">
-		SELECT	h.*, l."LCTR_ID", l."LCTR_NAME", l."USER_SEQ", u."USER_NAME"
+		SELECT	h.*, l."LCTR_ID", l."LCTR_NAME", l."USER_SEQ", u."USER_NAME" AS prof_name
 		FROM	"HOMEWORK" AS h
 		JOIN	"LECTURE" AS l ON l."LCTR_ID" = h."LCTR_ID"
 		JOIN	"USER_INFO" AS u ON u."USER_SEQ" = l."USER_SEQ"
@@ -178,8 +180,8 @@
 		UPDATE	"ATTENDANCE_CHECK" AS a
 		SET		"ATT_STATUS" =
 				CASE
-					WHEN c."CONTS_PRGRT" = 100 THEN 5001
-					WHEN c."CONTS_PRGRT" &lt; 100 THEN 5003
+					WHEN c."CONTS_PRGRT" >= 90 THEN 5001
+					WHEN c."CONTS_PRGRT" &lt; 90 THEN 5003
 					ELSE a."ATT_STATUS"
 				END
 		FROM	"CLASS_SCHEDULE" AS c
@@ -187,4 +189,51 @@
 		AND		a."LCTR_ID" = c."LCTR_ID"
 		AND		a."USER_SEQ" = c."USER_SEQ"
 	</update>
+	<select id="studLecture" resultType="Lecture">
+		SELECT		p."USER_NAME", l."USER_SEQ", l."LCTR_ID", l."LCTR_NAME"
+		FROM		"USER_INFO" AS u
+		JOIN		"COURSE_REGISTRATION" AS c ON u."USER_SEQ" = c."USER_SEQ"
+		JOIN		"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"
+		JOIN		"USER_INFO" AS p ON l."USER_SEQ" = p."USER_SEQ"
+		WHERE		c."USER_SEQ" = #{user_seq}
+		AND			c."REG_STATE" = '2003'
+		ORDER BY	l."LCTR_NAME" ASC
+	</select>
+	<select id="studLectureMain" resultType="Lecture">
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF", u."USER_SEQ", u."USER_NAME", l."LCTR_CNTSCHD"
+		FROM		"LECTURE" AS l
+		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
+		WHERE		l."LCTR_ID" = #{lctr_id}
+	</select>
+	<select id="studAtt" resultType="Attendance_Check">
+		SELECT		u."USER_SEQ", a."LCTR_NO", a."LCTR_ID", a."ATT_STATUS"
+		FROM		"ATTENDANCE_CHECK" AS a
+		JOIN		"USER_INFO" AS u ON a."USER_SEQ" = u."USER_SEQ"
+		WHERE		a."LCTR_ID" = #{lctr_id}
+		AND			a."USER_SEQ" = #{user_seq}
+		ORDER BY	a."LCTR_NO" ASC
+	</select>
+	<select id="profAttDetail" resultType="Attendance_Check">
+		SELECT DISTINCT
+					u."USER_SEQ", u."USER_NAME" AS stud_name, a."LCTR_NO", a."ATT_STATUS",
+					l."LCTR_ID", l."LCTR_NAME", l."ONOFF"
+		FROM		"ATTENDANCE_CHECK" AS a
+		JOIN		"SYLLABUS" AS s ON a."LCTR_NO" = s."LCTR_NO"
+		JOIN		"USER_INFO" AS u ON a."USER_SEQ" = u."USER_SEQ"
+		JOIN		"LECTURE" AS l ON a."LCTR_ID" = l."LCTR_ID"
+		WHERE		a."LCTR_NO" = #{lctr_no}
+		AND			a."LCTR_ID" = #{lctr_id}
+	</select>
+	<select id="profGrade" resultType="Grade">
+		SELECT		u."USER_NAME" AS stud_name, g."LCTR_ID", g."USER_SEQ", g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR"
+		FROM		"GRADE" AS g
+		JOIN		"COURSE_REGISTRATION" AS c ON g."USER_SEQ" = c."USER_SEQ"
+		JOIN		"USER_INFO" AS u ON c."USER_SEQ" = u."USER_SEQ"
+		WHERE		g."lctr_id" = #{lctr_id}
+		AND			c."REG_STATE" = '2003'
+	</select>
+	<insert id="insertGrade" parameterType="Grade">
+		INSERT INTO	"GRADE" ("LCTR_ID", "USER_SEQ", "ATNDC_SCR", "ASMT_SCR", "LAST_SCR")
+		VALUES	(#{lctr_id}, #{user_seq}, #{atndc_scr}, #{asmt_scr}, #{last_scr})
+	</insert>
 </mapper>

@@ -6,12 +6,13 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dto.Attendance_Check;
+import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Lecture;
 
 
 public interface JheService {
-	List<Homework>	getLectureHomeworkList();
+	List<Lecture>	getLectureHomeworkList(int user_seq);
 	List<Lecture>	getProfLectureInfo(String lctr_id);
 	List<Homework>	getProfHomeworkList(String lctr_id);
 	List<Homework>	getStudSubmitList(String lctr_id);
@@ -27,4 +28,11 @@ public interface JheService {
 	List<Attendance_Check> getOnlineStudAtt(String lctr_id);
 	int				updatesubmitHomework(Homework homework, int user_seq);
 	void			updateStudAtt(String lctr_id, int lctr_no, List<Integer> user_seq, Map<String, String> att_status, int onoff);
+	List<Lecture>	studLecture(int user_seq);
+	List<Lecture>	studLectureMain(String lctr_id);
+	List<Attendance_Check> studAtt(String lctr_id, int user_seq);
+	List<Attendance_Check> profAttDetail(String lctr_id, int lctr_no);
+	List<Grade>		profGrade(String lctr_id);
+	List<Grade> getInsertGrade(String lctr_id);
+	void			insertGrade(String lctr_id, List<Integer> user_seq);
 }
