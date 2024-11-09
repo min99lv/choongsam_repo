@@ -143,18 +143,18 @@
             if (!response.ok) {
                 throw new Error(`Error fetching notice: ${response.status}`);
             }
-            const note = await response.json();
+            const ask = await response.json();
 
             console.log(note); // note 객체를 콘솔에 출력하여 구조 확인
 
             // 제목과 내용을 가져와서 표시
-            document.getElementById('dscsn_ttl').textContent = note.dscsn_ttl;
-            document.getElementById('dscsn_cn').textContent = note.dscsn_cn;
+            document.getElementById('dscsn_ttl').textContent = ask.dscsn_ttl;
+            document.getElementById('dscsn_cn').textContent = ask.dscsn_cn;
 
             // 답변이 존재하면 답변 표시
-            if (note.dscsn_ans_yn === 'Y' && note.dscsn_ans_cn) {
+            if (ask.dscsn_ans_yn === 'Y' && ask.dscsn_ans_cn) {
                 // 답변 내용이 있을 경우에만 보여주기
-                document.getElementById('dscsn_ans_cn').textContent = note.dscsn_ans_cn;
+                document.getElementById('dscsn_ans_cn').textContent = ask.dscsn_ans_cn;
                 // 답변 영역을 보이게 설정
                 document.getElementById('dscsn_ans').style.display = 'table-row'; 
             } else {
@@ -197,7 +197,26 @@
                 <td class="answer-content" id="dscsn_ans_cn"></td>
             </tr>
 		</table>
-            
+            <!-- 답변 등록 또는 답변 표시 -->
+        <c:choose>
+            <!-- user_status가 1003이고 답변이 없을 경우 답변 작성 폼 표시 -->
+            <c:when test="${user_status == 1003}">
+                <div id="no-answer" style="display: none;">
+                    <h3>답변 작성</h3>
+                    <form id="replyForm" action="/api/asks/reply" method="post">
+                        <textarea name="dscsn_ans_cn" rows="5" placeholder="답변을 입력하세요"></textarea>
+                        <button type="submit">답변 등록</button>
+                    </form>
+                </div>
+            </c:when>
+            <!-- 답변이 있을 경우에는 답변 내용만 표시 -->
+            <c:otherwise>
+                <div id="answer-section">
+                    <h3>답변 내용</h3>
+                    <p id="dscsn_ans_cn"></p>
+                </div>
+            </c:otherwise>
+        </c:choose>
             <button onclick="history.back();">목록</button>
     </div>
     

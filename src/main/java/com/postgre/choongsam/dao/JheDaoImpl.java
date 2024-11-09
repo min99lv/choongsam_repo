@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.postgre.choongsam.dto.Attendance_Check;
 import com.postgre.choongsam.dto.File_Group;
+import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Homework_Submission;
 import com.postgre.choongsam.dto.Lecture;
@@ -24,11 +25,11 @@ public class JheDaoImpl implements JheDao {
 	private final SqlSession session;
 
 	@Override
-	public List<Homework> getLectureHomeworkList() {
+	public List<Lecture> getLectureHomeworkList(int user_seq) {
 		System.out.println("강사별 강의 과제 리스트 와따오");
-		List<Homework> lectureHomeworkList = null;
+		List<Lecture> lectureHomeworkList = null;
 		try {
-			lectureHomeworkList = session.selectList("getLectureHomeworkList");
+			lectureHomeworkList = session.selectList("getLectureHomeworkList", user_seq);
 		} catch (Exception e) {
 			System.out.println("getLectureHomeworkList error: " + e.getMessage());
 		}
@@ -227,7 +228,7 @@ public class JheDaoImpl implements JheDao {
 
 	@Override
 	public List<Attendance_Check> profAttMain(String lctr_id) {
-		System.out.println("출석 메인보드 와따오");
+		System.out.println("강사 출석 메인보드 와따오");
 		List<Attendance_Check> profAttMainList = null;
 		try {
 			profAttMainList = session.selectList("profAttMain", lctr_id);
@@ -290,5 +291,78 @@ public class JheDaoImpl implements JheDao {
 			System.out.println("upStudOnlineAtt error: " + e.getMessage());
 		}
 		return upStudOnAtt;
+	}
+
+	@Override
+	public List<Lecture> studLecture(int user_seq) {
+		System.out.println("학생 강의 리스트");
+		List<Lecture> studLecture = null;
+		try {
+			studLecture = session.selectList("studLecture", user_seq);
+		} catch (Exception e) {
+			System.out.println("studLecture error: " + e.getMessage());
+		}
+		return studLecture;
+	}
+
+	@Override
+	public List<Lecture> studLectureMain(String lctr_id) {
+		System.out.println("학생 강의 메인보드 다오");
+		List<Lecture> studLectureMainList = null;
+		try {
+			studLectureMainList = session.selectList("studLectureMain", lctr_id);
+			System.out.println("강의 메인보드 studLectureMain: " + studLectureMainList);
+		} catch (Exception e) {
+			System.out.println("getProfLectureInfo error: " + e.getMessage());
+		}
+		return studLectureMainList;
+	}
+
+	@Override
+	public List<Attendance_Check> studAtt(Attendance_Check attendance_Check) {
+		System.out.println("학생 출석 메인보드 와따오");
+		List<Attendance_Check> studAttList = null;
+		try {
+			studAttList = session.selectList("studAtt", attendance_Check);
+		} catch (Exception e) {
+			System.out.println("studAtt error: " + e.getMessage());
+		}
+		return studAttList;
+	}
+
+	@Override
+	public List<Attendance_Check> profAttDetail(Attendance_Check attendance_Check) {
+		System.out.println("강사 차시별 수강생 출결 현황 와따오");
+		List<Attendance_Check> profAttDetailList = null;
+		try {
+			profAttDetailList = session.selectList("profAttDetail", attendance_Check);
+		} catch (Exception e) {
+			System.out.println("profAttDetail error: " + e.getMessage());
+		}
+		return profAttDetailList;
+	}
+
+	@Override
+	public List<Grade> profGrade(String lctr_id) {
+		System.out.println("강사 수강생 성적 다오");
+		List<Grade> profGradeList = null;
+		try {
+			profGradeList = session.selectList(lctr_id);
+		} catch (Exception e) {
+			System.out.println("profGradeList error: " + e.getMessage());
+			System.out.println("lctr_id: " + lctr_id);
+		}
+		return profGradeList;
+	}
+
+	@Override
+	public void insertGrade(Grade grade) {
+		System.out.println("강사 수강생 성적 입력 다오");
+		try {
+			session.insert("insertGrade", grade);
+		} catch (Exception e) {
+			System.out.println("insertGrade error: " + e.getMessage());
+			System.out.println("grade: " + grade);
+		}
 	}
 }

@@ -16,13 +16,13 @@ public interface HmsDao {
 
 	Syllabus findLctrInfo(String videoId);
 
-	long findCurrentMax(String videoId);
+	long findCurrentMax(String videoId, int user_seq);
 
 	void saveWatchTimeNoMaxUpdate(Class_Schedule class_schedule);
 
-	int watchedFinalTime(String videoId);
+	int watchedFinalTime(String videoId, int user_seq);
 
-	String getFilePath(String filename);
+	String getFilePath(String conts_id);
 
 	String getURL(String videoId);
 
