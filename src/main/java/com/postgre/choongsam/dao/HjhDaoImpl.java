@@ -7,6 +7,8 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.postgre.choongsam.dto.Course_Registration;
+import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Login_Info;
 import com.postgre.choongsam.dto.User_Info;
 
@@ -137,6 +139,57 @@ public class HjhDaoImpl implements HjhDao {
 		return updateCountAdmin;
 	}
 
+	@Override
+	public int changePW(String hashedNewPassword, String user_id) {
+	    int changePW = 0;
+
+	    // DB 업데이트를 위한 파라미터 맵 생성
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("user_id", user_id);  // 사용자 ID
+	    params.put("password", hashedNewPassword);  // 암호화된 새 비밀번호
+
+	    try {
+	        // MyBatis session을 통해 update 쿼리 실행
+	        changePW = session.update("changePW", params);  // "changePW"는 MyBatis에서 사용할 쿼리 ID
+	    } catch (Exception e) {
+	        // 예외 처리
+	        System.out.println("비밀번호 변경 중 오류 발생: " + e.getMessage());
+	    }
+
+	    return changePW;  // 비밀번호 변경 성공 여부 반환 (성공 시 1, 실패 시 0)
+	}
+
+	@Override
+	public Login_Info changepassword(String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Lecture> lectureList(int userSeq) {
+	    List<Lecture> lectureList = null;
+	    try {
+	        // MyBatis 매퍼에서 userSeq를 사용하여 강의 목록을 조회
+	        lectureList = session.selectList("lectureList", userSeq);
+	    } catch (Exception e) {
+	        e.printStackTrace();  // 예외 처리
+	    }
+	    return lectureList;
+	}
+
+	@Override
+	public List<Course_Registration> sugangStu(int userSeq) {
+	    List<Course_Registration> sugangStu = null;
+	    try {
+	        // userSeq 값 확인
+	        System.out.println("DAO에서 받은 userSeq: " + userSeq);
+	        sugangStu = session.selectList("sugangStu", userSeq);
+	        System.out.println("DAO에서 받은 sugangStu: " + sugangStu);  // 이 부분에서 null 확인
+	    } catch (Exception e) {
+	        System.out.println("DAO 에러: " + e.getMessage());
+	    }
+	    return sugangStu;
+	}
 
 
 }

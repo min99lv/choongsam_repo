@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.postgre.choongsam.dto.Course_Registration;
+import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Login_Info;
 import com.postgre.choongsam.dto.Paging;
 import com.postgre.choongsam.dto.User_Info;
@@ -42,20 +44,87 @@ public class HjhController {
 		return "view_Hjh/adminPage";
 
 	}
-	
 	@RequestMapping(value = "/myPageTeacher")
-	public String myPageTeacher(HttpSession session) {
-
-		System.out.println("강사마이페이지");
-		System.out.println(session.getAttribute("user"));
-
+	public String myPageTeacher(Model model) {
+		System.out.println("관리자마이페이지");
 		return "view_Hjh/myPageTeacher";
+
 	}
+	
+	@RequestMapping(value = "/suganglistStd")
+	public String suganglistStd(Model model, HttpSession session) {
+	    System.out.println("관리자마이페이지");
+	    
+	    // 세션에서 user_seq 값을 가져옵니다.
+	    Object userSeqObject = session.getAttribute("user_seq");
+
+	    // 세션 값이 Integer나 String이면 int로 변환
+	    int userSeq = 0; // 기본값 설정
+	    if (userSeqObject != null) {
+	        if (userSeqObject instanceof Integer) {
+	            userSeq = (Integer) userSeqObject;
+	        } else if (userSeqObject instanceof String) {
+	            try {
+	                userSeq = Integer.parseInt((String) userSeqObject);
+	            } catch (NumberFormatException e) {
+	                System.out.println("user_seq 변환 오류: " + e.getMessage());
+	            }
+	        }
+	    }
+
+	    // userSeq가 올바르게 설정되었을 경우
+	    if (userSeq > 0) {
+	        List<Course_Registration> sugangStu = hjh.sugangStu(userSeq);
+	        System.out.println("zz: " + sugangStu);
+	        model.addAttribute("sugangStu", sugangStu);
+	    } else {
+	        System.out.println("유효하지 않은 userSeq 값입니다.");
+	    }
+
+	    return "view_Hjh/suganglistStd";
+	}
+
+	
+	@RequestMapping(value = "/gangyilistTeacher")
+	public String gangyilistTeacher(HttpSession session, Model model) {
+	    System.out.println("강사마이페이지");
+
+	    // 세션에서 user_seq를 가져옴 (Object로 반환되므로, Integer로 캐스팅)
+	    Object userSeqObject = session.getAttribute("user_seq");
+
+	    // 세션에서 가져온 값이 Integer 타입인지 확인 후 int로 변환
+	    int userSeq = 0;  // 기본값 설정
+	    if (userSeqObject != null && userSeqObject instanceof Integer) {
+	        userSeq = (Integer) userSeqObject;  // 안전하게 Integer로 변환
+	    } else if (userSeqObject != null && userSeqObject instanceof String) {
+	        try {
+	            // 만약 user_seq가 String 타입으로 저장되어 있다면 Integer로 변환
+	            userSeq = Integer.parseInt((String) userSeqObject);
+	        } catch (NumberFormatException e) {
+	            // 변환 실패 처리
+	            System.out.println("user_seq 변환 오류: " + e.getMessage());
+	        }
+	    }
+
+	    // userSeq가 올바르게 설정되었다면 lectureList 조회
+	    if (userSeq > 0) {
+	        List<Lecture> lectureList = hjh.lectureList(userSeq);  // userSeq를 int로 전달
+	        System.out.println("lectureList: " + lectureList);
+	        model.addAttribute("lectureList", lectureList);  // lectureList를 모델에 추가
+	    } else {
+	        System.out.println("유효하지 않은 userSeq 값입니다.");
+	    }
+
+	    return "view_Hjh/gangyilistTeacher";  // JSP 페이지로 반환
+	}
+
 
 	@RequestMapping(value = "/myPageStd")
 	public String myPageStd(HttpSession session) {
 		System.out.println("학생마이페이지");
 		System.out.println(session.getAttribute("user"));
+		System.out.println(session.getAttribute("user_seq"));
+
 		return "view_Hjh/myPageStd";
 	}
 
@@ -401,17 +470,38 @@ public class HjhController {
 	        return "view_Hjh/deleteStd";  // 탈퇴 실패 시 다시 탈퇴 페이지로 이동
 	    }
 	}
+	
+	//비밀번호 변경
 	@GetMapping("changePW")
 	public String changePW(HttpSession session, Model model) {
 	    // 세션에서 사용자 아이디를 가져옵니다.
 	    String userId = (String) session.getAttribute("user"); // 세션에 저장된 사용자 아이디
 
+        Login_Info loginInfo = hjh.getLoginInfo(userId);
+        System.out.println("loginInfo"+loginInfo);
+        // 가져온 사용자 정보를 model에 추가하여 뷰에서 사용하도록 전달
+        model.addAttribute("user_id", userId);
+        model.addAttribute("userInfo", loginInfo);  // 사용자 정보 추가
 	    // 사용자 아이디를 모델에 추가
 	    model.addAttribute("userId", userId);
 
 	    // 비밀번호 변경 페이지를 반환
 	    return "view_Hjh/changePW";
 	}
+	
+	@PostMapping("changePassword")
+	public String changePassword(HttpSession session,
+							 	Model model,
+								 @RequestParam("password") String password ) {
+		System.out.println("password"+password);
+		  String userId =(String) session.getAttribute("user");
+		int changePW = hjh.changePW(password,userId);
+		return "view_Hjh/changePW";
+	}
+	
+
+	
+	
 
 
 }
