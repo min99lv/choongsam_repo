@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.postgre.choongsam.dao.JheDao;
 import com.postgre.choongsam.dto.Attendance_Check;
 import com.postgre.choongsam.dto.File_Group;
+import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Homework_Submission;
 import com.postgre.choongsam.dto.Lecture;
@@ -30,9 +31,9 @@ public class JheServiceImpl implements JheService {
 	private final JheDao hed;
 
 	@Override
-	public List<Homework> getLectureHomeworkList() {
+	public List<Lecture> getLectureHomeworkList(int user_seq) {
 		System.out.println("강사별 강의 리스트 서비스");
-		List<Homework> lectureHomeworkList = hed.getLectureHomeworkList();
+		List<Lecture> lectureHomeworkList = hed.getLectureHomeworkList(user_seq);
 		return lectureHomeworkList;
 	}
 
@@ -214,6 +215,7 @@ public class JheServiceImpl implements JheService {
 		homework_Submission.setSbmsn_yn("Y");
 		homework_Submission.setSbmsn_ymd(today);
 		homework_Submission.setFile_group(1);
+		System.out.println("Sbmsn_yn: " + homework_Submission.getSbmsn_yn());
 		int upSubmitHomework = hed.updatesubmitHomework(homework_Submission);
 		return upSubmitHomework;
 	}
@@ -227,7 +229,7 @@ public class JheServiceImpl implements JheService {
 
 	@Override
 	public List<Attendance_Check> profAttMain(String lctr_id) {
-		System.out.println("출석 메인보드 서비스");
+		System.out.println("강사 출석 메인보드 서비스");
 		List<Attendance_Check> profAttMainList = hed.profAttMain(lctr_id);
 		return profAttMainList;
 	}
@@ -276,6 +278,67 @@ public class JheServiceImpl implements JheService {
 					hed.upStudOnlineAtt(attendance_Check);
 				}
 			}
+		}
+	}
+
+	@Override
+	public List<Lecture> studLecture(int user_seq) {
+		System.out.println("학생 강의 리스트");
+		List<Lecture> studLectureList = hed.studLecture(user_seq);
+		return studLectureList;
+	}
+
+	@Override
+	public List<Lecture> studLectureMain(String lctr_id) {
+		System.out.println("학생 강의 메인보드 서비스");
+		List<Lecture> studLectureMainList = hed.studLectureMain(lctr_id);
+		return studLectureMainList;
+	}
+
+	@Override
+	public List<Attendance_Check> studAtt(String lctr_id, int user_seq) {
+		System.out.println("학생 출석 메인보드 서비스");
+		Attendance_Check attendance_Check = new Attendance_Check();
+		attendance_Check.setLctr_id(lctr_id);
+		attendance_Check.setUser_seq(user_seq);
+		List<Attendance_Check> studAttList = hed.studAtt(attendance_Check);
+		return studAttList;
+	}
+
+	@Override
+	public List<Attendance_Check> profAttDetail(String lctr_id, int lctr_no) {
+		System.out.println("강사 차시별 수강생 출결 현황 서비스");
+		Attendance_Check attendance_Check = new Attendance_Check();
+		attendance_Check.setLctr_id(lctr_id);
+		attendance_Check.setLctr_no(lctr_no);
+		List<Attendance_Check> profAttDetailList = hed.profAttDetail(attendance_Check);
+		return profAttDetailList;
+	}
+
+	@Override
+	public List<Grade> profGrade(String lctr_id) {
+		System.out.println("강사 수강생 성적 조회 서비스");
+		List<Grade> profGradeList = hed.profGrade(lctr_id);
+		return profGradeList;
+	}
+
+	@Override
+	public List<Grade> getInsertGrade(String lctr_id) {
+		System.out.println("성적 등록할 학생 찾기 서비스");
+		return null;
+	}
+
+	@Override
+	public void insertGrade(String lctr_id, List<Integer> user_seq) {
+		System.out.println("강사 수강생 성적 등록 서비스");
+		List<Homework> studHomeworkList = hed.notifyStudents(lctr_id);
+		for (Homework homework : studHomeworkList) {
+			int userSeq = homework.getUser_seq();
+			System.out.println("userSeq: " + userSeq);
+			Grade grade = new Grade();
+			grade.setLctr_id(lctr_id);
+			grade.setUser_seq(userSeq);
+			hed.insertGrade(grade);
 		}
 	}
 }

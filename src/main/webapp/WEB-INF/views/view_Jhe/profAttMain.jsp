@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,11 +22,12 @@
 		<c:forEach var="AttMain" items="${profAttMainList}">
 		<tr>
 		 	<td><c:if test="${onoff != 7002}">
-		 		<a href="/Jhe/insertStudAtt?LCTR_ID=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
-		 		${AttMain.lctr_no}</a>
+		 			<a href="/Jhe/insertStudAtt?LCTR_ID=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
+		 			${AttMain.lctr_no}</a>
 		 		</c:if>
 		 		<c:if test="${onoff == 7002}">
-		 			${AttMain.lctr_no}
+		 			<a href="/Jhe/profAttDetail?LCTR_ID=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
+		 			${AttMain.lctr_no}</a>
 		 		</c:if>
 		 	</td>
 			<td>${AttMain.present_count}</td>

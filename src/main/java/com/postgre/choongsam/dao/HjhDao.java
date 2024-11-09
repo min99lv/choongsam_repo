@@ -3,6 +3,8 @@ package com.postgre.choongsam.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.postgre.choongsam.dto.Course_Registration;
+import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Login_Info;
 import com.postgre.choongsam.dto.User_Info;
 
@@ -26,6 +28,14 @@ public interface HjhDao {
 	Login_Info getLoginInfo(String user_id);
 
 	int updateCountAdmin(User_Info info);
+
+	int changePW(String hashedNewPassword, String user_id);
+
+	Login_Info changepassword(String userId);
+
+	List<Lecture> lectureList(int userSeq);
+
+	List<Course_Registration> sugangStu(int userSeq);
 
 
 
