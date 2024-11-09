@@ -14,9 +14,9 @@ public class Homework  { // 과제
     private String    sbmsn_end_ymd;    // 과제 제출 마감일
     private int        file_group;        // 파일 그룹
 
-    private String    user_name;        // 회원 이름
     private String    prof_name;        // 강사명
     private String    stud_name;        // 학생명
+    private String	  lctr_name;		// 과제명
     private int        user_status;    // 회원 분류
     private String    asmtStatus;        // 과제 등록 상태
     private String     user_id;        // 회원 아이디
