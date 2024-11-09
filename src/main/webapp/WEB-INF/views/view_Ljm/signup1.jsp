@@ -8,8 +8,9 @@
 <style type="text/css">
     body {
         margin: 0;
-        padding: 0;
-        font-family: 'Noto Sans KR', sans-serif;
+	    padding: 0;
+	    font-family: 'Noto Sans KR', sans-serif;
+	    padding-bottom: 60px; /* 푸터 높이만큼 아래 여백 추가 */
     }
 
     header {
@@ -22,15 +23,9 @@
         border-bottom: 1px solid #ccc; /* 헤더 아래쪽 경계선 */
     }
 
-    footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: white; /* 배경색 추가 */
-        z-index: 1000; /* 다른 요소보다 위에 위치하도록 */
-        border-top: 1px solid #ccc; /* 푸터 위쪽 경계선 */
-    }
+    footer {	   
+	    padding: 10px 0; /* 푸터 내 패딩 추가 (옵션) */
+	}
 
     .main_container {
         margin-top: 60px; /* 헤더 높이에 맞게 마진 설정 */
@@ -283,6 +278,10 @@
         <footer>
         </footer>
     </body>
+    
+    <footer>
+        <%@ include file="../footer.jsp" %>
+    </footer>
     
 <script type="text/javascript">
 	// 약관 모두 동의 시 다음 페이지 이동
