@@ -11,10 +11,10 @@ public interface HmsService {
 	String getVideoDetails(String videoId); //영상화면
 	List<Lecture_Video> findAllVideo(); //모든 비디오 목록
 	void saveWatchTime(Class_Schedule class_schedule);
-	long findCurrentMax(String videoId);
+	long findCurrentMax(String videoId, int user_seq);
 	void saveWatchTimeNoMaxUpdate(Class_Schedule class_schedule);
-	int watchedFinalTime(String videoId);
-	String getFilePath(String filename);
+	int watchedFinalTime(String videoId, int user_seq);
+	String getFilePath(String conts_id);
 	List<Class_Bookmark> getBookmarksByContsId(String conts_id);
 	List<Class_Bookmark> getBookmark(String conts_id);
 	String getfilename(String conts_id);
