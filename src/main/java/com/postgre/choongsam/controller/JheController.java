@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.postgre.choongsam.dto.Attendance_Check;
+import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.service.JheService;
@@ -21,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -31,17 +34,28 @@ public class JheController {
 	@Autowired
 	private final JheService hes;
 
-	@GetMapping(value = "/lectureHomeworkList")
-	public String getLectureHomeworkList(Model model) {
-		System.out.println("강사별 강의 과제 리스트 컨트롤러");
-		List<Homework> lectureHomeworkList = hes.getLectureHomeworkList();
-		System.out.println("lectureHomeworkList" + lectureHomeworkList);
-		model.addAttribute("homeworkList", lectureHomeworkList);
-		return "view_Jhe/lectureHomeworkList";
+	@GetMapping(value = "/myLecture")
+	public String getLectureHomeworkList(HttpSession session, Model model) {
+		System.out.println("내 강의 리스트 컨트롤러");
+		int user_seq = (int) session.getAttribute("user_seq");
+		int user_status = (int) session.getAttribute("usertype");
+		System.out.println("user_status: " + user_status);
+
+		if (user_status == 1002) {
+			List<Lecture> profLectureList = hes.getLectureHomeworkList(user_seq);
+			model.addAttribute("homeworkList", profLectureList);
+			System.out.println("profLectureList: " + profLectureList);
+		} else if (user_status == 1001) {
+			List<Lecture> studLectureList = hes.studLecture(user_seq);
+			model.addAttribute("homeworkList", studLectureList);
+			System.out.println("studLectureList: " + studLectureList);
+		}
+
+		return "view_Jhe/myLecture";
 	}
 
-	@GetMapping(value = "/lectureManagement")
-	public String lectureManagement(@RequestParam("LCTR_ID") String LCTR_ID, Model model) {
+	@GetMapping(value = "/profLectureMain")
+	public String profLectureMain(@RequestParam("LCTR_ID") String LCTR_ID, Model model) {
 		System.out.println("강의 메인보드 컨트롤러");
 		List<Lecture> profLectureList = hes.getProfLectureInfo(LCTR_ID);
 		System.out.println("profLectureList: " + profLectureList);
@@ -53,7 +67,7 @@ public class JheController {
 
 		model.addAttribute("profLectureList", profLectureList);
 		model.addAttribute("LCTR_ID", LCTR_ID);
-		return "view_Jhe/lectureManagement";
+		return "view_Jhe/profLectureMain";
 	}
 
 	@GetMapping(value = "/profHomeworkList")
@@ -197,5 +211,69 @@ public class JheController {
 
 		hes.updateStudAtt(LCTR_ID, LCTR_NO, user_seq, att_status, onoff);
 		return "redirect:/Jhe/profAttMain?LCTR_ID=" + LCTR_ID + "&onoff=" + onoff;
+	}
+
+	@GetMapping(value = "/studLectureMain")
+	public String studLectureMain(@RequestParam("LCTR_ID") String LCTR_ID, Model model) {
+		System.out.println("학생 강의 메인보드 컨트롤러");
+		List<Lecture> studLectureMainList = hes.studLectureMain(LCTR_ID);
+		System.out.println("studLectureMainList: " + studLectureMainList);
+
+		if (!studLectureMainList.isEmpty()) {
+			Lecture lecture = studLectureMainList.get(0);
+			model.addAttribute("onoff", lecture.getOnoff());
+		}
+
+		model.addAttribute("studLectureMain", studLectureMainList);
+		model.addAttribute("LCTR_ID", LCTR_ID);
+		return "view_Jhe/studLectureMain";
+	}
+
+	@GetMapping("/studAtt")
+	public String studAtt(@RequestParam("LCTR_ID") String LCTR_ID,
+						  @RequestParam int onoff, HttpSession session, Model model) {
+		System.out.println("차시별 출석 현황");
+		int user_seq = (int) session.getAttribute("user_seq");
+		System.out.println("user_seq: " + user_seq);
+		List<Attendance_Check> studAttList = hes.studAtt(LCTR_ID, user_seq);
+		System.out.println("profAttMainList: " + studAttList);
+		model.addAttribute("onoff", onoff);
+		model.addAttribute("studAttList", studAttList);
+		return "view_Jhe/studAtt";
+	}
+
+	@GetMapping("/profAttDetail")
+	public String profAttDetail(@RequestParam("LCTR_ID") String LCTR_ID,
+								@RequestParam int LCTR_NO, @RequestParam int onoff, Model model) {
+		System.out.println("강사 차시별 수강생 출결 현황");
+		List<Attendance_Check> profAttDetailList = hes.profAttDetail(LCTR_ID, LCTR_NO);
+		model.addAttribute("profAttDetailList", profAttDetailList);
+		model.addAttribute("onoff", onoff);
+		return "view_Jhe/profAttDetail";
+	}
+
+	@GetMapping("/profGrade")
+	public String profGrade(@RequestParam("LCTR_ID") String LCTR_ID, Model model) {
+		System.out.println("강사 수강생 성적 조회 컨트롤러");
+		List<Grade> profGradeList = hes.profGrade(LCTR_ID);
+		model.addAttribute("profGradeList", profGradeList);
+		return "view_Jhe/profGrade";
+	}
+
+	@GetMapping("insertGrade")
+	public String getInsertGrade(@RequestParam("LCTR_ID") String LCTR_ID,
+								 @RequestParam List<Integer> user_seq, Model model) {
+		System.out.println("성적 등록할 수강생 조회 컨트롤러");
+		List<Grade> insertGradeList = hes.getInsertGrade(LCTR_ID);
+		model.addAttribute("insertGradeList", insertGradeList);
+		return "view_Jhe/profGrade";
+	}
+	
+	@PostMapping("/insertGrade")
+	public String insertGrade(@RequestParam("LCTR_ID") String LCTR_ID,
+							  @RequestParam List<Integer> user_seq, Model model) {
+		System.out.println("강사 수강생 성적 등록 컨트롤러");
+		hes.insertGrade(LCTR_ID, user_seq);
+		return "Jhe/profGrade";
 	}
 }

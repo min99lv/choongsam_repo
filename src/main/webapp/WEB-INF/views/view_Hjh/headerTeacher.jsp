@@ -82,7 +82,7 @@
     <h1>강사</h1>
         <li onclick="toggleSubMenu('myClassroomSubmenu')">나의 강의실</li>
         <ul class="submenu" id="myClassroomSubmenu">
-            <li style="font-size: 13px;">현재 수업 중인 강의</li>
+            <li style="font-size: 13px;" onclick="location.href='../Jhe/myLecture'">현재 수업 중인 강의</li>
             <li style="font-size: 13px;">강의 목록</li>
         </ul>
         <li onclick="toggleSubMenu('gradeManagementSubmenu')">성적 관리</li>

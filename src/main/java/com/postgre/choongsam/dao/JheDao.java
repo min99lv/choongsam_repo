@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.postgre.choongsam.dto.Attendance_Check;
 import com.postgre.choongsam.dto.File_Group;
+import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Homework_Submission;
 import com.postgre.choongsam.dto.Lecture;
 
 public interface JheDao {
-	List<Homework>	getLectureHomeworkList();
+	List<Lecture>	getLectureHomeworkList(int user_seq);
 	List<Lecture>	getProfLectureInfo(String lctr_id);
 	List<Homework>	getProfHomeworkList(String lctr_id);
 	Lecture			findByLCTR(String lctr_id);
@@ -31,4 +32,10 @@ public interface JheDao {
 	List<Attendance_Check> getOnlineStudAtt(String lctr_id);
 	int				updateStudAtt(Attendance_Check attendance_Check);
 	int upStudOnlineAtt(Attendance_Check attendance_Check);
+	List<Lecture>	studLecture(int user_seq);
+	List<Lecture>	studLectureMain(String lctr_id);
+	List<Attendance_Check> studAtt(Attendance_Check attendance_Check);
+	List<Attendance_Check> profAttDetail(Attendance_Check attendance_Check);
+	List<Grade>		profGrade(String lctr_id);
+	void			insertGrade(Grade grade);
 }
