@@ -21,15 +21,10 @@
         border-bottom: 1px solid #ccc;
     }
 
-    footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: white;
-        z-index: 1000;
-        border-top: 1px solid #ccc;
-    }
+    footer {	  
+    	margin-top: 240px; 
+	    padding: 10px 0; /* 푸터 내 패딩 추가 (옵션) */
+	}
 
     .main_container {
         margin-top: 60px;
@@ -101,4 +96,7 @@
         </div>
     </main>
 </body>
+<footer>
+        <%@ include file="../footer.jsp" %>
+    </footer>
 </html>
