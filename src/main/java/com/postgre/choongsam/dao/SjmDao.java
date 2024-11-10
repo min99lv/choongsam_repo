@@ -63,5 +63,7 @@ public interface SjmDao {
 
 	int replyUpdateAsks(Ask ask);
 
+	List<Ask> getAsks();
+
 
 }

@@ -273,6 +273,12 @@ public class SjmServiceImpl implements SjmService {
 		return sd.replyUpdateAsks(ask);
 	}
 
+	@Override
+	public List<Ask> getAsks() {
+		
+		return sd.getAsks();
+	}
+
 	
 
 

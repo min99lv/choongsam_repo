@@ -441,13 +441,24 @@ public class SjmController {
 	@ResponseBody
 	public List<Ask> getAsksMy(HttpSession session) {
 		System.out.println("컨트롤러 문의사항 리스트 시작");
+
 		Map<String, Object> params = new HashMap<>();
-
 		params.put("user_seq", session.getAttribute("user_seq"));
+		List<Ask> ask = null;
+				
 
-		List<Ask> ask = ss.getAsksMy(params);
-
-		System.out.println("ask---->" + ask);
+		
+		int user_status = (int) session.getAttribute("usertype");
+		
+		if (user_status == 1003) {
+			System.out.println("관리자 리스트");
+			ask = ss.getAsks();
+		}else {
+			System.out.println("내리스트");
+		ask = 	ss.getAsksMy(params);
+			
+		}
+		
 		return ask;
 	}
 
@@ -474,6 +485,8 @@ public class SjmController {
 	@PostMapping(value = "/api/asks/reply")
 	public ResponseEntity<Integer> replyUpdateAsks(Ask ask, HttpSession session) {
 		System.out.println("답변작성 시작 -->" + ask);
+		int user_seq =(int) session.getAttribute("user_seq");
+		ask.setDscsn_ans_seq(user_seq);
 		int result = ss.replyUpdateAsks(ask);
 	
 		return ResponseEntity.ok(result);

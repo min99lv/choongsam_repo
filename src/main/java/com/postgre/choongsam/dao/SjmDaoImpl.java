@@ -328,4 +328,18 @@ public class SjmDaoImpl implements SjmDao {
 		return result;
 	}
 
+	@Override
+	public List<Ask> getAsks() {
+		System.out.println(" 모든 문의사항 불러오기");
+		List<Ask> askList = null;
+		
+		try {
+			askList = session.selectList("com.postgre.choongsam.mapper.sjm.getAsks");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("askss ----> "+ askList);
+		return askList;
+	}
+
 }

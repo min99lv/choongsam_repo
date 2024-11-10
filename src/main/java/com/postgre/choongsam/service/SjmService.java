@@ -68,4 +68,6 @@ public interface SjmService {
 
 	int replyUpdateAsks(Ask ask);
 
+	List<Ask> getAsks();
+
 }
