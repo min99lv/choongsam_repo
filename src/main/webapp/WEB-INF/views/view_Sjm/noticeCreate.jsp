@@ -182,7 +182,7 @@ button[type="submit"] {
 
 	<div class="container">
 		<div class="contents">
-			<h1>쪽지 작성</h1>
+			<h1>공지사항 작성</h1>
 		</div>
 
 		<form id="noticeForm" method="post" action="/api/notice/new"

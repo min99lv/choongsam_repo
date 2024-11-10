@@ -200,7 +200,7 @@ td a:hover {
 							<button type="submit" class="search_btn">검색</button>
 						</div>
 					</form>
-					<c:if test="${sessionScope.user_status == 1003}">
+					<c:if test="${sessionScope.usertype == 1003}">
 					    <a class="writeNoticeBtn" href="/api/notice/new">공지사항 작성</a>
 					</c:if>
 

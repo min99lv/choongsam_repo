@@ -317,7 +317,8 @@ WHERE
 		SELECT *
 		FROM "ASK"
 		WHERE "USER_SEQ" = #{user_seq}
-	
+	ORDER BY "DSCSN_REG_DT" desc
+
 	
 	</select>
 	
@@ -354,6 +355,13 @@ WHERE
 		WHERE "DSCSN_SN" = #{dscsn_sn};
 
 	</update>
+	
+	<select id="getAsks" resultType="Ask">
+	SELECT *
+	FROM "ASK"
+	ORDER BY "DSCSN_REG_DT" desc
+	</select>	
+	
 	
 	
 </mapper>
