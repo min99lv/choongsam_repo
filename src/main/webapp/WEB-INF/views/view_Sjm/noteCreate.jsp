@@ -371,6 +371,8 @@ function sendMessage() {
     .then(data => {
         if (data === 1) {
             alert('쪽지가 전송되었습니다.');
+			// 성공하면 보낸 쪽지 목록으로 이동
+			window.location.href = '/notes/sent';  // 보낸 쪽지 목록 페이지로 이동
         } else {
             alert('쪽지 전송에 실패했습니다.');
         }

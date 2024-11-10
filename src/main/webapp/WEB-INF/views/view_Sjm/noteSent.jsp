@@ -171,7 +171,6 @@ td a:hover {
 		</div>
 
 		<div class="contents1">
-			<form action="/api/notice" id="frm">
 				<div class="manager_Qna_header_search">
 					<select>
 						<option>전체검색</option>
@@ -180,7 +179,6 @@ td a:hover {
 					</select> <input type="text" name="keyword" class="keyword" id="keyword">
 					<button type="submit" class="search_btn">검색</button>
 				</div>
-			</form>
 
 			<a class="writeNoticeBtn" href="/notes/new">쪽지 보내기</a>
 		</div>
@@ -217,101 +215,113 @@ td a:hover {
 		<%@ include file="../footer.jsp"%>
 
 	</footer>
-
-<script type="text/javascript">
-
-
-
-document.addEventListener('DOMContentLoaded', function() {
- // 페이지 로드 시 기본적으로 받은쪽지 목록을 가져온다
- fetchNotes('/api/notes/sent?currentPage=1');  // 기본적으로 첫 페이지 호출
-
- // 검색어 입력 및 페이지 변경 시 실행
- document.querySelector('.search_btn').addEventListener('click', function(event) {
-     event.preventDefault();
-     const keyword = document.querySelector('.keyword').value;  // 클래스 'keyword'로부터 값 가져오기
-     console.log(keyword);  // 확인용
-     fetchNotes(`/api/notes/sent?currentPage=1&keyword=${keyword}`);  // 검색어와 함께 첫 페이지 요청
- });
-});
- 
- function fetchNotes(apiUrl) {
-	    fetch(apiUrl)
-	        .then(response => {
-	            if (!response.ok) {
-	                throw new Error('네트워크 오류 발생');
-	            }
-	            return response.json();
-	        })
-	        .then(data => {
-	            populateNoteTable(data.notes);
-	            updatePagination(data.paging, data.total, data.keyword);
-	        })
-	        .catch(error => console.error('에러:', error));
-	}
- 
-//Define onPageClick function in the global scope
- function onPageClick(url) {
-  const keyword = document.querySelector('.keyword').value;  // 현재 입력된 검색어 가져오기
-  fetchNotes(decodedUrl); // fetchNotes 함수 호출
- }
-
- // 받은 쪽지 테이블에 데이터를 채워주는 함수
- function populateNoteTable(notes) {
-     const tableBody = document.querySelector('.list tbody');
-     tableBody.innerHTML = ''; // 기존 데이터 초기화
-
-     if (notes.length === 0) {
-         const emptyRow = `<tr><td colspan="3" style="text-align: center;">등록된 쪽지가 없습니다.</td></tr>`;
-         tableBody.innerHTML = emptyRow;
-         return;
-     }
-
-     let rows = '';
-     notes.forEach(note => {
-         rows += `
-             <tr>
-                 <td>`+note.note_sn+`</td>
-                 <td><a href="/note/` + note.note_sn + `">` + note.note_ttl + `</a> </td> <!-- 제목에 a태그 추가 -->
-                 <td>`+note.receiver_name+`</td>
-             </tr>
-         `;
-     });
-     tableBody.innerHTML = rows; // 모든 행을 한 번에 추가
- }
-
- function updatePagination(paging, total, keyword) {
-	    const paginationContainer = document.querySelector('.manager_pagination');
-	    let paginationHtml = '';
-
-	    // keyword가 undefined일 경우 빈 문자열로 처리
-	    const searchKeyword = (keyword === undefined || keyword === null) ? '' : keyword;
-	    
-	    // 이전 페이지
-	    if (paging.startPage > paging.pageBlock) {
-	        paginationHtml += `<a class="pagination_a_back" href="javascript:void(0);" onclick="onPageClick('${paging.startPage - paging.pageBlock}')">이전</a>`;
-	    }
-
-	    // 페이지 번호
-	    for (let i = paging.startPage; i <= paging.endPage; i++) {
-	        if (i === paging.currentPage) {
-	            paginationHtml += `<span class="pagination_current">` + i + `</span>`;
-	        } else {
-	            const url = "/api/notes/sent?currentPage=" + i + "&keyword=" + encodeURIComponent(searchKeyword);
-	            paginationHtml += `<a class="pagination_a" href="javascript:void(0);" onclick="onPageClick('${url}')">` + i + `</a>`;
-	        }
-	    }
-
-	    // 다음 페이지
-	    if (paging.endPage < paging.totalPage) {
-	        paginationHtml += `<a class="pagination_a_next" href="javascript:void(0);" onclick="onPageClick('${paging.startPage + paging.pageBlock}')">다음</a>`;
-	    }
-
-	    paginationContainer.innerHTML = paginationHtml;
-	}
-
-</script>
-
+	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			// 페이지 로드 시 URL에서 검색어를 추출하여 입력 필드에 설정
+			const urlParams = new URLSearchParams(window.location.search);
+			const keyword = urlParams.get('keyword');
+			if (keyword) {
+				document.querySelector('.keyword').value = keyword;
+			}
+		
+			// 받은쪽지 목록을 가져오고, 검색어가 있을 경우 해당 검색어와 함께 요청
+			const currentPage = urlParams.get('currentPage') || 1;  // 기본 페이지는 1로 설정
+			fetchNotes(`/api/notes/sent?currentPage=\${currentPage}&keyword=\${encodeURIComponent(keyword || '')}`);
+		
+			// 검색 버튼 클릭 시 검색어와 페이지를 URL에 포함하여 이동
+			document.querySelector('.search_btn').addEventListener('click', function(event) {
+				event.preventDefault();
+				const keyword = document.querySelector('.keyword').value;
+				window.location.href = `/notes/sent?currentPage=1&keyword=\${encodeURIComponent(keyword)}`;
+			});
+		});
+		
+		function fetchNotes(apiUrl) {
+			console.log("너야 ?", apiUrl);
+			fetch(apiUrl)
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('네트워크 오류 발생');
+					}
+					return response.json();
+				})
+				.then(data => {
+					populateNoteTable(data.notes, data.paging, data.total);
+					updatePagination(data.paging, data.total, data.keyword);
+				})
+				.catch(error => console.error('에러:', error));
+		}
+		
+		function onPageClick(currentPage) {
+			// 현재 입력된 검색어 가져오기
+			const keyword = document.querySelector('.keyword').value;
+			console.log(keyword);
+			// 페이지 번호를 클릭하면 URL을 생성하고 fetchNotes 호출
+			const url = "/api/notes/sent?currentPage=" + currentPage + "&keyword=" + encodeURIComponent(keyword);
+			fetchNotes(url);
+		}
+		
+		// 받은 쪽지 테이블에 데이터를 채워주는 함수
+		function populateNoteTable(notes, paging, total) {
+			const tableBody = document.querySelector('.list tbody');
+			tableBody.innerHTML = ''; // 기존 데이터 초기화
+		
+			if (notes.length === 0) {
+				const emptyRow = `<tr><td colspan="3" style="text-align: center;">등록된 쪽지가 없습니다.</td></tr>`;
+				tableBody.innerHTML = emptyRow;
+				return;
+			}
+		
+			let rows = '';
+			const startIndex = total - (paging.currentPage - 1) * paging.rowPage;  // startIndex 계산
+		
+			notes.forEach((note, index) => {
+				const indexInTable = startIndex - index + 1;  // 각 항목의 번호 계산
+		
+				rows += `
+					<tr>
+						<td>\${indexInTable}</td> <!-- 순번 표시 -->
+						<td><a href="/note/\${note.note_sn}">\${note.note_ttl}</a></td> <!-- 제목에 a태그 추가 -->
+						<td>\${note.receiver_name}</td>
+					</tr>
+				`;
+			});
+			tableBody.innerHTML = rows; // 모든 행을 한 번에 추가
+		}
+		
+		function updatePagination(paging, total, keyword) {
+			const paginationContainer = document.querySelector('.manager_pagination');
+			let paginationHtml = '';
+		
+			// keyword가 undefined일 경우 빈 문자열로 처리
+			const searchKeyword = (keyword === undefined || keyword === null) ? '' : keyword;
+			console.log(searchKeyword);
+			
+			// 이전 페이지
+			if (paging.startPage > paging.pageBlock) {
+				paginationHtml += `<a class="pagination_a_back" href="javascript:void(0);" onclick="onPageClick(\${paging.startPage - paging.pageBlock})">이전</a>`;
+			}
+		
+			// 페이지 번호
+			for (let i = paging.startPage; i <= paging.endPage; i++) {
+				if (i === paging.currentPage) {
+					paginationHtml += `<span class="pagination_current">\${i}</span>`;
+				} else {
+					console.log("여기는 페이지 누를때 서치 키워드 -->", searchKeyword);
+					const url = "/api/notes/sent?currentPage=" + i + "&keyword=" + encodeURIComponent(searchKeyword);
+					paginationHtml += `<a class="pagination_a" href="javascript:void(0);" onclick="onPageClick(\${i})">\${i}</a>`;
+				}
+			}
+		
+			// 다음 페이지
+			if (paging.endPage < paging.totalPage) {
+				paginationHtml += `<a class="pagination_a_next" href="javascript:void(0);" onclick="onPageClick(\${paging.startPage + paging.pageBlock})">다음</a>`;
+			}
+		
+			paginationContainer.innerHTML = paginationHtml;
+		}
+		</script>
+		
 
 
 </body>

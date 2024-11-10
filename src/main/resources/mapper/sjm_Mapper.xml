@@ -215,6 +215,7 @@ WHERE
     <if test="keyword != null and keyword != ''">
         AND (
             n."NOTE_TTL" ILIKE '%' || #{keyword} || '%' 
+
             OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
         )
     </if>
@@ -362,6 +363,30 @@ WHERE
 	ORDER BY "DSCSN_REG_DT" desc
 	</select>	
 	
-	
+	<select id="countAskMy" resultType="Int" parameterType="Map">
+
+		SELECT COUNT(*)
+		FROM "ASK"
+		WHERE "USER_SEQ" = #{user_seq}
+		<if test="keyword != null and keyword != ''">
+        AND (
+            "DSCSN_TTL" ILIKE '%%' 
+            OR "DSCSN_CN" ILIKE '%%'
+        );
+		</if>
+	</select>
+
+	<select id="countAsk" resultType="Int" parameterType="Map">
+		 SELECT COUNT(*)
+    FROM "ASK" 
+    <where>
+        <if test="keyword != null and keyword != ''">
+            (
+                "DSCSN_TTL" ILIKE '%' || #{keyword} || '%' 
+                OR "DSCSN_CN" ILIKE '%' || #{keyword} || '%'
+            )
+        </if>
+    </where>
+	</select>
 	
 </mapper>

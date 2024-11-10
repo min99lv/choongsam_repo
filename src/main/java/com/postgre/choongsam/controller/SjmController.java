@@ -1,6 +1,5 @@
 package com.postgre.choongsam.controller;
 
-import java.io.File;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -10,10 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,7 +87,7 @@ public class SjmController {
 
 	// NOTE - 공지사항 작성
 	@PostMapping(value = "/api/notice/new")
-	public ResponseEntity<Integer> noticeCreate(Notice notice, @RequestParam("files") MultipartFile[] files,
+	public ResponseEntity<String> noticeCreate(Notice notice, @RequestParam("files") MultipartFile[] files,
 			HttpServletRequest request) {
 		System.out.println("작성 시작");
 		System.out.println("받은 파일 수: " + files.length); // 파일 수 출력
@@ -96,7 +95,29 @@ public class SjmController {
 		System.out.println("notice-->" + notice);
 		int result = ss.noticeCreate(notice, files, request);
 
-		return ResponseEntity.ok(result);
+
+		if (result > 0) {
+			// 답변 작성이 성공했을 때
+			String alertScript = "<script type='text/javascript'>"
+					+ "alert('공지사항 작성이 완료되었습니다!');"
+					+ "window.location.href = '/api/notice'" 
+					+ "</script>";
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+					.body(alertScript);
+		} else {
+			// 실패 시 메시지와 리디렉션
+			String alertScript = "<script type='text/javascript'>"
+					+ "alert('공지사항 작성에 실패했습니다!');"
+					+ "window.location.href = '/api/notice'" 
+					+ "</script>";
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+					.body(alertScript);
+		}
+
+
+		//return ResponseEntity.ok(result);
 	}
 
 	// NOTE - 공지사항 상세 화면
@@ -212,7 +233,7 @@ public class SjmController {
 	// NOTE - 받은 쪽지 목록
 	@GetMapping(value = "/api/notes/received")
 	@ResponseBody
-	public List<Note> getNotesReceived(Model model,
+	public Map<String, Object> getNotesReceived(Model model,
 			@RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
 			@RequestParam(value = "keyword", required = false) String keyword, HttpSession session) {
 
@@ -222,6 +243,7 @@ public class SjmController {
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("user_seq", session.getAttribute("user_seq"));
+		params.put("keyword", keyword);
 		
 		
 		int total = ss.getNoteRcvrTotal(params);
@@ -231,10 +253,14 @@ public class SjmController {
 
 		params.put("start", page.getStart());
 		params.put("rowPage", page.getRowPage());
-		params.put("keyword", keyword);
 		List<Note> noteList = ss.getNotesReceived(params);
 
-		return noteList;
+		Map<String, Object> response = new HashMap<>();
+		response.put("total", total); // 전체 데이터의 수
+		response.put("notes", noteList); // 쪽지 목록
+		response.put("paging", page); // 페이징 정보 (현재 페이지, 전체 페이지 등)
+
+		return response;
 	}
 
 	// NOTE - 보낸 쪽지 목록
@@ -246,16 +272,16 @@ public class SjmController {
 		
 		Map<String, Object> params = new HashMap<>();
 		params.put("user_seq", session.getAttribute("user_seq"));
+		params.put("keyword", keyword);
 		
 		int total = ss.getNoteSendTotal(params);
-
-
+				
+		System.out.println("SjmController.getNotesSend() keyword-->" +keyword);
 		Paging page = new Paging(total, currentPage);
 		// Map 객체 생성하여 파라미터 설정
 
 		params.put("start", page.getStart());
 		params.put("rowPage", page.getRowPage());
-		params.put("keyword", keyword);
 		List<Note> noteList = ss.getNotesSend(params);
 
 		Map<String, Object> response = new HashMap<>();
@@ -405,6 +431,18 @@ public class SjmController {
 		List<Note> note = ss.getSameLeceture(lctr_id);
 		return ResponseEntity.ok(note);
 	}
+	
+
+
+	// ##################
+	// ##################
+	// ##################
+	// ##################
+	// 문의사항 ------------------------------------------------------------------
+	// ##################
+	// ##################
+	// ##################
+	// ##################
 
 	// NOTE - 문의사항
 	@GetMapping(value = "/asks/new")
@@ -417,14 +455,36 @@ public class SjmController {
 
 	// NOTE - 문의사항 작성
 	@PostMapping(value = "/api/asks/new")
-	public ResponseEntity<Integer> postAsks(Ask ask, HttpSession session) {
+	public ResponseEntity<String> postAsks(Ask ask, HttpSession session) {
 
 		System.out.println("작성 시작");
 
 		ask.setUser_seq((int) session.getAttribute("user_seq"));
 		int result = ss.postAsks(ask);
 
-		return ResponseEntity.ok(result);
+
+		if (result > 0) {
+			// 답변 작성이 성공했을 때
+			String alertScript = "<script type='text/javascript'>"
+					+ "alert('답변 작성이 완료되었습니다!');"
+					+ "window.location.href = '/asks/my'"  // 리디렉션할 페이지
+					+ "</script>";
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+					.body(alertScript);
+		} else {
+			// 실패 시 메시지와 리디렉션
+			String alertScript = "<script type='text/javascript'>"
+					+ "alert('답변 작성에 실패했습니다!');"
+					+ "window.location.href = '/asks/my'"  // 리디렉션할 페이지
+					+ "</script>";
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+					.body(alertScript);
+		}
+
+
+		//return ResponseEntity.ok(result);
 	}
 
 	// NOTE - 내 문의사항
@@ -439,27 +499,46 @@ public class SjmController {
 	// 문의사항 리스트 
 	@GetMapping(value = "/api/asks/my")
 	@ResponseBody
-	public List<Ask> getAsksMy(HttpSession session) {
+	public Map<String, Object> getAsksMy(@RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
+	@RequestParam(value = "keyword", required = false) String keyword, HttpSession session) {
 		System.out.println("컨트롤러 문의사항 리스트 시작");
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("user_seq", session.getAttribute("user_seq"));
 		List<Ask> ask = null;
-				
+		
+		params.put("keyword", keyword);
 
+
+		int total = 0;
+		Paging page = null;
+		
 		
 		int user_status = (int) session.getAttribute("usertype");
 		
 		if (user_status == 1003) {
 			System.out.println("관리자 리스트");
+			total = ss.countAsk(params);
+			page = new Paging(total, currentPage);
+			params.put("start", page.getStart());
+		params.put("rowPage", page.getRowPage());
 			ask = ss.getAsks();
 		}else {
 			System.out.println("내리스트");
-		ask = 	ss.getAsksMy(params);
+			total = ss.countAskMy(params);
+			page = new Paging(total, currentPage);
+			params.put("start", page.getStart());
+			params.put("rowPage", page.getRowPage());
+			ask = 	ss.getAsksMy(params);
 			
 		}
 		
-		return ask;
+		Map<String, Object> response = new HashMap<>();
+		response.put("total", total); // 전체 데이터의 수
+		response.put("asks", ask); // 쪽지 목록
+		response.put("paging", page); // 페이징 정보 (현재 페이지, 전체 페이지 등)
+
+		return response;
 	}
 
 	// 문의사항 상세 페이지
@@ -483,12 +562,33 @@ public class SjmController {
 	
 	// NOTE - 문의사항 답변 작성 
 	@PostMapping(value = "/api/asks/reply")
-	public ResponseEntity<Integer> replyUpdateAsks(Ask ask, HttpSession session) {
+	public ResponseEntity<String> replyUpdateAsks(Ask ask, HttpSession session) {
 		System.out.println("답변작성 시작 -->" + ask);
 		int user_seq =(int) session.getAttribute("user_seq");
 		ask.setDscsn_ans_seq(user_seq);
 		int result = ss.replyUpdateAsks(ask);
 	
-		return ResponseEntity.ok(result);
+    if (result > 0) {
+        // 답변 작성이 성공했을 때
+        String alertScript = "<script type='text/javascript'>"
+                + "alert('답변 작성이 완료되었습니다!');"
+                + "window.location.href = '/asks/" + ask.getDscsn_sn() + "';"  // 리디렉션할 페이지
+                + "</script>";
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+                .body(alertScript);
+    } else {
+        // 실패 시 메시지와 리디렉션
+        String alertScript = "<script type='text/javascript'>"
+                + "alert('답변 작성에 실패했습니다!');"
+                + "window.location.href = '/asks/" + ask.getDscsn_sn() + "';"  // 리디렉션할 페이지
+                + "</script>";
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+                .body(alertScript);
+    }
+
+
+		//return ResponseEntity.ok(result);
 	}
 }
