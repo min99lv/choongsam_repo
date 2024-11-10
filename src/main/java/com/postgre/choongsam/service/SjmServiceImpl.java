@@ -274,9 +274,9 @@ public class SjmServiceImpl implements SjmService {
 	}
 
 	@Override
-	public List<Ask> getAsks() {
+	public List<Ask> getAsks(Map<String,Object> params) {
 		
-		return sd.getAsks();
+		return sd.getAsks(params);
 	}
 
 	@Override

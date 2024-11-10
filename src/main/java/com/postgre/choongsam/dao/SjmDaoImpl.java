@@ -207,9 +207,13 @@ public class SjmDaoImpl implements SjmDao {
 		
 		List<Ask> ask = null;
 		try {
+			System.out.println("시작 parameter-->"+params);
 			ask = session.selectList("com.postgre.choongsam.mapper.sjm.getAsksMy",params);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		if(ask != null){
+			System.out.println("리스트를 불러옴 -->" +ask.size());
 		}
 		return ask;
 	}
@@ -328,12 +332,12 @@ public class SjmDaoImpl implements SjmDao {
 	}
 
 	@Override
-	public List<Ask> getAsks() {
+	public List<Ask> getAsks(Map<String,Object> params) {
 		System.out.println(" 모든 문의사항 불러오기");
 		List<Ask> askList = null;
-		
+		System.out.println(" all ask params-->"+params);
 		try {
-			askList = session.selectList("com.postgre.choongsam.mapper.sjm.getAsks");
+			askList = session.selectList("com.postgre.choongsam.mapper.sjm.getAsks",params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

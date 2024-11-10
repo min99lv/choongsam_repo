@@ -497,14 +497,14 @@ public class SjmController {
 	}
 
 	// 문의사항 리스트 
-	@GetMapping(value = "/api/asks/my")
+	@GetMapping(value = "/api/asks")
 	@ResponseBody
 	public Map<String, Object> getAsksMy(@RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
 	@RequestParam(value = "keyword", required = false) String keyword, HttpSession session) {
 		System.out.println("컨트롤러 문의사항 리스트 시작");
 
 		Map<String, Object> params = new HashMap<>();
-		params.put("user_seq", session.getAttribute("user_seq"));
+		params.put("user_seq", (int)session.getAttribute("user_seq"));
 		List<Ask> ask = null;
 		
 		params.put("keyword", keyword);
@@ -514,15 +514,15 @@ public class SjmController {
 		Paging page = null;
 		
 		
-		int user_status = (int) session.getAttribute("usertype");
+		Integer user_status = (Integer) session.getAttribute("usertype");
 		
-		if (user_status == 1003) {
+		if (user_status != null && user_status == 1003) {
 			System.out.println("관리자 리스트");
 			total = ss.countAsk(params);
 			page = new Paging(total, currentPage);
 			params.put("start", page.getStart());
 		params.put("rowPage", page.getRowPage());
-			ask = ss.getAsks();
+			ask = ss.getAsks(params);
 		}else {
 			System.out.println("내리스트");
 			total = ss.countAskMy(params);

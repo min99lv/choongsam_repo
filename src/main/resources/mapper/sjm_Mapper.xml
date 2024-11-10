@@ -318,7 +318,16 @@ WHERE
 		SELECT *
 		FROM "ASK"
 		WHERE "USER_SEQ" = #{user_seq}
+		
+        <if test="keyword != null and keyword != ''">
+           AND (
+                "DSCSN_TTL" ILIKE '%' || #{keyword} || '%' 
+                OR "DSCSN_CN" ILIKE '%' || #{keyword} || '%'
+            )
+        </if>
 	ORDER BY "DSCSN_REG_DT" desc
+	 LIMIT #{rowPage}
+    OFFSET #{start};
 
 	
 	</select>
@@ -357,10 +366,20 @@ WHERE
 
 	</update>
 	
-	<select id="getAsks" resultType="Ask">
+	<select id="getAsks" resultType="Ask" parameterType="Map">
 	SELECT *
 	FROM "ASK"
+	<where>
+        <if test="keyword != null and keyword != ''">
+            (
+                "DSCSN_TTL" ILIKE '%' || #{keyword} || '%' 
+                OR "DSCSN_CN" ILIKE '%' || #{keyword} || '%'
+            )
+        </if>
+    </where>
 	ORDER BY "DSCSN_REG_DT" desc
+	 LIMIT #{rowPage}
+    OFFSET #{start};
 	</select>	
 	
 	<select id="countAskMy" resultType="Int" parameterType="Map">
