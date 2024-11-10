@@ -68,7 +68,7 @@ public interface SjmService {
 
 	int replyUpdateAsks(Ask ask);
 
-	List<Ask> getAsks();
+	List<Ask> getAsks(Map<String,Object> params);
 
 	int countAsk(Map<String,Object> params);
 
