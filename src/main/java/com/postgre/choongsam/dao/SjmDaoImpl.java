@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dto.Ask;
 import com.postgre.choongsam.dto.File_Group;
@@ -266,7 +265,7 @@ public class SjmDaoImpl implements SjmDao {
 
 	@Override
 	public int getNoteSendTotal(Map<String, Object> params) {
-		
+		System.out.println("params-->"+params);
 		System.out.println("센드리스트 다오 시작");
 		int total = 0;
 		try {
@@ -340,6 +339,34 @@ public class SjmDaoImpl implements SjmDao {
 		}
 		System.out.println("askss ----> "+ askList);
 		return askList;
+	}
+
+	@Override
+	public int countAsk(Map<String, Object> params) {
+		System.out.println("모든 쪽지 리스트");
+
+		int result = 0;
+		try {
+			result = session.selectOne("com.postgre.choongsam.mapper.sjm.countAsk",params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("SjmDaoImpl.countAsk() ===>"+result);
+		return result;
+	}
+
+	@Override
+	public int countAskMy(Map<String, Object> params) {
+		System.out.println("countAskMy 쪽지 리스트");
+
+		int result = 0;
+		try {
+			result = session.selectOne("com.postgre.choongsam.mapper.sjm.countAskMy",params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("SjmDaoImpl.countAskMy() ===>"+result);
+		return result;
 	}
 
 }

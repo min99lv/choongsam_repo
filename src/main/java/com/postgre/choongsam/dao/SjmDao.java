@@ -65,5 +65,9 @@ public interface SjmDao {
 
 	List<Ask> getAsks();
 
+    int countAsk(Map<String, Object> params);
+
+	int countAskMy(Map<String, Object>params);
 
 }
+
