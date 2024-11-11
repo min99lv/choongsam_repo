@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +11,12 @@
 <title>내 출결 현황</title>
 </head>
 <body>
-	<h2>내 출결 현황</h2>
+
+<div class="container">
+		<div class="contents">
+	<h1>내 출결 현황</h1>
+		
+		</div>
 	<table>
 		<tr>
 			<th>차시</th>
@@ -29,5 +35,10 @@
 		</tr>
 		</c:forEach>
 	</table>
+
+
+
+
+</div>
 </body>
 </html>
