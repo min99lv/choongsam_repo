@@ -7,13 +7,14 @@
 		SELECT
 		COUNT(*)
 		FROM "NOTICE"
-		WHERE
-		#{keyword} IS NULL
-		OR
-		("NTC_MTTR_TTL" ILIKE
-		'%' || #{keyword} || '%'
-		OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} ||
-		'%')
+		WHERE "NTC_MTTR_YN" = 'Y'
+  AND (
+      #{keyword} IS NULL
+      OR (
+          "NTC_MTTR_TTL" ILIKE '%' || #{keyword} || '%'
+          OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} || '%'
+      )
+  )
 
 
 	</select>
@@ -21,17 +22,21 @@
 
 	<select id="selectNoticeList" resultType="Notice"
 		parameterType="Map">
-		SELECT *
-		FROM "NOTICE"
-		WHERE
-		#{keyword} IS NULL
-		OR
-		("NTC_MTTR_TTL" ILIKE '%' || #{keyword} || '%'
-		OR "NTC_MTTR_CN" ILIKE
-		'%' || #{keyword} || '%')
-		ORDER BY "NTC_MTTR_DT" desc
-		LIMIT #{rowPage}
-		OFFSET #{start};
+	SELECT "NTC_MTTR_SN", "USER_SEQ",
+		"NTC_MTTR_GUBUN","NTC_MTTR_TTL","NTC_MTTR_CN",
+		TO_CHAR(TO_TIMESTAMP("NTC_MTTR_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "NTC_MTTR_DT","NTC_MTTR_YN","LCTR_ID","FILE_GROUP"
+FROM "NOTICE"
+WHERE "NTC_MTTR_YN" = 'Y'
+  AND (
+      #{keyword} IS NULL
+      OR (
+          "NTC_MTTR_TTL" ILIKE '%' || #{keyword} || '%'
+          OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} || '%'
+      )
+  )
+ORDER BY "NTC_MTTR_DT" DESC
+LIMIT #{rowPage}
+OFFSET #{start};
 	</select>
 
 
@@ -52,7 +57,7 @@
 		"NTC_MTTR_DT","NTC_MTTR_YN","LCTR_ID","FILE_GROUP")
 		VALUES
 		(NEXTVAL('ntc_mttr_sn_seq'),10023,6001,#{ntc_mttr_ttl},
-		#{ntc_mttr_cn},LOCALTIMESTAMP(0),'N', #{lctr_id},#{file_group});
+		#{ntc_mttr_cn},LOCALTIMESTAMP(0),'Y', #{lctr_id},#{file_group});
 
 
 
@@ -102,8 +107,8 @@ SELECT
         n."BFR_NOTE_SN",
         n."SNDPTY_SEQ",
         n."RCVR_SEQ",
-        n."DSPTCH_DT",
-        n."RCPTN_DT",
+       	TO_CHAR(TO_TIMESTAMP(n."DSPTCH_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "DSPTCH_DT",
+		TO_CHAR(TO_TIMESTAMP(n."RCPTN_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "RCPTN_DT",
         n."NOTE_TTL",
         n."NOTE_CN",
         n."SNDPTY_NOTE_YN",
@@ -118,6 +123,7 @@ SELECT
         "USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ"
     WHERE
         n."RCVR_SEQ" = #{user_seq}
+        AND n."RCVR_NOTE_YN" = 'Y'
         <if test="keyword != null and keyword != ''">
             AND (
                 n."NOTE_TTL" ILIKE '%' || #{keyword} || '%' 
@@ -136,8 +142,8 @@ SELECT
         n."BFR_NOTE_SN",
         n."SNDPTY_SEQ",
         n."RCVR_SEQ",
-        n."DSPTCH_DT",
-        n."RCPTN_DT",
+        TO_CHAR(TO_TIMESTAMP(n."DSPTCH_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "DSPTCH_DT",
+		TO_CHAR(TO_TIMESTAMP(n."RCPTN_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "RCPTN_DT",
         n."NOTE_TTL",
         n."NOTE_CN",
         n."SNDPTY_NOTE_YN",
@@ -152,6 +158,7 @@ SELECT
         "USER_INFO" r ON n."RCVR_SEQ" = r."USER_SEQ"
     WHERE
         n."SNDPTY_SEQ" = #{user_seq}
+       AND n."SNDPTY_NOTE_YN" = 'Y'
         <if test="keyword != null and keyword != ''">
             AND (
                 n."NOTE_TTL" ILIKE '%' || #{keyword} || '%' 
@@ -202,52 +209,66 @@ WHERE
 
 	</insert>
 	
-	<select id="getNoteSendTotal">
-			SELECT
-			    COUNT(*)
-			FROM
-			    "NOTE" n
-			JOIN
-			    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
-			WHERE
-			    (
-			        #{keyword} IS NULL OR #{keyword} = ''
-			    ) 
-			    OR (
-			        n."NOTE_TTL" ILIKE '%' || #{keyword} || '%'
-			        OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
-			    );
+	<select id="getNoteSendTotal" resultType="Int" parameterType="Map">
+SELECT
+    COUNT(*)
+FROM
+    "NOTE" n
+JOIN
+    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
+WHERE
+    n."SNDPTY_SEQ" = #{user_seq}
+    AND n."SNDPTY_NOTE_YN" = 'Y'
+    <if test="keyword != null and keyword != ''">
+        AND (
+            n."NOTE_TTL" ILIKE '%' || #{keyword} || '%' 
+
+            OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
+        )
+    </if>
 	</select>
-	<select id="getNoteRcvrTotal">
-	SELECT
-			    COUNT(*)
-			FROM
-			    "NOTE" n
-			JOIN
-			    "USER_INFO" u ON n."RCVR_SEQ" = u."USER_SEQ"
-			WHERE
-			    (
-			        #{keyword} IS NULL OR #{keyword} = ''
-			    ) 
-			    OR (
-			        n."NOTE_TTL" ILIKE '%' || #{keyword} || '%'
-			        OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
-			    );
+	<select id="getNoteRcvrTotal" resultType="Int" parameterType="Map">
+SELECT
+    COUNT(*)
+FROM
+    "NOTE" n
+JOIN
+    "USER_INFO" u ON n."SNDPTY_SEQ" = u."USER_SEQ"
+WHERE
+    n."RCVR_SEQ" = #{user_seq}
+    AND n."SNDPTY_NOTE_YN" = 'Y'
+    <if test="keyword != null and keyword != ''">
+        AND (
+            n."NOTE_TTL" ILIKE '%' || #{keyword} || '%' 
+            OR u."USER_NAME" ILIKE '%' || #{keyword} || '%'
+        )
+        </if>
 	</select>
 	
 
 	<select id="getMyLectures" parameterType="int"
 		resultType="Lecture">
 		SELECT
-		l."LCTR_ID",
-		l."LCTR_NAME"
-		FROM
-		"COURSE_REGISTRATION" cr
-		JOIN
-		"LECTURE" l ON cr."LCTR_ID" = l."LCTR_ID"
-		WHERE
-		cr."USER_SEQ" =
-		#{user_seq};
+    CASE
+        WHEN li."USER_STATUS" = 1001 THEN cr."LCTR_ID"   
+        WHEN li."USER_STATUS" = 1002 THEN l."LCTR_ID"    
+        ELSE NULL
+    END AS "LCTR_ID",
+    CASE
+        WHEN li."USER_STATUS" = 1001 THEN lec."LCTR_NAME" 
+        WHEN li."USER_STATUS" = 1002 THEN l."LCTR_NAME"  
+        ELSE NULL
+    END AS "LCTR_NAME"
+FROM 
+    "LOGIN_INFO" li
+LEFT JOIN 
+    "COURSE_REGISTRATION" cr ON cr."USER_SEQ" = li."USER_SEQ"  
+LEFT JOIN 
+    "LECTURE" l ON li."USER_SEQ" = l."USER_SEQ"  
+LEFT JOIN
+    "LECTURE" lec ON cr."LCTR_ID" = lec."LCTR_ID"  
+WHERE 
+    li."USER_SEQ" = ${user_seq}
 
 	</select>
 	<select id="getSameLeceture" parameterType="String"
@@ -301,10 +322,20 @@ WHERE
 	</insert>
 	
 	<select id="getAsksMy" resultType="Ask" parameterType="Map">
-		SELECT *
+		SELECT "DSCSN_SN", "USER_SEQ", "DSCSN_TTL", "DSCSN_CN", TO_CHAR(TO_TIMESTAMP("DSCSN_REG_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "DSCSN_REG_DT", "DSCSN_ANS_SEQ", "DSCSN_ANS_CN", TO_CHAR(TO_TIMESTAMP("DSCSN_ANS_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "DSCSN_ANS_DT", "DSCSN_ANS_YN"
 		FROM "ASK"
 		WHERE "USER_SEQ" = #{user_seq}
-	
+		
+        <if test="keyword != null and keyword != ''">
+           AND (
+                "DSCSN_TTL" ILIKE '%' || #{keyword} || '%' 
+                OR "DSCSN_CN" ILIKE '%' || #{keyword} || '%'
+            )
+        </if>
+	ORDER BY "DSCSN_REG_DT" desc
+	 LIMIT #{rowPage}
+    OFFSET #{start};
+
 	
 	</select>
 	
@@ -325,5 +356,87 @@ WHERE
 	FROM "FILE_GROUP"
 	WHERE "FILE_GROUP"=#{file_group} 
 	</select>
+	
+	<update id="updateReceiveDate" parameterType="Int" >
+		UPDATE "NOTE"
+		SET "RCPTN_DT" = LOCALTIMESTAMP(0)
+		WHERE "NOTE_SN" = #{note_sn};
 
+	</update>
+	
+	
+	<update id="replyUpdateAsks" parameterType="Ask" >
+		UPDATE "ASK"
+		SET "DSCSN_ANS_SEQ"= #{dscsn_ans_seq} ,"DSCSN_ANS_CN"= #{dscsn_ans_cn},"DSCSN_ANS_DT" = LOCALTIMESTAMP(0),
+					"DSCSN_ANS_YN"= #{dscsn_ans_yn}
+		WHERE "DSCSN_SN" = #{dscsn_sn};
+
+	</update>
+	
+	<select id="getAsks" resultType="Ask" parameterType="Map">
+	SELECT "DSCSN_SN", "USER_SEQ", "DSCSN_TTL", "DSCSN_CN", TO_CHAR(TO_TIMESTAMP("DSCSN_REG_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "DSCSN_REG_DT", "DSCSN_ANS_SEQ", "DSCSN_ANS_CN", TO_CHAR(TO_TIMESTAMP("DSCSN_ANS_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "DSCSN_ANS_DT", "DSCSN_ANS_YN"
+	FROM "ASK"
+	<where>
+        <if test="keyword != null and keyword != ''">
+            (
+                "DSCSN_TTL" ILIKE '%' || #{keyword} || '%' 
+                OR "DSCSN_CN" ILIKE '%' || #{keyword} || '%'
+            )
+        </if>
+    </where>
+	ORDER BY "DSCSN_REG_DT" desc
+	 LIMIT #{rowPage}
+    OFFSET #{start};
+	</select>	
+	
+	<select id="countAskMy" resultType="Int" parameterType="Map">
+
+		SELECT COUNT(*)
+		FROM "ASK"
+		WHERE "USER_SEQ" = #{user_seq}
+		<if test="keyword != null and keyword != ''">
+        AND (
+            "DSCSN_TTL" ILIKE '%%' 
+            OR "DSCSN_CN" ILIKE '%%'
+        );
+		</if>
+	</select>
+
+	<select id="countAsk" resultType="Int" parameterType="Map">
+		 SELECT COUNT(*)
+    FROM "ASK" 
+    <where>
+        <if test="keyword != null and keyword != ''">
+            (
+                "DSCSN_TTL" ILIKE '%' || #{keyword} || '%' 
+                OR "DSCSN_CN" ILIKE '%' || #{keyword} || '%'
+            )
+        </if>
+    </where>
+	</select>
+	
+	<update id="updateNoticeYn" parameterType="Notice">
+		UPDATE "NOTICE"
+		SET "NTC_MTTR_YN" = #{ntc_mttr_yn}
+		WHERE "NTC_MTTR_SN" = #{ntc_mttr_sn}
+	
+	</update>
+	
+	<update id="updateNoteRcvrDelYn" parameterType="Note">
+		UPDATE "NOTE"
+		SET "RCVR_NOTE_YN" = #{rcvr_note_yn}
+		WHERE "NOTE_SN" = #{note_sn}
+	
+	</update>
+	
+	
+	<update id="updateNoteSentDelYn" parameterType="Note">
+		UPDATE "NOTE"
+		SET "SNDPTY_NOTE_YN" = #{sndpty_note_yn}
+		WHERE "NOTE_SN" = #{note_sn}
+	
+	</update>
+	
+	
+	
 </mapper>

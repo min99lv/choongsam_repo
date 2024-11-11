@@ -21,4 +21,7 @@ public class Course_Registration {	// 수강신청
 	private String prof_name;
 	
 	
+	private String 		ONOFF;
+	private String 		LCTR_NAME;
+	
 }
