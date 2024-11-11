@@ -1,11 +1,18 @@
 package com.postgre.choongsam.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dao.JheDao;
 import com.postgre.choongsam.dto.Attendance_Check;
+import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Homework_Submission;
 import com.postgre.choongsam.dto.Lecture;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -88,12 +97,95 @@ public class JheServiceImpl implements JheService {
 
 	@Override
 	@Transactional
-	public int insertHomework(Homework homework, MultipartFile file) {
+	public int insertHomework(Homework homework, MultipartFile[] files, HttpServletRequest request) {
 		System.out.println("과제 등록 서비스");
 
+		List<File_Group> uploadFiles = new ArrayList<>();
+
+	    // 파일 리스트를 순회하며 업로드
+	    for (MultipartFile file : files) {
+	        if (file != null && !file.isEmpty()) {
+	            try {
+	                File_Group uploadFile = uploadFile(file, request);
+	                if (uploadFile != null) {
+	                    uploadFiles.add(uploadFile);
+	                }
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	                return -1;
+	            }
+	        }
+	    }
+	    
 		// 과제 정보 저장
-		int insHWList = hed.insertHomework(homework);
+		int insHWList = hed.insertHomework(homework, uploadFiles);
 		return insHWList;
+	}
+
+	// 업로드된 파일을 처리하는 메서드
+	public File_Group uploadFile(MultipartFile file, HttpServletRequest request) throws IOException {
+	    // 파일 정보 변수 선언
+		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		String idntf_no = UUID.randomUUID().toString() + "_" + timestamp;
+	    String originFile = file.getOriginalFilename();
+	    String file_nm = ""; // 실제 파일명
+	    String file_extn_nm = ""; // 확장자
+	    int file_sz = 0; // 파일 크기
+
+	    // 파일이 있는 경우 처리
+	    if (originFile != null && !originFile.isEmpty()) {
+	        int lastIndex = originFile.lastIndexOf(".");
+	        if (lastIndex != -1) {
+	            file_nm = originFile.substring(0, lastIndex);
+	            file_extn_nm = originFile.substring(lastIndex + 1);
+	            file_sz = (int) file.getSize();
+
+	            System.out.println("originFile >> " + file_nm);
+	            System.out.println("fileSuffix >> " + file_extn_nm);
+	            System.out.println("fileSize >> " + file_sz + "바이트");
+
+	            InputStream inputStream = file.getInputStream();
+
+	            // 파일이 저장될 경로
+	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/Homework");
+
+	            // 경로가 없으면 생성
+	            File uploadDir = new File(uploadPath);
+	            if (!uploadDir.exists()) {
+	            	boolean dirCreated = uploadDir.mkdirs(); // 디렉토리 생성
+	            	if (!dirCreated) {
+	            		throw new IOException("업로드 디렉토리를 생성할 수 없습니다: " + uploadPath);
+	            	}
+	            }
+	            
+	            // 파일 저장
+	            File targetFile = new File(uploadPath, idntf_no + "." + file_extn_nm);
+	            try (FileOutputStream outputStream = new FileOutputStream(targetFile)) {
+	                byte[] buffer = new byte[1024];
+	                int bytesRead;
+	                while ((bytesRead = inputStream.read(buffer)) != -1) {
+	                    outputStream.write(buffer, 0, bytesRead);
+	                }
+	            }
+	            
+	            String fileUrl = "/chFile/Homework/" +idntf_no +"."+ file_extn_nm ;
+
+	            // 파일 객체 생성 및 반환
+	            File_Group uploadFile = new File_Group(); // Filegroup 클래스 생성
+	            uploadFile.setIdntf_no(idntf_no);
+	            uploadFile.setFile_nm(file_nm);
+	            uploadFile.setFile_extn_nm(file_extn_nm);
+	            uploadFile.setFile_sz(file_sz);
+	            uploadFile.setFile_path_nm(fileUrl);
+
+	            return uploadFile; // 업로드된 파일 정보를 반환
+	        } else {
+	            System.out.println("파일에 확장자가 없습니다.");
+	        }
+	    } else {
+	        System.out.println("업로드된 파일이 없습니다.");
+	    }
+	    return null; // 파일이 없는 경우 null 반환
 	}
 
 	@Override
@@ -269,23 +361,24 @@ public class JheServiceImpl implements JheService {
 		int lctrState = hed.getLctrState(lctr_id);
 		List<Grade> allGrades = new ArrayList<>();
 
-		if (lctrState == 4006) {
 			List<Integer> userSeqList = hed.studUserSeq(lctr_id);
 			for (Integer userSeq : userSeqList) {
-				Grade grade = new Grade();
-				grade.setLctr_id(lctr_id);
-				grade.setUser_seq(userSeq);
-				Grade existingGrade = hed.selectGrade(grade);
-				if (existingGrade == null) {
-					insertGrade(lctr_id, userSeq);
+				if (lctrState == 4006) {
+					Grade grade = new Grade();
+					grade.setLctr_id(lctr_id);
+					grade.setUser_seq(userSeq);
+					Grade existingGrade = hed.selectGrade(grade);
+					if (existingGrade == null) {
+						insertGrade(lctr_id, userSeq);
+					}
 				}
-				List<Grade> studScoresList = hed.profGrade(userSeq);
-				allGrades.addAll(studScoresList);
-				System.out.println("service studScoresList: " + studScoresList);
-			}
-			return allGrades;
+				if (lctrState == 4005) {
+					List<Grade> studScoresList = hed.profGrade(userSeq);
+					allGrades.addAll(studScoresList);
+					System.out.println("service studScoresList: " + studScoresList);
+				}
 		}
-		return new ArrayList<>();
+		return allGrades;
 	}
 
 	private void insertGrade(String lctr_id, Integer userSeq) {

@@ -34,8 +34,21 @@
 			</tr>
 			<tr>
 				<th>첨부파일</th>
-				<td><input type="file" name="file_nm" accept="application/pdf, image/*, .doc, .docx, .txt"></td>
-			</tr>
+				<td>
+					<div class="file_list">
+						<div>
+							<div class="file_input">
+								<input type="file" name="files" onchange="selectFile(this);" />
+								<button type="button" onclick="removeFile(this);" class="btns del_btn">
+									<span>삭제</span>
+								</button>
+								<button type="button" onclick="addFile();" class="btns fn_add_btn">
+									<span>파일 추가</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</td>
 			<tr>
 				<th>과제내용</th>
 				<td><textarea name="asmt_cn"></textarea>

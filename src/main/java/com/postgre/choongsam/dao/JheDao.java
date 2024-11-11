@@ -14,7 +14,7 @@ public interface JheDao {
 	List<Lecture>	getProfLectureInfo(String lctr_id);
 	List<Homework>	getProfHomeworkList(String lctr_id);
 	Lecture			findByLCTR(String lctr_id);
-	int				insertHomework(Homework homework);
+	int				insertHomework(Homework homework, List<File_Group> uploadFiles);
 	Homework		findById(int asmt_no);
 	int				updateHomework(Homework homework);
 	void			deleteHomeworkSubmission(int asmt_no);

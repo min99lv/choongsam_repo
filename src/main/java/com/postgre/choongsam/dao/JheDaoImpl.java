@@ -82,7 +82,32 @@ public class JheDaoImpl implements JheDao {
 
 	@Override
 	@Transactional
-	public int insertHomework(Homework homework) {
+	public int insertHomework(Homework homework, List<File_Group> uploadFiles) {
+
+		// 파일 그룹 ID 생성
+		int fileGroupId = createNewFileGroupId();
+
+		// 공지사항 먼저 저장
+
+		// 파일 정보가 있다면 저장
+		if (uploadFiles != null && !uploadFiles.isEmpty()) {
+			for (File_Group fileUpload : uploadFiles) { // Filegroup 객체를 순회
+
+				int fileSeq = createNewFileSeq(fileGroupId);
+
+				fileUpload.setFile_group(fileGroupId); // 파일 그룹 ID 설정
+				fileUpload.setFile_seq(fileSeq); // 파일 시퀀스 설정
+				System.out.println("filegroup ------ > " + fileUpload);
+				int fileResult = session.insert("FileUpload", fileUpload);
+				System.out.println("파일 업로드 임 ㅋ");
+				homework.setFile_group(fileGroupId);
+				if (fileResult <= 0) {
+					// 파일 업로드 실패 처리
+					System.out.println("파일 업로드 실패");
+				}
+			}
+		}
+
 		System.out.println("과제등록 와따오");
 		int insHWList = 0;
 		try {
@@ -94,6 +119,16 @@ public class JheDaoImpl implements JheDao {
 			System.out.println("insertHomework error: " + e.getMessage());
 		}
 		return insHWList;
+	}
+
+	private int createNewFileGroupId() {
+		return session.selectOne("com.postgre.choongsam.dto.jheMapper.getNextFileGroupId");
+	}
+
+	private int createNewFileSeq(int fileGroupId) {
+		// file_seq는 파일 그룹에 대해 최대값을 가져오는 방법
+		Integer maxFileSeq = session.selectOne("com.postgre.choongsam.dto.jheMapper.getMaxFileSeq", fileGroupId);
+		return (maxFileSeq == null) ? 1 : maxFileSeq + 1; // maxFileSeq가 null이면 1을 반환
 	}
 
 	@Override
