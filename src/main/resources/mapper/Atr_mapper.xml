@@ -8,8 +8,7 @@
 		"LECTURE" ("LCTR_ID", "USER_SEQ", "ONOFF","LCTR_CATEGORY","LCTR_NAME",
 		"LCTR_COUNT","RCRT_DATE", "LCTR_COST", "LCTR_STATE", "EVAL_CRITERIA",
 		"LCTR_START_DATE", "LCTR_CNTSCHD", "FILE_GROUP", "LCTR_SCHD")
-		values (NEXTVAL('lctr_id_seq'), 0,
-		#{onoff},#{lctr_category},#{lctr_name},#{lctr_count},#{rcrt_date},#{lctr_cost},#{lctr_state},#{eval_criteria},#{lctr_start_date},#{lctr_cntschd},#{file_group},#{lctr_schd})
+		values (NEXTVAL('lctr_id_seq'), 0,CAST (#{onoff} AS INTEGER),CAST (#{lctr_category} AS INTEGER),#{lctr_name},#{lctr_count},#{rcrt_date},#{lctr_cost},'4001',#{eval_criteria},#{lctr_start_date},#{lctr_cntschd},#{file_group},#{lctr_schd})
 	</insert>
 	<insert id="trRegisterSyllabus">
 		INSERT INTO "SYLLABUS"
