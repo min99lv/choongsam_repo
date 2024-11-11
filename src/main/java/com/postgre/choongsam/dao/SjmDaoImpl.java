@@ -92,8 +92,7 @@ public class SjmDaoImpl implements SjmDao {
 		Integer maxFileSeq = session.selectOne("com.postgre.choongsam.mapper.sjm.getMaxFileSeq", fileGroupId);
 		return (maxFileSeq == null) ? 1 : maxFileSeq + 1; // maxFileSeq가 null이면 1을 반환
 	}
-	
-	
+
 // ##################
 // ##################
 // ##################
@@ -137,20 +136,20 @@ public class SjmDaoImpl implements SjmDao {
 	// NOTE - 쪽지 상세
 	@Override
 	public Note getNote(int note_sn) {
-		
+
 		Note note = session.selectOne("com.postgre.choongsam.mapper.sjm.getNote", note_sn);
 		System.out.println("note ---> " + note);
-		
+
 		return note;
 	}
 
 	@Override
 	public int createNote(Note note) {
-			int result = 0;
-			System.out.println("쪽지 작성 다오 시작 ");
+		int result = 0;
+		System.out.println("쪽지 작성 다오 시작 ");
 		try {
-			 result = session.insert("com.postgre.choongsam.mapper.sjm.createNote",note);
-			System.out.println(result +"이다");
+			result = session.insert("com.postgre.choongsam.mapper.sjm.createNote", note);
+			System.out.println(result + "이다");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -159,12 +158,12 @@ public class SjmDaoImpl implements SjmDao {
 
 	@Override
 	public List<Lecture> getMyLectures(int user_seq) {
-		System.out.println("내가 듣는 강의 리스트 가져오기"+ user_seq);
+		System.out.println("내가 듣는 강의 리스트 가져오기" + user_seq);
 		List<Lecture> lectures = null;
-		
+
 		try {
-			lectures= session.selectList("com.postgre.choongsam.mapper.sjm.getMyLectures",user_seq);
-			System.out.println("내가 듣는 강의 : "+lectures);
+			lectures = session.selectList("com.postgre.choongsam.mapper.sjm.getMyLectures", user_seq);
+			System.out.println("내가 듣는 강의 : " + lectures);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -173,12 +172,12 @@ public class SjmDaoImpl implements SjmDao {
 
 	@Override
 	public List<Note> getSameLeceture(String lectureId) {
-		System.out.println("내가 듣는 강의 리스트 가져오기"+ lectureId);
+		System.out.println("내가 듣는 강의 리스트 가져오기" + lectureId);
 		List<Note> note = null;
-		
+
 		try {
-			note= session.selectList("com.postgre.choongsam.mapper.sjm.getSameLeceture",lectureId);
-			System.out.println("내가 듣는 강의 : "+note);
+			note = session.selectList("com.postgre.choongsam.mapper.sjm.getSameLeceture", lectureId);
+			System.out.println("내가 듣는 강의 : " + note);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -187,33 +186,33 @@ public class SjmDaoImpl implements SjmDao {
 
 	@Override
 	public int postAsk(Ask ask) {
-		
+
 		System.out.println(" 문의사항 작성 다오");
-		 
+
 		int result = 0;
-		
+
 		try {
-			result = session.insert("com.postgre.choongsam.mapper.sjm.postAsk",ask);
+			result = session.insert("com.postgre.choongsam.mapper.sjm.postAsk", ask);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 
 	@Override
 	public List<Ask> getAsksMy(Map<String, Object> params) {
 		System.out.println("다오시작 문의사항");
-		
+
 		List<Ask> ask = null;
 		try {
-			System.out.println("시작 parameter-->"+params);
-			ask = session.selectList("com.postgre.choongsam.mapper.sjm.getAsksMy",params);
+			System.out.println("시작 parameter-->" + params);
+			ask = session.selectList("com.postgre.choongsam.mapper.sjm.getAsksMy", params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(ask != null){
-			System.out.println("리스트를 불러옴 -->" +ask.size());
+		if (ask != null) {
+			System.out.println("리스트를 불러옴 -->" + ask.size());
 		}
 		return ask;
 	}
@@ -222,11 +221,11 @@ public class SjmDaoImpl implements SjmDao {
 	@Override
 	public Ask getAsk(int dscsn_sn) {
 		System.out.println("상세 다오 시작");
-		
+
 		Ask ask = null;
-		
+
 		try {
-			ask = session.selectOne("com.postgre.choongsam.mapper.sjm.getAsk",dscsn_sn);
+			ask = session.selectOne("com.postgre.choongsam.mapper.sjm.getAsk", dscsn_sn);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -236,49 +235,49 @@ public class SjmDaoImpl implements SjmDao {
 	@Override
 	public File_Group getFile(int fileGroup, int fileSeq) {
 		System.out.println("파일 다운로드 진행");
-		
-	File_Group file = null;
-	
-	Map<String, Object> params = new HashMap<>();
-	params.put("file_group", fileGroup);
-	params.put("file_seq", fileSeq);
-	
-	try {
-		file = session.selectOne("com.postgre.choongsam.mapper.sjm.getFile",params);
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-		
+
+		File_Group file = null;
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("file_group", fileGroup);
+		params.put("file_seq", fileSeq);
+
+		try {
+			file = session.selectOne("com.postgre.choongsam.mapper.sjm.getFile", params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return file;
 	}
 
 	@Override
 	public List<File_Group> getFilesByGroup(int file_group) {
 		System.out.println("file 리스트 가져오기");
-		
+
 		List<File_Group> files = null;
-		
+
 		try {
-			files = session.selectList("com.postgre.choongsam.mapper.sjm.getFilesByGroup",file_group);
+			files = session.selectList("com.postgre.choongsam.mapper.sjm.getFilesByGroup", file_group);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return files;
 	}
 
 	@Override
 	public int getNoteSendTotal(Map<String, Object> params) {
-		System.out.println("params-->"+params);
+		System.out.println("params-->" + params);
 		System.out.println("센드리스트 다오 시작");
 		int total = 0;
 		try {
-			 total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteSendTotal",params);
+			total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteSendTotal", params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println("total---->" +total);
+
+		System.out.println("total---->" + total);
 		return total;
 	}
 
@@ -287,13 +286,13 @@ public class SjmDaoImpl implements SjmDao {
 		System.out.println("리시브리스트 다오 시작");
 		int total = 0;
 		try {
-			 total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteRcvrTotal",params);
+			total = session.selectOne("com.postgre.choongsam.mapper.sjm.getNoteRcvrTotal", params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println("total---->" +total);
-		
+
+		System.out.println("total---->" + total);
+
 		return total;
 	}
 
@@ -302,15 +301,13 @@ public class SjmDaoImpl implements SjmDao {
 		System.out.println("수신자 읽음 처리 다오 시작");
 		int result = 0;
 		try {
-			 result = session.update("com.postgre.choongsam.mapper.sjm.updateReceiveDate",note_sn);
+			result = session.update("com.postgre.choongsam.mapper.sjm.updateReceiveDate", note_sn);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-	
-		System.out.println("result---->" +result);
-		
-		
+
+		System.out.println("result---->" + result);
+
 		return result;
 	}
 
@@ -319,29 +316,27 @@ public class SjmDaoImpl implements SjmDao {
 		System.out.println(" 문의사항 답변작성 다오 시작");
 		int result = 0;
 		try {
-			 result = session.update("com.postgre.choongsam.mapper.sjm.replyUpdateAsks",ask);
+			result = session.update("com.postgre.choongsam.mapper.sjm.replyUpdateAsks", ask);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-	
-		System.out.println("result---->" +result);
-		
-		
+
+		System.out.println("result---->" + result);
+
 		return result;
 	}
 
 	@Override
-	public List<Ask> getAsks(Map<String,Object> params) {
+	public List<Ask> getAsks(Map<String, Object> params) {
 		System.out.println(" 모든 문의사항 불러오기");
 		List<Ask> askList = null;
-		System.out.println(" all ask params-->"+params);
+		System.out.println(" all ask params-->" + params);
 		try {
-			askList = session.selectList("com.postgre.choongsam.mapper.sjm.getAsks",params);
+			askList = session.selectList("com.postgre.choongsam.mapper.sjm.getAsks", params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("askss ----> "+ askList);
+		System.out.println("askss ----> " + askList);
 		return askList;
 	}
 
@@ -351,11 +346,11 @@ public class SjmDaoImpl implements SjmDao {
 
 		int result = 0;
 		try {
-			result = session.selectOne("com.postgre.choongsam.mapper.sjm.countAsk",params);
+			result = session.selectOne("com.postgre.choongsam.mapper.sjm.countAsk", params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("SjmDaoImpl.countAsk() ===>"+result);
+		System.out.println("SjmDaoImpl.countAsk() ===>" + result);
 		return result;
 	}
 
@@ -365,11 +360,56 @@ public class SjmDaoImpl implements SjmDao {
 
 		int result = 0;
 		try {
-			result = session.selectOne("com.postgre.choongsam.mapper.sjm.countAskMy",params);
+			result = session.selectOne("com.postgre.choongsam.mapper.sjm.countAskMy", params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("SjmDaoImpl.countAskMy() ===>"+result);
+		System.out.println("SjmDaoImpl.countAskMy() ===>" + result);
+		return result;
+	}
+
+	@Override
+	public int updateNoticeYn(Notice notice) {
+		System.out.println("공지사항 노출 여부 다오");
+
+		int result = 0;
+
+		try {
+			result = session.update("com.postgre.choongsam.mapper.sjm.updateNoticeYn", notice);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("SjmDaoImpl.countAskMy() ===>" + result);
+		return result;
+	}
+
+	@Override
+	public int updateNoteRcvrDelYn(Note note) {
+		System.out.println("받은쪽지 노출 여부 다오");
+
+		int result = 0;
+
+		try {
+			result = session.update("com.postgre.choongsam.mapper.sjm.updateNoteRcvrDelYn", note);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("SjmDaoImpl.updateNoteRcvrDelYn() ===>" + result);
+		return result;
+	}
+
+	@Override
+	public int updateNoteSentDelYn(Note note) {
+		System.out.println("보낸쪽지 노출 여부 다오");
+
+		int result = 0;
+
+		try {
+			result = session.update("com.postgre.choongsam.mapper.sjm.updateNoteSentDelYn", note);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("SjmDaoImpl.updateNoteSentDelYn() ===>" + result);
 		return result;
 	}
 

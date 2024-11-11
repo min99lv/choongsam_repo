@@ -290,6 +290,23 @@ public class SjmServiceImpl implements SjmService {
 		return sd.countAskMy(params);
 		}
 
+	@Override
+	public int updateNoticeYn(Notice notice) {
+		
+		return sd.updateNoticeYn(notice);
+	}
+
+	@Override
+	public int updateNoteRcvrDelYn(Note note) {
+		
+		return sd.updateNoteRcvrDelYn(note);
+	}
+
+	@Override
+	public int updateNoteSentDelYn(Note note) {
+		return sd.updateNoteSentDelYn(note);
+	}
+
 	
 
 

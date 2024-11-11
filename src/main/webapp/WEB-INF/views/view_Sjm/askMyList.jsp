@@ -156,6 +156,54 @@ td a {
 td a:hover {
 	text-decoration: underline;
 }
+
+/* 답변이 있는 경우 */
+.answered {
+    background-color: #00664F;
+    color: white;
+    font-weight: bold; /* 굵은 글씨 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    padding: 5px 10px; /* 패딩을 줄여서 버튼처럼 보이게 */
+    font-size: 15px; /* 글씨 크기 줄이기 */
+    height: 30px; /* 셀 높이 조정 */
+    line-height: 20px; /* 텍스트가 셀 안에서 가운데 오도록 설정 */
+    border-radius: 5px; /* 둥근 모서리 */
+    cursor: pointer; /* 마우스 포인터가 버튼처럼 보이게 */
+	
+}
+
+/* 답변이 없는 경우 */
+.not-answered {
+    background-color: red;
+    color: white;
+    font-weight: bold; /* 굵은 글씨 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    padding: 5px 10px; /* 패딩을 줄여서 버튼처럼 보이게 */
+    font-size: 15px; /* 글씨 크기 줄이기 */
+    height: 30px; /* 셀 높이 조정 */
+    line-height: 20px; /* 텍스트가 셀 안에서 가운데 오도록 설정 */
+    border-radius: 5px; /* 둥근 모서리 */
+    cursor: pointer; /* 마우스 포인터가 버튼처럼 보이게 */
+}
+
+td.cell-no {
+    width:10%;  /* 번호 셀의 너비 */
+}
+
+td.cell-title {
+    width: 50%;  /* 제목 셀의 너비 */
+    text-align: center; /* 텍스트는 가운데 정렬 */
+    padding-left: 100px; /* 왼쪽 패딩을 주어 텍스트 위치를 조정 */
+    padding-right: 100px; /* 오른쪽 패딩을 주어 균형 맞추기 */
+}
+
+
+td.cell-date {
+    width: 25%;
+}
+td.cell-Yn {
+    width: 15%;
+}
 </style>
 </head>
 
@@ -196,6 +244,7 @@ td a:hover {
 					<th>번호</th>
 					<th>제목</th>
 					<th>작성날짜</th>
+					<th>답변여부</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -280,13 +329,19 @@ td a:hover {
 			let rows = '';
 			const startIndex = total - ((paging.currentPage - 1) * paging.rowPage);  
 	
+			
+			
 			asks.forEach((ask, index) => {
 				const indexInTable = startIndex - index;  
+				const answerStatusClass = ask.dscsn_ans_yn === 'Y' ? 'answered' : 'not-answered'; // 조건에 맞는 클래스를 할당
+				const answerStatusText = ask.dscsn_ans_yn === 'Y' ? '답변완료' : '미답변';
+				
 				rows += `
 					<tr>
-						<td>\${indexInTable}</td> <!-- 순번 표시 -->
-						<td><a href="/asks/\${ask.dscsn_sn}">\${ask.dscsn_ttl}</a></td> <!-- 제목에 a태그 추가 -->
-						<td>\${ask.dscsn_reg_dt}</td> 
+					<td class="cell-no">\${indexInTable}</td> <!-- 순번 표시 -->
+					<td class="cell-title"><a href="/asks/\${ask.dscsn_sn}">\${ask.dscsn_ttl}</a></td> <!-- 제목에 a태그 추가 -->
+					<td class="cell-date">\${ask.dscsn_reg_dt}</td>
+						<td class="cell-Yn"><span class="\${answerStatusClass}">\${answerStatusText}</span></td>
 					</tr>
 				`;
 			});

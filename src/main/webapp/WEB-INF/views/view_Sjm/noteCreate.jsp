@@ -419,7 +419,6 @@ function sendMessage() {
 						<!-- 값을 직접 확인 --></td>
 						    </c:otherwise>
 						</c:choose>
-						<span>user_seq-${sessionScope.user_seq}</span>
 				</tr>
 				<tr>
 					<th>제목</th>
