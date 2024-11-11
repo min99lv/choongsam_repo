@@ -85,12 +85,7 @@
             <li style="font-size: 13px;" onclick="location.href='../Jhe/myLecture'">현재 수업 중인 강의</li>
             <li style="font-size: 13px;" onclick="location.href='gangyilistTeacher?user_seq=${user_seq}'">>강의 목록</li>
         </ul>
-        <li onclick="toggleSubMenu('gradeManagementSubmenu')">성적 관리</li>
-        <ul class="submenu" id="gradeManagementSubmenu">
-            <li style="font-size: 13px;">하은</li>
-            <li style="font-size: 13px;">하은</li>
-            <li style="font-size: 13px;">하은</li>
-        </ul>
+        <li onclick="location.href='../Jhe/profGrade'">성적 관리</li>
         <li onclick="toggleSubMenu('userInfoSubmenu')">회원정보</li>
         <ul class="submenu" id="userInfoSubmenu">
             <li style="font-size: 13px;" onclick="location.href='updateProfileteacher?user=${user}'">개인정보 수정</li>
