@@ -26,6 +26,7 @@
 		<typeAlias alias="Ask" type="com.postgre.choongsam.dto.Ask"/>
 		<typeAlias alias="Attendance_Check" type="com.postgre.choongsam.dto.Attendance_Check"/>
 		<typeAlias alias="Classroom" type="com.postgre.choongsam.dto.Classroom"/>
+		<typeAlias alias="Grade" type="com.postgre.choongsam.dto.Grade"/>
 
 	</typeAliases>
 </configuration>

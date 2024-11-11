@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>쪽지 상세</title>
+    <title>문의사항 상세</title>
     <style>
         body {
             margin: 0;
@@ -135,6 +135,56 @@
     height: 200px;
     
 }
+.writeNoticeBtn {
+	float: right;
+	width: 200px;
+	height: 50px;
+	background-color: #00664F;
+	border: none;
+	color: white;
+	text-align: center;
+	margin-top: 10px; /* 버튼과 검색 바 간격 */
+	text-decoration: none; /* 링크 스타일 없애기 */
+	display: flex; /* flexbox 사용 */
+	justify-content: center; /* 텍스트 가운데 정렬 */
+	align-items: center; /* 세로 가운데 정렬 */
+}
+
+/* 모달 기본 스타일 */
+.modal {
+				display: none;
+				/* 기본적으로 숨김 */
+				position: fixed;
+				z-index: 1;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+
+			/* 모달 콘텐츠 스타일 */
+			.modal-content {
+				background-color: #fff;
+				margin: 15% auto;
+				padding: 20px;
+				border: 1px solid #888;
+				width: 50%;
+			}
+
+			.close {
+				color: #aaa;
+				float: right;
+				font-size: 28px;
+				font-weight: bold;
+			}
+
+			.close:hover,
+			.close:focus {
+				color: #000;
+				text-decoration: none;
+				cursor: pointer;
+			}
     </style>
     <script type="text/javascript">
     async function fetchAskDetail() {
@@ -143,25 +193,35 @@
             if (!response.ok) {
                 throw new Error(`Error fetching notice: ${response.status}`);
             }
-            const note = await response.json();
+            const ask = await response.json();
 
-            console.log(note); // note 객체를 콘솔에 출력하여 구조 확인
+            console.log(ask); // note 객체를 콘솔에 출력하여 구조 확인
 
             // 제목과 내용을 가져와서 표시
-            document.getElementById('dscsn_ttl').textContent = note.dscsn_ttl;
-            document.getElementById('dscsn_cn').textContent = note.dscsn_cn;
+            document.getElementById('dscsn_ttl').textContent = ask.dscsn_ttl;
+            document.getElementById('dscsn_cn').textContent = ask.dscsn_cn;
+           
+
 
             // 답변이 존재하면 답변 표시
-            if (note.dscsn_ans_yn === 'Y' && note.dscsn_ans_cn) {
+            if (ask.dscsn_ans_yn === 'Y' && ask.dscsn_ans_cn) {
                 // 답변 내용이 있을 경우에만 보여주기
-                document.getElementById('dscsn_ans_cn').textContent = note.dscsn_ans_cn;
+                document.getElementById('dscsn_ans_cn').textContent = ask.dscsn_ans_cn;
                 // 답변 영역을 보이게 설정
                 document.getElementById('dscsn_ans').style.display = 'table-row'; 
             } else {
                 document.getElementById('dscsn_ans_cn').textContent = "답변이 아직 등록되지 않았습니다.";
                 // 답변 영역을 숨김
                 document.getElementById('dscsn_ans').style.display = 'none';
+                
+                
             }
+
+            // dscsn_sn 값을 히든 input에 설정
+        document.getElementById('dscsn_sn').value = ask.dscsn_sn;
+
+// 모달에서 사용할 수 있도록 ask.dscsn_cn을 textarea에 설정
+document.getElementById('dscsn_ans_cn').value = ask.dscsn_cn;
 
         } catch (error) {
             console.error('Error:', error);
@@ -171,6 +231,25 @@
     }
 
     window.onload = fetchAskDetail;
+
+
+    //모달 열기 함수
+function openModal() {
+	document.getElementById("adminModal").style.display = "block";
+}
+
+// 모달 닫기 함수
+function closeModal() {
+	document.getElementById("adminModal").style.display = "none";
+}
+
+// 모달 외부를 클릭했을 때 닫기
+window.onclick = function (event) {
+	var modal = document.getElementById("adminModal");
+	if (event.target == modal) {
+		modal.style.display = "none";
+	}
+}
       </script>
 </head>
 <body>
@@ -197,9 +276,25 @@
                 <td class="answer-content" id="dscsn_ans_cn"></td>
             </tr>
 		</table>
-            
             <button onclick="history.back();">목록</button>
+            <button onclick="openModal()">답변등록</button>
     </div>
+			
+            <div id="adminModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>답변 작성</h2>
+                    <form action="/api/asks/reply" method="post">
+                        <input type="hidden" id="dscsn_sn" name="dscsn_sn">
+                        <input type="hidden" id="dscsn_ans_yn" name="dscsn_ans_yn" value="Y">
+                        <textarea id="dscsn_ans_cn" name="dscsn_ans_cn"></textarea>
+                        <div class="form-group">
+                            <button type="submit">답변 등록하기</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+       
     
 </body>
 </html>

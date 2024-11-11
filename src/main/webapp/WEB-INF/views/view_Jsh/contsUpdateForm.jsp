@@ -134,6 +134,22 @@
 		    }
 		}
         
+     // 챕터 시간을 초로 변환하는 함수(컨트롤러에 값을 보내지는 않음)
+        function getSecondsFromTimeString(timeString) {
+            let totalSeconds = null;
+
+            if (timeString) {
+                const parts = timeString.split(":");
+                if (parts.length === 3) {
+                    const hours = parseInt(parts[0], 10);
+                    const minutes = parseInt(parts[1], 10);
+                    const seconds = parseInt(parts[2], 10);
+                    totalSeconds = hours * 3600 + minutes * 60 + seconds;
+                }
+            }
+            return totalSeconds;
+        }
+        
         function submitChk() {
             // Check if the hidden input contsTest has a value of 1
             const contsTestValue = document.getElementById('contsTest').value;
@@ -141,6 +157,22 @@
                 alert('영상 확인 버튼을 눌러주세요');
                 return false;
             }
+            
+         // 영상 전체 길이
+            const videoLength = parseInt(document.getElementById('vdo_length').value, 10);
+
+            // 챕터 시간 입력값 확인 및 비교
+            const chapterInputs = document.querySelectorAll('input[name^="chp_str"]');
+            for (const input of chapterInputs) {
+                const chapterTimeString = input.value.trim();
+                const chapterSeconds = getSecondsFromTimeString(chapterTimeString);
+
+                if (chapterSeconds !== null && chapterSeconds > videoLength) {
+                    alert('챕터 시간이 영상 전체 길이를 초과할 수 없습니다.');
+                    return false;
+                }
+            }
+
             return true;
         }
 
