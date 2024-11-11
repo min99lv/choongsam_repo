@@ -208,12 +208,8 @@ td.cell-Yn {
 </head>
 
 <body>
-	<header>
-		<%@ include file="../header.jsp"%>
-	</header>
-	
-	<%@ include file="../view_Hjh/headerStd.jsp"%>
-	
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myPageNav.jsp" %>
 
 	<div class="container">
 
