@@ -22,7 +22,7 @@ body {
 	/* 컨테이너에 미세한 그림자를 추가하여 입체감을 줍니다. */
 	top: 120px;
 	/*  컨테이너의 너비 1320px 고정 */
-	width: 1320px;
+	width: 1200px;
 	/* 중앙 정렬 */
 	margin: 0 auto;
 	/* padding을 width에 포함하여 계산 */
@@ -31,6 +31,8 @@ body {
 	margin: 0 auto;
 	height: auto;
 	margin-bottom: 200px;
+	height: 900px;
+	
 }
 
 .list {
@@ -208,11 +210,10 @@ td.cell-Yn {
 </head>
 
 <body>
-	<header>
-		<%@ include file="../header.jsp"%>
-	</header>
-	
-	<%@ include file="../view_Hjh/headerStd.jsp"%>
+<header>
+	<%@ include file="../headerGreen.jsp" %>
+</header>
+	<%@ include file="../myPageNav.jsp" %>
 	
 
 	<div class="container">
@@ -266,8 +267,7 @@ td.cell-Yn {
 
 	<footer>
 		<%@ include file="../footer.jsp"%>
-
-	</footer>
+	</footer> 
 
 	<script type="text/javascript">
 		document.addEventListener('DOMContentLoaded', function() {
