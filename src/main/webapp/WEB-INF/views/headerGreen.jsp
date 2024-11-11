@@ -51,6 +51,16 @@
         	text-decoration: none;
             color: white;
         }
+        
+        .header__logo {
+        	display: flex;            /* Flexbox 사용 */
+	    	align-items: center;     /* 수직 중앙 정렬 */
+	    	
+        }
+       
+       #logo{
+       	height: 50px;
+       }
        
 
     </style>
@@ -59,7 +69,9 @@
     <div class="header__">
         <div class="header__color">
         <div class="header__nav">
-        <div class="header__logo"><a href="/notes">로고</a></div>
+        <div class="header__logo"><a href="/">
+        	<img alt="로고" src="../image/headerLogoGreen.png" id="logo">
+        </a></div>
         <div class="header__navBar">
             <a href="#">수강신청</a>
 			<c:choose>

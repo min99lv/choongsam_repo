@@ -124,6 +124,18 @@ public class HjhDaoImpl implements HjhDao {
 	    return getLoginInfo;
 	}
 
+	@Override
+	public int updateCountAdmin(User_Info info) {
+		System.out.println("info"+info);
+		int updateCountAdmin = 0;
+		try {
+			updateCountAdmin = session.update("updateCountAdmin",info);
+		} catch (Exception e) {
+			System.out.println("error"+e.getMessage());
+			System.out.println("userProfile1"+info);
+		}
+		return updateCountAdmin;
+	}
 
 
 

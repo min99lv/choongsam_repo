@@ -208,9 +208,12 @@
 </head>
 <body>
 
+
 <div class="container">
     <div class="user-info">
     <form action="updateUserInfo1" method="post" enctype="multipart/form-data">
+    			    <input type="hidden" value="${profile_addr}" name="profile_addr">
+			    <input type="hidden" value="${profile_name}" name="profile_name">
         <!-- 프로필 이미지와 아이디, 회원번호 (위 그리드) -->
 		<div class="profile-id-grid">
 		    <div class="profile-section">

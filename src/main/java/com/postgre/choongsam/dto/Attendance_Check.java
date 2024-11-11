@@ -15,4 +15,6 @@ public class Attendance_Check {
 	private int		late_count;			// 지각 수
 	private int		absent_count;		// 결석 수
 	private int		attendance_rate;	// 출석률
+	private String	user_name;			// 회원 이름
+	private int		onoff;				// 온오프라인 여부
 }

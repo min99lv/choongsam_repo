@@ -55,6 +55,7 @@ public class Class_ScheduleAddVideo {
 	private String 	file_extn_nm; 			// 확장자
 	private long 		file_sz; 				// 파일 크기
 	private String 	file_path_nm; 			// 파일 경로
+	private String		idntf_no;				//UUID
 	
 	private String chp_str1;			//스트링챕터시간
 	private String chp_str2;			//스트링챕터시간
