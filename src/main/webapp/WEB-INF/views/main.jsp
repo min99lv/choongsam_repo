@@ -4,24 +4,28 @@
 
 
     <style>
-   
-
+   		
+   		.main_container{
+   			height: 511px;
+   		}
 
     </style>
 
 		
+		
+		 
     <head>
         <meta charset="UTF-8">
         <title>Insert title here</title>
     </head>
 
-	
+	      
 
     <body>
         
         <header>
-	       <%@ include file="header.jsp" %>
-	   </header>
+         	<%@ include file="header.jsp" %>
+        </header>
 
         <div class="main_container">
 
@@ -37,20 +41,43 @@
             <div class="main_contents"><a href="/sh_lecture_teacher?lctr_id=0001&user_seq=10050">교수강의실</a></div> 이것은 비즈니스
             <div class="main_contents"><a href="/sh_lecture_teacher?lctr_id=9&user_seq=10041">교수강의실</a></div> 이것은 테스트
             
+            
             <p>
             USER_SEQ : ${user_seq } <p>
 	   		USER_ID : ${user } <p>
 	   		USER_STATUS : ${usertype }
+	   		
+	   		<a href="/courseApproveList">안태랑1</a>
+        	<a href="/registerCourseForm">안태랑2</a>
 
             
+           <!--  <a href="/api/files/60/1">1111111111111</a> -->
+            
         </div>
+<<<<<<< HEAD
         <a href="/courseApproveList">안태랑1</a>
         <a href="/registerCourseForm">안태랑2</a>
         <a href="/courseApplyList">안태랑3</a>
+=======
+        
+        
+       	<!-- 하단의 div는 메인페이지를 이미지로 넣지않고 따로 만드는경우 사용하는 것으로 함 -->
+        <div class="main">
+        	<div class="lectureList">
+        		
+        	</div>
+        	<div class="noticeGongji">
+        		
+        	</div>
+        </div>
+        
+>>>>>>> 6d28c7dfbe2c5aec737a75bf6c104b6545afa1a1
 
-        <footer>
+        
+    </body>
+    
+    	<footer>
             <%@ include file="footer.jsp" %>
         </footer>
-    </body>
 
     </html>

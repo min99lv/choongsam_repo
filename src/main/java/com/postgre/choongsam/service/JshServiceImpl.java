@@ -1,6 +1,9 @@
 package com.postgre.choongsam.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -182,6 +185,10 @@ public class JshServiceImpl implements JshService {
 	public void contsUpdate(Class_ScheduleAddVideo info) {
 		System.out.println("JshService contsUpdate start...");
 		int result=0;
+		
+		//UUID 생성
+		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		String idntf_no = UUID.randomUUID().toString() + "_" + timestamp;
 		
 		String fileName = info.getFile_nm();
 		String fileSuffix= info.getFile_extn_nm();

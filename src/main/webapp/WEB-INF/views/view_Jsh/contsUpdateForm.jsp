@@ -245,7 +245,7 @@
 		                <div id="fileName">
 		                	<label id="fileNameText">이전에 올린 첨부파일 명: ${info.file_nm }.${ info.file_extn_nm}</label>
 		                </div>
-		                <input type="file" name="file">
+		                <input type="file" name="file" id="fileButton">
 		            </div>
 	            </div>
 	            

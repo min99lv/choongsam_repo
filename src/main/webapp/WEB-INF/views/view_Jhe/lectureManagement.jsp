@@ -29,8 +29,14 @@
 </form>
 
 <form action="/Jhe/profAttMain" method="get">
-    <input type="hidden" name="LCTR_ID" value="${LCTR_ID}" />
-    <button type="submit">출석</button>
+	<input type="hidden" name="LCTR_ID" value="${LCTR_ID}" />
+	<input type="hidden" name="onoff" value="${onoff}" />
+		<c:if test="${onoff == 7001}">
+			<button type="submit">출석</button>
+		</c:if>
+		<c:if test="${onoff == 7002}">
+			<button type="submit">온라잉출석</button>
+		</c:if>
 </form>
 
 <form action="/Jhe/profHomeworkList" method="get">
