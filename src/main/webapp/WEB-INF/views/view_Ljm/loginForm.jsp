@@ -163,7 +163,6 @@
       });
     });
   </script>
-
 </body>
 		<footer>
 			<div class="adminLoginSection" style="text-align: right; margin-top: 11px;">
