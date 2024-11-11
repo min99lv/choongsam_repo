@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,12 @@
 <title>내 성적 조회</title>
 </head>
 <body>
-<h2>내 성적 조회</h2>
+
+<div class="container">
+<div class="contents">
+<h1>내 성적 조회</h1>
+
+</div>
 <table>
 	<tr>
 		<th>강의명</th>
@@ -17,6 +23,7 @@
 		<th>총 점수</th>
 		<th>수료여부</th>
 		<th>상세</th>
+		<th>쪽지</th>
 	</tr>
 	<c:forEach var="myScore" items="${myGradeList}">
 		<tr>
@@ -33,9 +40,15 @@
 			<td>
 				<a href="/Jhe/studGradeDetail?LCTR_ID=${myScore.lctr_id}">상세보기</a>
 			</td>
+			<td>
+<a href="../notes/new"><button type="button" class="submitBtn">쪽지</button></a>
+			
+			</td>
 		</tr>
 	</c:forEach>
 </table>
-<a href="../notes/new"><button type="button">쪽지</button></a>
+
+
+</div>
 </body>
 </html>

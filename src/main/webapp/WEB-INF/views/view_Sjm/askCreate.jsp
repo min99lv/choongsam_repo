@@ -181,10 +181,7 @@ button[type="submit"] {
 
 </script>
 <body>
-	<header>
-		<%@ include file="../header.jsp"%>
-	</header>
-
+	<%@ include file="../headerGreen.jsp" %>
 	<div class="container">
 		<div class="contents">
 			<h1>문의사항 작성</h1>

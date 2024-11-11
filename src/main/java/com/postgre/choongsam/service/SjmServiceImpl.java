@@ -221,8 +221,8 @@ public class SjmServiceImpl implements SjmService {
 
 	@Override
 
-	public List<Note> getSameLeceture(String lectureId) {
-		 List<Note> note = sd.getSameLeceture(lectureId);
+	public List<Note> getSameLeceture(Map<String, Object> params) {
+		 List<Note> note = sd.getSameLeceture(params);
 		return note;
 	}
 
