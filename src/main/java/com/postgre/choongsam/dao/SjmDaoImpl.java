@@ -171,12 +171,12 @@ public class SjmDaoImpl implements SjmDao {
 	}
 
 	@Override
-	public List<Note> getSameLeceture(String lectureId) {
-		System.out.println("내가 듣는 강의 리스트 가져오기" + lectureId);
+	public List<Note> getSameLeceture(Map<String, Object> params) {
+		System.out.println("내가 듣는 강의 리스트 가져오기" + params);
 		List<Note> note = null;
 
 		try {
-			note = session.selectList("com.postgre.choongsam.mapper.sjm.getSameLeceture", lectureId);
+			note = session.selectList("com.postgre.choongsam.mapper.sjm.getSameLeceture", params);
 			System.out.println("내가 듣는 강의 : " + note);
 		} catch (Exception e) {
 			e.printStackTrace();

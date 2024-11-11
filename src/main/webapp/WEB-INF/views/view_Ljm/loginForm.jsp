@@ -28,6 +28,7 @@
         margin-right: 100px;
         padding: 20px; /* 콘텐츠 여백 */
         text-align: center; /* 가운데 정렬 */
+       	margin-bottom: 100px;
     }
     
     hr {
