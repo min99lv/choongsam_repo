@@ -146,6 +146,11 @@
            <!--  <a href="/api/files/60/1">1111111111111</a> -->
             
         </div>
+<<<<<<< HEAD
+        <a href="/courseApproveList">안태랑1</a>
+        <a href="/registerCourseForm">안태랑2</a>
+        <a href="/courseApplyList">안태랑3</a>
+=======
         
         
        	<!-- 하단의 div는 메인페이지를 이미지로 넣지않고 따로 만드는경우 사용하는 것으로 함 -->
@@ -206,6 +211,7 @@
         	</div>
         </div>
         
+>>>>>>> 6d28c7dfbe2c5aec737a75bf6c104b6545afa1a1
 
         
     </body>

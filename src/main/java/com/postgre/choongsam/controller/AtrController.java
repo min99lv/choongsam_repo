@@ -71,6 +71,20 @@ public class AtrController {
 		model.addAttribute("paging", paging);
 		return "view_Atr/courseApproveList";
 	}
+	@RequestMapping(value = "/courseApplyList")
+	public String courseApplyList(@RequestParam(value = "page", required = false) String currentPage, Model model) {
+		List<Lecture> lectureList = as.getRecruitLectureList();
+		int total = lectureList.size(	); // 전체 강의 수
+		
+		// 페이징 객체 생성
+		Paging paging = new Paging(total, currentPage);
+		List<Lecture> paginatedLectureList = lectureList.subList(Math.min(paging.getStart(), total),
+				Math.min(paging.getEnd(), total));
+		
+		model.addAttribute("lectureList", paginatedLectureList);
+		model.addAttribute("paging", paging);
+		return "view_Atr/courseApplyList";
+	}
 
 	@RequestMapping(value = "/lectureDetail")
 	public String lectureDetail(HttpServletRequest request, Model model, String lctr_id) {
@@ -78,6 +92,11 @@ public class AtrController {
 
 		Lecture lecture = new Lecture();
 		lecture = as.getLectureDetail(lctr_id);
+		if(!lecture.getLctr_state().equals("개설 허가 대기중")) {
+			model.addAttribute("lecture", lecture);
+			return "view_Atr/courseDetailAdmin";
+		}
+		
 		if(lecture.getOnoff().equals("대면")) {
 			List<Classroom> classroomList=as.getAllClassRoom();
 			String schdTGemp = "";
@@ -93,24 +112,45 @@ public class AtrController {
 			model.addAttribute("classroomList", classroomList);
 			model.addAttribute("lctr_id", lctr_id);
 			model.addAttribute("schdList", schdList);
-			return "view_Atr/onCourseApprove";
+			return "view_Atr/offCourseApprove";
 		}
 		else{
 			model.addAttribute("lecture", lecture);
-			return "view_Atr/offCourseApprove";
+			System.out.println("비대면");
+			return "view_Atr/onCourseApprove";
 		}
 		
 	}
+	@RequestMapping(value = "/courseApplyDetail")
+	public String courseApplyDetail(HttpServletRequest request, Model model, String lctr_id) {
+		
+		
+		Lecture lecture = new Lecture();
+		lecture = as.getLectureDetail(lctr_id);
+		model.addAttribute("lecture", lecture);
+		return "view_Atr/courseApplyDetail";
+		
+	}
 
-	@RequestMapping(value = "/addClassRoom")
+	@RequestMapping(value = "/approveOfflineCourse")
 	public String addClassRoom(HttpServletRequest request, Model model) {
 		System.out.println("www");
 		System.out.println(request.getParameter("count"));
 		for(int i=0; i <Integer.parseInt(request.getParameter("count")); i++) {
 			as.addClassRoom(request.getParameter("lctr_id"),request.getParameter("schd"+i),request.getParameter("lctr_room"+i));
 		}
-		
+		as.approveCourse(request.getParameter("lctr_id"));
 		return "redirect:courseApproveList";
+	}
+	@RequestMapping(value = "/approveOnlineCourse")
+	public String approveOnlineCourse(HttpServletRequest request, Model model) {
+		as.approveCourse(request.getParameter("lctr_id"));
+		return "redirect:courseApproveList";
+	}
+	@RequestMapping(value = "/applyCourse")
+	public String applyCourse(HttpServletRequest request, Model model) {
+		as.applyCourse(request.getParameter("lctr_id"),request.getParameter("student_id"));
+		return "redirect:courseApplyList";
 	}
 
 	@GetMapping(value = "/overlapCheck")
