@@ -35,11 +35,18 @@
 		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
 		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
-	<insert id="insertFile" parameterType="File_Group">
-		INSERT INTO "FILE" ("FILE_GROUP", "FILE_SEQ", "FILE_NM", "FILE_EXTN_NM", "FILE_SZ", "FILE_PATH_NM")
-		VALUES	(NEXTVAL('file_group_seq'), 1, #{file_nm}, #{file_extn_nm}, #{file_sz}, #{file_path_nm})
-		RETURNING "FILE_GROUP"
+	<insert id="FileUpload" parameterType="File_Group">
+		INSERT INTO "FILE_GROUP" ("FILE_GROUP","FILE_SEQ","IDNTF_NO","FILE_NM","FILE_EXTN_NM","FILE_SZ","FILE_PATH_NM")
+		VALUES (#{file_group},#{file_seq},#{idntf_no},#{file_nm},#{file_extn_nm},#{file_sz},#{file_path_nm})
 	</insert>
+	<select id="getNextFileGroupId" resultType="int">
+		SELECT NEXTVAL('file_group_seq')
+	</select>
+	<select id="getMaxFileSeq" parameterType="int" resultType="java.lang.Integer">
+		SELECT	COALESCE(MAX("FILE_SEQ"), 0) 
+		FROM	"FILE_GROUP" 
+		WHERE	"FILE_GROUP" = #{file_group}
+	</select>
 	<insert id="insertHomework" parameterType="Homework">
 		INSERT INTO "HOMEWORK" ("ASMT_NO", "LCTR_ID", "ASMT_NM", "ASMT_CN", "SBMSN_BGNG_YMD", "SBMSN_END_YMD", "FILE_GROUP")
 		VALUES (NEXTVAL('asmt_no_seq'), #{lctr_id}, #{asmt_nm}, #{asmt_cn}, #{sbmsn_bgng_ymd}, #{sbmsn_end_ymd}, #{file_group})
@@ -250,7 +257,7 @@
 	</select>
 	<select id="studUserSeqList" resultType="Integer">
 		SELECT		"USER_SEQ", "LCTR_ID"
-d		FROM		"COURSE_REGISTRATION"
+		FROM		"COURSE_REGISTRATION"
 		WHERE		"LCTR_ID" = #{lctr_id}
 		AND			"REG_STATE" = '2003'
 	</select>
