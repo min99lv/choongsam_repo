@@ -16,7 +16,7 @@
 <table border="1" cellpadding="10" cellspacing="0">
     <thead>
         <tr>
-            <th>강의번호</th>
+            <th>No</th>
             <th>강의명</th>
             <th>강의구분</th>
             <th>대면 여부</th>
@@ -28,22 +28,59 @@
     </thead>
     <tbody>
         <!-- 강의 목록을 출력 -->
-        <c:forEach var="lecture" items="${lectureList}">
+        <c:forEach var="lecture" items="${lectureList}" varStatus="status">
             <tr>
-                <td>${lecture.lctr_id}</td>
+                <!-- 강의번호는 status로 변환하여 출력 -->
+                <td>${status.index + 1}</td>
+
+                <!-- 강의명 -->
                 <td>${lecture.lctr_name}</td>
-                <td>${lecture.lctr_category}</td>
-                <td>${lecture.onoff}</td>
-                <td>${lecture.lctr_count}</td>
+
+                <!-- 강의구분: 3001:취미, 3002:전문 -->
+                <td>
+                    <c:choose>
+                        <c:when test="${lecture.lctr_category == '3001'}">취미</c:when>
+                        <c:when test="${lecture.lctr_category == '3002'}">전문</c:when>
+                        <c:otherwise>기타</c:otherwise>
+                    </c:choose>
+                </td>
+
+                <!-- 대면 여부: 7001:대면, 7002:온라인 -->
+                <td>
+                    <c:choose>
+                        <c:when test="${lecture.onoff == '7001'}">대면</c:when>
+                        <c:when test="${lecture.onoff == '7002'}">온라인</c:when>
+                        <c:otherwise>기타</c:otherwise>
+                    </c:choose>
+                </td>
+
+                <!-- 모집인원 -->
+                <td>${lecture.register_count}/${lecture.lctr_count}</td>
+
+                <!-- 수강료 -->
                 <td>${lecture.lctr_cost}</td>
+
+                <!-- 개강일 -->
                 <td>${lecture.lctr_start_date}</td>
-                <td>${lecture.lctr_state}</td>
-                
+
+                <!-- 상태: 4001:허가 대기중, 4002:모집전, 4003:모집중, 4004:강의전, 4005:강의중, 4006:폐강 -->
+                <td>
+                    <c:choose>
+                        <c:when test="${lecture.lctr_state == '4001'}">허가 대기중</c:when>
+                        <c:when test="${lecture.lctr_state == '4002'}">모집전</c:when>
+                        <c:when test="${lecture.lctr_state == '4003'}">모집중</c:when>
+                        <c:when test="${lecture.lctr_state == '4004'}">강의전</c:when>
+                        <c:when test="${lecture.lctr_state == '4005'}">강의중</c:when>
+                        <c:when test="${lecture.lctr_state == '4006'}">폐강</c:when>
+                        <c:otherwise>기타</c:otherwise>
+                    </c:choose>
+                </td>
+
             </tr>
         </c:forEach>
     </tbody>
-    </main>
 </table>
 
+</main>
 </body>
 </html>
