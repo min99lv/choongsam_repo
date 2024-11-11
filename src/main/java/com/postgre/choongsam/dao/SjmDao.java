@@ -63,5 +63,19 @@ public interface SjmDao {
 
 	int replyUpdateAsks(Ask ask);
 
+	List<Ask> getAsks(Map<String,Object> params);
+
+    int countAsk(Map<String, Object> params);
+
+	int countAskMy(Map<String, Object>params);
+
+	int updateNoticeYn(Notice notice);
+
+	int updateNoteRcvrDelYn(Note note);
+
+	int updateNoteSentDelYn(Note note);
+
+
 
 }
+

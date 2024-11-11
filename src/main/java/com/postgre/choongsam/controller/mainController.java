@@ -11,7 +11,7 @@ import com.postgre.choongsam.dto.Notice;
 import com.postgre.choongsam.dto.User_Info;
 import com.postgre.choongsam.service.mainService;
 
-import jakarta.servlet.http.HttpSession;
+
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -24,8 +24,9 @@ public class mainController {
 	@GetMapping(value="/")
 	public String test(Model model) {
 		System.out.println("컨트롤러옴");
-		User_Info test = ms.test();
 		
+		User_Info test = ms.test();
+
 		List<Lecture> lecture = ms.getLectureList();
 		List<Notice> notice = ms.getNotice();
 		
@@ -35,6 +36,7 @@ public class mainController {
 		model.addAttribute("lecture", lecture);
 		model.addAttribute("notice", notice);
 		
+
 		return "main";
 	}
 
