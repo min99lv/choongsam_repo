@@ -56,7 +56,7 @@ public class LjmServiceImpl implements LjmService {
 		return user_Info;
 	}	
     
-    // 관리자 로그인 처리
+ // 관리자 로그인 처리
     @Override
 	public Login_Info adminLogin(String user_id, String password) {
     	System.out.println("LjmServiceImpl adminLogin() start....");
@@ -85,18 +85,18 @@ public class LjmServiceImpl implements LjmService {
         }
 	}
     
-    // 회원가입
-	@Override
-	public int signup(Login_Info login_Info, User_Info user_info) {
-		System.out.println("LjmServiceImpl signup() start....");
-		
-		String encodePassword = passwordEncoder.encode(login_Info.getPassword());
-		login_Info.setPassword(encodePassword);
-		int signupResult = ljd.signup(login_Info, user_info);
-		System.out.println("LjmServiceImpl signupResult -> " + signupResult);
-		
-		return signupResult;
-	}
+ // 회원가입
+ 	@Override
+ 	public int signup(Login_Info login_Info, User_Info user_info) {
+ 		System.out.println("LjmServiceImpl signup() start....");
+ 		
+ 		String encodePassword = passwordEncoder.encode(login_Info.getPassword());
+ 		login_Info.setPassword(encodePassword);
+ 		int signupResult = ljd.signup(login_Info, user_info);
+ 		System.out.println("LjmServiceImpl signupResult -> " + signupResult);
+ 		
+ 		return signupResult;
+ 	}
 	
 	// 아이디 중복 체크
 	@Override

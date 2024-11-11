@@ -590,25 +590,6 @@ public class HjhController {
 	    return "view_Hjh/changePW";
 	}
 	
-	@PostMapping("changePassword")
-	public String changePassword(HttpSession session,
-							 	Model model,
-								 @RequestParam("password") String password,
-								 @RequestParam("new_password") String new_password ) {
-		System.out.println("password"+password);
-		System.out.println("new_password"+new_password);
-		  String userId =(String) session.getAttribute("user");
-		  System.out.println("userId"+userId);
-		int changePW = hjh.changePW(password,userId,new_password);
-		// userSeq 변수를 받아서 리다이렉트
-		System.out.println("changePW"+changePW);
-		  return "main";
-	}
-	
-
-	
-	
-
 
 }
 
