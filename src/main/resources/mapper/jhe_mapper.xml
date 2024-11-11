@@ -35,6 +35,11 @@
 		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
 		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
+	<insert id="insertFile" parameterType="File_Group">
+		INSERT INTO "FILE" ("FILE_GROUP", "FILE_SEQ", "FILE_NM", "FILE_EXTN_NM", "FILE_SZ", "FILE_PATH_NM")
+		VALUES	(NEXTVAL('file_group_seq'), 1, #{file_nm}, #{file_extn_nm}, #{file_sz}, #{file_path_nm})
+		RETURNING "FILE_GROUP"
+	</insert>
 	<insert id="insertHomework" parameterType="Homework">
 		INSERT INTO "HOMEWORK" ("ASMT_NO", "LCTR_ID", "ASMT_NM", "ASMT_CN", "SBMSN_BGNG_YMD", "SBMSN_END_YMD", "FILE_GROUP")
 		VALUES (NEXTVAL('asmt_no_seq'), #{lctr_id}, #{asmt_nm}, #{asmt_cn}, #{sbmsn_bgng_ymd}, #{sbmsn_end_ymd}, #{file_group})
@@ -90,7 +95,7 @@
 	</select>
 	<update id="updatesubmitHomework" parameterType="Homework_Submission">
 		UPDATE	"HOMEWORK_SUBMISSION"
-		SET		"SBMSN_YN" = #{sbmsn_yn}, "SBMSN_YMD" = #{sbmsn_ymd}, "FILE_GROUP" = #{file_group}
+		SET		"SBMSN_YN" = #{sbmsn_yn}, "SBMSN_YMD" = #{sbmsn_ymd}, "ASMT_SCR" = #{asmt_scr}, "FILE_GROUP" = #{file_group}
 		WHERE	"ASMT_NO" = #{asmt_no}
 		AND		"USER_SEQ" = #{user_seq}
 	</update>
@@ -105,10 +110,6 @@
 		WHERE	"ASMT_NO" = #{asmt_no}
 		AND		"SBMSN_YN" = 'Y'
 	</select>
-	<insert id="insertFile" parameterType="File_Group">
-		INSERT INTO FILE ("FILE_NM", "FILE_EXTN_NM", "FILE_SZ", "FILE_PATH_NM")
-		VALUES	(#{file_nm}, #{file_extn_nm}, #{file_sz}, #{file_path_nm})
-	</insert>
 	<select id="getStudSubmitList" resultType="Homework">
 		SELECT		l."LCTR_ID", l."LCTR_NAME", u."USER_NAME" AS profName,
 					ui."USER_NAME" AS stud_name, h."ASMT_NM", h."SBMSN_END_YMD",
@@ -151,6 +152,11 @@
 		WHERE		a."LCTR_ID" = #{lctr_id}
 		GROUP BY	l."LCTR_ID", l."LCTR_NAME", l."LCTR_CNTSCHD", l."ONOFF", a."LCTR_NO"
 	</select>
+	<select id="getLctrNoList" resultType="int">
+		SELECT		"LCTR_NO"
+		FROM		"SYLLABUS"
+		WHERE		"LCTR_ID" = #{lctr_id}
+	</select>
 	<select id="getStudAtt" resultType="Attendance_Check">
 		SELECT		u."USER_SEQ", u."USER_NAME", a."ATT_STATUS", l."ONOFF", c."LCTR_ID"
 		FROM		"COURSE_REGISTRATION" AS c
@@ -169,6 +175,10 @@
 		AND		a."LCTR_NO" = c."LCTR_NO"
 		WHERE	a."LCTR_ID" = #{lctr_id}
 	</select>
+	<insert id="insertStudAtt" parameterType="Attendance_Check">
+		INSERT INTO	"ATTENDANCE_CHECK" ("LCTR_NO", "LCTR_ID", "USER_SEQ", "ATT_STATUS")
+		VALUES (#{lctr_no}, #{lctr_id}, #{user_seq}, #{att_status})
+	</insert>
 	<update id="updateStudAtt" parameterType="Attendance_Check">
 		UPDATE	"ATTENDANCE_CHECK"
 		SET		"ATT_STATUS" = #{att_status}
@@ -224,16 +234,101 @@
 		WHERE		a."LCTR_NO" = #{lctr_no}
 		AND			a."LCTR_ID" = #{lctr_id}
 	</select>
-	<select id="profGrade" resultType="Grade">
-		SELECT		u."USER_NAME" AS stud_name, g."LCTR_ID", g."USER_SEQ", g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR"
+	<select id="selectGrade" resultType="Grade">
+		SELECT		*
+		FROM		"GRADE"
+		WHERE		"LCTR_ID" = #{lctr_id}
+		AND			"USER_SEQ" = #{user_seq}
+	</select>
+	<select id="studScores" resultType="Grade">
+		SELECT		u."USER_NAME" AS stud_name, l."LCTR_ID", l."LCTR_NAME",
+					g."USER_SEQ", g."LCTR_ID", g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR", g."FNSH_YN"
 		FROM		"GRADE" AS g
-		JOIN		"COURSE_REGISTRATION" AS c ON g."USER_SEQ" = c."USER_SEQ"
-		JOIN		"USER_INFO" AS u ON c."USER_SEQ" = u."USER_SEQ"
-		WHERE		g."lctr_id" = #{lctr_id}
-		AND			c."REG_STATE" = '2003'
+		JOIN		"USER_INFO" u ON g."USER_SEQ" = u."USER_SEQ"
+		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
+		WHERE		g."USER_SEQ" = #{user_seq}
+	</select>
+	<select id="studUserSeqList" resultType="Integer">
+		SELECT		"USER_SEQ", "LCTR_ID"
+d		FROM		"COURSE_REGISTRATION"
+		WHERE		"LCTR_ID" = #{lctr_id}
+		AND			"REG_STATE" = '2003'
+	</select>
+	<select id="studAttList" resultType="Attendance_Check">
+		SELECT		"USER_SEQ", "LCTR_ID", "ATT_STATUS"
+		FROM		"ATTENDANCE_CHECK"
+		WHERE		"LCTR_ID" = #{lctr_id}
+		AND			"USER_SEQ" = #{user_seq}
+	</select>
+	<select id="StudHomework" resultType="Homework_Submission">
+		SELECT		hs."USER_SEQ", hs."ASMT_SCR", h."LCTR_ID"
+		FROM		"HOMEWORK_SUBMISSION" AS hs
+		JOIN		"HOMEWORK" AS h ON hs."ASMT_NO" = h."ASMT_NO"
+		WHERE		h."LCTR_ID" = #{lctr_id}
+		AND			hs."USER_SEQ" = #{user_seq}
+	</select>
+	<select id="getEvalCriteria" resultType="String">
+		SELECT		"EVAL_CRITERIA"
+		FROM		"LECTURE"
+		WHERE		"LCTR_ID" = #{lctr_id}
+	</select>
+	<select id="getLctrCntschd" resultType="int">
+		SELECT		"LCTR_CNTSCHD"
+		FROM		"LECTURE"
+		WHERE		"LCTR_ID" = #{lctr_id}
+	</select>
+	<select id="getTotalAsmts" resultType="int">
+		SELECT		COUNT("ASMT_NO")
+		FROM		"HOMEWORK"
+		WHERE		"LCTR_ID" = #{lctr_id}
+	</select>
+	<select id="getLctrState" resultType="int">
+		SELECT		"LCTR_STATE"
+		FROM		"LECTURE"
+		WHERE		"LCTR_ID" = #{lctr_id}
 	</select>
 	<insert id="insertGrade" parameterType="Grade">
-		INSERT INTO	"GRADE" ("LCTR_ID", "USER_SEQ", "ATNDC_SCR", "ASMT_SCR", "LAST_SCR")
-		VALUES	(#{lctr_id}, #{user_seq}, #{atndc_scr}, #{asmt_scr}, #{last_scr})
+		INSERT INTO	"GRADE" ("LCTR_ID", "USER_SEQ", "ATNDC_SCR", "ASMT_SCR", "LAST_SCR", "FNSH_YN")
+		VALUES	(#{lctr_id}, #{user_seq}, #{atndc_scr}, #{asmt_scr}, #{last_scr}, #{fnsh_yn})
 	</insert>
+	<select id="getupdateGrade" resultType="Grade">
+		SELECT		l."LCTR_ID", l."LCTR_NAME", u."USER_NAME" AS stud_name,
+					g."USER_SEQ", g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR"
+		FROM		"GRADE" AS g
+		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
+		JOIN		"USER_INFO" AS u ON g."USER_SEQ" = u."USER_SEQ"
+		WHERE		g."USER_SEQ" = #{user_seq}
+		AND			g."LCTR_ID" = #{lctr_id}
+	</select>
+	<update id="updateGrade" parameterType="Grade">
+		UPDATE		"GRADE"
+		SET			"ATNDC_SCR" = #{atndc_scr}, "ASMT_SCR" = #{asmt_scr}, "LAST_SCR" = #{last_scr}
+		WHERE		"USER_SEQ" = #{user_seq}
+		AND			"LCTR_ID" = #{lctr_id}
+	</update>
+	<select id="studGrade" resultType="Grade">
+		SELECT		l."LCTR_ID", l."LCTR_NAME",
+					g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR", g."FNSH_YN"
+		FROM		"GRADE" AS g
+		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
+		WHERE		g."USER_SEQ" = #{user_seq}	
+	</select>
+	<select id="studGradeDetail" resultType="Grade">
+		SELECT		l."LCTR_ID", l."LCTR_NAME",
+					g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR", g."FNSH_YN"
+		FROM		"GRADE" AS g
+		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
+		WHERE		g."USER_SEQ" = #{user_seq}	
+		AND			g."LCTR_ID" = #{lctr_id}	
+	</select>
+	<select id="getProfSeq" resultType="int">
+		SELECT		"USER_SEQ"
+		FROM		"LECTURE"
+		WHERE		"LCTR_ID" = #{lctr_id}
+	</select>
+	<select id="getProfName" resultType="String">
+		SELECT		"USER_NAME"
+		FROM		"USER_INFO"
+		WHERE		"USER_SEQ" = #{user_seq}
+	</select>
 </mapper>

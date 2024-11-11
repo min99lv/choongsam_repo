@@ -1,9 +1,8 @@
 package com.postgre.choongsam.service;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.postgre.choongsam.dao.JheDao;
 import com.postgre.choongsam.dto.Attendance_Check;
-import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Homework_Submission;
@@ -93,54 +91,9 @@ public class JheServiceImpl implements JheService {
 	public int insertHomework(Homework homework, MultipartFile file) {
 		System.out.println("과제 등록 서비스");
 
-		// 파일이 있다면 파일을 먼저 저장하고, 그 정보를 과제에 매핑
-		if (file != null && !file.isEmpty()) {
-			// 파일 저장 및 FILE_GROUP 얻기
-			int fileGroup = saveFile(file);
-			homework.setFile_group(fileGroup); // 과제에 파일 그룹 설정
-		}
-
 		// 과제 정보 저장
 		int insHWList = hed.insertHomework(homework);
 		return insHWList;
-	}
-
-	// 파일 저장 메서드
-	private int saveFile(MultipartFile file) {
-		System.out.println("파일 저장 서비스");
-
-		// 파일 경로와 이름을 설정하여 파일을 저장
-		String uploadDir = "C:\\spring\\springSrc17\\choongsam_repo\\src\\main\\webapp\\WEB-INF\\chFile\\homework"; // 파일 업로드 디렉토리
-		String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-		File dest = new File(uploadDir + File.separator + fileName);
-
-		try {
-			// 파일을 실제 경로에 저장
-			file.transferTo(dest);
-
-			// 파일 정보를 DB에 저장
-			File_Group file_Group = new File_Group();
-			file_Group.setFile_nm(fileName);
-			file_Group.setFile_extn_nm(getFileExtension(fileName)); // 확장자 추출
-			file_Group.setFile_sz((int) file.getSize());
-			file_Group.setFile_path_nm(uploadDir + File.separator + fileName);
-
-			// 파일 저장 후 FILE_GROUP 반환
-			hed.insertFile(file_Group); // DAO에서 파일을 DB에 저장하는 SQL 문 실행
-			return file_Group.getFile_group();
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("파일 업로드 실패 ", e);
-		}
-	}
-
-	// 파일 확장자 추출
-	private String getFileExtension(String fileName) {
-		int idx = fileName.lastIndexOf('.');
-		if (idx > 0) {
-			return fileName.substring(idx + 1);
-		}
-		return "";
 	}
 
 	@Override
@@ -154,13 +107,6 @@ public class JheServiceImpl implements JheService {
 	@Transactional
 	public int updateHomework(Homework homework , MultipartFile file) {
 		System.out.println("과제 수정 서비스");
-
-		// 파일이 있다면 새로운 파일을 저장하고, 그 정보를 과제에 매핑
-		if (file != null && !file.isEmpty()) {
-			// 파일 저장 및 FILE_GROUP 얻기
-			int fileGroup = saveFile(file);  // 서비스 계층에서 파일 저장
-			homework.setFile_group(fileGroup); // 과제에 파일 그룹 설정
-		}
 
 		int upHomeworkList = hed.updateHomework(homework);
 		return upHomeworkList;
@@ -206,14 +152,15 @@ public class JheServiceImpl implements JheService {
 	}
 
 	@Override
-	public int updatesubmitHomework(Homework homework, int user_seq) {
+	public int updatesubmitHomework(int user_seq, int asmt_no) {
 		System.out.println("학생 과제 제출 수정 서비스");
 		Homework_Submission homework_Submission = new Homework_Submission();
 		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		homework_Submission.setUser_seq(user_seq);
-		homework_Submission.setAsmt_no(homework.getAsmt_no());
+		homework_Submission.setAsmt_no(asmt_no);
 		homework_Submission.setSbmsn_yn("Y");
 		homework_Submission.setSbmsn_ymd(today);
+		homework_Submission.setAsmt_scr(10);
 		homework_Submission.setFile_group(1);
 		System.out.println("Sbmsn_yn: " + homework_Submission.getSbmsn_yn());
 		int upSubmitHomework = hed.updatesubmitHomework(homework_Submission);
@@ -247,7 +194,7 @@ public class JheServiceImpl implements JheService {
 		List<Attendance_Check> onlineStudAttList = hed.getOnlineStudAtt(lctr_id);
 
 		for (Attendance_Check attendance : onlineStudAttList) {
-			updateStudAtt(attendance.getLctr_id(), attendance.getLctr_no(),
+			insertStudAtt(attendance.getLctr_id(), attendance.getLctr_no(),
 						  Arrays.asList(attendance.getUser_seq()),
 						  Map.of("att_status_" + attendance.getUser_seq(), String.valueOf(attendance.getAtt_status())),
 						  7002);
@@ -256,7 +203,7 @@ public class JheServiceImpl implements JheService {
 	}
 
 	@Override
-	public void updateStudAtt(String lctr_id, int lctr_no,
+	public void insertStudAtt(String lctr_id, int lctr_no,
 							  List<Integer> user_seq, Map<String, String> att_status, int onoff) {
 		System.out.println("출석 insert 서비스");
 
@@ -273,7 +220,7 @@ public class JheServiceImpl implements JheService {
 				attendance_Check.setAtt_status(attStatusValue);
 
 				if (onoff == 7001) {
-					hed.updateStudAtt(attendance_Check);
+					hed.insertStudAtt(attendance_Check);
 				} else if (onoff == 7002) {
 					hed.upStudOnlineAtt(attendance_Check);
 				}
@@ -316,29 +263,178 @@ public class JheServiceImpl implements JheService {
 	}
 
 	@Override
-	public List<Grade> profGrade(String lctr_id) {
+	public List<Grade> profGrade(String lctr_id, int user_seq) {
 		System.out.println("강사 수강생 성적 조회 서비스");
-		List<Grade> profGradeList = hed.profGrade(lctr_id);
-		return profGradeList;
+
+		int lctrState = hed.getLctrState(lctr_id);
+		List<Grade> allGrades = new ArrayList<>();
+
+		if (lctrState == 4006) {
+			List<Integer> userSeqList = hed.studUserSeq(lctr_id);
+			for (Integer userSeq : userSeqList) {
+				Grade grade = new Grade();
+				grade.setLctr_id(lctr_id);
+				grade.setUser_seq(userSeq);
+				Grade existingGrade = hed.selectGrade(grade);
+				if (existingGrade == null) {
+					insertGrade(lctr_id, userSeq);
+				}
+				List<Grade> studScoresList = hed.profGrade(userSeq);
+				allGrades.addAll(studScoresList);
+				System.out.println("service studScoresList: " + studScoresList);
+			}
+			return allGrades;
+		}
+		return new ArrayList<>();
 	}
 
-	@Override
-	public List<Grade> getInsertGrade(String lctr_id) {
-		System.out.println("성적 등록할 학생 찾기 서비스");
-		return null;
-	}
-
-	@Override
-	public void insertGrade(String lctr_id, List<Integer> user_seq) {
+	private void insertGrade(String lctr_id, Integer userSeq) {
 		System.out.println("강사 수강생 성적 등록 서비스");
-		List<Homework> studHomeworkList = hed.notifyStudents(lctr_id);
-		for (Homework homework : studHomeworkList) {
-			int userSeq = homework.getUser_seq();
-			System.out.println("userSeq: " + userSeq);
+
+		String evalCriteria = hed.getEvalCriteria(lctr_id);
+		int attWeight = extractAttWeight(evalCriteria);
+		int asmtWeight = extractAsmtWeight(evalCriteria);
+		
+		Attendance_Check attendance_Check = new Attendance_Check();
+		attendance_Check.setLctr_id(lctr_id);
+		attendance_Check.setUser_seq(userSeq);
+		List<Attendance_Check> studAtt = hed.studAttList(attendance_Check);
+
+		Homework_Submission homework_Submission = new Homework_Submission();
+		homework_Submission.setLctr_id(lctr_id);
+		homework_Submission.setUser_seq(userSeq);
+		List<Homework_Submission> studHomework = hed.StudHomework(homework_Submission);
+
+		if (studAtt != null && studHomework != null) {
+			int attScore = calculateAttScore(studAtt, lctr_id);
+			int asmtScore = calculateAsmtScore(studHomework, lctr_id);
+			int lastScore = calculateLastScore(attScore, asmtScore, attWeight, asmtWeight);
+
+			String finishYn = lastScore >= 70 ? "Y" : "N";
+
 			Grade grade = new Grade();
-			grade.setLctr_id(lctr_id);
 			grade.setUser_seq(userSeq);
+			grade.setLctr_id(lctr_id);
+			grade.setAtndc_scr(attScore);
+			grade.setAsmt_scr(asmtScore);
+			grade.setLast_scr(lastScore);
+			grade.setFnsh_yn(finishYn);
+
 			hed.insertGrade(grade);
 		}
+	}
+
+	private int calculateAttScore(List<Attendance_Check> studentAttendance, String lctr_id) {
+		int totalAttScore = 0;
+		int totalClasses = hed.getLctrCntschd(lctr_id);
+
+		if (totalClasses == 0) {
+			return 0;
+		}
+
+		int maxScorePerClass = 100 / totalClasses;
+		int attScorePerClass = maxScorePerClass;
+		int lateScorePerClass = maxScorePerClass / 2;
+		int absentScorePerClass = 0;
+
+		for (Attendance_Check attendance : studentAttendance) {
+			switch (attendance.getAtt_status()) {
+				case 5001:
+					totalAttScore += attScorePerClass;
+					break;
+				case 5002:
+					totalAttScore += lateScorePerClass;
+					break;
+				case 5003:
+					totalAttScore += absentScorePerClass;
+					break;
+			}
+		}
+		 return Math.max(totalAttScore, 0);
+	}
+
+	private int calculateAsmtScore(List<Homework_Submission> studentHomework, String lctr_id) {
+		int totalAsmtScore = 0;
+		int totalAsmt = hed.getTotalAsmts(lctr_id);
+
+		if (totalAsmt == 0) {
+			return 0;
+		}
+
+		int maxScrPerAsmt = 100 / totalAsmt;
+		int submittedAsmt = 0;
+		for (Homework_Submission homework : studentHomework) {
+			if (homework.getAsmt_scr() > 0) {
+				submittedAsmt++;
+			}
+		}
+
+		int missingAsmt = totalAsmt - submittedAsmt;
+		int totalPenalty = missingAsmt * maxScrPerAsmt;
+		totalAsmtScore = 100 - totalPenalty;
+		return Math.max(totalAsmtScore, 0);
+	}
+
+	private int extractAttWeight(String evalCriteria) {
+		return Integer.parseInt(evalCriteria.trim());
+	}
+
+	private int extractAsmtWeight(String evalCriteria) {
+		int attendanceWeight = Integer.parseInt(evalCriteria.trim());
+		return 100 - attendanceWeight;
+	}
+
+	private int calculateLastScore(int attScore, int asmtScore, int attWeight, int asmtWeight) {
+		return (attScore * attWeight / 100) + (asmtScore * asmtWeight / 100);
+	}
+
+	@Override
+	public Grade getupdateGrade(Integer userSeq, String lctr_id) {
+		System.out.println("수강생 성적 수정할 정보 찾기 서비스");
+		Grade grade = new Grade();
+		grade.setUser_seq(userSeq);
+		grade.setLctr_id(lctr_id);
+		return hed.getupdateGrade(grade);
+	}
+
+	@Override
+	public void updateGrade(Integer userSeq, String lctr_id, int atndcScr, int asmtScr, int lastScr) {
+		System.out.println("수강생 성적 수정할 정보 찾기 서비스");
+		Grade grade = new Grade();
+		grade.setUser_seq(userSeq);
+		grade.setLctr_id(lctr_id);
+		grade.setAtndc_scr(atndcScr);
+		grade.setAsmt_scr(asmtScr);
+		grade.setLast_scr(lastScr);
+		hed.getupdateGrade(grade);
+	}
+
+	@Override
+	public List<Grade> studGrade(int user_seq) {
+		System.out.println("수강생 내 성적 조회 서비스");
+		List<Grade> myGradeDetailList = hed.studGrade(user_seq);
+		return myGradeDetailList;
+	}
+
+	@Override
+	public List<Grade> studGradeDetail(String lctr_id, int user_seq) {
+		System.out.println("수강생 내 성적 상세 조회 서비스");
+		Grade grade = new Grade();
+		grade.setLctr_id(lctr_id);
+		grade.setUser_seq(user_seq);
+		List<Grade> myGradeDetailList = hed.studGradeDetail(grade);
+		return myGradeDetailList;
+	}
+
+	@Override
+	public Integer getProfSeq(String lctr_id) {
+		System.out.println("강사 seq 찾기 서비스");
+		return hed.getProfSeq(lctr_id);
+	}
+
+	@Override
+	public String getProfName(Integer rcvrSeq) {
+		System.out.println("강사 이름 찾기 서비스");
+		return hed.getProfName(rcvrSeq);
 	}
 }
