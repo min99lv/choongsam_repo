@@ -147,24 +147,37 @@ button {
             	    // 파일 이름과 확장자가 정상적으로 결합되었는지 확인
             	    console.log(`File: `+fileName+`.`+fileExtension+``);
 					console.log(`/api/files/`+file.file_group+`/`+file.file_seq+``);
-            	    const fileLink = document.createElement('a');
-            	    fileLink.href = `/api/files/`+file.file_group+`/`+file.file_seq+``;  // 파일 다운로드 경로 설정
-            	    
-            	   fileLink.textContent = ``+fileName+`.`+fileExtension+``
-            	    fileLink.target = '_blank';  // 새 탭에서 열기
-            	    
-            	    const fileItem = document.createElement('li');
-            	    fileItem.appendChild(fileLink);
-            	    fileListElement.appendChild(fileItem);
-            	});
-            } else {
-                fileListElement.innerHTML = '<li>첨부파일이 없습니다.</li>';
-            }
+            	   // 이미지 파일인지 확인
+				   if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension.toLowerCase())) {
+                    // 이미지 파일인 경우
+                    const imgElement = document.createElement('img');
+                    imgElement.src = `/api/files/` + file.file_group + `/` + file.file_seq;  // 이미지 경로 설정
+                    imgElement.alt = fileName;  // 대체 텍스트 설정
+                    imgElement.style.maxWidth = '100%';  // 이미지 크기 조정
 
-        } catch (error) {
-            console.error('Error:', error.message);
+                    const fileItem = document.createElement('li');
+                    fileItem.appendChild(imgElement);
+                    fileListElement.appendChild(fileItem);
+                } else {
+                    // 이미지 파일이 아닌 경우
+                    const fileLink = document.createElement('a');
+                    fileLink.href = `/api/files/` + file.file_group + `/` + file.file_seq;  // 파일 다운로드 경로 설정
+                    fileLink.textContent = `\${fileName}.\${fileExtension}`;
+                    fileLink.target = '_blank';  // 새 탭에서 열기
+
+                    const fileItem = document.createElement('li');
+                    fileItem.appendChild(fileLink);
+                    fileListElement.appendChild(fileItem);
+                }
+            });
+        } else {
+            fileListElement.innerHTML = '<li>첨부파일이 없습니다.</li>';
         }
+
+    } catch (error) {
+        console.error('Error:', error.message);
     }
+}
 
     // 페이지 로드 시 공지사항 상세 정보 가져오기
     window.onload = () => {

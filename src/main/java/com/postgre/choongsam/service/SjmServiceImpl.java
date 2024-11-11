@@ -113,7 +113,7 @@ public class SjmServiceImpl implements SjmService {
 	            InputStream inputStream = file.getInputStream();
 
 	         // 파일이 저장될 경로
-	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/ntice");
+	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/notice");
 
 	            // 경로가 없으면 생성
 	            File uploadDir = new File(uploadPath);
@@ -271,6 +271,40 @@ public class SjmServiceImpl implements SjmService {
 	public int replyUpdateAsks(Ask ask) {
 		
 		return sd.replyUpdateAsks(ask);
+	}
+
+	@Override
+	public List<Ask> getAsks(Map<String,Object> params) {
+		
+		return sd.getAsks(params);
+	}
+
+	@Override
+	public int countAsk(Map<String, Object> params) {
+	
+		return sd.countAsk(params);
+	}
+
+	@Override
+	public int countAskMy(Map<String, Object> params) {
+		return sd.countAskMy(params);
+		}
+
+	@Override
+	public int updateNoticeYn(Notice notice) {
+		
+		return sd.updateNoticeYn(notice);
+	}
+
+	@Override
+	public int updateNoteRcvrDelYn(Note note) {
+		
+		return sd.updateNoteRcvrDelYn(note);
+	}
+
+	@Override
+	public int updateNoteSentDelYn(Note note) {
+		return sd.updateNoteSentDelYn(note);
 	}
 
 	

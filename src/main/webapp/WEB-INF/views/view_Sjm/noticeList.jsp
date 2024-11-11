@@ -14,24 +14,22 @@
 
 				.container {
 					display: flex;
-					flex-direction: column;
-					position: relative;
-					/* 컨테이너의 배경색을 흰색에 가까운 연한 회색으로 설정합니다. */
-					background-color: #fdfdfd;
-					/* 컨테이너에 미세한 그림자를 추가하여 입체감을 줍니다. */
-
-					top: 120px;
-					/*  컨테이너의 너비 1320px 고정 */
-					width: 1320px;
-					/* 중앙 정렬 */
-					margin: 0 auto;
-					/* padding을 width에 포함하여 계산 */
-
-					box-sizing: border-box;
-					/* 자동으로 좌우 여백을 설정하여 가운데 정렬 */
-					margin: 0 auto;
-					height: auto;
-					margin-bottom: 200px;
+	flex-direction: column;
+	position: relative;
+	/* 컨테이너의 배경색을 흰색에 가까운 연한 회색으로 설정합니다. */
+	background-color: #fdfdfd;
+	/* 컨테이너에 미세한 그림자를 추가하여 입체감을 줍니다. */
+	top: 120px;
+	/*  컨테이너의 너비 1320px 고정 */
+	width: 1320px;
+	/* 중앙 정렬 */
+	margin: 0 auto;
+	/* padding을 width에 포함하여 계산 */
+	box-sizing: border-box;
+	/* 자동으로 좌우 여백을 설정하여 가운데 정렬 */
+	margin: 0 auto;
+	height: auto;
+	margin-bottom: 200px;
 					
 
 				}
@@ -42,7 +40,6 @@
 
 				table {
 					padding: 0;
-					width: 1280px;
 					border-top: 2px solid black;
 				}
 
@@ -68,7 +65,7 @@
 					text-align: center;
 					/* 중앙 정렬 */
 					color: #323232;
-					font-size: px;
+				
 					height: 50px;
 				}
 
@@ -89,85 +86,94 @@
 
 
 				
-				.writeNoticeBtn{
-				width: 200px;
+				.activeBtn{
+				width: 100px;
 	            height: 50px;
 	            background-color: #00664F;
 	            border: none;
 	            color: white;
 	            text-align: center;
-	            margin-top: 10px; /* 버튼과 검색 바 간격 */
 	            text-decoration: none; /* 링크 스타일 없애기 */
 	            display: flex; /* flexbox 사용 */
 	            justify-content: center; /* 텍스트 가운데 정렬 */
 	            align-items: center; /* 세로 가운데 정렬 */
+	            font-size: 20px;
+	            font-weight: bold;
+	            margin-left: 20px;
+	    
 				}
 				
 				.pagination_current {
-    border-radius: 10px;
-    width: 35px; /* 크기를 키움 */
-    height: 35px; /* 높이 설정 */
-    border: 1px solid black;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center; /* 텍스트 가운데 정렬 */
-    font-size: 18px; /* 폰트 크기 조정 */
-    background-color: black;
-    color: white;
-}
-
-.pagination_a {
-    border-radius: 10px;
-    width: 35px; /* 크기를 키움 */
-    height: 35px; /* 높이 설정 */
-    border: 1px solid black;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center; /* 텍스트 가운데 정렬 */
-    font-size: 18px; /* 폰트 크기 조정 */
-    text-decoration: none; /* 링크 스타일 없애기 */
-    color: black; /* 링크 색상 설정 */
-}
-
-.keyword{
-	height: 40px;
-	width: 255px;
-	border-radius: 10px;
-	border: 1px #949494 solid;
-	font-size: 20px;
-	text-align: center;
-}
-
-.search_btn{
-	height: 40px;
-	border-radius: 10px; 
-	background-color:#00664F;
-	width: 70px;
-	font-size: 20px;
-	color: white;
-	border: none;
-	
-}
-
-select{
-height: 40px;
-	width: 255px;
-	border-radius: 10px;
-	border: 1px #949494 solid;
-	font-size: 20px;
-	text-align: center;
-	color: #949494;
-
-}
-
-td a{
-	color: black;
-	text-decoration: none;
-}
-
-td a:hover {
-	text-decoration: underline;
-}
+			    border-radius: 10px;
+			    width: 35px; /* 크기를 키움 */
+			    height: 35px; /* 높이 설정 */
+			    border: 1px solid black;
+			    display: inline-flex;
+			    justify-content: center;
+			    align-items: center; /* 텍스트 가운데 정렬 */
+			    font-size: 18px; /* 폰트 크기 조정 */
+			    background-color: black;
+			    color: white;
+			  
+			}
+			
+			.pagination_a {
+			    border-radius: 10px;
+			    width: 35px; /* 크기를 키움 */
+			    height: 35px; /* 높이 설정 */
+			    border: 1px solid black;
+			    display: inline-flex;
+			    justify-content: center;
+			    align-items: center; /* 텍스트 가운데 정렬 */
+			    font-size: 18px; /* 폰트 크기 조정 */
+			    text-decoration: none; /* 링크 스타일 없애기 */
+			    color: black; /* 링크 색상 설정 */
+			}
+			
+			.keyword{
+				height: 40px;
+				width: 255px;
+				border-radius: 10px;
+				border: 1px #949494 solid;
+				font-size: 20px;
+				text-align: center;
+			}
+			
+			.search_btn{
+				height: 40px;
+				border-radius: 10px; 
+				background-color:#00664F;
+				width: 70px;
+				font-size: 20px;
+				color: white;
+				border: none;
+				
+			}
+			
+			select{
+			height: 40px;
+				width: 255px;
+				border-radius: 10px;
+				border: 1px #949494 solid;
+				font-size: 20px;
+				text-align: center;
+				color: #949494;
+			
+			}
+			
+			td a{
+				color: black;
+				text-decoration: none;
+			}
+			
+			td a:hover {
+				text-decoration: underline;
+			}
+			
+			.content3{
+			display: flex;
+			 
+			}
 
 
 
@@ -189,20 +195,27 @@ td a:hover {
 				</div>
 
 				<div class="contents1" >
+				<div class="content2">
+				
+				
 					<form action="/api/notice" id="frm">
 						<div class="manager_Qna_header_search">
-						<select>
-						<option>전체검색</option>
-						<option>제목</option>
-						<option>내용</option>
-						</select>
 							<input type="text" name="keyword" class="keyword" id="keyword" >
 							<button type="submit" class="search_btn">검색</button>
 						</div>
 					</form>
-					<c:if test="${sessionScope.user_status == 1003}">
-					    <a class="writeNoticeBtn" href="/api/notice/new">공지사항 작성</a>
+				</div>
+					<div class="content3">
+					<c:if test="${sessionScope.usertype == 1003}">
+					    <a class="activeBtn" href="/api/notice/new">작성</a>
+					    <form action="/api/notice/delete" method="post" id="deleteForm">
+					    <button class="activeBtn" type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+					    </form>
 					</c:if>
+					
+					
+					
+					</div>
 
 				</div>
 
@@ -211,6 +224,11 @@ td a:hover {
 					<table class="list">
 						<thead>
 							<tr>
+								<c:choose>
+								 <c:when test="${usertype == 1003}">
+									<th>삭제</th>
+									</c:when>
+								</c:choose>
 								<th>번호</th>
 								<th>제목</th>
 								<th>등록일</th>
@@ -222,6 +240,13 @@ td a:hover {
 						
 							<c:forEach var="notice" items="${noticeList}" varStatus="status">
 								<tr>
+								<c:choose>
+								 <c:when test="${usertype == 1003}">
+									<td> <input type="checkbox" name="deleteIds" value="${notice.ntc_mttr_sn}" form="deleteForm"></td>
+									</c:when>
+								</c:choose>
+								
+								
 									<td>${startIndex - status.index}</td>
 									<td><a href="/view_Sjm/noticeDetail?ntc_mttr_sn=${notice.ntc_mttr_sn}">${notice.ntc_mttr_ttl}</a></td>
 									<td>${notice.ntc_mttr_dt}</td>
@@ -285,7 +310,18 @@ td a:hover {
 	
 	</footer>
 
+<script type="text/javascript">
+function submitDeleteForm() {
+    // 체크된 항목이 없으면 경고창 표시
+    if (document.querySelectorAll('#deleteForm input[type="checkbox"]:checked').length === 0) {
+        alert("삭제할 공지사항을 선택해주세요.");
+        return;
+    }
+    // 폼 제출
+    document.getElementById('deleteForm').submit();
+}
 
+</script>
 
 		</body>
 

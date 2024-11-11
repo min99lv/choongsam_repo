@@ -170,10 +170,16 @@ button[type="submit"] {
 
 
 }
+
 </style>
 
 
 </head>
+<script>
+
+
+
+</script>
 <body>
 	<header>
 		<%@ include file="../header.jsp"%>
@@ -184,7 +190,7 @@ button[type="submit"] {
 			<h1>문의사항 작성</h1>
 		</div>
 
-		<form id="noticeForm" method="post" action="/api/asks">
+		<form id="noticeForm" method="post" action="/api/asks/new">
 
 			<table class="list">
 				<tr>
