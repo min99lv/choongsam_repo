@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.postgre.choongsam.dao.HmsDao;
 import com.postgre.choongsam.dto.Class_Bookmark;
 import com.postgre.choongsam.dto.Class_Schedule;
+import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture_Video;
 
 import lombok.RequiredArgsConstructor;
@@ -80,7 +81,6 @@ public class HmsServiceImpl implements HmsService{
 
 	            System.out.println("duration->" + duration);
 	            System.out.println("durationInSeconds->" + durationInSeconds);
-	            System.out.println("API 응답: " + response); // 전체 응답 확인
 	            return "view_Hms/videoView";
 	        } else {
 	            System.out.println("API에서 유효한 비디오 데이터를 찾을 수 없습니다.");
@@ -131,11 +131,11 @@ public class HmsServiceImpl implements HmsService{
 
 	//현재 max값
 	@Override
-	public long findCurrentMax(String videoId, int user_seq) {
+	public long findCurrentMax(String videoId, int user_seq, int lctr_no) {
 		System.out.println("msService findCurrentMax start..");
 		System.out.println("msService findCurrentMax videoId.."+videoId);
 		System.out.println("msService findCurrentMax user_seq.."+user_seq);
-		return HD.findCurrentMax(videoId,user_seq);
+		return HD.findCurrentMax(videoId,user_seq,lctr_no);
 	}
 
 	//max값 빼고 업뎃
@@ -148,11 +148,11 @@ public class HmsServiceImpl implements HmsService{
 
 	//final
 	@Override
-	public int watchedFinalTime(String videoId, int user_seq) {
+	public int watchedFinalTime(String videoId, int user_seq, int lctr_no) {
 		System.out.println("msService watchedFinalTime start...");
 		System.out.println("msService watchedFinalTime videoId..."+videoId);
 		System.out.println("msService watchedFinalTime user_seq..."+user_seq);
-		return HD.watchedFinalTime(videoId, user_seq);
+		return HD.watchedFinalTime(videoId, user_seq,lctr_no);
 	}
 
 	@Override
@@ -179,6 +179,13 @@ public class HmsServiceImpl implements HmsService{
 		System.out.println("msService getfilename start..");
 		System.out.println("msService getfilename conts_id.."+conts_id);	
 		return HD.getfilename(conts_id);
+	}
+
+	@Override
+	public File_Group getFilegogo(String conts_id) {
+		System.out.println("msService getFilegogo start..");
+		System.out.println("msService getFilegogo conts_id.."+conts_id);
+		return HD.getfileGoGo(conts_id);
 	}
 
 	

@@ -311,7 +311,7 @@
 			                ">
 			                <span class="stateTxt">${conts.view_status}</span>
 			            </div>
-			            <a href="/video-details?videoId=${conts.conts_id }&user_seq=${conts.user_seq }" 
+			            <a href="/video-details?videoId=${conts.conts_id }&user_seq=${conts.user_seq }&lctr_no=${conts.lctr_no}" 
 			               onclick="chkClassSche(event, this.href, '${conts.conts_id}', '${conts.user_seq}', '${conts.lctr_no}', '${conts.lctr_id}')">
 			                <div id="startDiv">
 			                    <span id="startTxt"><div id="start">학습 시작</div></span>
