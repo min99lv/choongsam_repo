@@ -22,18 +22,13 @@
             border-bottom: 1px solid #ccc;
         }
 
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: white;
-            z-index: 1000;
-            border-top: 1px solid #ccc;
-        }
+        footer {	  
+    	margin-top: 155px; 
+	    padding: 10px 0; /* 푸터 내 패딩 추가 (옵션) */
+	}
 
         .main_container {
-            margin-top: 60px;
+            margin-top: 140px;
             margin-bottom: 60px;
             margin-left: auto;
             margin-right: auto;
@@ -117,8 +112,8 @@
             </div>
         </form>
     </main>
-
-    <footer>
-    </footer>
 </body>
+<footer>
+        <%@ include file="../footer.jsp" %>
+    </footer>
 </html>

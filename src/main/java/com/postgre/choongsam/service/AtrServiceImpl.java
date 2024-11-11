@@ -63,4 +63,21 @@ public class AtrServiceImpl implements AtrService {
 		return classroomList;
 	}
 
+	@Override
+	public void approveCourse(String parameter) {
+		ad.approveCourse(parameter);
+	}
+
+	@Override
+	public List<Lecture> getRecruitLectureList() {
+		List <Lecture> lectureList= ad. getRecruitLectureList();
+		return lectureList;
+	}
+
+	@Override
+	public void applyCourse(String parameter, String parameter2) {
+		ad.applyCourse(parameter,parameter2);
+		
+	}
+
 }

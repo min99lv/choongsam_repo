@@ -16,5 +16,11 @@ public class Attendance_Check {
 	private int		absent_count;		// 결석 수
 	private int		attendance_rate;	// 출석률
 	private String	user_name;			// 회원 이름
+	private String	stud_name;			// 학생 이름
 	private int		onoff;				// 온오프라인 여부
+	private int		atndc_scr;			// 출석 점수
+	private int		asmt_scr;			// 과제 점수
+	private int		last_scr;			// 최종 성적
+	private String	fnsh_yn;			// 수료 여부
+	private String	sbmsn_Yn;			// 과제 제출 여부
 }
