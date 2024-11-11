@@ -9,13 +9,13 @@
 <title>학생 관리 시스템</title>
 <style type="text/css">
     
-    html, body {
+    /* html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-}
+} */
     
-    .body {
+    .pobody {
         position: fixed;
 		  width: auto;
 		  top:0;
@@ -31,7 +31,7 @@
 		  }
     }
     
-    .green {
+    .pogreen {
     	margin-top: 100px;
     	margin-bottom: 50px;
     }
@@ -52,12 +52,12 @@
 		  }
     } */
     
-    .navy ul {
+    .ponavy ul {
         list-style-type: none;
         padding: 0;
     }
     
-    .navy li {
+    .ponavy li {
         width: 320px;
 	    height: 90px;
 	    font-size: 30px;
@@ -67,8 +67,13 @@
 	    border-bottom: solid 2px white;
 	    transition: background-color 0.2s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
+    
+    
+    .potxt li {
+    	margin-left: 50px;
+    }
 
-    .navy li:hover {
+    .ponavy li:hover {
         background-color: #00664F;
 	    color: white;
 	    transform: scale(1.1);
@@ -76,7 +81,7 @@
     }
 
     /* Submenu Styling */
-    .submenu {
+    .posubmenu {
         display: none;
         padding-left: 25px;
         border-left: 2px solid #236147;
@@ -84,7 +89,7 @@
         margin-top: 5px;
     }
 
-    .submenu li {
+    .posubmenu li {
         font-size: 20px;
         padding: 10px 0;
         cursor: pointer;
@@ -107,7 +112,7 @@
         text-decoration: none;
     } */
     
-    .txt {
+    .potxt {
     	margin-left: 50px;
     }
 </style>
@@ -123,47 +128,42 @@
 </script>
 </head>
 <body>
-	<div class="body">
-		<!-- <header>
-		    <h1>마이페이지</h1>
-		</header> -->
-		
-		<%-- sideNav.jsp --%>
-		<div class="green">
-			<nav class="navy">
+	<div class="pobody">
+		<div class="pogreen">
+			<nav class="ponavy">
 		    <ul>
-		        <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">나의 강의실</label></li>
-		        <ul class="submenu" id="myClassroomSubmenu">
-		            <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
-		            <li onclick="location.href='gangyilistTeacher?user_seq=${user_seq}'"><label class="txt">강의 목록</label></li>
+		        <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="potxt">나의 강의실</label></li>
+		        <ul class="posubmenu" id="myClassroomSubmenu">
+		            <li onclick="location.href='../Jhe/myLecture'"><label class="potxt">현재 수업중인 강의</label></li>
+		            <li onclick="location.href='gangyilistTeacher?user_seq=${user_seq}'"><label class="potxt">강의 목록</label></li>
 		        </ul>
-		        <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="txt">성적 관리</label></li>
-		        <ul class="submenu" id="gradeManagementSubmenu">
-		            <li><label class="txt">하은</label></li>
-		            <li><label class="txt">하은</label></li>
-		            <li><label class="txt">하은</label></li>
+		        <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="potxt">성적 관리</label></li>
+		        <ul class="posubmenu" id="gradeManagementSubmenu">
+		            <li><label class="potxt">하은</label></li>
+		            <li><label class="potxt">하은</label></li>
+		            <li><label class="potxt">하은</label></li>
 		        </ul>
-		        <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="txt">회원정보</label></li>
-		        <ul class="submenu" id="userInfoSubmenu">
-		            <li onclick="location.href='updateProfileteacher?user=${user}'"><label class="txt">개인정보 수정</label></li>
-		            <li><label class="txt">비밀번호 변경</label></li>
-		            <li onclick="location.href='deleteTeacher?user=${user}'"><label class="txt">회원탈퇴</label></li>
+		        <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="potxt">회원정보</label></li>
+		        <ul class="posubmenu" id="userInfoSubmenu">
+		            <li onclick="location.href='updateProfileteacher?user=${user}'"><label class="potxt">개인정보 수정</label></li>
+		            <li><label class="potxt">비밀번호 변경</label></li>
+		            <li onclick="location.href='deleteTeacher?user=${user}'"><label class="potxt">회원탈퇴</label></li>
 		        </ul>
-		        <li onclick="toggleSubMenu('inquirySubmenu')"><label class="txt">1:1문의</label></li>
-		        <ul class="submenu" id="inquirySubmenu">
-		            <li onclick="location.href='/asks/my'"><label class="txt">문의내역</label></li>
-		            <li onclick="location.href='/asks/new'"><label class="txt">문의작성</label></li>
+		        <li onclick="toggleSubMenu('inquirySubmenu')"><label class="potxt">1:1문의</label></li>
+		        <ul class="posubmenu" id="inquirySubmenu">
+		            <li onclick="location.href='/asks/my'"><label class="potxt">문의내역</label></li>
+		            <li onclick="location.href='/asks/new'"><label class="potxt">문의작성</label></li>
 		        </ul>
-		        <li onclick="toggleSubMenu('zzji')"><label class="txt">쪽지함</label></li>
-		        <ul class="submenu" id="zzji">
-		            <li onclick="location.href='/notes/received'"><label class="txt">받은쪽지</label></li>
-		            <li onclick="location.href='/notes/sent'"><label class="txt">보낸쪽지</label></li>
-		            <li onclick="location.href='/asks/my'"><label class="txt">휴지통</label></li>
+		        <li onclick="toggleSubMenu('zzji')"><label class="potxt">쪽지함</label></li>
+		        <ul class="posubmenu" id="zzji">
+		            <li onclick="location.href='/notes/received'"><label class="potxt">받은쪽지</label></li>
+		            <li onclick="location.href='/notes/sent'"><label class="potxt">보낸쪽지</label></li>
+		            <li onclick="location.href='/asks/my'"><label class="potxt">휴지통</label></li>
 		        </ul>
 		    </ul>
 		</nav>
 		</div>
 </div>
-
 </body>
 </html>
+
