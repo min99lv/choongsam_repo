@@ -52,12 +52,62 @@ public class HjhController {
 	}
 	
 	@RequestMapping(value = "/suganglistStd")
-	public String suganglistStd(Model model, HttpSession session) {
+	public String suganglistStd(Model model, HttpSession session,
+	        @RequestParam(value = "currentPage", defaultValue = "1") String currentPage, 
+	        @RequestParam(value = "keyword", required = false) String keyword) {
 	    System.out.println("관리자마이페이지");
 	    
 	    // 세션에서 user_seq 값을 가져옵니다.
 	    Object userSeqObject = session.getAttribute("user_seq");
 
+	    // 세션 값이 Integer나 String이면 int로 변환
+	    Integer userSeq = null; // Integer로 초기화
+	    if (userSeqObject != null) {
+	        if (userSeqObject instanceof Integer) {
+	            userSeq = (Integer) userSeqObject;
+	        } else if (userSeqObject instanceof String) {
+	            try {
+	                userSeq = Integer.parseInt((String) userSeqObject);
+	            } catch (NumberFormatException e) {
+	                System.out.println("user_seq 변환 오류: " + e.getMessage());
+	            }
+	        }
+	    }
+
+	    // userSeq가 올바르게 설정되었을 경우
+	    if (userSeq != null) {  // null 체크
+	        // 검색어와 페이지를 기반으로 데이터 가져오기
+	        int totalCount = hjh.sugangStuTotalCount(userSeq, keyword); // 총 데이터 수
+	        System.out.println("totalCount" + totalCount);
+	        Paging page = new Paging(totalCount, currentPage); // 페이징 처리 객체
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("userSeq", userSeq);  // Integer로 저장
+	        params.put("start", page.getStart());
+	        params.put("rowPage", page.getRowPage());
+	        params.put("keyword", keyword); // 검색어도 전달
+
+	        // 데이터 목록 가져오기
+	        List<Course_Registration> sugangStu = hjh.sugangStu(params); 
+	        System.out.println("zz: " + sugangStu);
+
+	        // 모델에 데이터 전달
+	        model.addAttribute("sugangStu", sugangStu);
+	        model.addAttribute("page", page);
+	        model.addAttribute("totalCount", totalCount);
+	        model.addAttribute("keyword", keyword);
+	    } else {
+	        System.out.println("유효하지 않은 userSeq 값입니다.");
+	    }
+
+	    return "view_Hjh/suganglistStd"; // 뷰 이름 반환
+	}
+
+
+	@PostMapping("/updatePayState")
+	public String updatePayState(Model model, HttpSession session, @RequestParam("lctr_id") String lctrId) {
+	    // 세션에서 user_seq 값을 가져옵니다.
+	    Object userSeqObject = session.getAttribute("user_seq");
+	    System.out.println("updatePayStateㅋㅋㅋ");
 	    // 세션 값이 Integer나 String이면 int로 변환
 	    int userSeq = 0; // 기본값 설정
 	    if (userSeqObject != null) {
@@ -74,15 +124,17 @@ public class HjhController {
 
 	    // userSeq가 올바르게 설정되었을 경우
 	    if (userSeq > 0) {
-	        List<Course_Registration> sugangStu = hjh.sugangStu(userSeq);
-	        System.out.println("zz: " + sugangStu);
-	        model.addAttribute("sugangStu", sugangStu);
+	        // 결제 상태 업데이트
+	        int updatePayState = hjh.updatePayState(userSeq, lctrId);
+	        System.out.println("updatePayState 결과: " + updatePayState);
 	    } else {
 	        System.out.println("유효하지 않은 userSeq 값입니다.");
 	    }
 
-	    return "view_Hjh/suganglistStd";
+	    // 수강 신청 목록 페이지로 리다이렉트
+	    return "redirect:/view_Hjh/suganglistStd?user_seq=" + userSeq;
 	}
+
 
 	
 	@RequestMapping(value = "/gangyilistTeacher")
@@ -434,11 +486,30 @@ public class HjhController {
 	}
 
 	
-	@GetMapping("deleteTeacher") 
-	public String deleteTeacher(HttpSession session) {
-		
-		System.out.println(session.getAttribute("user"));
-		return "view_Hjh/deleteTeacher";
+	@GetMapping("deleteTeacher")
+	public String deleteTeacher(HttpSession session, Model model) {
+	    // 세션에서 user 정보를 가져오기
+	    String userId = (String) session.getAttribute("user");
+	    
+	    // 세션에서 userId가 존재하는지 확인
+	    if (userId != null) {
+	        // userId를 이용해 사용자 정보 가져오기
+	        User_Info userInfo = hjh.detailProfileuser(userId);
+	        
+	        // 가져온 사용자 정보를 model에 추가하여 뷰에서 사용하도록 전달
+	        model.addAttribute("user_id", userId);
+	        model.addAttribute("userInfo", userInfo);  // 사용자 정보 추가
+	        
+	        // 로그로 세션에서 가져온 값 출력
+	        System.out.println("user: " + userId);  // 세션에서 가져온 userId 출력
+	        System.out.println("user_id from session: " + userId);  // 세션에서 가져온 userId 출력
+	    } else {
+	        // 세션에 userId가 없으면 로그인 페이지로 리다이렉트
+	        return "redirect:/login";
+	    }
+	    
+	    // 사용자 정보와 user_id를 포함한 페이지로 이동
+	    return "view_Hjh/deleteTeacher";  // deleteStd 페이지로 이동
 	}
 	
 	@PostMapping("deleteStd1")
@@ -471,6 +542,36 @@ public class HjhController {
 	    }
 	}
 	
+	@PostMapping("deleteStd2")
+	public String deleteTeacher(@RequestParam("password") String password,
+	                         HttpSession session, Model model) {
+
+	    // 세션에서 user_id를 가져옵니다.
+	    String userId = (String) session.getAttribute("user");
+	    
+	    // 세션에 user_id가 없다면, 로그인 상태가 아닌 것이므로 처리할 수 없게 합니다.
+	    if (userId == null) {
+	        model.addAttribute("msg", "로그인 정보가 없습니다.");
+	        return "view_Hjh/deleteTeacher";  // 로그인 페이지나 탈퇴 페이지로 이동
+	    }
+
+	    // 서비스에서 회원 탈퇴 처리
+	    int result = hjh.deleteStd1(userId, password);
+
+	    if (result == 1) {
+	        // 회원 탈퇴가 성공했으면, 세션 해제 (로그아웃)
+	        session.invalidate();  // 세션 무효화
+	        model.addAttribute("msg", "회원 탈퇴가 완료되었습니다.");
+	        return "main";  // 탈퇴 후 마이페이지로 리다이렉트
+	    } else if (result == 0) {
+	        model.addAttribute("msg", "비밀번호가 일치하지 않거나 회원 정보가 없습니다.");
+	        return "view_Hjh/deleteTeacher";  // 실패 메시지와 함께 탈퇴 페이지로 이동
+	    } else {
+	        model.addAttribute("msg", "탈퇴 처리에 실패하였습니다.");
+	        return "view_Hjh/deleteTeacher";  // 탈퇴 실패 시 다시 탈퇴 페이지로 이동
+	    }
+	}
+	
 	//비밀번호 변경
 	@GetMapping("changePW")
 	public String changePW(HttpSession session, Model model) {
@@ -492,11 +593,16 @@ public class HjhController {
 	@PostMapping("changePassword")
 	public String changePassword(HttpSession session,
 							 	Model model,
-								 @RequestParam("password") String password ) {
+								 @RequestParam("password") String password,
+								 @RequestParam("new_password") String new_password ) {
 		System.out.println("password"+password);
+		System.out.println("new_password"+new_password);
 		  String userId =(String) session.getAttribute("user");
-		int changePW = hjh.changePW(password,userId);
-		return "view_Hjh/changePW";
+		  System.out.println("userId"+userId);
+		int changePW = hjh.changePW(password,userId,new_password);
+		// userSeq 변수를 받아서 리다이렉트
+		System.out.println("changePW"+changePW);
+		  return "main";
 	}
 	
 

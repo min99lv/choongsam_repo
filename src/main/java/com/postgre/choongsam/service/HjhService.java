@@ -29,13 +29,17 @@ public interface HjhService {
 
 	int updateCountAdmin(User_Info info);
 
-	int changePW(String password,String userId);
+	int changePW(String password,String userId, String new_password);
 
 	Login_Info changepassword(String userId);
 
 	List<Lecture> lectureList(int userSeq);
 
-	List<Course_Registration> sugangStu(int userSeq);
+	List<Course_Registration> sugangStu(Map<String, Object> params);
+
+	int updatePayState(int userSeq, String lctrId);
+
+	int sugangStuTotalCount(int userSeq, String keyword);
 
 
 

@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HjhServiceImpl implements HjhService {
 	private final HjhDao hjhdao;
+	private final BCryptPasswordEncoder passwordEncoder;
+
 
 	@Override
 	public List<User_Info> userList(Map<String, Object> params) {
@@ -95,26 +97,30 @@ public class HjhServiceImpl implements HjhService {
 		return updateCountAdmin;
 	}
 	@Override
-	public int changePW(String password, String user_id) {
+	public int changePW(String password, String user_id, String new_password) {
 	    int changePW = 0;
 
 	    // 로그인 정보 조회 (사용자의 비밀번호를 가져옴)
 	    Login_Info loginInfo = hjhdao.getLoginInfo(user_id);  // 사용자 ID로 DB에서 로그인 정보 조회
-
+	    
 	    System.out.println("로그인 정보: " + loginInfo);
+	    System.out.println("입력한 비밀번호"+password);
+
 
 	    if (loginInfo != null) {
-	        // BCryptPasswordEncoder 객체를 메소드 안에서 생성
-	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	        
 	        
 	        // 입력된 비밀번호와 DB에 저장된 비밀번호를 비교
 	        if (passwordEncoder.matches(password, loginInfo.getPassword())) {
+	        	System.out.println("비밀번호일치");
+
 	            // 비밀번호가 일치하면 새 비밀번호를 암호화
-	            String hashedNewPassword = passwordEncoder.encode(password);  // 새 비밀번호 암호화
+	            String hashedNewPassword = passwordEncoder.encode(new_password);  // 새 비밀번호 암호화
 
 	            // 새 비밀번호를 DB에 업데이트
 	            changePW = hjhdao.changePW(hashedNewPassword, user_id);  // DB 업데이트
-
+	            System.out.println("changePW"+changePW);
+	            System.out.println("changePW"+changePW);
 	        } else {
 	            // 비밀번호가 일치하지 않으면 0 반환
 	            System.out.println("비밀번호가 일치하지 않습니다.");
@@ -142,10 +148,25 @@ public class HjhServiceImpl implements HjhService {
 	}
 
 	@Override
-	public List<Course_Registration> sugangStu(int userSeq) {
-		List<Course_Registration> sugangStu = hjhdao.sugangStu(userSeq);
+	public List<Course_Registration> sugangStu(Map<String, Object> params) {
+		List<Course_Registration> sugangStu = hjhdao.sugangStu(params);
 		System.out.println("서비스"+sugangStu);
 		return sugangStu;
+	}
+
+	@Override
+	public int updatePayState(int userSeq,String lctrId) {
+		int updatePayState = hjhdao.updatePayState(userSeq,lctrId);
+		System.out.println("updatePayState 서비스"+updatePayState);
+		System.out.println("userSeq"+userSeq);
+		System.out.println("lctrId"+lctrId);
+		return updatePayState;
+	}
+
+	@Override
+	public int sugangStuTotalCount(int userSeq, String keyword) {
+		int sugangStuTotalCount = hjhdao.sugangStuTotalCount(userSeq,keyword);
+		return sugangStuTotalCount;
 	}
 
 
