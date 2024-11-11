@@ -49,18 +49,12 @@
             background-color: #f4f6e7;
         }
 
-        /* Link Styling for "상세보기" (View Details) */
-        a.details-link {
-            color: #6d805a;
-            font-weight: bold;
-            text-decoration: none;
+        /* Special styling for full lecture count */
+        td.full {
+            color: red;
         }
 
-        a.details-link:hover {
-            color: #4e623e;
-        }
-
-        /* Pagination Styling */
+        /* Button Styling */
         .pagination {
             margin-top: 20px;
             text-align: center;
@@ -87,6 +81,17 @@
             background-color: #6d805a;
             color: #ffffff;
         }
+
+        /* Link Styling for Apply */
+        a.apply-link {
+            color: #6d805a;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a.apply-link[hidden] {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -99,12 +104,12 @@
                 <th>강의구분명</th>
                 <th>강의명</th>
                 <th>모집인원수</th>
+                <th>신청인원</th>
                 <th>모집 시작일</th>
                 <th>수강료</th>
-                <th>강의상태명</th>
                 <th>개강일</th>
                 <th>총 차시</th>
-                <th>상세보기</th>
+                <th>신청하기</th>
             </tr>
         </thead>
         <tbody>
@@ -115,12 +120,18 @@
                     <td>${lecture.lctr_category}</td>
                     <td>${lecture.lctr_name}</td>
                     <td>${lecture.lctr_count}</td>
+                    <td class="${lecture.lctr_count eq lecture.register_count ? 'full' : ''}">
+                        ${lecture.register_count}
+                    </td>
                     <td>${lecture.rcrt_date}</td>
                     <td>${lecture.lctr_cost}</td>
-                    <td>${lecture.lctr_state}</td>
                     <td>${lecture.lctr_start_date}</td>
                     <td>${lecture.lctr_cntschd}</td>
-                    <td><a href="lectureDetail?lctr_id=${lecture.lctr_id}" class="details-link">상세보기</a></td>
+                    <td>
+                        <a href="courseApplyDetail?lctr_id=${lecture.lctr_id}" 
+                           class="apply-link" 
+                           <c:if test="${lecture.lctr_count eq lecture.register_count}"> hidden</c:if>>신청하기</a>
+                    </td>
                 </tr>
             </c:forEach>
         </tbody>
