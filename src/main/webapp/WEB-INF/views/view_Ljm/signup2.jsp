@@ -23,18 +23,12 @@
         border-bottom: 1px solid #ccc; /* 헤더 아래쪽 경계선 */
     }
 
-    footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: white; /* 배경색 추가 */
-        z-index: 1000; /* 다른 요소보다 위에 위치하도록 */
-        border-top: 1px solid #ccc; /* 푸터 위쪽 경계선 */
-    }
+    footer {	   
+	    padding: 10px 0; /* 푸터 내 패딩 추가 (옵션) */
+	}
 
     .main_container {
-        margin-top: 60px; /* 헤더 높이에 맞게 마진 설정 */
+        margin-top: 120px; /* 헤더 높이에 맞게 마진 설정 */
         
         margin-left: 100px;
         margin-right: 100px;
@@ -462,4 +456,8 @@ function findAddr() {
         <footer>
         </footer>
     </body>
+    
+    <footer>
+        <%@ include file="../footer.jsp" %>
+    </footer>
 </html>

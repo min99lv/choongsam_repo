@@ -79,7 +79,8 @@
 		    WHERE "USER_ID" = #{userId}
 	
 	    	</select>
-				<update id="updateCountAdmin" parameterType="User_Info">
+	    	
+		<update id="updateCountAdmin" parameterType="User_Info">
 			UPDATE public."USER_INFO"
 			    SET   "USER_NAME"= #{user_name},
 			   		  "EMAIL" = #{email},
@@ -88,7 +89,51 @@
 			   		  "BIRTH" = #{birth}
 			    WHERE "USER_ID" = #{user_id}
 		</update>
+		
 
+				
+			<update id="changePW" parameterType="map">
+				UPDATE "LOGIN_INFO" 
+				SET "PASSWORD" = #{new_password}
+				 where "USER_ID" = #{user_id}
+			</update>
+		
+		
+		<select id="lectureList"  resultType="Lecture">
+		    SELECT *
+		    FROM "LECTURE"
+		    WHERE "USER_SEQ" = #{user_seq}
+		</select>
+		
+		<select id="sugangStu" resultType="Course_Registration">
+		    SELECT 
+		        cr.*, 
+		        ui."USER_NAME" AS std_name, 
+		        l."ONOFF" AS ONOFF, 
+		        l."LCTR_NAME" AS LCTR_NAME
+		    FROM "COURSE_REGISTRATION" cr
+		    LEFT JOIN "USER_INFO" ui ON cr."USER_SEQ" = ui."USER_SEQ"
+		    LEFT JOIN "LECTURE" l ON cr."LCTR_ID" = l."LCTR_ID"
+		    WHERE cr."USER_SEQ" = #{userSeq}
+		</select>
+
+		
+		
+		<update id="updatePayState" parameterType="Map">
+		    UPDATE "COURSE_REGISTRATION"
+		    SET 
+		        "PAY_STATE" = 'Y', 
+		        "PAY_DATE" = CURRENT_DATE,
+		        "REG_STATE" =  '2002'
+		    WHERE "USER_SEQ" = #{user_seq}
+		      AND "LCTR_ID" = #{lctr_id};
+		</update>
+
+		<select id="sugangStuTotalCount"   resultType="int">
+		    SELECT count(*)
+		    FROM "COURSE_REGISTRATION"
+		    WHERE "USER_SEQ" = #{user_seq}
+		</select>
 
 
 </mapper> 

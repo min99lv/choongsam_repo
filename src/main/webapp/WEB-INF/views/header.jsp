@@ -63,7 +63,18 @@
         }
        
        #logo{
-       	height: 50px;
+       		height: 50px;
+       }
+       
+       #btnAdminLogin {
+	       	width: 80px;
+	       	height: 18px;
+	       	color: white;
+	       	background-color: #00664F;
+	       	border: 1px solid #00664F;
+	       	font-size: 9px;
+	       	margin-right: 15px;
+	       	border-radius: 2px;
        }
        
        
@@ -72,7 +83,19 @@
 </head>
 <body>
     <div class="header__">
-        <div class="header__color"></div>
+        <div class="header__color" style="text-align: right;">
+          <c:choose>
+          	<c:when test="${empty sessionScope.user}">
+          		<form action="adminLoginForm" method="post">
+		  			<input id="btnAdminLogin" type="submit" value="관리자 로그인">
+		  		</form>
+          	</c:when>
+          	<c:otherwise>
+                    
+            </c:otherwise>
+          </c:choose>
+        	
+        </div>
         <div class="header__nav">
         <div class="header__logo">
         	<a href="/">
@@ -81,23 +104,35 @@
         </div>
         <div class="header__navBar">
             <a href="#">수강신청</a>
-			<c:choose>
-			    <c:when test="${usertype == 1001}">
-			        <a href="/view_Hjh/myPageStd?user=${user}">마이페이지</a>
-			    </c:when>
-			    <c:when test="${usertype == 1002}">
-			        <a href="/view_Hjh/myPageTeacher?user=${user}">마이페이지</a>
-			    </c:when>
-			    <c:when test="${usertype == 1003}">
-			        <a href="/view_Hjh/adminPage?user=${user}">관리자페이지</a>
-			    </c:when>			    
-			    <c:otherwise>
-			        <a href="/view_Ljm/loginForm">마이페이지</a>
-			    </c:otherwise>
-			</c:choose>
+		<c:choose>
+		    <c:when test="${usertype == 1001}">
+		        <a href="/view_Hjh/myPageStd?user=${user}&user_seq=${user_seq}">마이페이지</a>
+		    </c:when>
+		    <c:when test="${usertype == 1002}">
+		        <a href="/view_Hjh/myPageTeacher?user=${user}&user_seq=${user_seq}">마이페이지</a>
+		    </c:when>
+		    <c:when test="${usertype == 1003}">
+		        <a href="/view_Hjh/adminPage?user=${user}&user_seq=${user_seq}">관리자페이지</a>
+		    </c:when>
+		    <c:otherwise>
+		        <a href="/view_Ljm/loginForm?user_seq=${user_seq}">마이페이지</a>
+		    </c:otherwise>
+		</c:choose>
+
 			
             <a href="/api/notice">공지사항</a>
-            <a href="/video-details?videoId=H8BqV91Mhe0&user_seq=user48">문의사항</a>
+            <c:choose>
+			    <c:when test="${usertype == 1001}">
+			         <a href="/asks/new">문의사항</a>문의사항</a>
+			    </c:when>
+			    <c:when test="${usertype == 1002}">
+			         <a href="/asks/new">문의사항</a>문의사항</a>
+			    </c:when>
+			    <c:otherwise>
+			        <a href="/view_Ljm/loginForm">문의사항</a>
+			    </c:otherwise>
+			</c:choose>
+    
         </div>
         
             <!-- 로그인 여부에 따라 버튼 표시 -->

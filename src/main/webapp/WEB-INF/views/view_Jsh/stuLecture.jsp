@@ -10,6 +10,8 @@
 <title>Insert title here</title>
 </head>
 
+<%-- <%@ include file="../myPageNav.jsp" %> --%>
+
 <%@ include file="../myStudyHomeNav.jsp" %>
 <%@ include file="../headerGreen.jsp" %>
 
@@ -233,17 +235,14 @@
 		<div class="infor">
 			<div id="inforText">
 				<span id="lectureName">
-				${lectName }
-			</span>
+					${lectName}
+				</span>
 			<div class="teachName">
 				<span id="teachName">
-					${teacherName } 강사님
+					${teacherName} 강사님
 				</span>
 			</div>
 			</div>
-		</div>
-		<div class="notice">
-			
 		</div>
 	
 		<c:forEach var="conts" items="${contentList}">

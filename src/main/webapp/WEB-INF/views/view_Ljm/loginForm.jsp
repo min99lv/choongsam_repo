@@ -8,8 +8,8 @@
 <style type="text/css">
     body {
         margin: 0;
-        padding: 0;
-        font-family: 'Noto Sans KR', sans-serif;
+	    padding: 0;
+	    font-family: 'Noto Sans KR', sans-serif;
     }
 
     header {
@@ -22,19 +22,8 @@
         border-bottom: 1px solid #ccc; /* 헤더 아래쪽 경계선 */
     }
 
-    footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: white; /* 배경색 추가 */
-        z-index: 1000; /* 다른 요소보다 위에 위치하도록 */
-        border-top: 1px solid #ccc; /* 푸터 위쪽 경계선 */
-    }
-
     .main_container {
-        margin-top: 60px; /* 헤더 높이에 맞게 마진 설정 */
-        margin-bottom: 60px; /* 푸터 높이에 맞게 마진 설정 */
+        margin-top: 140px; /* 헤더 높이에 맞게 마진 설정 */
         margin-left: 100px;
         margin-right: 100px;
         padding: 20px; /* 콘텐츠 여백 */
@@ -76,13 +65,22 @@
 
      }
      
-     #btnLogin, #btnAdminLogin {
+     #btnLogin {
 		width: 250px;
         height: 36px;
         padding: 5px 10px 5px 10px;
         background-color: #00664F;
         color: white;
         border: 1px solid #00664F;
+	}
+	
+	#btnAdminLogin {
+		width: 250px;
+        height: 36px;
+        padding: 5px 10px 5px 10px;
+        background-color: #FFFFFF;
+        color: white;
+        border: 1px solid #FFFFFF;
 	}
 	
 	.errMessage{
@@ -92,9 +90,10 @@
 	}
         
 </style>
-<style type="text/css">
-	
-</style>
+
+<script type="text/javascript">
+
+</script>
 </head>
 <body>
         <header>
@@ -102,8 +101,9 @@
         </header>
         
         <main>
-			
-		<form action="login" method="post" id="myForm">
+		
+		<div>	
+		<form action="login" method="post" id="loginForm">
 		  <div class="main_container">
 		    <h2 style="color: #00664F ">로그인</h2>
 		    <hr style="width: 400px; margin: 0 auto;">
@@ -128,7 +128,7 @@
 		          <input type="text" name="user_id" value="${user_id }" placeholder="아이디">
 		        </p>
 		        <p>
-		          <input type="password" name="password" placeholder="비밀번호">
+		          <input type="password" id="password" name="password" placeholder="비밀번호">
 		        </p>
 		        <p>
 		          <input id="btnLogin" type="submit" value="로그인">
@@ -144,14 +144,10 @@
 		  </form>
 		  <br>
 		  <br>
-		  <br>
-		  <div class="main_container">
-		  <form action="adminLoginForm" method="post">
-		  	<input id="btnAdminLogin" type="submit" value="관리자 로그인">
-		  </form>
+		  <br>		  
 		  </div>
 	</main>
-  <script>
+<script>
     // DOMContentLoaded 이벤트를 사용하여 DOM이 완전히 로드된 후 실행되게 설정
     document.addEventListener('DOMContentLoaded', function() {
       var form = document.getElementById('myForm');
@@ -167,5 +163,12 @@
       });
     });
   </script>
+
 </body>
+		<footer>
+			<div class="adminLoginSection" style="text-align: right; margin-top: 11px;">
+		  
+		  </div>
+            <%@ include file="../footer.jsp" %>
+        </footer>
 </html>
