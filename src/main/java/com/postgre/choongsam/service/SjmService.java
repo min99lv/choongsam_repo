@@ -74,5 +74,11 @@ public interface SjmService {
 
     int countAskMy(Map<String,Object> params);
 
+	int updateNoticeYn(Notice notice);
+
+	int updateNoteRcvrDelYn(Note note);
+
+	int updateNoteSentDelYn(Note note);
+
 }
 

@@ -62,7 +62,7 @@ td {
 	text-align: center;
 	/* 중앙 정렬 */
 	color: #323232;
-	font-size: px;
+	
 	height: 50px;
 }
 
@@ -80,17 +80,18 @@ h1 {
 }
 
 .writeNoticeBtn {
-	width: 200px;
+	width: 150px;
 	height: 50px;
 	background-color: #00664F;
 	border: none;
 	color: white;
+	 font-size: 20px;
 	text-align: center;
-	margin-top: 10px; /* 버튼과 검색 바 간격 */
 	text-decoration: none; /* 링크 스타일 없애기 */
 	display: flex; /* flexbox 사용 */
 	justify-content: center; /* 텍스트 가운데 정렬 */
 	align-items: center; /* 세로 가운데 정렬 */
+	 font-weight: bold;
 }
 
 .pagination_current {
@@ -156,6 +157,58 @@ td a {
 td a:hover {
 	text-decoration: underline;
 }
+.red-text {
+     background-color: red;
+    color: white;
+    border-radius: 10px;
+    margin-right: 10px;
+    display: inline-block; /* 인라인 블록으로 변경하여 박스 형태로 만듬 */
+    padding: 3px 7px; /* 내부 여백을 추가하여 넓히기 */
+    width: auto; /* 자동으로 너비를 조정 (필요에 따라 고정 값으로 변경 가능) */
+    
+}
+
+td.cell-del {
+    width:10%;  /* 번호 셀의 너비 */
+}
+td.cell-no {
+    width:10%;  /* 번호 셀의 너비 */
+}
+
+td.cell-title {
+    width: 40%;  /* 제목 셀의 너비 */
+    text-align: center; /* 텍스트는 가운데 정렬 */
+    padding-left: 100px; /* 왼쪽 패딩을 주어 텍스트 위치를 조정 */
+    padding-right: 100px; /* 오른쪽 패딩을 주어 균형 맞추기 */
+}
+
+td.cell-name {
+    width: 15%;  /* 보낸사람 셀의 너비 */
+}
+td.cell-date {
+    width: 25%;
+}
+.content3{
+			display: flex;
+			 
+			}
+				.activeBtn{
+				width: 100px;
+	            height: 50px;
+	            background-color: #00664F;
+	            border: none;
+	            color: white;
+	            text-align: center;
+	            text-decoration: none; /* 링크 스타일 없애기 */
+	            display: flex; /* flexbox 사용 */
+	            justify-content: center; /* 텍스트 가운데 정렬 */
+	            align-items: center; /* 세로 가운데 정렬 */
+	            font-size: 20px;
+	            font-weight: bold;
+	            margin-left: 20px;
+	    
+				}
+
 </style>
 </head>
 
@@ -167,20 +220,23 @@ td a:hover {
 	<div class="container">
 
 		<div class="contents">
-			<h1>쪽지함</h1>
+			<h1>보낸 쪽지</h1>
 		</div>
 
 		<div class="contents1">
+		<div class="contents2">
 				<div class="manager_Qna_header_search">
-					<select>
-						<option>전체검색</option>
-						<option>제목</option>
-						<option>내용</option>
-					</select> <input type="text" name="keyword" class="keyword" id="keyword">
+				 <input type="text" name="keyword" class="keyword" id="keyword">
 					<button type="submit" class="search_btn">검색</button>
 				</div>
-
+				</div>
+			<div class="content3">
 			<a class="writeNoticeBtn" href="/notes/new">쪽지 보내기</a>
+			<form action="/api/note/delete" method="post" id="deleteForm">
+			<button class="activeBtn" type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">쪽지 삭제</button>
+			</form>
+		
+		</div>
 		</div>
 
 
@@ -188,9 +244,11 @@ td a:hover {
 		<table class="list">
 			<thead>
 				<tr>
+				<th>선택</th>
 					<th>번호</th>
 					<th>제목</th>
 					<th>받은사람</th>
+					<th>보낸날짜</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -278,11 +336,17 @@ td a:hover {
 			notes.forEach((note, index) => {
 				const indexInTable = startIndex - index + 1;  // 각 항목의 번호 계산
 		
+				const checkboxDisabled = note.rcvr_note_yn === 'Y' ? 'disabled' : '';
+				
+				
 				rows += `
 					<tr>
-						<td>\${indexInTable}</td> <!-- 순번 표시 -->
-						<td><a href="/note/\${note.note_sn}">\${note.note_ttl}</a></td> <!-- 제목에 a태그 추가 -->
-						<td>\${note.receiver_name}</td>
+					<td class="cell-del"> <input type="checkbox" name="deleteIds" value="\${note.note_sn}" form="deleteForm" \${checkboxDisabled} 
+                    onclick="if (!this.checked && !note.rcptn_dt) { alert('삭제할 수 없는 항목입니다.'); }"></td>
+					<td class="cell-no">\${indexInTable}</td> <!-- 순번 표시 -->
+						<td class="cell-title"><a href="/note/\${note.note_sn}">\${note.note_ttl}</a></td> <!-- 제목에 a태그 추가 -->
+						<td class="cell-name">\${note.receiver_name}</td>
+						<td class="cell-date">\${note.dsptch_dt}</td>
 					</tr>
 				`;
 			});
@@ -320,6 +384,22 @@ td a:hover {
 		
 			paginationContainer.innerHTML = paginationHtml;
 		}
+		
+		
+		function submitDeleteForm() {
+		    // 체크된 항목이 없으면 경고창 표시
+		    if (document.querySelectorAll('#deleteForm input[type="checkbox"]:checked').length === 0) {
+		        alert("삭제할 쪽지를 선택해주세요.");
+		        return;
+		    }
+		    
+		    
+		    
+		    // 폼 제출
+		    document.getElementById('deleteForm').submit();
+		}
+		
+		
 		</script>
 		
 

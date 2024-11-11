@@ -201,7 +201,47 @@ public class SjmController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
+	
+	// NOTE - 공지사항 노출 여부
+	@PostMapping(value = "/api/notice/delete")
+	@ResponseBody
+	public ResponseEntity<String> updateNoticeYn(@RequestParam List<Integer> deleteIds, HttpSession session){
 
+		System.out.println("deleteIds--->"+deleteIds);
+		
+		int result = 0;
+		
+		for(int noticeId : deleteIds) {
+			Notice notice = new Notice();
+			notice.setNtc_mttr_sn(noticeId);
+			notice.setNtc_mttr_yn("N");
+			result += ss.updateNoticeYn(notice); // 각 업데이트 결과를 result에 누적
+		}
+		
+		
+		
+		if (result > 0) {
+			// 답변 작성이 성공했을 때
+			String alertScript = "<script type='text/javascript'>"
+					+ "alert('공지사항 삭제 완료되었습니다!');"
+					+ "window.location.href = '/api/notice'" 
+					+ "</script>";
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+					.body(alertScript);
+		} else {
+			// 실패 시 메시지와 리디렉션
+			String alertScript = "<script type='text/javascript'>"
+					+ "alert('공지사항 삭제 실패했습니다!');"
+					+ "window.location.href = '/api/notice'" 
+					+ "</script>";
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+					.body(alertScript);
+		}
+	}
+	
+	
 	// ##################
 	// ##################
 	// ##################
@@ -431,6 +471,83 @@ public class SjmController {
 		List<Note> note = ss.getSameLeceture(lctr_id);
 		return ResponseEntity.ok(note);
 	}
+	
+	@PostMapping(value="/api/note/delete")
+	@ResponseBody
+	public ResponseEntity<String> updateNoteDelYn(@RequestParam List<Integer> deleteIds, HttpSession session){
+		
+		System.out.println("쪽지를 삭제해보자  --> " +deleteIds );
+		
+		
+		 Integer userSeq = (Integer) session.getAttribute("user_seq");
+		    
+		    // 세션에 user_seq가 없으면 처리 중지
+		    if (userSeq == null) {
+		        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		                .body("<script type='text/javascript'>alert('세션이 만료되었습니다. 로그인 해주세요.'); window.location.href='/login';</script>");
+		    }
+		
+		int result = 0;
+		// 받은 사람은 읽은 쪽지만 삭제 가능함 -> 이건 뷰에서 해줌 
+		// 그럼 읽은 쪽지를 가져옴 
+		// 받은 사람 이름과 로그인 세션이름이 같으면 수신자 쪽 삭제 여부
+		for(int noteId  : deleteIds) {
+			Note note = ss.getNote(noteId);
+			
+			
+			
+			// 받은 쪽지 삭제
+			if( note.getRcvr_seq() == userSeq) {
+	        	note.setNote_sn(noteId);
+	        	note.setRcvr_note_yn("N");
+				result = ss.updateNoteRcvrDelYn(note);
+				if (result > 0) {
+	                System.out.println("쪽지 ID " + noteId + "의 수신자 삭제 여부가 업데이트되었습니다.");
+	            }
+			}
+			// 보낸 쪽지 삭제 (로그인한 사용자가 발신자일 경우)
+	        else if (note.getSndpty_seq() == userSeq) {
+	        	note.setNote_sn(noteId);
+	        	note.setSndpty_note_yn("N");
+	            result = ss.updateNoteSentDelYn(note);
+	            if (result > 0) {
+	                System.out.println("쪽지 ID " + noteId + "의 발신자 삭제 여부가 업데이트되었습니다.");
+	            }
+	        } else {
+	            System.out.println("쪽지 ID " + noteId + "는 현재 사용자와 관련이 없습니다.");
+	        }
+			
+			
+			
+	    }
+		
+		if (result > 0) {
+			// 답변 작성이 성공했을 때
+			String alertScript = "<script type='text/javascript'>"
+					+ "alert('쪽지 삭제 완료되었습니다!');"
+					+ "window.location.href = '/notes/sent'" 
+					+ "</script>";
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+					.body(alertScript);
+		} else {
+			// 실패 시 메시지와 리디렉션
+			String alertScript = "<script type='text/javascript'>"
+					+ "alert('쪽지 삭제 실패했습니다!');"
+					+ "window.location.href = '/notes/sent'" 
+					+ "</script>";
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+					.body(alertScript);
+		}
+
+			
+			
+		}
+		
+	
+		
+
 	
 
 
