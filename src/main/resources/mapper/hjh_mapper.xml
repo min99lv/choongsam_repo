@@ -90,6 +90,7 @@
 			    WHERE "USER_ID" = #{user_id}
 		</update>
 		
+
 				
 			<update id="changePW" parameterType="map">
 				UPDATE "LOGIN_INFO" 
@@ -134,7 +135,7 @@
 		    WHERE "USER_SEQ" = #{user_seq}
 		</select>
 
-		
+
 </mapper> 
 
 

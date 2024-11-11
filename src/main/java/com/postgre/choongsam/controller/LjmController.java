@@ -51,6 +51,7 @@ public class LjmController {
 		    System.out.println("user_id -> " + user_id);
 		    Login_Info login_info = ljs.login(user_id, password); // 로그인 정보 조회
 		    User_Info user_Info = null;
+		   
 		    
 		    // 로그인 실패
 		    if (login_info == null) {
