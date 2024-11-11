@@ -89,8 +89,8 @@
         <li onclick="toggleSubMenu('userInfoSubmenu')">회원정보</li>
         <ul class="submenu" id="userInfoSubmenu">
             <li style="font-size: 13px;" onclick="location.href='updateProfileteacher?user=${user}'">개인정보 수정</li>
-            <li style="font-size: 13px;">비밀번호 변경</li>
-                        <li style="font-size: 13px;" onclick="location.href='deleteTeacher?user=${user}'">회원탈퇴</li>
+            <li style="font-size: 13px;" onclick="location.href='changePW?user=${user}'">비밀번호 변경</li>
+            <li style="font-size: 13px;" onclick="location.href='deleteTeacher?user=${user}'">회원탈퇴</li>
         </ul>
        <li onclick="toggleSubMenu('inquirySubmenu')">1:1 문의</li>
         <ul class="submenu" id="inquirySubmenu">
