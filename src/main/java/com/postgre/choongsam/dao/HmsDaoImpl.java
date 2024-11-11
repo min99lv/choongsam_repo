@@ -1,6 +1,7 @@
 package com.postgre.choongsam.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.hibernate.internal.build.AllowSysOut;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.postgre.choongsam.dto.Class_Bookmark;
 import com.postgre.choongsam.dto.Class_Schedule;
+import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Lecture_Video;
 import com.postgre.choongsam.dto.Syllabus;
 
@@ -77,12 +79,12 @@ public class HmsDaoImpl implements HmsDao {
 	
 	//syllabus테이블에서 videoId로 lctr_정보 가져오기
 	@Override
-	public Syllabus findLctrInfo(String videoId) {
+	public Syllabus findLctrInfo(String videoId, int lctr_no) {
 		System.out.println("msDao findLctrInfo start...");
 		System.out.println("msDao findLctrInfo videoId..."+videoId);
 		Syllabus info = null;
 		try {
-			info = session.selectOne("com.postgre.choongsam.mapper.HMS.findLctrInfo", videoId);
+			info = session.selectOne("com.postgre.choongsam.mapper.HMS.findLctrInfo", Map.of("videoId",videoId,"lctr_no",lctr_no));
 		} catch (Exception e) {
 			System.out.println("msDao findLctrInfo error->"+e.getMessage());
 			e.printStackTrace();
@@ -92,11 +94,11 @@ public class HmsDaoImpl implements HmsDao {
 
 	//max값
 	@Override
-	public long findCurrentMax(String videoId) {
+	public long findCurrentMax(String videoId, int user_seq, int lctr_no) {
 		System.out.println("msDao findCurrentMax start..");
 		int currentMax = 0;
 		try {
-			currentMax = session.selectOne("com.postgre.choongsam.mapper.HMS.CurrentMax",videoId);
+			currentMax = session.selectOne("com.postgre.choongsam.mapper.HMS.CurrentMax",Map.of("videoId",videoId,"user_seq",user_seq,"lctr_no",lctr_no));
 		} catch (Exception e) {
 			System.out.println("msDao findCurrentMax error->"+e.getMessage());
 			e.printStackTrace();
@@ -106,12 +108,12 @@ public class HmsDaoImpl implements HmsDao {
 
 	//final
 	@Override
-	public int watchedFinalTime(String videoId) {
+	public int watchedFinalTime(String videoId, int user_seq, int lctr_no) {
 		System.out.println("msDao watchedFinalTime start..");
 		System.out.println("msDao watchedFinalTime videoId.."+videoId);
 		int result = 0;
 		try {
-			result = session.selectOne("com.postgre.choongsam.mapper.HMS.finalTime",videoId);
+			result = session.selectOne("com.postgre.choongsam.mapper.HMS.finalTime",Map.of("videoId",videoId,"user_seq",user_seq,"lctr_no",lctr_no));
 		} catch (Exception e) {
 			System.out.println("msDao watchedFinalTime error->"+e.getMessage());
 		}
@@ -120,18 +122,18 @@ public class HmsDaoImpl implements HmsDao {
 
 	//파일 다운로드
 	@Override
-	public String getFilePath(String filename) {
+	public String getFilePath(String conts_id) {
 	    System.out.println("msDao getFilePath start...");
-	    System.out.println("msDao getFilePath filename..."+filename);
+	    System.out.println("msDao getFilePath filename..." + conts_id);
 	    String result = null;
 	    try {
-	        System.out.println("filename: " + filename);  // filename 출력
-	        result = session.selectOne("com.postgre.choongsam.mapper.HMS.FileDown", filename);
+	        System.out.println("filename: " + conts_id);  // filename 출력
+	        result = session.selectOne("com.postgre.choongsam.mapper.HMS.FileDown", conts_id);
 	        
-	        if (result == null) {
-	            System.out.println("No file path found for filename: " + filename);
+	        if (result == null || result.trim().isEmpty()) {
+	            System.out.println("No file path found for filename: " + conts_id);  // 경로가 없을 경우 로그
 	        } else {
-	            System.out.println("File path retrieved: " + result);
+	            System.out.println("File path retrieved: " + result);  // 경로가 있을 경우 로그
 	        }
 	    } catch (Exception e) {
 	        System.out.println("msDao getFilePath error->" + e.getMessage());
@@ -140,6 +142,7 @@ public class HmsDaoImpl implements HmsDao {
 	    
 	    return result;
 	}
+
 
 	//주소가져오기
 	@Override
@@ -195,6 +198,19 @@ public class HmsDaoImpl implements HmsDao {
 			System.out.println("msDao getBookmark error->"+e.getMessage());
 		}
 		return bookmark;
+	}
+
+	@Override
+	public File_Group getfileGoGo(String conts_id) {
+		System.out.println("msDao getfilegogo start..");
+		System.out.println("msDao getfilegogo conts_id.."+conts_id);
+		File_Group file = null;
+		try {
+			file = session.selectOne("com.postgre.choongsam.mapper.HMS.getfilegogo",conts_id);
+		} catch (Exception e) {
+			System.out.println("msDao getfilegogo error->"+e.getMessage());
+		}
+		return file;
 	}
 
 	

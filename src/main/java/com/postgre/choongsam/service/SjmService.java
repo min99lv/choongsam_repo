@@ -26,15 +26,11 @@ public interface SjmService {
 	int noticeCreate(Notice notice, MultipartFile[] files,HttpServletRequest request);
 	
 	
-// ##################
-// ##################
-// ##################
+
 // ##################
 // 쪽지 ------------------------------------------------------------------
 // ##################
-// ##################
-// ##################
-// ##################
+
 
 	int countNote(Map<String, Object> params);
 	
@@ -50,6 +46,10 @@ public interface SjmService {
 
 	List<Note> getSameLeceture(String lectureId);
 
+// ##################
+// 문의사항 ------------------------------------------------------------------
+// ##################
+
 	int postAsks(Ask ask);
 
 	List<Ask> getAsksMy(Map<String, Object> params);
@@ -60,8 +60,25 @@ public interface SjmService {
 
 	List<File_Group> getFilesByGroup(int file_group);
 
-	int getNoteSendTotal(String keyword);
+	int getNoteSendTotal(Map<String, Object> params);
 
-	int getNoteRcvrTotal(String keyword);
+	int getNoteRcvrTotal(Map<String, Object> params);
+
+	int updateReceiveDate(int note_sn);
+
+	int replyUpdateAsks(Ask ask);
+
+	List<Ask> getAsks(Map<String,Object> params);
+
+	int countAsk(Map<String,Object> params);
+
+    int countAskMy(Map<String,Object> params);
+
+	int updateNoticeYn(Notice notice);
+
+	int updateNoteRcvrDelYn(Note note);
+
+	int updateNoteSentDelYn(Note note);
 
 }
+

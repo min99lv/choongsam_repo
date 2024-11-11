@@ -108,12 +108,12 @@
 		    CASE 
 		        WHEN TO_DATE(lv."VIEWING_PERIOD", 'YYYY-MM-DD') &lt; CURRENT_DATE THEN 
 		            CASE 
-		                WHEN cs."CONTS_PRGRT" = 100 THEN '출석'
+		                WHEN cs."CONTS_PRGRT" >= 95 THEN '출석'
 		                ELSE '결석'
 		            END
 		        WHEN TO_DATE(lv."VIEWING_PERIOD", 'YYYY-MM-DD') > CURRENT_DATE THEN 
 		            CASE 
-		                WHEN cs."CONTS_PRGRT" = 100 THEN '출석'
+		                WHEN cs."CONTS_PRGRT" >= 95 THEN '출석'
 		                ELSE '미수강'
 		            END
 		        ELSE '결석'

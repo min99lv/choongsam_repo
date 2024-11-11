@@ -23,5 +23,11 @@ public interface AtrService {
 
 	List<Classroom> getAllClassRoom();
 
+	void approveCourse(String parameter);
+
+	List<Lecture> getRecruitLectureList();
+
+	void applyCourse(String parameter, String parameter2);
+
 
 }

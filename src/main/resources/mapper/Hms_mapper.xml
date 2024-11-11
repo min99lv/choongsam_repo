@@ -11,8 +11,6 @@
 	<update id="saveWatchTime" parameterType="com.postgre.choongsam.dto.Class_Schedule">
 		UPDATE "CLASS_SCHEDULE" 
 		SET
-			"LCTR_NO" = SL."LCTR_NO",
-			"LCTR_ID" = SL."LCTR_ID",
 			"CONTS_FINAL" = #{conts_final},
 			"CONTS_MAX" = #{conts_max},
 			"CONTS_PRGRT" = #{conts_prgrt}
@@ -20,53 +18,67 @@
 		WHERE "CLASS_SCHEDULE"."LCTR_NO" = SL."LCTR_NO"
 		AND "CLASS_SCHEDULE"."CONTS_ID" = (	SELECT "CONTS_ID"
 											FROM "LECTURE_VIDEO"
-											WHERE "VDO_URL_ADDR" = #{conts_id})
+											WHERE "VDO_URL_ADDR" = #{conts_id}
+											AND "LCTR_NO"=#{lctr_no})
+		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}
 	</update>
 	
 	<update id="noMaxUpdate" parameterType="com.postgre.choongsam.dto.Class_Schedule">
 		UPDATE "CLASS_SCHEDULE" 
 		SET
-			"LCTR_NO" = SL."LCTR_NO",
-			"LCTR_ID" = SL."LCTR_ID",
 			"CONTS_FINAL" = #{conts_final},
 			"CONTS_PRGRT" = #{conts_prgrt}
 		FROM "SYLLABUS" SL
 		WHERE "CLASS_SCHEDULE"."LCTR_NO" = SL."LCTR_NO"
 		AND "CLASS_SCHEDULE"."CONTS_ID" = (	SELECT "CONTS_ID"
 											FROM "LECTURE_VIDEO"
-											WHERE "VDO_URL_ADDR" = #{conts_id})
+											WHERE "VDO_URL_ADDR" = #{conts_id}
+											AND "LCTR_NO"=#{lctr_no})
+		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}
 	</update>
 	
-	<select id="findLctrInfo" parameterType="String" resultType="SYLLABUS">
+	<select id="findLctrInfo" parameterType="map" resultType="SYLLABUS">
 		SELECT *
 		FROM "SYLLABUS"
 		WHERE "CONTS_ID" = (SELECT "CONTS_ID"
 							FROM "LECTURE_VIDEO"
-							WHERE "VDO_URL_ADDR" = #{videoId})
+							WHERE "VDO_URL_ADDR" = #{videoId}
+							AND "LCTR_NO"=#{lctr_no})
 	</select>
 	
 
 	
-	<select id="CurrentMax" parameterType="String" resultType="int">
+	<select id="CurrentMax" parameterType="map" resultType="int">
 		SELECT "CONTS_MAX"
 		FROM "CLASS_SCHEDULE"
 		WHERE "CONTS_ID" = (SELECT "CONTS_ID"
 							FROM "LECTURE_VIDEO"
-							WHERE "VDO_URL_ADDR" = #{videoId})
+							WHERE "VDO_URL_ADDR" = #{videoId}
+							AND "LCTR_NO"=#{lctr_no})
+		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}
+							
+							
+							
 	</select>
 	
-	<select id="finalTime" parameterType="String" resultType="int">
+	<select id="finalTime" parameterType="map" resultType="int">
 		SELECT "CONTS_FINAL"
 		FROM "CLASS_SCHEDULE"
 		WHERE "CONTS_ID" = (SELECT "CONTS_ID"
 							FROM "LECTURE_VIDEO"
-							WHERE "VDO_URL_ADDR" = #{videoId})
+							WHERE "VDO_URL_ADDR" = #{videoId}
+							AND "LCTR_NO"=#{lctr_no})
+		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}
 	</select>
 	
 	<select id="FileDown" parameterType="String" resultType="String">
 		SELECT "FILE_PATH_NM"
 		FROM "FILE_GROUP"
-		WHERE "FILE_NM"= #{filename}
+		WHERE "FILE_GROUP" = (
+								SELECT "FILE_GROUP"
+								FROM "LECTURE_VIDEO"
+								WHERE "CONTS_ID"= #{conts_id}
+								)
 	</select>
 	
 	<select id="getURL" parameterType="String" resultType="String">
@@ -81,6 +93,10 @@
 		WHERE "CONTS_ID"=#{conts_id}
 	</select>
 	
+	
+	
+	
+	
 	<select id="getfilename" parameterType="String" resultType="String">
 		SELECT "FILE_NM"
 		FROM "FILE_GROUP"
@@ -89,6 +105,14 @@
 							WHERE "CONTS_ID"=#{conts_id})
 	</select>
 	
+	<select id="getfilegogo" parameterType="String" resultType="File_Group">
+		SELECT *
+		FROM "FILE_GROUP"
+		WHERE "FILE_GROUP"=(SELECT "FILE_GROUP"
+							FROM "LECTURE_VIDEO"
+							WHERE "CONTS_ID"=#{conts_id})
+	
+	</select>
 	
 
 

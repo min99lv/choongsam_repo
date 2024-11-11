@@ -327,6 +327,8 @@ public class JshDaoImpl implements JshDao {
 		info.put("user_seq", user_seqInt);
 		info.put("lctr_id", lctr_id);
 		
+		System.out.println("------------------------------------lctr_id"+lctr_id);
+		
 		
 		try {
 			result = session.insert("insertSche", info);
