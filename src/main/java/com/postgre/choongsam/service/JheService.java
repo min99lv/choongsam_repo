@@ -26,13 +26,17 @@ public interface JheService {
 	List<Attendance_Check> profAttMain(String lctr_id);
 	List<Attendance_Check> getStudAtt(String lctr_id, int lctr_no);
 	List<Attendance_Check> getOnlineStudAtt(String lctr_id);
-	int				updatesubmitHomework(Homework homework, int user_seq);
-	void			updateStudAtt(String lctr_id, int lctr_no, List<Integer> user_seq, Map<String, String> att_status, int onoff);
+	int				updatesubmitHomework(int user_seq, int asmt_no);
+	void			insertStudAtt(String lctr_id, int lctr_no, List<Integer> user_seq, Map<String, String> att_status, int onoff);
 	List<Lecture>	studLecture(int user_seq);
 	List<Lecture>	studLectureMain(String lctr_id);
 	List<Attendance_Check> studAtt(String lctr_id, int user_seq);
 	List<Attendance_Check> profAttDetail(String lctr_id, int lctr_no);
-	List<Grade>		profGrade(String lctr_id);
-	List<Grade> getInsertGrade(String lctr_id);
-	void			insertGrade(String lctr_id, List<Integer> user_seq);
+	List<Grade>		profGrade(String lctr_id, int user_seq);
+	Grade			getupdateGrade(Integer userSeq, String lctr_id);
+	void			updateGrade(Integer userSeq, String lctr_id, int atndcScr, int asmtScr, int lastScr);
+	List<Grade>		studGrade(int user_seq);
+	List<Grade>		studGradeDetail(String lctr_id, int user_seq);
+	Integer			getProfSeq(String lctr_id);
+	String			getProfName(Integer rcvrSeq);
 }
