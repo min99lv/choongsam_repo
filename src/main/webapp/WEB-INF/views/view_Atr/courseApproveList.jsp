@@ -1,27 +1,71 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>Lecture List</title>
     <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f3;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #3e4a2c;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Table Styling */
         table {
-            width: 100%;
+            width: 90%;
             border-collapse: collapse;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
         }
+
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
+            padding: 12px;
+            font-size: 15px;
             text-align: left;
         }
+
+        th {
+            background-color: #78866b;
+            color: #ffffff;
+        }
+
+        td {
+            background-color: #f4f6e7;
+        }
+
+        /* Link Styling for "상세보기" (View Details) */
+        a.details-link {
+            color: #6d805a;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a.details-link:hover {
+            color: #4e623e;
+        }
+
+        /* Pagination Styling */
         .pagination {
             margin-top: 20px;
             text-align: center;
         }
+
         .pagination a {
             display: inline-block;
             padding: 8px 16px;
@@ -29,10 +73,19 @@
             border: 1px solid #ddd;
             text-decoration: none;
             color: #333;
+            border-radius: 5px;
+            background-color: #f4f6e7;
         }
+
         .pagination a.active {
             font-weight: bold;
-            background-color: #f2f2f2;
+            background-color: #78866b;
+            color: #ffffff;
+        }
+
+        .pagination a:hover {
+            background-color: #6d805a;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -57,7 +110,7 @@
         <tbody>
             <c:forEach var="lecture" items="${lectureList}">
                 <tr>
-                    <td>${lecture.user_seq}</td>
+                    <td>${lecture.user_name}</td>
                     <td>${lecture.onoff}</td>
                     <td>${lecture.lctr_category}</td>
                     <td>${lecture.lctr_name}</td>
@@ -67,7 +120,7 @@
                     <td>${lecture.lctr_state}</td>
                     <td>${lecture.lctr_start_date}</td>
                     <td>${lecture.lctr_cntschd}</td>
-                    <td><a href="lectureDetail?lctr_id=${lecture.lctr_id}">상세보기</a></td>
+                    <td><a href="lectureDetail?lctr_id=${lecture.lctr_id}" class="details-link">상세보기</a></td>
                 </tr>
             </c:forEach>
         </tbody>

@@ -47,25 +47,26 @@
 	        <div>
 	            <label for="user_id">아이디 (사용자 ID):</label>
 	            <input type="hidden" id="user" name="user_id" value="${user_id}" readonly />
+	           
 	            <p>아이디: ${user_id}</p>  <!-- 사용자 아이디 출력 -->
 	        </div>
 	
-	        <!-- 기존 비밀번호 입력 필드 -->
+	        <
 	        <div>
 	            <label for="old_password">현재 비밀번호:</label>
-	            <input type="password" id="old_password" name="old_password" required />
+	            <input type="text" id="old_password" name="password" required />
 	        </div>
 	
 	        <!-- 새 비밀번호 입력 필드 -->
 	        <div>
 	            <label for="new_password">새 비밀번호:</label>
-	            <input type="password" id="new_password" name="new_password" required />
+	            <input type="text" id="new_password" name="new_password" required />
 	        </div>
 	
 	        <!-- 새 비밀번호 확인 입력 필드 -->
 	        <div>
 	            <label for="confirm_password">새 비밀번호 확인:</label>
-	            <input type="password" id="confirm_password" name="confirm_password" required />
+	            <input type="text" id="confirm_password" name="confirm_password" required />
 	        </div>
 	
 	        <div>
@@ -73,7 +74,6 @@
 	        </div>
 	    </form>
 
-	    <!-- 실패 메시지 또는 성공 메시지 출력 -->
 	    <p style="color: red;">${msg}</p>
 	</div>
 

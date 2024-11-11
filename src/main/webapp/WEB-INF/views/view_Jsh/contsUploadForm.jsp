@@ -13,120 +13,7 @@
 
     <meta charset="UTF-8">
     <title>Insert title here</title>
-<<<<<<< HEAD
-    <style>
-        #listBody {
-            width: 1560px;
-            height: 100%;
-            background-color: #F1F1F1;
-            float: right;
-        }
-        
-        input {
-        	border: solid 2px #00664F;
-        	height: 20px;
-        	width: 800px;
-        }
-
-        .form {
-            width: 1360px;
-            height: auto;
-            background-color: white;
-            margin: 0 auto;
-        }
-
-        #inserts {
-            padding: 15px;
-            vertical-align: middle;
-        }
-
-        #chapter {
-            background-color: white;
-            border: 2px #00664F solid;
-            margin-bottom: 10px; /* 챕터 사이의 간격 추가 */
-            padding: 10px;
-            width: 1000px;
-        }
-        
-        .chapterTitle {
-            margin-bottom: 50px;
-        }
-
-        .video {
-            margin-top: 20px;
-            display: none; /* 처음에 비디오 div를 숨깁니다. */
-            text-align: center;
-        }
-        
-        .oneLine {
-      		display: flex;
-      		margin-bottom: 10px;
-      	}
-        
-      	.twoLine {
-      		display: flex;
-      		margin-bottom: 10px;
-      	}
-      	
-      	.text {
-      		font-size: 20px;
-      	}
-      	
-      	.tb {
-      		width: 200px;
-      	}
-      	
-      	.tbViewing {
-      		width: 150px;
-      	}
-      	
-      	
-      	.infor {
-		height: 130px;
-		text-align: center;
-		background-color: white;
-	}
-	
-	#lectureName {
-		width: 1560px;
-		height: 119px;
-		text-align: center;
-		font-size: 45px;
-	}
-	
-	.teachName {
-		margin-top: 20px;
-	}
-	
-	#teachName {
-		font-size: 25px;
-		color: #A6A6A6;
-		margin-bottom: 20px;
-	}
-	
-	.chapterTime {
-		margin-top: 30px;
-	}
-	
-	#subBut {
-		width:246px;
-		height: 50px;
-		background-color: #00664F;
-		color: white;
-	    display: flex;            /* Flexbox 사용 */
-	    align-items: center;     /* 수직 중앙 정렬 */
-   		justify-content: center;  /* 수평 중앙 정렬 */
-		border-radius: 8px;
-		font-size: 25px;
-		border: none;
-		float: right;
-		margin-right: 50px;
-	}
-        
-    </style>
-=======
     
->>>>>>> develop
     
     <script src="https://www.youtube.com/iframe_api"></script>
     <script type="text/javascript">
@@ -247,12 +134,44 @@
 		    }
 		}
         
+        
+     // 챕터 시간을 초로 변환하는 함수 (컨트롤러에 전송되지는 않음)
+        function getSecondsFromTimeString(timeString) {
+            let totalSeconds = null;
+
+            if (timeString) {
+                const parts = timeString.split(":");
+                if (parts.length === 3) {
+                    const hours = parseInt(parts[0], 10);
+                    const minutes = parseInt(parts[1], 10);
+                    const seconds = parseInt(parts[2], 10);
+                    totalSeconds = hours * 3600 + minutes * 60 + seconds;
+                }
+            }
+            return totalSeconds;
+        }
+        
+        
         function submitChk() {
             // Check if the hidden input contsTest has a value of 1
             const contsTestValue = document.getElementById('contsTest').value;
             if (contsTestValue !== "1") {
                 alert('영상 확인 버튼을 눌러주세요');
                 return false;
+            }
+         // 영상 전체 길이
+            const videoLength = parseInt(document.getElementById('vdo_length').value, 10);
+
+            // 챕터 시간 입력값 확인 및 비교
+            const chapterInputs = document.querySelectorAll('input[name^="chp_str"]');
+            for (const input of chapterInputs) {
+                const chapterTimeString = input.value.trim();
+                const chapterSeconds = getSecondsFromTimeString(chapterTimeString);
+
+                if (chapterSeconds !== null && chapterSeconds > videoLength) {
+                    alert('챕터 시간이 영상 전체 길이를 초과할 수 없습니다.');
+                    return false;
+                }
             }
             return true;
         }
@@ -264,17 +183,6 @@
 <div id="listBody">
 
 	<div class="infor">
-<<<<<<< HEAD
-		<span id="lectureName">
-			${lectName }
-		</span>
-		<div class="teachName">
-			<span id="teachName">
-				${teacherName } 강사님
-			</span>
-		</div>
-	</div>
-=======
 			<div id="inforText">
 				<span id="lectureName">
 				${lectName }
@@ -286,7 +194,6 @@
 			</div>
 			</div>
 		</div>
->>>>>>> develop
 
     <form action="/contsUpload" class="form" method="post" enctype="multipart/form-data" onsubmit="return submitChk()">
         <div id="inserts">
@@ -297,9 +204,6 @@
 
             <div class="oneLine">
                 <div class="tb"><label class="text">차시</label></div>
-<<<<<<< HEAD
-                <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
-=======
                 <c:choose>
 		            <c:when test="${max_lctr_no == 1}">
 		               <input type="text" name="lctr_no" value="${max_lctr_no }" readonly="readonly">
@@ -309,7 +213,6 @@
 		            </c:otherwise>
 		        </c:choose>
                 
->>>>>>> develop
             </div>
             
             <!-- <div class="oneLine">
@@ -378,17 +281,11 @@
                 </div>
             </div>
             
-<<<<<<< HEAD
-            <div class="file">
-                <div class="tb"><label class="text">첨부파일</label></div>
-                <input type="file" name="file">
-=======
             <div class="oneLine">
             	<div class="file">
 	                <div class="tb"><label class="text">첨부파일</label></div>
 	                <input type="file" name="file">
 	            </div>
->>>>>>> develop
             </div>
             
             
