@@ -24,12 +24,11 @@
     }
 
     footer {	  
-    	margin-top: 240px; 
-	    padding: 10px 0; /* 푸터 내 패딩 추가 (옵션) */
+    	margin-top: 165px; 
 	}
 
     .main_container {
-        margin-top: 60px; /* 헤더 높이에 맞게 마진 설정 */
+        margin-top: 140px; /* 헤더 높이에 맞게 마진 설정 */
         margin-bottom: 60px; /* 푸터 높이에 맞게 마진 설정 */
         margin-left: 100px;
         margin-right: 100px;
@@ -92,7 +91,7 @@
         <main>
 			
 		  <form action="findIdResult" method="post">
-	        <div class="main_container">
+	        <div class="main_container" >
 			<h2 style="color: #00664F ">아이디 찾기</h2>
 			<hr style="width: 400px; margin: 0 auto;">
 			<br>

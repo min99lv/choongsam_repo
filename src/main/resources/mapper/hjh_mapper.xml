@@ -88,9 +88,12 @@
 			   		  "BIRTH" = #{birth}
 			    WHERE "USER_ID" = #{user_id}
 		</update>
-
-
-
+		
+		<update id="updatePw" parameterType="String">
+			UPDATE "LOGIN_INFO"
+			SET "PASSWORD" = #{password}
+			WHERE "USER_ID" = #{userId}
+		</update>
 </mapper> 
 
 

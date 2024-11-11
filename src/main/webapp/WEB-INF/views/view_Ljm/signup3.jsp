@@ -28,7 +28,7 @@
 	}
 
     .main_container {
-        margin-top: 60px; /* 헤더 높이에 맞게 마진 설정 */
+        margin-top: 140px; /* 헤더 높이에 맞게 마진 설정 */
         margin-bottom: 60px; /* 푸터 높이에 맞게 마진 설정 */
         margin-left: 100px;
         margin-right: 100px;
