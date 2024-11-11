@@ -412,8 +412,7 @@ public class HjhController {
 	    // 비밀번호 변경 페이지를 반환
 	    return "view_Hjh/changePW";
 	}
-
-
+	
 }
 
 
