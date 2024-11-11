@@ -42,7 +42,7 @@
     <button type="submit">과제</button>
 </form>
 
-<form action="/Jhe/profGradeList" method="get">
+<form action="/Jhe/studGrade" method="get">
     <input type="hidden" name="LCTR_ID" value="${LCTR_ID}" />
     <button type="submit">성적</button>
 </form>
