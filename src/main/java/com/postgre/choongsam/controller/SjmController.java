@@ -462,13 +462,23 @@ public class SjmController {
 		List<Lecture> lectures = ss.getMyLectures(userSeq);
 		return ResponseEntity.ok(lectures);
 	}
-
+	
+	
+	
+	
+	// NOTE - 같이 듣는 사람들 
 	@GetMapping(value = "/api/lectures/recipients")
 	@ResponseBody
-	public ResponseEntity<?> getMyLectures(@RequestParam("lctr_id") String lctr_id) {
+	public ResponseEntity<?> getSameLeceture(@RequestParam("lctr_id") String lctr_id, HttpSession session) {
 		System.out.println("내가 듣는 강의 목록 불러오기 같은 강의를 듣는 사람들->" + lctr_id);
-
-		List<Note> note = ss.getSameLeceture(lctr_id);
+		// params 초기화
+	    Map<String, Object> params = new HashMap<>();  
+	    
+		int user_seq = (Integer) session.getAttribute("user_seq");
+		params.put("user_seq", user_seq);
+		params.put("lctr_id", lctr_id);
+		System.out.println("params--->" + params);
+		List<Note> note = ss.getSameLeceture(params);
 		return ResponseEntity.ok(note);
 	}
 	

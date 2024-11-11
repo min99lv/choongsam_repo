@@ -277,7 +277,18 @@ window.onclick = function (event) {
             </tr>
 		</table>
             <button onclick="history.back();">목록</button>
-            <button onclick="openModal()">답변등록</button>
+            
+            <c:choose>
+    <c:when test="${sessionScope.usertype == 1003}">
+        <!-- userType이 1003일 경우 버튼을 보여줍니다 -->
+        <button onclick="openModal()">답변등록</button>
+    </c:when>
+    <c:otherwise>
+        <!-- userType이 1003이 아닐 경우 버튼은 보이지 않습니다 -->
+        <!-- 아무 것도 출력하지 않음 -->
+    </c:otherwise>
+</c:choose>
+            
     </div>
 			
             <div id="adminModal" class="modal">

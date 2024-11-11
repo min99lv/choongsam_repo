@@ -170,7 +170,7 @@ button {
 <body>
 
 
-	<%@ include file="../view_Hjh/headerStd.jsp"%>
+<%@ include file="../headerGreen.jsp" %>
 
 
 	<div class="container">

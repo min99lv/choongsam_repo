@@ -44,7 +44,7 @@ public interface SjmService {
 
 	List<Lecture> getMyLectures(int user_seq);
 
-	List<Note> getSameLeceture(String lectureId);
+	List<Note> getSameLeceture(Map<String, Object> params);
 
 // ##################
 // 문의사항 ------------------------------------------------------------------
