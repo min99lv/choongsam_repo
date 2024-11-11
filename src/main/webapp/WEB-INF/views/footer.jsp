@@ -14,6 +14,7 @@
 	        height: auto;
 	        position: relative;
 	        padding: 50px 0px 50px 0px;
+	        z-index: 3;
 	    }
 	
 	    .footer_main {
