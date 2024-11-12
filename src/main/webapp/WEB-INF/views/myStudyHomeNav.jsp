@@ -72,7 +72,7 @@
 	
 		<div class="header_detail">
 			<div class="header_info">
-				<label class="header_user">사용자 정보 </label>
+				<!-- <label class="header_user">사용자 정보 </label> -->
 				<div class="header_userName">
 					<c:out value="${sessionScope.username}" />
 				</div>

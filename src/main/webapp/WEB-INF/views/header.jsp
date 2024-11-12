@@ -118,7 +118,7 @@
 		        <a href="/view_Ljm/loginForm?user_seq=${user_seq}">마이페이지</a>
 		    </c:otherwise>
 		</c:choose>
-
+]
 			
             <a href="/api/notice">공지사항</a>
             <c:choose>

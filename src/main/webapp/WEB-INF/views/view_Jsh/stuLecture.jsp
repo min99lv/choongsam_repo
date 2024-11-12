@@ -283,7 +283,7 @@
 							        <span class="percent">
 								        <fmt:formatNumber value="${conts.vdo_length != null && conts.vdo_length > 0 ? (conts.conts_max * 100 / conts.vdo_length) : 0}" 
 								                          type="number" 
-								                          maxFractionDigits="2" />%
+								                          maxFractionDigits="1" />%
 								    </span>
 							    </c:when>
 							    <c:otherwise>
