@@ -199,10 +199,20 @@
            		  <li>강의 승인</li>
           		  <li>강의 목록</li>
             </ul>
-            <li onclick="toggleSubMenu('inquirySubmenu')"><label class="txt">1:1문의</label></li>
+            
+            
+            
+            <li onclick="toggleSubMenu('inquirySubmenu')"><label class="txt">문의사항 관리</label></li>
         	    <ul class="submenu" id="inquirySubmenu">
-                <li onclick="location.href='/asks/my'"><label class="txt">문의내역</label></li>
                 <li onclick="location.href='/asks/new'"><label class="txt">문의작성</label></li>
+                <li onclick="location.href='/asks/my'"><label class="txt">문의내역</label></li>
+            </ul>
+            
+            
+            <li onclick="toggleSubMenu('inquiSubmenu')"><label class="txt">공지사항 관리</label></li>
+        	    <ul class="submenu" id="inquiSubmenu">
+                <li onclick="location.href='/api/notice/new'"><label class="txt">공지사항 작성</label></li>
+                <li onclick="location.href='/api/notice'"><label class="txt">공지사항 목록</label></li>
             </ul>
 
         </ul>
