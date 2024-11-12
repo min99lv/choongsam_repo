@@ -34,7 +34,7 @@
 			</tr>
 		</table>
 		<button type="submit">수정</button>
-		<a href="/Jhe/profGrade?LCTR_ID=${upGrade.lctr_id}"><button type="button">취소</button></a>
+		<a href="/Jhe/profGrade?lctr_id=${upGrade.lctr_id}"><button type="button">취소</button></a>
 	</form>
 </body>
 </html>
