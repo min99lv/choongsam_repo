@@ -34,7 +34,7 @@
 		</form>
 		
 		<form action="/Jhe/profAttMain" method="get">
-			<input type="hidden" name="LCTR_ID" value="${LCTR_ID}" />
+			<input type="hidden" name="lctr_id" value="${lctr_id}" />
 			<input type="hidden" name="onoff" value="${onoff}" />
 				<c:if test="${onoff == 7001}">
 					<button type="submit">출석</button>
@@ -45,12 +45,12 @@
 		</form>
 		
 		<form action="/Jhe/profHomeworkList" method="get">
-		    <input type="hidden" name="LCTR_ID" value="${LCTR_ID}" />
+		    <input type="hidden" name="lctr_id" value="${lctr_id}" />
 		    <button type="submit">과제</button>
 		</form>
 		
 		<form action="/Jhe/profGrade" method="get">
-		    <input type="hidden" name="LCTR_ID" value="${LCTR_ID}" />
+		    <input type="hidden" name="lctr_id" value="${lctr_id}" />
 		    <button type="submit">성적</button>
 		</form>
 		</main>

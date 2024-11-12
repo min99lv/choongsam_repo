@@ -13,7 +13,7 @@
 <body>
 <h2>차시별 출석 입력</h2>
 <form action="/Jhe/insertStudAtt" method="post">
-<input type="hidden" name="LCTR_ID" value="${LCTR_ID}">
+<input type="hidden" name="lctr_id" value="${lctr_id}">
 <input type="hidden" name="LCTR_NO" value="${LCTR_NO}">
 <input type="hidden" name="onoff" value="${onoff}">
 <button type="button" id="markAllPresent">전체 출석</button>

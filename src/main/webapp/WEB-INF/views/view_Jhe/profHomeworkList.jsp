@@ -13,10 +13,10 @@
 <body>
 	<h2>나는 진행중인 내 강의 과제 리스트 (강사)</h2>
 	<form action="/Jhe/insertHomework" method="get">
-		<input type="hidden" name="LCTR_ID" value="${LCTR_ID}">
+		<input type="hidden" name="lctr_id" value="${lctr_id}">
     		<button type="submit">과제 등록</button>
 	</form>
-<form action="/Jhe/deleteHomework?LCTR_ID=${LCTR_ID}" method="post">
+<form action="/Jhe/deleteHomework?lctr_id=${lctr_id}" method="post">
 	<table id="homeworkList">
 		<tr>
 			<th>강의명</th>
