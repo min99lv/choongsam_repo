@@ -23,3 +23,4 @@ public class Lecture { // 강의 정보
 	private String		user_name;			// 회원 이름
 	private int			reg_count;			// 수강 인원
 }
+	

@@ -142,8 +142,8 @@ public class HjhServiceImpl implements HjhService {
 	}
 
 	@Override
-	public List<Lecture> lectureList(int userSeq) {
-		List<Lecture> lectureList = hjhdao.lectureList(userSeq);
+	public List<Lecture> lectureList(Map<String, Object> params) {
+		List<Lecture> lectureList = hjhdao.lectureList(params);
 		return lectureList;
 	}
 
@@ -167,6 +167,12 @@ public class HjhServiceImpl implements HjhService {
 	public int sugangStuTotalCount(int userSeq, String keyword) {
 		int sugangStuTotalCount = hjhdao.sugangStuTotalCount(userSeq,keyword);
 		return sugangStuTotalCount;
+	}
+
+	@Override
+	public int totalLectureCount(int userSeq, String keyword) {
+		int totalLectureCount = hjhdao.totalLectureCount(userSeq,keyword);
+		return totalLectureCount;
 	}
 
 

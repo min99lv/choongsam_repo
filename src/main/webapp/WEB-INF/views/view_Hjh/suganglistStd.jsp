@@ -1,118 +1,179 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="headerStd.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myPageNav.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>수강신청 목록</title>
     <style>
-        /* 간단한 스타일 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            margin-left: -150px; /* 내비게이션 바 너비 고려 */
+            padding: 200px;
+            background-color: white;
+            
+        }
+
+        h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* 테이블 스타일 */
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
+
         th, td {
-            padding: 10px;
+            padding: 12px;
             text-align: left;
-            border: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #00664F;
+            color: white;
+            font-size: 16px;
         }
+
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
 
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* 수납하기 버튼 스타일 */
+        .openModalButton {
+            background-color: #FF4C4C;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .openModalButton:hover {
+            background-color: #218838;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a, .pagination .current {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #fff;
+            color: #00664F;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+        }
+
+        .pagination .current {
+            background-color: #00664F;
+            color: white;
+            pointer-events: none;
+        }
+
+        .pagination a:hover {
+            background-color: #45a049;
+        }
+
         /* 모달 스타일 */
         .modal {
-            display: none; /* 기본적으로 숨겨짐 */
+            display: none;
             position: fixed;
             z-index: 1;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 220px;
         }
 
-		.modal-content {
-		    background-color: #fefefe;
-		    padding: 20px;
-		    border: 1px solid #888;
-		    width: 30%;
-		    position: absolute; /* 절대 위치 */
-		    top: 50%; /* 화면의 세로 중앙 */
-		    left: 50%; /* 화면의 가로 중앙 */
-		    transform: translate(-50%, -50%); /* 정확한 중앙 정렬 */
-		    text-align: center; /* 텍스트 중앙 정렬 */
-		}
-		
-		button[type="submit"] {
-		    margin-top: 20px; /* 버튼과 다른 요소들 간의 간격 */
-		    padding: 10px 20px;
-		    background-color: #236147; /* 버튼 배경색 */
-		    color: white; /* 글자 색 */
-		    border: none; /* 테두리 없애기 */
-		    cursor: pointer;
-		    float: right; /* 오른쪽으로 버튼 정렬 */
-		}
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            margin: auto;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-content h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 18px;
+            color: red;
+            font-weight: bold;
+        }
+
+        button[type="submit"] {
+            background-color: #00664F;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
 
         .close {
             color: #aaa;
-            float: right;
             font-size: 28px;
             font-weight: bold;
+            cursor: pointer;
         }
 
         .close:hover,
         .close:focus {
-            color: black;
+            color: #000;
             text-decoration: none;
-            cursor: pointer;
         }
 
-        /* 타이머 텍스트 스타일 */
-        .timer {
-            font-size: 16px;
-            color: red;
-        }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
-    .pagination a, .pagination .current {
-        padding: 1px 5px;
-        margin: 0 5px;
-        background-color: white;
-        color: black;
-        text-decoration: none;
-        border-radius: 5px;
-        align-items: center; 
-        justify-content: center;
-    }
-
-    .pagination .current {
-        background-color: #45a049;
-        pointer-events: none;
-    }
-
-    .pagination a:hover {
-        background-color: #45a049;
-    }
-        
-        
     </style>
 </head>
-<main>
 <body>
 
-
+<main>
 <h2>수강신청 목록</h2>
-
 
 <!-- 수강신청 리스트 테이블 -->
 <table>
@@ -125,11 +186,10 @@
             <th>신청일</th>
             <th>수강상태</th>
             <th>결제일</th>
-            <th>결제상태 변경</th> <!-- 결제상태 변경 버튼 추가 -->
+            <th>결제상태 변경</th>
         </tr>
     </thead>
     <tbody>
-        <!-- 수강신청 리스트를 출력 -->
         <c:forEach var="course" items="${sugangStu}" varStatus="status">
             <tr>
                 <td>${status.index + 1}</td>
@@ -139,11 +199,11 @@
                      <c:when test="${course.ONOFF == '7002'}">온라인</c:when>
                      <c:otherwise>알 수 없음</c:otherwise>
                  </c:choose>
-                 </td>
+                </td>
                 <td>${course.LCTR_NAME}</td>
                 <td>${course.std_name}</td>
                 <td>${course.aply_date}</td>
-                 <td>
+                <td>
                     <c:choose>
                         <c:when test="${course.reg_state == '2001'}">수강신청중</c:when>
                         <c:when test="${course.reg_state == '2002'}">수강신청완료</c:when>
@@ -153,47 +213,44 @@
                     </c:choose>
                 </td>
                 <td>${course.pay_date}</td>
-
-				<td>
-				  
-				    <c:choose>
-				       
-				        <c:when test="${course.pay_state == 'Y'}">
-				            <span>수납완료</span>
-				        </c:when>
-				       
-				        <c:when test="${(course.pay_state == 'N' or course.pay_state == null) and course.reg_state == '2001'}">
-				            <button class="openModalButton" data-lctr-id="${course.lctr_id}" data-user-seq="${course.user_seq}">수납하기</button>
-				        </c:when>
-				        
-				        <c:otherwise>
-				            <span>기간만료</span>
-				        </c:otherwise>
-				    </c:choose>
-				</td>
-
+                <td>
+                    <c:choose>
+                        <c:when test="${course.pay_state == 'Y'}">
+                            <span>수납완료</span>
+                        </c:when>
+                        <c:when test="${(course.pay_state == 'N' or course.pay_state == null) and course.reg_state == '2001'}">
+                            <button class="openModalButton" data-lctr-id="${course.lctr_id}" data-user-seq="${course.user_seq}">수납하기</button>
+                        </c:when>
+                        <c:otherwise>
+                            <span>기간만료</span>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
         </c:forEach>
     </tbody>
 </table>
-    <div class="pagination">
-        <c:if test="${page.startPage > page.pageBlock}">
-            <a href="/view_Hjh/suganglistStd?currentPage=${page.startPage - page.pageBlock}&keyword=${keyword}">이전</a>
-        </c:if>
-        <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-            <c:choose>
-                <c:when test="${i == page.currentPage}">
-                    <span class="current">${i}</span>
-                </c:when>
-                <c:otherwise>
-                    <a href="/view_Hjh/suganglistStd?currentPage=${i}&keyword=${keyword}">${i}</a>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
-        <c:if test="${page.endPage < page.totalPage}">
-            <a href="/view_Hjh/suganglistStd?currentPage=${page.startPage + page.pageBlock}&keyword=${keyword}">다음</a>
-        </c:if>
-    </div> 
+
+<div class="pagination">
+    <c:if test="${page.startPage > page.pageBlock}">
+        <a href="/view_Hjh/suganglistStd?currentPage=${page.startPage - page.pageBlock}&keyword=${keyword}">이전</a>
+    </c:if>
+    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+        <c:choose>
+            <c:when test="${i == page.currentPage}">
+                <span class="current">${i}</span>
+            </c:when>
+            <c:otherwise>
+                <a href="/view_Hjh/suganglistStd?currentPage=${i}&keyword=${keyword}">${i}</a>
+            </c:otherwise>
+        </c:choose>
+    </c:forEach>
+    <c:if test="${page.endPage < page.totalPage}">
+        <a href="/view_Hjh/suganglistStd?currentPage=${page.startPage + page.pageBlock}&keyword=${keyword}">다음</a>
+    </c:if>
+</div>
+
+</main>
 
 <!-- 모달 -->
 <div id="paymentModal" class="modal">
@@ -202,7 +259,7 @@
         <h2>수납완료 처리</h2>
         <p>QR결제</p>
         <img src="${pageContext.request.contextPath}/chFile/user/QR.png" alt="QR Code" width="200" />
-        <p class="timer" id="timer">남은 시간: 60초</p> <!-- 타이머 표시 -->
+        <p class="timer" id="timer">남은 시간: 60초</p>
         <form id="paymentForm" action="/view_Hjh/updatePayState" method="POST">
             <input type="hidden" name="lctr_id" id="lctrId" />
             <input type="hidden" name="user_seq" id="userSeq" />
@@ -216,24 +273,19 @@
     var modal = document.getElementById("paymentModal");
     var btns = document.querySelectorAll(".openModalButton");
     var span = document.getElementsByClassName("close")[0];
-    var timerElement = document.getElementById("timer"); // 타이머 엘리먼트
-    var countdown; // 카운트다운 변수
+    var timerElement = document.getElementById("timer");
+    var countdown;
 
-    // 각 버튼 클릭 시 모달 열기
     btns.forEach(function(btn) {
         btn.onclick = function() {
-            // 버튼에 저장된 data 값 가져오기
             var lctrId = this.getAttribute("data-lctr-id");
             var userSeq = this.getAttribute("data-user-seq");
 
-            // 모달 내 input에 값 설정
             document.getElementById("lctrId").value = lctrId;
             document.getElementById("userSeq").value = userSeq;
 
-            // 모달 표시
             modal.style.display = "block";
 
-            // 타이머 시작 (60초)
             var timeRemaining = 60;
             timerElement.textContent = "남은 시간: " + timeRemaining + "초";
             
@@ -241,30 +293,26 @@
                 timeRemaining--;
                 timerElement.textContent = "남은 시간: " + timeRemaining + "초";
 
-                // 1분이 경과하면 모달 자동 닫기
                 if (timeRemaining <= 0) {
-                    clearInterval(countdown); // 타이머 멈추기
-                    modal.style.display = "none"; // 모달 닫기
+                    clearInterval(countdown);
+                    modal.style.display = "none";
                 }
-            }, 1000); // 1초마다 업데이트
+            }, 1000);
         };
     });
 
-    // 모달 닫기
     span.onclick = function() {
         modal.style.display = "none";
-        clearInterval(countdown); // 타이머 멈추기
+        clearInterval(countdown);
     }
 
-    // 모달 바깥 부분 클릭 시 닫기
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearInterval(countdown); // 타이머 멈추기
+            clearInterval(countdown);
         }
     }
 </script>
 
 </body>
-</main>
 </html>

@@ -110,39 +110,105 @@
 </header> -->
 
 <%-- sideNav.jsp --%>
-<nav>
-    <ul>
-        <h1>강사</h1>
-        <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">나의 강의실</label></li>
-        <ul class="submenu" id="myClassroomSubmenu">
-            <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
-            <li onclick="location.href='gangyilistTeacher?user_seq=${user_seq}'"><label class="txt">강의 목록</label></li>
+<c:choose>
+<c:when test="${usertype == 1001}">
+    <nav>
+        <ul>
+            <h1>학생</h1>
+            <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">내 강의실</label></li>
+            <ul class="submenu" id="myClassroomSubmenu">
+                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
+                <li onclick="location.href='../view_Hjh/suganglistStd?user_seq=${user_seq}'"><label class="txt">수강신청내역</li>
+            </ul>
+            <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="txt">성적 관리</label></li>
+            <ul class="submenu" id="gradeManagementSubmenu">
+                <li><label class="txt">하은</label></li>
+                <li><label class="txt">하은</label></li>
+                <li><label class="txt">하은</label></li>
+            </ul>
+            <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="txt">회원정보</label></li>
+            <ul class="submenu" id="userInfoSubmenu">
+           		 <li onclick="location.href='../view_Hjh/updateProfile?user=${user}'"><label class="txt">개인정보 수정</li>
+           		 <li onclick="location.href='../view_Hjh/changePW?user=${user}'"><label class="txt">비밀번호 변경</li>
+           		 <li onclick="location.href='../view_Hjh/deleteStd?user=${user}'"><label class="txt">회원탈퇴</li>
+            </ul>
+            <li onclick="toggleSubMenu('inquirySubmenu')"><label class="txt">1:1문의</label></li>
+            <ul class="submenu" id="inquirySubmenu">
+                <li onclick="location.href='/asks/my'"><label class="txt">문의내역</label></li>
+                <li onclick="location.href='/asks/new'"><label class="txt">문의작성</label></li>
+            </ul>
+            <li onclick="toggleSubMenu('zzji')"><label class="txt">쪽지함</label></li>
+            <ul class="submenu" id="zzji">
+                <li onclick="location.href='/notes/received'"><label class="txt">받은쪽지</label></li>
+                <li onclick="location.href='/notes/sent'"><label class="txt">보낸쪽지</label></li>
+                <li onclick="location.href='/asks/my'"><label class="txt">휴지통</label></li>
+            </ul>
         </ul>
-        <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="txt">성적 관리</label></li>
-        <ul class="submenu" id="gradeManagementSubmenu">
-            <li><label class="txt">하은</label></li>
-            <li><label class="txt">하은</label></li>
-            <li><label class="txt">하은</label></li>
+    </nav>
+    </c:when>
+    </c:choose>
+
+<c:choose>
+<c:when test="${usertype == 1002}">
+    <nav>
+        <ul>
+            <h1>강사</h1>
+            <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">나의 강의실</label></li>
+            <ul class="submenu" id="myClassroomSubmenu">
+                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
+                <li onclick="location.href='../view_Hjh/gangyilistTeacher?user_seq=${user_seq}'"><label class="txt">강의 목록</label></li>
+            </ul>
+            <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="txt">성적 관리</label></li>
+            <ul class="submenu" id="gradeManagementSubmenu">
+                <li><label class="txt">하은</label></li>
+                <li><label class="txt">하은</label></li>
+                <li><label class="txt">하은</label></li>
+            </ul>
+            <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="txt">회원정보</label></li>
+            <ul class="submenu" id="userInfoSubmenu">
+                <li onclick="location.href='../view_Hjh/updateProfileteacher?user=${user}'"><label class="txt">개인정보 수정</label></li>
+                <li onclick="location.href='../view_Hjh/changePW?user=${user}'"><label class="txt">비밀번호 변경</li>
+                <li onclick="location.href='../view_Hjh/deleteTeacher?user=${user}'"><label class="txt">회원탈퇴</label></li>
+            </ul>
+            <li onclick="toggleSubMenu('inquirySubmenu')"><label class="txt">1:1문의</label></li>
+            <ul class="submenu" id="inquirySubmenu">
+                <li onclick="location.href='/asks/my'"><label class="txt">문의내역</label></li>
+                <li onclick="location.href='/asks/new'"><label class="txt">문의작성</label></li>
+            </ul>
+            <li onclick="toggleSubMenu('zzji')"><label class="txt">쪽지함</label></li>
+            <ul class="submenu" id="zzji">
+                <li onclick="location.href='/notes/received'"><label class="txt">받은쪽지</label></li>
+                <li onclick="location.href='/notes/sent'"><label class="txt">보낸쪽지</label></li>
+                <li onclick="location.href='/asks/my'"><label class="txt">휴지통</label></li>
+            </ul>
         </ul>
-        <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="txt">회원정보</label></li>
-        <ul class="submenu" id="userInfoSubmenu">
-            <li onclick="location.href='updateProfileteacher?user=${user}'"><label class="txt">개인정보 수정</label></li>
-            <li><label class="txt">비밀번호 변경</label></li>
-            <li onclick="location.href='deleteTeacher?user=${user}'"><label class="txt">회원탈퇴</label></li>
+    </nav>
+</c:when>
+</c:choose>
+<c:choose>
+<c:when test="${usertype == 1003}">
+    <nav>
+        <ul>
+            <h1>관리자</h1>
+            <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">회원관리</label></li>
+            <ul class="submenu" id="myClassroomSubmenu">
+                 <li onclick="location.href='../view_Hjh/updateProfileAdmin'">회원정보수정</li>
+             </ul>
+            <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="txt">강의</label></li>
+            <ul class="submenu" id="gradeManagementSubmenu">
+           		  <li>강의 승인</li>
+          		  <li>강의 목록</li>
+            </ul>
+            <li onclick="toggleSubMenu('inquirySubmenu')"><label class="txt">1:1문의</label></li>
+        	    <ul class="submenu" id="inquirySubmenu">
+                <li onclick="location.href='/asks/my'"><label class="txt">문의내역</label></li>
+                <li onclick="location.href='/asks/new'"><label class="txt">문의작성</label></li>
+            </ul>
+
         </ul>
-        <li onclick="toggleSubMenu('inquirySubmenu')"><label class="txt">1:1문의</label></li>
-        <ul class="submenu" id="inquirySubmenu">
-            <li onclick="location.href='/asks/my'"><label class="txt">문의내역</label></li>
-            <li onclick="location.href='/asks/new'"><label class="txt">문의작성</label></li>
-        </ul>
-        <li onclick="toggleSubMenu('zzji')"><label class="txt">쪽지함</label></li>
-        <ul class="submenu" id="zzji">
-            <li onclick="location.href='/notes/received'"><label class="txt">받은쪽지</label></li>
-            <li onclick="location.href='/notes/sent'"><label class="txt">보낸쪽지</label></li>
-            <li onclick="location.href='/asks/my'"><label class="txt">휴지통</label></li>
-        </ul>
-    </ul>
-</nav>
+    </nav>
+</c:when>
+</c:choose>
 
 
 

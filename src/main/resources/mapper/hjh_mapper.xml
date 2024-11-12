@@ -99,23 +99,24 @@
 			</update>
 		
 		
-		<select id="lectureList"  resultType="Lecture">
+		<select id="lectureList" resultType="Lecture">
 		    SELECT *
 		    FROM "LECTURE"
-		    WHERE "USER_SEQ" = #{user_seq}
+		    WHERE "USER_SEQ" = CAST(#{userSeq} AS INTEGER)
 		</select>
 		
-		<select id="sugangStu" resultType="Course_Registration">
-		    SELECT 
-		        cr.*, 
-		        ui."USER_NAME" AS std_name, 
-		        l."ONOFF" AS ONOFF, 
-		        l."LCTR_NAME" AS LCTR_NAME
-		    FROM "COURSE_REGISTRATION" cr
-		    LEFT JOIN "USER_INFO" ui ON cr."USER_SEQ" = ui."USER_SEQ"
-		    LEFT JOIN "LECTURE" l ON cr."LCTR_ID" = l."LCTR_ID"
-		    WHERE cr."USER_SEQ" = #{userSeq}
-		</select>
+			<select id="sugangStu" resultType="Course_Registration">
+			    SELECT 
+			        cr.*, 
+			        ui."USER_NAME" AS std_name, 
+			        l."ONOFF" AS ONOFF, 
+			        l."LCTR_NAME" AS LCTR_NAME
+			    FROM "COURSE_REGISTRATION" cr
+			    LEFT JOIN "USER_INFO" ui ON cr."USER_SEQ" = ui."USER_SEQ"
+			    LEFT JOIN "LECTURE" l ON cr."LCTR_ID" = l."LCTR_ID"
+			    WHERE cr."USER_SEQ" = #{userSeq}
+			    ORDER BY cr."REG_STATE" ASC, cr."APLY_DATE" DESC
+			</select>
 
 		
 		
@@ -131,10 +132,15 @@
 
 		<select id="sugangStuTotalCount"   resultType="int">
 		    SELECT count(*)
-		    FROM "COURSE_REGISTRATION"
+		    FROM "LECTURE"
 		    WHERE "USER_SEQ" = #{user_seq}
 		</select>
-
+		
+		<select id="totalLectureCount" resultType="int">
+		    SELECT count(*)
+		    FROM "COURSE_REGISTRATION"
+		    WHERE CAST("USER_SEQ" AS INTEGER) = #{user_seq}
+		</select>
 
 </mapper> 
 
