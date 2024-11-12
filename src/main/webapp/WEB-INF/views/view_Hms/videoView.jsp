@@ -289,7 +289,7 @@ body {
         console.log('originalTime->'+originalTime);
         console.log('conts_final->'+conts_final);
         // 슬라이더 조작을 감지하고, 제한 범위를 벗어나면 원래 위치로 되돌림.
-        if (!isPaused && (currentTime - conts_final) > 0.1 && currentTime > conts_max) {
+        if (!isPaused && (currentTime - conts_final) > 0.5 && currentTime > conts_max) {
             
         	if((currentTime - conts_final)>0.1 && (currentTime > conts_max)){
         		if(currentTimeStamp - lastSliderMoveTime < sliderDelay){
@@ -302,6 +302,7 @@ body {
         	}    	
         	lastSliderMoveTime = currentTimeStamp;
         	originalTime = conts_final;
+        	
             const validatePosition = setTimeout(() => {
                 if(player.getCurrentTime() > conts_max){
                     // 최대 시청 시간 이상 조작 시 원래 위치로
