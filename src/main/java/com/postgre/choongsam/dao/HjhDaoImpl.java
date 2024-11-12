@@ -167,11 +167,11 @@ public class HjhDaoImpl implements HjhDao {
 	}
 
 	@Override
-	public List<Lecture> lectureList(int userSeq) {
+	public List<Lecture> lectureList(Map<String, Object> params) {
 	    List<Lecture> lectureList = null;
 	    try {
 	        // MyBatis 매퍼에서 userSeq를 사용하여 강의 목록을 조회
-	        lectureList = session.selectList("lectureList", userSeq);
+	        lectureList = session.selectList("lectureList", params);
 	    } catch (Exception e) {
 	        e.printStackTrace();  // 예외 처리
 	    }
@@ -226,6 +226,21 @@ public class HjhDaoImpl implements HjhDao {
 			// TODO: handle exception
 		}
 		return sugangStuTotalCount;
+	}
+
+	@Override
+	public int totalLectureCount(int userSeq, String keyword) {
+		int totalLectureCount = 0;
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("user_seq", userSeq);
+	    params.put("keyword", keyword); 
+	    System.out.println("userSeq"+userSeq);
+	    try {
+	    	totalLectureCount = session.selectOne("totalLectureCount",params);
+		} catch (Exception e) {
+			
+		}
+		return totalLectureCount;
 	}
 
 

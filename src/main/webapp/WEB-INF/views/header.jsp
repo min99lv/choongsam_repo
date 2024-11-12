@@ -67,6 +67,7 @@
        }
        
 
+
         .header_adminLogin a {
        		text-decoration: none;
             color: white;
@@ -119,13 +120,13 @@
             <a href="#">수강신청</a>
 		<c:choose>
 		    <c:when test="${usertype == 1001}">
-		        <a href="/view_Hjh/myPageStd?user=${user}&user_seq=${user_seq}">마이페이지</a>
+		        <a href="../Jhe/myLecture?user=${user}&user_seq=${user_seq}">마이페이지</a>
 		    </c:when>
 		    <c:when test="${usertype == 1002}">
-		        <a href="/view_Hjh/myPageTeacher?user=${user}&user_seq=${user_seq}">마이페이지</a>
+		        <a href="../Jhe/myLecture??user=${user}&user_seq=${user_seq}">마이페이지</a>
 		    </c:when>
 		    <c:when test="${usertype == 1003}">
-		        <a href="/view_Hjh/adminPage?user=${user}&user_seq=${user_seq}">관리자페이지</a>
+		        <a href="/view_Hjh/updateProfileAdmin?user=${user}&user_seq=${user_seq}">관리자페이지</a>
 		    </c:when>
 		    <c:otherwise>
 		        <a href="/view_Ljm/loginForm?user_seq=${user_seq}">마이페이지</a>
