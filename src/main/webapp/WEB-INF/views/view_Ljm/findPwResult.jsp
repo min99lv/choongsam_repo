@@ -9,6 +9,7 @@
         margin: 0;
         padding: 0;
         font-family: 'Noto Sans KR', sans-serif;
+        overflow: hidden; /* 스크롤 없애기 */
     }
 
     header {
@@ -22,8 +23,7 @@
     }
 
     footer {	  
-    	margin-top: 160px; 
-	    padding: 10px 0; /* 푸터 내 패딩 추가 (옵션) */
+    	margin-top: 243px;
 	}
 
     .main_container {
