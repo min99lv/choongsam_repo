@@ -23,12 +23,11 @@
     }
 
     footer {	  
-    	margin-top: 150px; 
-	    padding: 10px 0; /* 푸터 내 패딩 추가 (옵션) */
+    	margin-top: 30px;
 	}
 
     .main_container {
-        margin-top: 140px; /* 헤더 높이에 맞게 마진 설정 */
+        margin-top: 110px; /* 헤더 높이에 맞게 마진 설정 */
         margin-bottom: 60px; /* 푸터 높이에 맞게 마진 설정 */
         margin-left: 100px;
         margin-right: 100px;

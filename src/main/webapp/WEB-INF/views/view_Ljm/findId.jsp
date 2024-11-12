@@ -24,7 +24,7 @@
     }
 
     footer {	  
-    	margin-top: 165px; 
+    	margin-top: 184px; 
 	}
 
     .main_container {
