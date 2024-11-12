@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../headerGreen.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f5f5f5;
+            background-color: white;
             color: #333;
             font-family: Arial, sans-serif;
         }
@@ -18,10 +19,11 @@
             color: #556b2f;
             font-size: 2em;
             margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         table {
-            width: 70%;
+            width: 50%;
             margin: auto;
             border-collapse: collapse;
             background-color: #fdfdfd;
@@ -37,8 +39,8 @@
         }
 
         th {
-            background-color: #dcdcdc;
-            color: #556b2f;
+            background-color: #00664F;
+            color: white;
             font-weight: 600;
         }
 
@@ -62,10 +64,12 @@
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
+            margin-left:50%;
             cursor: pointer;
             font-size: 16px;
             margin-top: 20px;
             transition: background-color 0.3s;
+            margin-bottom: 30px;
         }
 
         input[type="submit"]:hover {
@@ -154,7 +158,7 @@
     <h2>강의 상세</h2>
     <table>
         <tr>
-            <th>강사ID</th>
+            <th>강사</th>
             <td>${lecture.user_name}</td>
         </tr>
         <tr>
@@ -249,4 +253,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+<footer><%@ include file="../footer.jsp"%></footer>
 </html>
