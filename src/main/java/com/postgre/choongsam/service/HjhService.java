@@ -33,13 +33,15 @@ public interface HjhService {
 
 	Login_Info changepassword(String userId);
 
-	List<Lecture> lectureList(int userSeq);
+	List<Lecture> lectureList(Map<String, Object> params);
 
 	List<Course_Registration> sugangStu(Map<String, Object> params);
 
 	int updatePayState(int userSeq, String lctrId);
 
 	int sugangStuTotalCount(int userSeq, String keyword);
+
+	int totalLectureCount(int userSeq, String keyword);
 
 
 

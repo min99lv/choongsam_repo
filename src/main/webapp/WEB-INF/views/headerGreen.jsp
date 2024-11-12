@@ -76,11 +76,14 @@
             <a href="#">수강신청</a>
 			<c:choose>
 			    <c:when test="${usertype == 1001}">
-			        <a href="/view_Hjh/myPageStd?user=${user}">마이페이지</a>
+			        <a href="../Jhe/myLecture?user=${user}">마이페이지</a>
 			    </c:when>
 			    <c:when test="${usertype == 1002}">
-			        <a href="/view_Hjh/myPageTeacher?user=${user}">마이페이지</a>
+			        <a href="../Jhe/myLecture?user=${user}">마이페이지</a>
 			    </c:when>
+			    <c:when test="${usertype == 1003}">
+			        <a href="/view_Hjh/updateProfileAdmin?user=${user}">마이페이지</a>
+			    </c:when>			    
 			    <c:otherwise>
 			        <a href="/view_Ljm/loginForm">마이페이지</a>
 			    </c:otherwise>

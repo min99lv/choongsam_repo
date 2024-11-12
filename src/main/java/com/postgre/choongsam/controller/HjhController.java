@@ -38,19 +38,7 @@ public class HjhController {
 
 	private final HjhService hjh;
 
-	@RequestMapping(value = "/adminPage")
-	public String adminPage(Model model) {
-		System.out.println("관리자마이페이지");
-		return "view_Hjh/adminPage";
 
-	}
-	@RequestMapping(value = "/myPageTeacher")
-	public String myPageTeacher(Model model) {
-		System.out.println("관리자마이페이지");
-		return "view_Hjh/myPageTeacher";
-
-	}
-	
 	@RequestMapping(value = "/suganglistStd")
 	public String suganglistStd(Model model, HttpSession session,
 	        @RequestParam(value = "currentPage", defaultValue = "1") String currentPage, 
@@ -138,7 +126,9 @@ public class HjhController {
 
 	
 	@RequestMapping(value = "/gangyilistTeacher")
-	public String gangyilistTeacher(HttpSession session, Model model) {
+	public String gangyilistTeacher(HttpSession session, Model model,
+	        @RequestParam(value = "currentPage", defaultValue = "1") String currentPage, 
+	        @RequestParam(value = "keyword", required = false) String keyword) {
 	    System.out.println("강사마이페이지");
 
 	    // 세션에서 user_seq를 가져옴 (Object로 반환되므로, Integer로 캐스팅)
@@ -160,9 +150,26 @@ public class HjhController {
 
 	    // userSeq가 올바르게 설정되었다면 lectureList 조회
 	    if (userSeq > 0) {
-	        List<Lecture> lectureList = hjh.lectureList(userSeq);  // userSeq를 int로 전달
+	        // 총 데이터 수를 가져옵니다.
+	        int totalCount1 = hjh.totalLectureCount(userSeq, keyword);  // 총 데이터 수
+	        System.out.println("totalCount1"+totalCount1);
+	        // 페이징 객체 생성
+	        Paging page = new Paging(totalCount1, currentPage); // 페이징 처리 객체
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("userSeq", userSeq);  // Integer로 저장
+	        params.put("start", page.getStart());  // 페이지 시작 위치
+	        params.put("rowPage", page.getRowPage());  // 한 페이지에 표시할 항목 수
+	        params.put("keyword", keyword);  // 검색어
+
+	        // 데이터 목록 가져오기
+	        List<Lecture> lectureList = hjh.lectureList(params);
 	        System.out.println("lectureList: " + lectureList);
-	        model.addAttribute("lectureList", lectureList);  // lectureList를 모델에 추가
+
+	        // 모델에 데이터와 페이징 정보 전달
+	        model.addAttribute("lectureList", lectureList);
+	        model.addAttribute("page", page);  // 페이징 정보
+	        model.addAttribute("totalCount", totalCount1);
+	        model.addAttribute("keyword", keyword);  // 검색어 전달
 	    } else {
 	        System.out.println("유효하지 않은 userSeq 값입니다.");
 	    }
@@ -170,15 +177,6 @@ public class HjhController {
 	    return "view_Hjh/gangyilistTeacher";  // JSP 페이지로 반환
 	}
 
-
-	@RequestMapping(value = "/myPageStd")
-	public String myPageStd(HttpSession session) {
-		System.out.println("학생마이페이지");
-		System.out.println(session.getAttribute("user"));
-		System.out.println(session.getAttribute("user_seq"));
-
-		return "view_Hjh/myPageStd";
-	}
 
 	// 학생 개인정보수정
 	@GetMapping("updateProfile")
@@ -380,7 +378,7 @@ public class HjhController {
 	    System.out.println("updateCount -> " + updateCount);
 
 	    if (updateCount > 0) {
-	        return "redirect:/view_Hjh/myPageTeacher";  // 수정 성공 후 이동할 페이지
+	        return "redirect:../Jhe/myLecture";  // 수정 성공 후 이동할 페이지
 	    } else {
 	        model.addAttribute("msg", "사용자 정보 수정에 실패하였습니다.");
 	        return "main";  // 수정 실패 시 이동할 페이지
@@ -453,7 +451,7 @@ public class HjhController {
 	    System.out.println("updateCount -> " + updateCount);
 
 	    if (updateCount > 0) {
-	        return "redirect:/view_Hjh/myPageStd";  // 수정 성공 후 이동할 페이지
+	        return "redirect:../Jhe/myLecture";  // 수정 성공 후 이동할 페이지
 	    } else {
 	        model.addAttribute("msg", "사용자 정보 수정에 실패하였습니다.");
 	        return "main";  // 수정 실패 시 이동할 페이지
