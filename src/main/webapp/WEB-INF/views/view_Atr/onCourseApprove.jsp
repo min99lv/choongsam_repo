@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="../headerGreen.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,20 +13,21 @@
             background-color: #faf9f6;
             color: #333;
             font-family: Arial, sans-serif;
-            padding: 20px;
+     
         }
 
         h2 {
             text-align: center;
-            color: #556b2f;
+            color: #00664F;
             font-size: 2.5em;
             font-weight: bold;
             margin-bottom: 20px;
+            margin-top: 20px;
             text-shadow: 1px 1px 5px rgba(85, 107, 47, 0.6);
         }
 
         table {
-            width: 80%;
+            width: 50%;
             margin: auto;
             border-collapse: collapse;
             background-color: #fff;
@@ -41,8 +43,8 @@
         }
 
         th {
-            background-color: #a9c083;
-            color: #333;
+            background-color: #00664F;
+            color: white;
             font-weight: bold;
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
         }
