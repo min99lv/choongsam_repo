@@ -37,8 +37,9 @@ public class LjmServiceImpl implements LjmService {
             return null; // 사용자 ID가 없으면 null 반환
         }
         
-       
-
+        // 사용자가 입력한 비밀번호를 SHA-256으로 암호화
+        // String encodePassword = UserSha256.encrypt(password);
+        
         // 비밀번호 확인
         if (passwordEncoder.matches(password, login_Info.getPassword())) {
             System.out.println(user_id + " 로그인 성공");
@@ -47,7 +48,7 @@ public class LjmServiceImpl implements LjmService {
             System.out.println("비밀번호가 일치하지 않습니다.");
             return null; // 비밀번호가 일치하지 않으면 null 반환
         }
-    }
+    }    
     
     @Override
 	public User_Info getUserStatus(String user_id) {
@@ -74,9 +75,12 @@ public class LjmServiceImpl implements LjmService {
         	 System.out.println("관리자만 로그인 가능합니다.");
              return null; // 회원 상태가 1003이 아니면 null 반환
         }
-
+        
+        // 사용자가 입력한 비밀번호를 SHA-256으로 암호화
+        // String encodePassword = UserSha256.encrypt(password);
+        
         // 비밀번호 확인
-        if (passwordEncoder.matches(password, login_Info.getPassword())) {
+        if (passwordEncoder.matches(password, login_Info.getPassword())) {// 암호화된 패스워드로 로그인 정보 조회
             System.out.println(user_id + " 로그인 성공");
             return login_Info; // 로그인 성공
         } else {
@@ -89,6 +93,9 @@ public class LjmServiceImpl implements LjmService {
  	@Override
  	public int signup(Login_Info login_Info, User_Info user_info) {
  		System.out.println("LjmServiceImpl signup() start....");
+ 		
+ 		// 비밀번호 SHA-256 암호화
+ 		// String encodePassword = UserSha256.encrypt(login_Info.getPassword());
  		
  		String encodePassword = passwordEncoder.encode(login_Info.getPassword());
  		login_Info.setPassword(encodePassword);

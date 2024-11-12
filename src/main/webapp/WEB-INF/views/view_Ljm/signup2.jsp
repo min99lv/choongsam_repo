@@ -23,8 +23,8 @@
         border-bottom: 1px solid #ccc; /* 헤더 아래쪽 경계선 */
     }
 
-    footer {	   
-	    padding: 10px 0; /* 푸터 내 패딩 추가 (옵션) */
+    footer {
+    	margin-top: 50px;	   
 	}
 
     .main_container {
