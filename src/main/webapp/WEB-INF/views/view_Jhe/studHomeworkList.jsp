@@ -31,7 +31,7 @@
 		<c:set var="previousName" value="" />
 		<c:set var="previousAsmtNm" value="" />
 		<c:set var="previousprofNm" value="" />
-		<c:forEach var="homeworkList" items="${homeworkList}">
+		<c:forEach var="homeworkList" items="${studHomeworkList}">
 			<c:if test="${homeworkList.lctr_name != previousName}">
 				<tr>
 					<td>${homeworkList.lctr_name}</td>
