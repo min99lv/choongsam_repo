@@ -653,7 +653,7 @@ public class JshController {
 			System.out.println("강사명 >> "+teacherName);
 			
 			
-			
+			model.addAttribute("lctr_id", lctr_id);
 			model.addAttribute("lectName", lectName);
 			model.addAttribute("teacherName", teacherName);
 			model.addAttribute("contentList", contentList);
