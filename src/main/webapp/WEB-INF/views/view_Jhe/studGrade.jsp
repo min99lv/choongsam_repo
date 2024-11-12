@@ -11,10 +11,9 @@
 <body>
 
 <div class="container">
-<div class="contents">
-<h1>내 성적 조회</h1>
-
-</div>
+	<div class="contents">
+		<h1>내 성적 조회</h1>
+	</div>
 <table>
 	<tr>
 		<th>강의명</th>
@@ -42,13 +41,10 @@
 			</td>
 			<td>
 <a href="../notes/new"><button type="button" class="submitBtn">쪽지</button></a>
-			
 			</td>
 		</tr>
 	</c:forEach>
 </table>
-
-
 </div>
 </body>
 </html>
