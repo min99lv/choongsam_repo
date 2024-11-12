@@ -18,7 +18,7 @@ body {
 	flex-direction: column;
 	position: relative;
 	/* 컨테이너의 배경색을 흰색에 가까운 연한 회색으로 설정합니다. */
-	background-color: #fdfdfd;
+	background-color: white;
 	/* 컨테이너에 미세한 그림자를 추가하여 입체감을 줍니다. */
 	top: 120px;
 	/*  컨테이너의 너비 1320px 고정 */
@@ -210,11 +210,12 @@ td.cell-Yn {
 </head>
 
 <body>
+
 <header>
 	<%@ include file="../headerGreen.jsp" %>
 </header>
 	<%@ include file="../myPageNav.jsp" %>
-	
+
 
 	<div class="container">
 

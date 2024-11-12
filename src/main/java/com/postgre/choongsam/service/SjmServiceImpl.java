@@ -221,8 +221,8 @@ public class SjmServiceImpl implements SjmService {
 
 	@Override
 
-	public List<Note> getSameLeceture(String lectureId) {
-		 List<Note> note = sd.getSameLeceture(lectureId);
+	public List<Note> getSameLeceture(Map<String, Object> params) {
+		 List<Note> note = sd.getSameLeceture(params);
 		return note;
 	}
 
@@ -306,6 +306,18 @@ public class SjmServiceImpl implements SjmService {
 	public int updateNoteSentDelYn(Note note) {
 		return sd.updateNoteSentDelYn(note);
 	}
+
+	@Override
+	public int countNoticeAll(Map<String, Object> params) {
+		return sd.countNoticeAll(params);
+	}
+
+	@Override
+	public List<Notice> selectNoticeListAll(Map<String, Object> params) {
+		return sd.selectNoticeListAll(params);
+	}
+
+
 
 	
 
