@@ -3,7 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ include file="../header.jsp" %>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myStudyHomeNav.jsp" %>
 <link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
