@@ -47,7 +47,6 @@ public class HmsDaoImpl implements HmsDao {
 		}	
 	}
 
-
 	//class_schedule업데이트
 	@Override
 	public void saveWatchTime(Class_Schedule class_schedule) {
@@ -76,8 +75,7 @@ public class HmsDaoImpl implements HmsDao {
 			
 		}
 
-	
-	//syllabus테이블에서 videoId로 lctr_정보 가져오기
+	//syllabus테이블에서 videoId로 lctr_정보
 	@Override
 	public Syllabus findLctrInfo(String videoId, int lctr_no) {
 		System.out.println("msDao findLctrInfo start...");
@@ -138,11 +136,9 @@ public class HmsDaoImpl implements HmsDao {
 	    } catch (Exception e) {
 	        System.out.println("msDao getFilePath error->" + e.getMessage());
 	        e.printStackTrace();  // 예외의 전체 스택 트레이스를 출력
-	    }
-	    
+	    }	    
 	    return result;
 	}
-
 
 	//주소가져오기
 	@Override
@@ -156,8 +152,7 @@ public class HmsDaoImpl implements HmsDao {
 		} catch (Exception e) {
 			System.out.println("msDao getURL error->"+e.getMessage());
 		}
-		return result;
-		
+		return result;	
 	}
 
 	@Override
@@ -212,15 +207,4 @@ public class HmsDaoImpl implements HmsDao {
 		}
 		return file;
 	}
-
-	
-
-
-	
-	
-	
-	
-	
-	
-
 }

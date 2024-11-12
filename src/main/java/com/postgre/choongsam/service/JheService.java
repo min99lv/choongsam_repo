@@ -10,6 +10,8 @@ import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Lecture;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 
 public interface JheService {
 	List<Lecture>	getLectureHomeworkList(int user_seq);
@@ -17,7 +19,7 @@ public interface JheService {
 	List<Homework>	getProfHomeworkList(String lctr_id);
 	List<Homework>	getStudSubmitList(String lctr_id);
 	Lecture			findByLCTR(String lctr_id);
-	int				insertHomework(Homework homework, MultipartFile file);
+	int				insertHomework(Homework homework, MultipartFile[] files, HttpServletRequest request);
 	Homework		findById(int asmt_no);
 	int				updateHomework(Homework homework, MultipartFile file);
 	void			deleteHomeworkList(List<Integer> delCheck);

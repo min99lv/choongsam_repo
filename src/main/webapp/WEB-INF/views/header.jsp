@@ -66,6 +66,13 @@
        		height: 50px;
        }
        
+
+
+        .header_adminLogin a {
+       		text-decoration: none;
+            color: white;
+            width: 80px;
+
        #header__btnAdminLogin {
 	       	width: 80px;
 	       	height: 18px;
@@ -75,7 +82,9 @@
 	       	font-size: 9px;
 	       	margin-right: 15px;
 	       	border-radius: 2px;
+	       	text-align: right;
        }
+
        
        
 
@@ -86,14 +95,19 @@
         <div class="header__color" style="text-align: right;">
           <c:choose>
           	<c:when test="${empty sessionScope.user}">
+
+		  			<div class="header_adminLogin"><a href="/view_Ljm/adminLoginForm">관리자 로그인</a></div>
+
           		<form action="adminLoginForm" method="post">
 		  			<input id="header__btnAdminLogin" type="submit" value="관리자 로그인">
 		  		</form>
+
           	</c:when>
           	<c:otherwise>
                     
             </c:otherwise>
           </c:choose>
+
         	
         </div>
         <div class="header__nav">
@@ -118,7 +132,7 @@
 		        <a href="/view_Ljm/loginForm?user_seq=${user_seq}">마이페이지</a>
 		    </c:otherwise>
 		</c:choose>
-
+]
 			
             <a href="/api/notice">공지사항</a>
             <c:choose>

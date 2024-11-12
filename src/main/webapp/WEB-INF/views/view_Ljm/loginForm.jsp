@@ -6,6 +6,8 @@
 <meta charset="UTF-8">
 <title>로그인</title>
 <style type="text/css">
+
+	
     body {
         margin: 0;
 	    padding: 0;
@@ -103,7 +105,7 @@
         <main>
 		
 		<div>	
-		<form action="login" method="post" id="loginForm">
+		<form action="login" method="post" id="myForm">
 		  <div class="main_container">
 		    <h2 style="color: #00664F ">로그인</h2>
 		    <hr style="width: 400px; margin: 0 auto;">
@@ -126,8 +128,9 @@
 		        </p>
 		        <p>
 		          <input type="text" name="user_id" value="${user_id }" placeholder="아이디">
-		        </p>
+		        </p>		        
 		        <p>
+		        <input type="hidden" id="hashed_password" name="hashed_password" />
 		          <input type="password" id="password" name="password" placeholder="비밀번호">
 		        </p>
 		        <p>
@@ -141,32 +144,44 @@
 		        </div>
 		      </div>
 		    </div>
-		  </form>
+		  </form>		  		  
 		  <br>
 		  <br>
 		  <br>		  
 		  </div>
 	</main>
-<script>
-    // DOMContentLoaded 이벤트를 사용하여 DOM이 완전히 로드된 후 실행되게 설정
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/sha256.js"></script>
+<script> 
     document.addEventListener('DOMContentLoaded', function() {
-      var form = document.getElementById('myForm');
-      var selectElement = document.getElementById('user_status');
-      
-      // 폼 제출 시 체크
-      form.addEventListener('submit', function(event) {
-        // 사용자가 선택하지 않았다면
-        if (selectElement.selectedIndex === 0) {  // 첫 번째 option은 disabled로 선택 불가
-          event.preventDefault();  // 폼 제출 막기
-          alert('회원 유형을 선택해주세요');  // 경고 메시지 띄우기
-        }
-      });
-    });
-  </script>
+        var form = document.getElementById('myForm');
+        var selectElement = document.getElementById('user_status');
 
+        // 폼 제출 시 처리
+        form.addEventListener('submit', function(event) {
+            // 비밀번호 입력값 가져오기
+            var passwordField = document.getElementById("password");
+            var password = passwordField.value;
+
+            // 비밀번호를 SHA-256으로 암호화
+            const passhash = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+            console.log("암호화된 비밀번호 해시값:", passhash);
+
+            // 해시값을 hidden 필드에 설정
+            var hashedPasswordField = document.getElementById('hashed_password');
+            hashedPasswordField.value = passhash;
+
+            // 사용자가 회원 유형을 선택하지 않았다면
+            if (selectElement.selectedIndex === 0) {  // 첫 번째 option은 disabled로 선택 불가
+                event.preventDefault();  // 폼 제출 막기
+                alert('회원 유형을 선택해주세요');  // 경고 메시지 띄우기
+            }
+        });
+    });
+</script>
 </body>
 		<footer>
-			<div class="adminLoginSection" style="text-align: right; margin-top: 11px;">
+			<div class="adminLoginSection" style="text-align: right; margin-top: 47px;">
 		  
 		  </div>
             <%@ include file="../footer.jsp" %>

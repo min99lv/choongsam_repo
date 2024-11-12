@@ -16,7 +16,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	position: relative;
-	background-color: #fdfdfd;
+	background-color: white;
 	top: 120px;
 	width: 1220px;
 	margin: 0 auto;
@@ -387,7 +387,7 @@ function sendMessage() {
 </head>
 <body>
 
-<%@ include file="../view_Hjh/headerStd.jsp"%>
+<%@ include file="../headerGreen.jsp" %>
 
 
 	<div class="container">

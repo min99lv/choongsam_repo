@@ -113,7 +113,7 @@ public class SjmServiceImpl implements SjmService {
 	            InputStream inputStream = file.getInputStream();
 
 	         // 파일이 저장될 경로
-	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/notice");
+	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/Homework");
 
 	            // 경로가 없으면 생성
 	            File uploadDir = new File(uploadPath);
@@ -131,7 +131,7 @@ public class SjmServiceImpl implements SjmService {
 	                }
 	            }
 	            
-	            String fileUrl = "/chFile/notice/" +idntf_no +"."+ file_extn_nm ;
+	            String fileUrl = "/chFile/Homework/" +idntf_no +"."+ file_extn_nm ;
 
 	            // 파일 객체 생성 및 반환
 	            File_Group uploadFile = new File_Group(); // Filegroup 클래스 생성
@@ -221,8 +221,8 @@ public class SjmServiceImpl implements SjmService {
 
 	@Override
 
-	public List<Note> getSameLeceture(String lectureId) {
-		 List<Note> note = sd.getSameLeceture(lectureId);
+	public List<Note> getSameLeceture(Map<String, Object> params) {
+		 List<Note> note = sd.getSameLeceture(params);
 		return note;
 	}
 
@@ -306,6 +306,18 @@ public class SjmServiceImpl implements SjmService {
 	public int updateNoteSentDelYn(Note note) {
 		return sd.updateNoteSentDelYn(note);
 	}
+
+	@Override
+	public int countNoticeAll(Map<String, Object> params) {
+		return sd.countNoticeAll(params);
+	}
+
+	@Override
+	public List<Notice> selectNoticeListAll(Map<String, Object> params) {
+		return sd.selectNoticeListAll(params);
+	}
+
+
 
 	
 

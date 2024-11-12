@@ -167,8 +167,7 @@ body {
  	let user_seq = "${user_seq}";
  	let lctr_no ="${lctr_no}";
  	let updateInterval; // setInterval의 참조를 저장할 변수
- 	
- 	
+ 		
     //페이지 로드 ajax 
     window.onload = function(){
     	console.log("user_seq ->"+ user_seq);
@@ -236,7 +235,7 @@ body {
         .catch(error => console.error("시청 시간을 불러오지 못했습니다:", error));
 	}
     
-   //재생시간 체크(현재 재생시간을 10ms마다 업뎃해서 conts_final과 watchedTime을 저장)
+   //재생시간 체크(현재 재생시간을 업뎃해서 conts_final과 watchedTime을 저장)
    function checkPlayerTime() {
     if (!isPaused) {
         conts_final = player.getCurrentTime(); // 현재 재생 위치 저장
@@ -259,8 +258,7 @@ body {
 	        conts_final: Math.floor(conts_final),
 	        conts_max: Math.floor(conts_max),
 	        vdo_length: Math.floor(vdo_length)
-	    };
-	
+	    };	
 	    // AJAX 요청을 통해 데이터를 서버에 전달하여 저장
 	    $.ajax({
 	        url: '/api/progress/save', // 저장할 API 엔드포인트
@@ -274,7 +272,61 @@ body {
 	        }
 	    });
 	}
-    
+
+    //슬라이더 조작 제한
+    let lastSliderMoveTime = 0;
+ 	const sliderDelay = 1000;
+
+	// 슬라이더 움직임체크
+    function checkSliderMovement() {
+        const currentTime = player.getCurrentTime();
+        const currentTimeStamp = new Date().getTime();
+        console.log('isPaused->'+isPaused);
+        console.log('(currentTime - conts_final)->'+(currentTime - conts_final));
+        console.log('currentTime->'+currentTime);
+        console.log('conts_max->'+conts_max);
+        console.log('lastSliderMoveTime->'+lastSliderMoveTime);
+        console.log('originalTime->'+originalTime);
+        console.log('conts_final->'+conts_final);
+        // 슬라이더 조작을 감지하고, 제한 범위를 벗어나면 원래 위치로 되돌림.
+        if (!isPaused && (currentTime - conts_final) > 0.1 && currentTime > conts_max) {
+            
+        	if((currentTime - conts_final)>0.1 && (currentTime > conts_max)){
+        		if(currentTimeStamp - lastSliderMoveTime < sliderDelay){
+        			if((currentTime - conts_final)>0.5) { 
+                			alert("슬라이더 연타하지말라능");
+        			}
+         			player.seekTo(conts_final, true); //원래위치로
+        			return; //멈춤
+        		}
+        	}    	
+        	lastSliderMoveTime = currentTimeStamp;
+        	originalTime = conts_final;
+            const validatePosition = setTimeout(() => {
+                if(player.getCurrentTime() > conts_max){
+                    // 최대 시청 시간 이상 조작 시 원래 위치로
+                    player.seekTo(originalTime, true); 
+                }else{
+                    clearInterval(validatePosition);
+                }
+            }, 10);
+        }          
+    }
+
+	 // 플레이어 상태변화 감지
+    function onPlayerStateChange(event) {
+    isPaused = event.data === YT.PlayerState.PAUSED;
+    if (event.data === YT.PlayerState.ENDED) { // 영상이 끝났을 때 실시간 시간 업데이트 멈추기       
+        clearInterval(updateInterval);
+        console.log('영상이 종료되었습니다.');
+    } else if (!isPaused) { // 영상이 재생 중이라면 타이머 시작
+        checkSliderMovement();        
+        if (!updateInterval) {
+            updateInterval = setInterval(checkPlayerTime, 3000); // 3초마다 업데이트
+        	}
+   	 	}
+	}	 
+	 
  	// 데이터베이스에서 북마크 정보를 불러오는 ajax
     function fetchBookmarks(conts_id) {
  		var conts_id = conts_id;
@@ -295,8 +347,8 @@ body {
     document.addEventListener('DOMContentLoaded', function() {
         // displayBookmarks 함수 호출
         displayBookmarks(bookmarks);
-    });
- 	
+    });	 
+    
     //북마크 데이터를 화면에 표시
     function displayBookmarks(bookmarks) {
 	    const bookmarkContainer = document.querySelector('.bookmark');
@@ -341,52 +393,6 @@ body {
 	    });
 	}
    
-    
- 	let lastSliderMoveTime = 0;
- 	const sliderDelay = 1000;
-
-	// 슬라이더 움직임체크
-    function checkSliderMovement() {
-        const currentTime = player.getCurrentTime();
-        const currentTimeStamp = new Date().getTime();
-        
-        // 슬라이더 조작을 감지하고, 제한 범위를 벗어나면 원래 위치로 되돌림.
-        if (!isPaused && Math.abs(currentTime - conts_final) > 0.5 && currentTime > conts_max) {
-            
-        	if((currentTime - conts_final)>0.1 && (currentTime > conts_max)){
-        		if(currentTimeStamp - lastSliderMoveTime < sliderDelay){
-        			alert("슬라이더 연타하지말라능");
-        			player.seekTo(conts_final, true); //원래위치로
-        			return; //멈춤
-        		}
-        	}    	
-        	lastSliderMoveTime = currentTimeStamp;
-        	originalTime = conts_final;
-            const validatePosition = setTimeout(() => {
-                if(player.getCurrentTime() > conts_max){
-                    // 최대 시청 시간 이상 조작 시 원래 위치로
-                    player.seekTo(originalTime, true); 
-                }else{
-                    clearInterval(validatePosition);
-                }
-            }, 10);
-        }
-    }
-
-	 // 플레이어 상태변화 감지
-    function onPlayerStateChange(event) {
-    isPaused = event.data === YT.PlayerState.PAUSED;
-    if (event.data === YT.PlayerState.ENDED) { // 영상이 끝났을 때 실시간 시간 업데이트 멈추기       
-        clearInterval(updateInterval);
-        console.log('영상이 종료되었습니다.');
-    } else if (!isPaused) { // 영상이 재생 중이라면 타이머 시작
-        checkSliderMovement();        
-        if (!updateInterval) {
-            updateInterval = setInterval(checkPlayerTime, 3000); // 3초마다 업데이트
-        	}
-   	 	}
-	}
-
     // 출석인정 기능 
     document.getElementById('markAttendance').addEventListener('click', () => {
         if (Math.abs(conts_max - vdo_length) <= 10) {
@@ -406,10 +412,7 @@ body {
             type: "GET",
             data: {
                 part: 'snippet,contentDetails,statistics',
-                id: videoId,
-                
-                
-                
+                id: videoId,            
                 key: apiKey
             },
             success: function(data) {

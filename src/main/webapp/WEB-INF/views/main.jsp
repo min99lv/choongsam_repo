@@ -151,6 +151,7 @@
         <a href="/registerCourseForm">안태랑2</a>
         <a href="/courseApplyList">안태랑3</a>
 
+		
         
         
        	<!-- 하단의 div는 메인페이지를 이미지로 넣지않고 따로 만드는경우 사용하는 것으로 함 -->
