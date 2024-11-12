@@ -80,5 +80,10 @@ public interface SjmService {
 
 	int updateNoteSentDelYn(Note note);
 
+	int countNoticeAll(Map<String, Object> params);
+
+	List<Notice> selectNoticeListAll(Map<String, Object> params);
+
+
 }
 

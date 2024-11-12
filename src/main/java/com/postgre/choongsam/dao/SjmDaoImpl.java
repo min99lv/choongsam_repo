@@ -1,5 +1,6 @@
 package com.postgre.choongsam.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Note;
 import com.postgre.choongsam.dto.Notice;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -31,7 +33,7 @@ public class SjmDaoImpl implements SjmDao {
 	@Override
 	public int countNotice(String keyword) {
 		System.out.println("다오 도착 ");
-		int total = session.selectOne("com.postgre.choongsam.mapper.sjm.countNotice", keyword);
+		int total = session.selectOne("com.postgre.choongsam.mapper.sjm.countNoticeUser", keyword);
 
 		System.out.println("-------->" + total);
 
@@ -52,6 +54,7 @@ public class SjmDaoImpl implements SjmDao {
 	public int noticeCreate(Notice notice, List<File_Group> uploadFiles) {
 		System.out.println("공지사항 작성");
 
+		
 		// 파일 그룹 ID 생성
 		int fileGroupId = createNewFileGroupId();
 
@@ -75,8 +78,17 @@ public class SjmDaoImpl implements SjmDao {
 				}
 			}
 		}
+		
+		int noticeId = (Integer) notice.getNtc_mttr_sn();
+		
+		int result = 0;
+		
+		if(noticeId > 0) {
+			result = session.update("com.postgre.choongsam.mapper.sjm.noticeUpdate",notice);
+		}else {
+			result = session.insert("com.postgre.choongsam.mapper.sjm.noticeCreate", notice);			
+		}
 
-		int result = session.insert("com.postgre.choongsam.mapper.sjm.noticeCreate", notice);
 
 		System.out.println("공지사항 업로드 result ---> " + result);
 		return result;
@@ -411,6 +423,36 @@ public class SjmDaoImpl implements SjmDao {
 		}
 		System.out.println("SjmDaoImpl.updateNoteSentDelYn() ===>" + result);
 		return result;
+	}
+
+	@Override
+	public int countNoticeAll(Map<String, Object> params) {
+
+		System.out.println("카운트 올 다오");
+		int result =0;
+		System.out.println("params--->" + params);
+		try {
+			result = session.selectOne("com.postgre.choongsam.mapper.sjm.countNoticeAll", params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("SjmDaoImpl.countNoticeAll() ===>" + result);
+		return result;
+	}
+
+	@Override
+	public List<Notice> selectNoticeListAll(Map<String, Object> params) {
+		System.out.println("셀렉트 올 에스크 리스트 ");
+		System.out.println("params--->" + params);
+		List<Notice> noticeList = new ArrayList<>();
+		System.out.println(" all ask params-->" + params);
+		try {
+			noticeList = session.selectList("com.postgre.choongsam.mapper.sjm.selectNoticeListAll", params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("askss ----> " + noticeList);
+		return noticeList;
 	}
 
 }

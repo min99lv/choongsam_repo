@@ -3,7 +3,7 @@
 <mapper namespace="com.postgre.choongsam.mapper.sjm">
 	<!-- <select id="countNotice" resultType="int"> SELECT count(*) FROM "NOTICE" 
 		</select> -->
-	<select id="countNotice" resultType="int" parameterType="String">
+	<select id="countNoticeUser" resultType="int" parameterType="String">
 		SELECT
 		COUNT(*)
 		FROM "NOTICE"
@@ -16,7 +16,19 @@
       )
   )
 
-
+	</select>
+	
+	<select id="countNoticeAll" resultType="int" parameterType="Map">
+		SELECT COUNT(*)
+		FROM "NOTICE"
+		WHERE 
+    (
+        #{keyword} IS NULL 
+        OR (
+            "NTC_MTTR_TTL" ILIKE '%' || #{keyword} || '%'  
+            OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} || '%' 
+        )
+    )
 	</select>
 
 
@@ -34,6 +46,23 @@ WHERE "NTC_MTTR_YN" = 'Y'
           OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} || '%'
       )
   )
+ORDER BY "NTC_MTTR_DT" DESC
+LIMIT #{rowPage}
+OFFSET #{start};
+	</select>
+	
+	<select id="selectNoticeListAll" resultType="Notice"
+		parameterType="Map">
+	SELECT "NTC_MTTR_SN", "USER_SEQ",
+		"NTC_MTTR_GUBUN","NTC_MTTR_TTL","NTC_MTTR_CN",
+		TO_CHAR(TO_TIMESTAMP("NTC_MTTR_DT", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS "NTC_MTTR_DT","NTC_MTTR_YN","LCTR_ID","FILE_GROUP"
+FROM "NOTICE"
+<where>
+        <if test="keyword != null and keyword != ''">
+            AND ("NTC_MTTR_TTL" ILIKE '%' || #{keyword} || '%'
+                 OR "NTC_MTTR_CN" ILIKE '%' || #{keyword} || '%')
+        </if>
+    </where>
 ORDER BY "NTC_MTTR_DT" DESC
 LIMIT #{rowPage}
 OFFSET #{start};
@@ -244,6 +273,19 @@ WHERE
         )
         </if>
 	</select>
+	
+	<update id="noticeUpdate" parameterType="Notice">
+		
+	UPDATE "NOTICE"
+SET 
+    "NTC_MTTR_TTL" = #{ntc_mttr_ttl}, 
+    "NTC_MTTR_CN" = #{ntc_mttr_cn},   
+    "FILE_GROUP" = #{file_group}
+WHERE 
+    "NTC_MTTR_SN" = #{ntc_mttr_sn}
+	
+	
+	</update>
 	
 
 	<select id="getMyLectures" parameterType="int"

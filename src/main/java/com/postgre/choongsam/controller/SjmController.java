@@ -52,20 +52,34 @@ public class SjmController {
 	// NOTE - 공지사항 목록
 	@GetMapping(value = "/api/notice")
 	public String notice(Model model, @RequestParam(value = "currentPage", defaultValue = "1") String currentPage,
-			@RequestParam(value = "keyword", required = false) String keyword) {
+			@RequestParam(value = "keyword", required = false) String keyword,HttpSession session) {
 
-		log.info("noticeController start...");
-		int total = ss.countNotice(keyword);
-		Paging page = new Paging(total, currentPage);
-		// Map 객체 생성하여 파라미터 설정
+		
+		int total = 0;
+		Paging page = new Paging();	
 		Map<String, Object> params = new HashMap<>();
-		params.put("start", page.getStart());
-		params.put("rowPage", page.getRowPage());
+		List<Notice> noticeList = new ArrayList<>();
+				
 		params.put("keyword", keyword);
-
-		System.out.println("page---->" + page);
-
-		List<Notice> noticeList = ss.selectNoticeList(params);
+		
+		Integer user_status = (Integer) session.getAttribute("usertype");
+		
+		if (user_status != null && user_status == 1003) {
+		    // user_status가 1003일 경우
+		    total = ss.countNoticeAll(params);  // 전체 공지사항의 개수를 가져옴
+		    page = new Paging(total, currentPage);  // 페이지 객체 생성
+		    params.put("start", page.getStart());  // 페이지 시작 인덱스
+		    params.put("rowPage", page.getRowPage());  // 페이지당 행 개수
+		    noticeList = ss.selectNoticeListAll(params);  // 공지사항 리스트 가져옴
+		} else {
+		    // user_status가 1003이 아닌 경우
+		    total = ss.countNotice(keyword);  // 조건에 맞는 공지사항 개수를 가져옴
+		    page = new Paging(total, currentPage);  // 페이지 객체 생성
+		    params.put("start", page.getStart());  // 페이지 시작 인덱스
+		    params.put("rowPage", page.getRowPage());  // 페이지당 행 개수
+		    noticeList = ss.selectNoticeList(params);  // 공지사항 리스트 가져옴
+		}
+		
 
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", page);
@@ -84,6 +98,19 @@ public class SjmController {
 
 		return "view_Sjm/noticeCreate";
 	}
+	
+	
+	// NOTE - 공지사항 수정화면
+	@GetMapping(value = "/api/notice/edit")
+	public String noticeEdit(@RequestParam("ntc_mttr_sn") int ntc_mttr_sn,Model model) {
+		
+		System.out.println("SjmController.noticeEdit start .....");
+		Notice notice = ss.noticeDetail(ntc_mttr_sn);
+		
+		model.addAttribute("notice", notice);
+		
+		return "view_Sjm/noticeEdit";
+	}
 
 	// NOTE - 공지사항 작성
 	@PostMapping(value = "/api/notice/new")
@@ -93,6 +120,9 @@ public class SjmController {
 		System.out.println("받은 파일 수: " + files.length); // 파일 수 출력
 
 		System.out.println("notice-->" + notice);
+		
+		System.out.println("수정 파라메터 --->" +notice.getNtc_mttr_sn());
+		
 		int result = ss.noticeCreate(notice, files, request);
 
 

@@ -16,7 +16,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	position: relative;
-	background-color: #fdfdfd;
+	background-color: white;
 	top: 120px;
 	width: 1320px;
 	margin: 0 auto;
@@ -128,6 +128,7 @@ button {
             // 가져온 데이터를 HTML 요소에 넣기
             document.getElementById('notice.ntc_mttr_ttl').textContent = notice.ntc_mttr_ttl;
             document.getElementById('notice.ntc_mttr_cn').textContent = notice.ntc_mttr_cn;
+            const ntc_mttr_sn = "${ntc_mttr_sn}";  // 서버에서 전달된 값
             
             console.log(notice.file_group);
             
@@ -216,6 +217,7 @@ button {
 		</table>
 
 		<button onclick="history.back();">목록</button>
+		<a href="/api/notice/edit?ntc_mttr_sn=${ntc_mttr_sn}"><button id="editBtn">수정</button></a>
 	</div>
 
 </body>
