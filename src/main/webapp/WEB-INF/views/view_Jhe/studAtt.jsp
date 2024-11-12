@@ -11,12 +11,11 @@
 <title>내 출결 현황</title>
 </head>
 <body>
-
 <div class="container">
-		<div class="contents">
-	<h1>내 출결 현황</h1>
-		
-		</div>
+	<div class="contents">
+		<h1>내 출결 현황</h1>
+	</div>
+
 	<table>
 		<tr>
 			<th>차시</th>
@@ -35,10 +34,6 @@
 		</tr>
 		</c:forEach>
 	</table>
-
-
-
-
 </div>
 </body>
 </html>

@@ -98,7 +98,7 @@ public class JheDaoImpl implements JheDao {
 				fileUpload.setFile_group(fileGroupId); // 파일 그룹 ID 설정
 				fileUpload.setFile_seq(fileSeq); // 파일 시퀀스 설정
 				System.out.println("filegroup ------ > " + fileUpload);
-				int fileResult = session.insert("FileUpload", fileUpload);
+				int fileResult = session.insert("com.postgre.choongsam.dto.jheMapper.FileUpload", fileUpload);
 				System.out.println("파일 업로드 임 ㅋ");
 				homework.setFile_group(fileGroupId);
 				if (fileResult <= 0) {
