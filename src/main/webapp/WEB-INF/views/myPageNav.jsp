@@ -25,6 +25,7 @@
 		  overflow:hidden;
 		  transition:width .3s ease;
 		  cursor:pointer;
+		  margin-top: 50px;
 		  @media screen and (min-width: 600px) {
 		    width: 320px;
 		  }
