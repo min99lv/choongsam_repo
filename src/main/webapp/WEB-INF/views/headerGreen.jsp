@@ -17,7 +17,7 @@
         	position:relative;
 		    display: flex;
 		    align-items: center; /* 수직 중앙 정렬 */
-		    width: 100%;
+		    width: 1920px;
 		    background-color: #00664F;
 		    height: 70px; /* 헤더 전체 높이 */
 		    font-size: 20px;
