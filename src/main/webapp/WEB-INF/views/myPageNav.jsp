@@ -8,17 +8,36 @@
 <meta charset="UTF-8">
 <title>학생 관리 시스템</title>
 <style type="text/css">
-    /* Base Styling */
-    body {
-        display: grid;
-        grid-template-rows: 1fr auto;
-        grid-template-columns: 320px 1fr;
-        height: 100vh;
-        margin: 0;
+    
+    /* html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+} */
+    
+    .pobody {
+        position: fixed;
+		  width: auto;
+		  top:0;
+		  height: 100vh;
+		  z-index: 1;
+		  background-color: #304742;
+		  overflow:hidden;
+		  transition:width .3s ease;
+		  cursor:pointer;
+		  margin-top: 50px;
+		  @media screen and (min-width: 600px) {
+		    width: 320px;
+		  }
+    }
+    
+    .pogreen {
+    	margin-top: 100px;
+    	margin-bottom: 50px;
     }
     
     /* Navigation Styling */
-    nav {
+    /* .navy {
           position: fixed;
 		  width: auto;
 		  top:0;
@@ -31,14 +50,14 @@
 		  @media screen and (min-width: 600px) {
 		    width: 320px;
 		  }
-    }
+    } */
     
-    nav ul {
+    .ponavy ul {
         list-style-type: none;
         padding: 0;
     }
     
-    nav li {
+    .ponavy li {
         width: 320px;
 	    height: 90px;
 	    font-size: 30px;
@@ -48,8 +67,13 @@
 	    border-bottom: solid 2px white;
 	    transition: background-color 0.2s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
+    
+    
+    .potxt li {
+    	margin-left: 50px;
+    }
 
-    nav li:hover {
+    .ponavy li:hover {
         background-color: #00664F;
 	    color: white;
 	    transform: scale(1.1);
@@ -57,7 +81,7 @@
     }
 
     /* Submenu Styling */
-    .submenu {
+    .posubmenu {
         display: none;
         padding-left: 25px;
         border-left: 2px solid #236147;
@@ -65,7 +89,7 @@
         margin-top: 5px;
     }
 
-    .submenu li {
+    .posubmenu li {
         font-size: 20px;
         padding: 10px 0;
         cursor: pointer;
@@ -74,21 +98,21 @@
     }
 
     /* Header Styling */
-    header {
+    /* header {
         grid-column: 1 / span 2;
         background-color: #236147;
         color: white;
         padding: 10px;
         text-align: center;
-    }
+    } */
 
     /* Link Styling */
-    a {
+    /* a {
         color: white;
         text-decoration: none;
-    }
+    } */
     
-    .txt {
+    .potxt {
     	margin-left: 50px;
     }
 </style>
@@ -104,6 +128,7 @@
 </script>
 </head>
 <body>
+
 
 <!-- <header>
     <h1>마이페이지</h1>
@@ -210,8 +235,6 @@
 </c:when>
 </c:choose>
 
-
-
-
 </body>
 </html>
+

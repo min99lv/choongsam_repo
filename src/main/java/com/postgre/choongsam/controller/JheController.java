@@ -17,6 +17,7 @@ import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.service.JheService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -100,15 +101,15 @@ public class JheController {
 								 @RequestParam("sbmsn_bgng_ymd") String sbmsnBgngYmd,
 								 @RequestParam("sbmsn_end_ymd") String sbmsnEndYmd,
 								 @RequestParam("asmt_cn") String asmtCn,
-								 @RequestParam("file_nm") MultipartFile file,
+								 @RequestParam("files") MultipartFile[] files,
 								 @ModelAttribute Homework homework,
-								 RedirectAttributes redirectAttributes, Model model) {
+								 RedirectAttributes redirectAttributes,
+								 HttpServletRequest request, Model model) {
 		System.out.println("과제 등록 포오스트");
 		System.out.println("강의 ID: " + LCTR_ID);
 
 		homework.setLctr_id(LCTR_ID);
-
-		int insHomeworkList = hes.insertHomework(homework, file);
+		int insHomeworkList = hes.insertHomework(homework, files, request);
 		System.out.println("insHWList: " + insHomeworkList);
 
 		if (insHomeworkList > 0) {
@@ -262,7 +263,7 @@ public class JheController {
 		System.out.println("강사 수강생 성적 조회 컨트롤러");
 		int user_seq = (int) session.getAttribute("user_seq");
 		List<Grade> studentScoreList = hes.profGrade(LCTR_ID, user_seq);
-		System.out.println("studentScoreList: " + studentScoreList);
+		System.out.println("controller studentScoreList: " + studentScoreList);
 		model.addAttribute("studentScoreList", studentScoreList);
 		return "view_Jhe/profGrade";
 	}

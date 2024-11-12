@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.postgre.choongsam.configuration.RSAUtil;
 import com.postgre.choongsam.dto.Login_Info;
+import com.postgre.choongsam.dto.RSA;
 import com.postgre.choongsam.dto.User_Info;
 import com.postgre.choongsam.service.LjmService;
 
@@ -31,10 +34,16 @@ public class LjmController {
 	
 	private final LjmService ljs;
 	private final JavaMailSender mailSender;
+	private final PasswordEncoder passwordEncoder;
 	
 		// 로그인 페이지 이동
 		@RequestMapping(value =  "view_Ljm/loginForm")
-		public String showLoginPage() {
+		public String showLoginPage(HttpSession session, Model model) {
+			RSAUtil rsaUtil = new RSAUtil();
+			RSA rsa = rsaUtil.createRSA();
+		    session.setAttribute("RSAprivateKey", rsa.getPrivateKey());
+		    model.addAttribute("publicKeyModulus", rsa.getModulus());
+		    model.addAttribute("publicKeyExponent", rsa.getExponent());
 			return "view_Ljm/loginForm";
 		}
 		
@@ -49,10 +58,14 @@ public class LjmController {
 		    System.out.println("로그인 컨트롤러 이동");
 
 		    System.out.println("user_id -> " + user_id);
+		    
+		    // 패스워드 암호화
+		    // String encPasswd = passwordEncoder.encode(password);
+		    // System.out.println("encPasswd" + encPasswd);
+	    
 		    Login_Info login_info = ljs.login(user_id, password); // 로그인 정보 조회
 		    User_Info user_Info = null;
-		   
-		    
+		   		    		    
 		    // 로그인 실패
 		    if (login_info == null) {
 		        System.out.println(user_id + "로그인 실패");

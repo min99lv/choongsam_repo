@@ -111,7 +111,6 @@ public class HmsServiceImpl implements HmsService{
             String[] parts = duration.split("S");
             seconds += Integer.parseInt(parts[0]);
         }
-
         return seconds;
     }
 

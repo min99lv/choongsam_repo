@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ include file="../header.jsp" %>
+<link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +13,11 @@
 <title>수강중인 강의 과제 리스트</title>
 </head>
 <body>
-	<h2>나는 수강중인 강의 과제 리스트 (학생)</h2>
+
+<div class="container">
+<div class="contents">
+<h1>나는 수강중인 강의 과제 리스트 (학생)</h1>
+</div>
 	<table id="homeworkList">
 		<tr>
 			<th>강의명</th>
@@ -59,5 +64,6 @@
 			</c:if>
 		</c:forEach>
 	</table>
+</div>
 </body>
 </html>
