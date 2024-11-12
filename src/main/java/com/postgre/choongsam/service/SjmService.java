@@ -44,7 +44,7 @@ public interface SjmService {
 
 	List<Lecture> getMyLectures(int user_seq);
 
-	List<Note> getSameLeceture(String lectureId);
+	List<Note> getSameLeceture(Map<String, Object> params);
 
 // ##################
 // 문의사항 ------------------------------------------------------------------
@@ -79,6 +79,11 @@ public interface SjmService {
 	int updateNoteRcvrDelYn(Note note);
 
 	int updateNoteSentDelYn(Note note);
+
+	int countNoticeAll(Map<String, Object> params);
+
+	List<Notice> selectNoticeListAll(Map<String, Object> params);
+
 
 }
 
