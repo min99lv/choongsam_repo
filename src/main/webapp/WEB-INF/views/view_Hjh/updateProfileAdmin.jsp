@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ include file="headerAdmin.jsp"%>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myPageNav.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -117,12 +118,12 @@ td a:hover {
     }
 
     .pagination .current {
-        background-color: #45a049;
+        background-color: gray;
         pointer-events: none;
     }
 
     .pagination a:hover {
-        background-color: #45a049;
+        background-color: gray;
     }
 
     /* 기본적인 모달 스타일 */
@@ -206,7 +207,7 @@ td a:hover {
 <body>
 
 <main>
-    <!-- 검색 폼 -->
+    <h2 style="margin-top: 100px;">회원정보수정</h2>
     <div class="search-container">
         <form action="/view_Hjh/updateProfileAdmin" method="get" id="searchForm">
             <input type="text" name="keyword" placeholder="아이디 or 이름" />
