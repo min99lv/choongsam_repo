@@ -55,12 +55,28 @@ public class JheController {
 			List<Lecture> profLectureList = hes.getLectureHomeworkList(user_seq);
 			model.addAttribute("homeworkList", profLectureList);
 			System.out.println("profLectureList: " + profLectureList);
+			
+			String onOff = profLectureList.stream()
+	                .map(Lecture::getOnoff)
+	                .findFirst()
+	                .orElse("");
+			
+			model.addAttribute("onoff",onOff);
 		} else if (user_status == 1001) {
 			List<Lecture> studLectureList = hes.studLecture(user_seq);
 			model.addAttribute("homeworkList", studLectureList);
 			System.out.println("studLectureList: " + studLectureList);
+			
+			String onOff = studLectureList.stream()
+	                .map(Lecture::getOnoff)
+	                .findFirst()
+	                .orElse("");
+			
+			model.addAttribute("onoff",onOff);
 		}
+		
 
+		
 		return "view_Jhe/myLecture";
 	}
 

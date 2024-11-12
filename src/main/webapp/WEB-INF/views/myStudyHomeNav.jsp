@@ -80,7 +80,7 @@
 		
 			<div class="header_butt">
 				<c:if test="${usertype == 1002}">
-					<a href="" class="header_link">내 강의실</a>
+					<a href="/sh_lecture_teacher?lctr_id=${lctr_id }&user_seq=${sessionScope.user_seq}" class="header_link">내 강의실</a>
 				</c:if>
 				<c:if test="${usertype == 1001}">
 					<a href="/sh_lecture_student?lctr_id=${lctr_id }&user_seq=${sessionScope.user_seq}" class="header_link">내 강의실</a>
