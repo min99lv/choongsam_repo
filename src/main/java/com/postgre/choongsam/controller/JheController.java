@@ -60,14 +60,17 @@ public class JheController {
 		System.out.println("강의 메인보드 컨트롤러");
 		List<Lecture> profLectureList = hes.getProfLectureInfo(LCTR_ID);
 		System.out.println("profLectureList: " + profLectureList);
+		List<Homework> profHomeworkList = hes.getProfHomeworkList(LCTR_ID);
+		System.out.println("profHomeworkList: " + profHomeworkList);
 
 		if (!profLectureList.isEmpty()) {
 			Lecture lecture = profLectureList.get(0);
 			model.addAttribute("onoff", lecture.getOnoff());
+			model.addAttribute("lctr_name",lecture.getLctr_name());
 		}
 
-		model.addAttribute("profLectureList", profLectureList);
 		model.addAttribute("LCTR_ID", LCTR_ID);
+		model.addAttribute("profHomeworkList", profHomeworkList);
 		return "view_Jhe/profLectureMain";
 	}
 

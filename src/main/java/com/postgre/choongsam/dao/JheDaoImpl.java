@@ -54,7 +54,7 @@ public class JheDaoImpl implements JheDao {
 		System.out.println("강사 강의별 과제 리스트 와따오");
 		List<Homework> profHomeworkList = null;
 		try {
-			profHomeworkList = session.selectList("getProfHomeworkList", lctr_id);
+			profHomeworkList = session.selectList("getProfHomework", lctr_id);
 			System.out.println("다오 LCTR_ID: " + lctr_id);
 		} catch (Exception e) {
 			System.out.println("getProfHomeworkList error: " + e.getMessage());
