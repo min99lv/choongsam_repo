@@ -90,7 +90,7 @@
 				<a href="" class="header_link">출석</a>
 			</div>
 			<div class="header_butt">
-				<a href="/Jhe/studHomeworkList" class="header_link">과제</a>
+				<a href="/Jhe/studHomeworkList?lctr_id=${lctr_id }&user_seq=${sessionScope.user_seq}" class="header_link">과제</a>
 			</div>
 			<!-- <div class="header_utt">
 				<a href="" class="header_link">공지사항</a>
