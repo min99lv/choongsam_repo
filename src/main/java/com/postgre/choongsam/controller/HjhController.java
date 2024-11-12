@@ -588,6 +588,14 @@ public class HjhController {
 	    return "view_Hjh/changePW";
 	}
 	
+	@PostMapping("changePassword");
+	public String changePassword(HttpSession session,Model model) {
+		
+		
+	}
+	
+	
+	
 
 }
 
