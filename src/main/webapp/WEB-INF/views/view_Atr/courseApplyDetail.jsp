@@ -1,32 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="../headerGreen.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>강의 신청 상세</title>
     <style>
-        /* Page styling */
+      
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f3;
+            background-color: white;
             color: #333;
             margin: 0;
-            padding: 20px;
-            display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
 
         h2 {
-            color: #3e4a2c;
+            color: #00664F;
             text-align: center;
             margin-bottom: 20px;
         }
 
-        /* Table styling */
         table {
-            width: 60%;
+        
+        margin-top:20px;
+        margin-left:30%;
+        margin-rigth:30%;
+            width: 40%;
             border-collapse: collapse;
             background-color: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -41,22 +43,22 @@
         }
 
         th {
-            background-color: #78866b;
+            background-color: #00664F;
             color: #ffffff;
         }
 
         td {
-            background-color: #f4f6e7;
+            background-color: white;
         }
 
-        /* Submit button styling */
+
         form {
             text-align: center;
             margin-top: 20px;
         }
 
         input[type="submit"] {
-            background-color: #6d805a;
+            background-color:#00664F;
             color: #ffffff;
             font-size: 16px;
             border: none;
@@ -64,6 +66,7 @@
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            margin-bottom: 40px;
         }
 
         input[type="submit"]:hover {
@@ -124,4 +127,5 @@
         <input type="submit" value="신청하기">
     </form>
 </body>
+<footer><%@ include file="../footer.jsp"%></footer>
 </html>
