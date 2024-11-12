@@ -1,96 +1,131 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../headerGreen.jsp"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Lecture List</title>
-    <style>
-        /* General Page Styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f3;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+<meta charset="UTF-8">
+<title>Lecture List</title>
+<style>
+/* General Page Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: white; /* Light greenish background */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 1.6;
+}
 
-        h2 {
-            color: #3e4a2c;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+/* Title Styling */
+h2 {
+    color: #00664F; /* Deep green */
+    margin: 30px 0;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
 
-        /* Table Styling */
-        table {
-            width: 90%;
-            border-collapse: collapse;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            overflow: hidden;
-        }
+/* Table Styling */
+table {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transform: scale(1);
+    transition: transform 0.3s ease-in-out;
+}
 
-        th, td {
-            padding: 12px;
-            font-size: 15px;
-            text-align: left;
-        }
 
-        th {
-            background-color: #78866b;
-            color: #ffffff;
-        }
 
-        td {
-            background-color: #f4f6e7;
-        }
+/* Header row styling */
+th {
+    background-color: #00664F; /* Deep green */
+    color: white;
+    padding: 15px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-        /* Link Styling for "상세보기" (View Details) */
-        a.details-link {
-            color: #6d805a;
-            font-weight: bold;
-            text-decoration: none;
-        }
 
-        a.details-link:hover {
-            color: #4e623e;
-        }
+/* Data cells styling */
+td {
+    background-color: #f9f9f9;
+    padding: 6px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
 
-        /* Pagination Styling */
-        .pagination {
-            margin-top: 20px;
-            text-align: center;
-        }
 
-        .pagination a {
-            display: inline-block;
-            padding: 8px 16px;
-            margin: 0 4px;
-            border: 1px solid #ddd;
-            text-decoration: none;
-            color: #333;
-            border-radius: 5px;
-            background-color: #f4f6e7;
-        }
+a.details-link {
+    color: #00664F; /* Deep green */
+    font-weight: 600;
+    text-decoration: none;
+    padding: 8px;
+    border: 2px solid #00664F; /* Added a border for the button */
+    transition: all 0.3s ease;
+    display: inline-block;
+    font-size: 1rem;
+}
 
-        .pagination a.active {
-            font-weight: bold;
-            background-color: #78866b;
-            color: #ffffff;
-        }
+a.details-link:hover {
+    background-color: #00664F; /* Deep green */
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-        .pagination a:hover {
-            background-color: #6d805a;
-            color: #ffffff;
-        }
-    </style>
+/* Pagination Styling */
+.pagination {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 12px 20px;
+    margin: 0 6px;
+    border: 2px solid #00664F; /* Deep green border */
+    color: #00664F; /* Deep green text */
+    text-decoration: none;
+    font-weight: bold;
+    background-color: #f8f8f8;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    /* Removed border-radius to make buttons square */
+}
+
+.pagination a:hover {
+    background-color: #00664F; /* Deep green */
+    color: white;
+    transform: scale(1.1);
+}
+
+.pagination a.active {
+    background-color: #00664F; /* Deep green */
+    color: white;
+}
+
+/* Hover effect on pagination buttons */
+.pagination a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 102, 79, 0.2);
+}
+
+</style>
 </head>
 <body>
-    <h2>Lecture List</h2>
+    <h2>강의 개설 리스트</h2>
     <table>
         <thead>
             <tr>
@@ -140,4 +175,5 @@
         </c:if>
     </div>
 </body>
+<footer><%@ include file="../footer.jsp"%></footer>
 </html>
