@@ -266,9 +266,7 @@ td.cell-Yn {
 
 	</div>
 
-	<footer>
-		<%@ include file="../footer.jsp"%>
-	</footer> 
+	
 
 	<script type="text/javascript">
 		document.addEventListener('DOMContentLoaded', function() {
