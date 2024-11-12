@@ -387,7 +387,7 @@ public class JheServiceImpl implements JheService {
 		String evalCriteria = hed.getEvalCriteria(lctr_id);
 		int attWeight = extractAttWeight(evalCriteria);
 		int asmtWeight = extractAsmtWeight(evalCriteria);
-		
+
 		Attendance_Check attendance_Check = new Attendance_Check();
 		attendance_Check.setLctr_id(lctr_id);
 		attendance_Check.setUser_seq(userSeq);

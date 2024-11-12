@@ -10,22 +10,14 @@
 </head>
 <style>
 form#submitHomework table {
-
-width: 1200px;
+	width: 1200px;
 }
-
-
-
-
-
 </style>
 <body>
 <div class="container">
 <div class="contents">
 	<h1>나는 과제 제출 (학생)</h1>
-
 </div>
-
 	<form action="/Jhe/submitHomework" method="post" id="submitHomework">
 		<table>
 			<tr>
@@ -47,21 +39,31 @@ width: 1200px;
 			</tr>
 			<tr>
 				<th>첨부파일</th>
-				<td><input type="text" name="addfile"></td>
+				<td><a href="/api/files/${upHomework.file_group}/1">과제</a></td>
+			</tr>
+			<tr>
+				<th>과제 파일 업로드</th>
+				<td>
+					<div class="file_list">
+						<div class="file_input">
+							<input type="file" name="files" onchange="selectFile(this);" />
+							<button type="button" onclick="removeFile(this);" class="btns del_btn">
+								<span>삭제</span>
+							</button>
+							<button type="button" onclick="addFile();" class="btns fn_add_btn">
+								<span>파일 추가</span>
+							</button>
+						</div>
+					</div>
+				</td>
 			</tr>
 			<tr>
 				<th>제출</th>
 				<td><input  class="submitBtn" type="submit" value="제출">
 		<a href="../Jhe/studHomeworkList"><button  class="submitBtn" type="button">취소</button></a></td>
 			</tr>
-			
 		</table>
-		
 	</form>
-
-
-
-
 </div>
 </body>
 </html>
