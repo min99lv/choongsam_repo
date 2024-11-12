@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.postgre.choongsam.dto.Attendance_Check;
+import com.postgre.choongsam.dto.Class_ScheduleAddVideo;
 import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Lecture;
@@ -157,6 +158,15 @@ public class JheController {
 		int user_seq = (int) session.getAttribute("user_seq");
 		List<Homework> studHomeworkList = hes.getStudHomeworkList(user_seq);
 		System.out.println(studHomeworkList);
+		
+		//****************************************************************
+		String lctrId = studHomeworkList.stream()
+                .map(Homework::getLctr_id)
+                .findFirst()
+                .orElse("");
+		
+		model.addAttribute("lctr_id", lctrId);
+		//****************************************************************
 		model.addAttribute("homeworkList", studHomeworkList);
 		return "view_Jhe/studHomeworkList";
 	}
