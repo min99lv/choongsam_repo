@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../headerGreen.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,6 +26,7 @@ body {
 	height: auto;
 	padding: 20px; /* 여백 추가 */
 	font-size: 20px;
+	margin-bottom: 200px;
 }
 
 .list {
@@ -108,6 +111,43 @@ button {
 	border: none;
 	color: white;
 }
+
+#file-list a {
+    font-size: 20px;
+    color: #00664F; /* 링크 색상 */
+    text-decoration: underline; /* 밑줄 제거 */
+}
+
+.NavBtn {
+	display: flex;
+	justify-content: center;
+}
+
+.NavBtn a {
+	width: 200px;
+	text-align: center;
+	margin: 20px 20px; 
+	display: block; 
+	height: 50px;
+	background-color: #00664F;
+	border: none;
+	color: white;
+	font-size: 16px;
+	text-decoration: none;
+}
+
+#historyBtn {
+width: 200px;
+	text-align: center;
+	/* 버튼 가운데 정렬을 위한 추가 스타일 */
+	margin: 20px 20px; /* 버튼을 가운데 정렬 */
+	display: block; /* 블록으로 설정 */
+	height: 50px;
+	background-color: #00664F;
+	border: none;
+	color: white;
+		font-size: 16px;
+}
 </style>
 <script type="text/javascript">
 
@@ -189,9 +229,6 @@ button {
       </script>
 </head>
 <body>
-	<header>
-		<%@ include file="../header.jsp"%>
-	</header>
 
 
 
@@ -216,8 +253,14 @@ button {
 			</tr>
 		</table>
 
-		<button onclick="history.back();">목록</button>
-		<a href="/api/notice/edit?ntc_mttr_sn=${ntc_mttr_sn}"><button id="editBtn">수정</button></a>
+<div class="NavBtn">
+		<button id="historyBtn" onclick="history.back();">목록</button>
+		<c:if test="${sessionScope.usertype == 1003}">
+		<button id="historyBtn" onclick="location.href='/api/notice/edit?ntc_mttr_sn=${ntc_mttr_sn}'">수정</button>
+		</c:if>
+		<%-- <a href="/api/notice/edit?ntc_mttr_sn=${ntc_mttr_sn}"><span>수정</span></a> --%>
+
+</div>
 	</div>
 
 </body>
