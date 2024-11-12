@@ -89,7 +89,7 @@
 		DELETE	FROM  "HOMEWORK"  WHERE	 "ASMT_NO" = #{asmt_no}
 	</delete>
 	<select id="getStudHomeworkList" resultType="Homework">
-		SELECT		u."USER_NAME" AS prof_name, l."LCTR_ID", l."LCTR_NAME", hs."SBMSN_YN",
+		SELECT		u."USER_NAME" AS prof_name, l."LCTR_ID", l."LCTR_NAME", l."ONOFF" hs."SBMSN_YN",
 					h."ASMT_NO", h."ASMT_NM", h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD"
 		FROM		"COURSE_REGISTRATION" AS c
 		JOIN		"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"
