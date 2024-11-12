@@ -46,8 +46,6 @@
 							AND "LCTR_NO"=#{lctr_no})
 	</select>
 	
-
-	
 	<select id="CurrentMax" parameterType="map" resultType="int">
 		SELECT "CONTS_MAX"
 		FROM "CLASS_SCHEDULE"
@@ -55,10 +53,7 @@
 							FROM "LECTURE_VIDEO"
 							WHERE "VDO_URL_ADDR" = #{videoId}
 							AND "LCTR_NO"=#{lctr_no})
-		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}
-							
-							
-							
+		AND "CLASS_SCHEDULE"."USER_SEQ" = #{user_seq}						
 	</select>
 	
 	<select id="finalTime" parameterType="map" resultType="int">
@@ -93,10 +88,6 @@
 		WHERE "CONTS_ID"=#{conts_id}
 	</select>
 	
-	
-	
-	
-	
 	<select id="getfilename" parameterType="String" resultType="String">
 		SELECT "FILE_NM"
 		FROM "FILE_GROUP"
@@ -113,8 +104,6 @@
 							WHERE "CONTS_ID"=#{conts_id})
 	
 	</select>
-	
-
 
 
 </mapper>

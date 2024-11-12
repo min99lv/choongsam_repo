@@ -58,7 +58,7 @@ public class HmsController {
 	private String basepath;
 	
 	
-	//영상불러오기 api
+	//영상불러오기
 	@GetMapping("/video-details")
 	public String getVideoDetails(@RequestParam String videoId, Model model,
 			@RequestParam int user_seq,
@@ -101,9 +101,8 @@ public class HmsController {
 		model.addAttribute("videoList",videoList);
 		return "view_Hms/videoList";
 	}
-
 	
-	//뷰에서 데이터 받아 저장하기
+	//시청시간 저장하기
 	@PostMapping("/api/progress/save")
 	public String dataSave(Lecture_Video lecture_video, 
 			@RequestParam String videoId,
@@ -132,8 +131,7 @@ public class HmsController {
 		class_schedule.setConts_id(videoId);
 		class_schedule.setUser_seq(user_seq);
 		class_schedule.setLctr_id(lctrInfo.getLctr_id());
-		class_schedule.setLctr_no(lctrInfo.getLctr_no()); 
-		
+		class_schedule.setLctr_no(lctrInfo.getLctr_no()); 	
 		System.out.println("msController filnasave class_schedule->"+class_schedule);
 		String lctr_id = lctrInfo.getLctr_id();
 		System.out.println("msController filnasave lctr_no->"+lctr_id);
@@ -153,8 +151,7 @@ public class HmsController {
 			class_schedule.setConts_prgrt(conts_prgrt);
 	        HS.saveWatchTimeNoMaxUpdate(class_schedule); // conts_max 없이 업데이트
 	    }   		
-	    System.out.println("mscontroller dataSave class_schedule->"+class_schedule);
-	
+	    System.out.println("mscontroller dataSave class_schedule->"+class_schedule);	
 		return "redirect:/sh_lecture_student?lctr_id="+lctr_id+"&user_seq="+user_seq;//이전 강의목록으로
 	}
 	
@@ -168,8 +165,7 @@ public class HmsController {
 		System.out.println("msController getProgress user_seq.."+user_seq);
 		System.out.println("msController getProgress lctr_no.."+lctr_no);
 	    // 비디오 ID를 사용하여 시청 시간 정보를 조회합니다.
-	    int conts_final = HS.watchedFinalTime(videoId, user_seq, lctr_no);
-	    
+	    int conts_final = HS.watchedFinalTime(videoId, user_seq, lctr_no);    
 	    System.out.println("mscontroller getProgress conts_final"+conts_final);
 
 	    // 결과를 DTO로 포장하여 반환.
@@ -188,8 +184,6 @@ public class HmsController {
 		model.addAttribute("filename",filename);
 		return "view_Hms/videoView";
 	}
-
-	
 	
 	//강의자료 다운로드
 	@GetMapping("/api/lectures/download/{conts_id}")
@@ -315,11 +309,6 @@ public class HmsController {
 	        return ResponseEntity.badRequest().build();
 	    }
 	}
-
-
-
-
-
 	
 	//북마크
 	@GetMapping("/api/bookmarks/{conts_id}")
@@ -336,12 +325,6 @@ public class HmsController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-	
-	
-	
-	
-	
 }
 	
 
