@@ -40,11 +40,11 @@
 			<tr>
 				<th>과제 내용</th>
 				<td><textarea name="asmt_cn">${upHomework.asmt_cn}</textarea>
-				<input type="hidden" name="LCTR_ID" value="${upHomework.lctr_id}"></td>
+				<input type="hidden" name="lctr_id" value="${upHomework.lctr_id}"></td>
 			</tr>
 		</table>
 			<button type="submit">수정</button>
-			<a href="../Jhe/profHomeworkList?LCTR_ID=${upHomework.lctr_id}"><button type="button">취소</button></a>
+			<a href="../Jhe/profHomeworkList?lctr_id=${upHomework.lctr_id}"><button type="button">취소</button></a>
 	</form>
 </body>
 </html>
