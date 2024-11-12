@@ -17,7 +17,7 @@
 	flex-direction: column;
 	position: relative;
 	/* 컨테이너의 배경색을 흰색에 가까운 연한 회색으로 설정합니다. */
-	background-color: #fdfdfd;
+	background-color: white;
 	/* 컨테이너에 미세한 그림자를 추가하여 입체감을 줍니다. */
 	top: 120px;
 	/*  컨테이너의 너비 1320px 고정 */
@@ -175,6 +175,33 @@
 			 
 			}
 
+.answered {
+    background-color: #00664F;
+    color: white;
+    font-weight: bold; /* 굵은 글씨 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    padding: 5px 10px; /* 패딩을 줄여서 버튼처럼 보이게 */
+    font-size: 15px; /* 글씨 크기 줄이기 */
+    height: 30px; /* 셀 높이 조정 */
+    line-height: 20px; /* 텍스트가 셀 안에서 가운데 오도록 설정 */
+    border-radius: 5px; /* 둥근 모서리 */
+    cursor: pointer; /* 마우스 포인터가 버튼처럼 보이게 */
+	
+}
+
+/* 답변이 없는 경우 */
+.not-answered {
+    background-color: red;
+    color: white;
+    font-weight: bold; /* 굵은 글씨 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    padding: 5px 10px; /* 패딩을 줄여서 버튼처럼 보이게 */
+    font-size: 15px; /* 글씨 크기 줄이기 */
+    height: 30px; /* 셀 높이 조정 */
+    line-height: 20px; /* 텍스트가 셀 안에서 가운데 오도록 설정 */
+    border-radius: 5px; /* 둥근 모서리 */
+    cursor: pointer; /* 마우스 포인터가 버튼처럼 보이게 */
+}
 
 
 			</style>
@@ -209,7 +236,7 @@
 					<c:if test="${sessionScope.usertype == 1003}">
 					    <a class="activeBtn" href="/api/notice/new">작성</a>
 					    <form action="/api/notice/delete" method="post" id="deleteForm">
-					    <button class="activeBtn" type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+					    <button class="activeBtn" type="submit" onclick="return confirm('정말 비활성화하시겠습니까?');">비활성화</button>
 					    </form>
 					</c:if>
 					
@@ -226,12 +253,17 @@
 							<tr>
 								<c:choose>
 								 <c:when test="${usertype == 1003}">
-									<th>삭제</th>
+									<th>선택</th>
 									</c:when>
 								</c:choose>
 								<th>번호</th>
 								<th>제목</th>
 								<th>등록일</th>
+						<c:choose>
+								 <c:when test="${usertype == 1003}">
+									<th>노출여부</th>
+									</c:when>
+								</c:choose>
 							</tr>
 						</thead>
 					<c:if test="${total>0}">
@@ -250,6 +282,23 @@
 									<td>${startIndex - status.index}</td>
 									<td><a href="/view_Sjm/noticeDetail?ntc_mttr_sn=${notice.ntc_mttr_sn}">${notice.ntc_mttr_ttl}</a></td>
 									<td>${notice.ntc_mttr_dt}</td>
+									<c:choose>
+									    <c:when test="${usertype == 1003}">
+									        <td>
+									            <c:choose>
+									                <c:when test="${notice.ntc_mttr_yn == 'Y'}">
+									                    <span class="answered">활성</span>
+									                </c:when>
+									                <c:when test="${notice.ntc_mttr_yn == 'N'}">
+									                    <span class="not-answered">비활성</span>
+									                </c:when>
+									                <c:otherwise>
+									                    <span style="color: gray;">알 수 없음</span>
+									                </c:otherwise>
+									            </c:choose>
+									        </td>
+									    </c:when>
+									</c:choose>
 								</tr>
 							</c:forEach>
 						</tbody>

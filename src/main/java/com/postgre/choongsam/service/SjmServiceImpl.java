@@ -307,6 +307,18 @@ public class SjmServiceImpl implements SjmService {
 		return sd.updateNoteSentDelYn(note);
 	}
 
+	@Override
+	public int countNoticeAll(Map<String, Object> params) {
+		return sd.countNoticeAll(params);
+	}
+
+	@Override
+	public List<Notice> selectNoticeListAll(Map<String, Object> params) {
+		return sd.selectNoticeListAll(params);
+	}
+
+
+
 	
 
 
