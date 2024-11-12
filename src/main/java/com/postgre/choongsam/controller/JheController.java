@@ -35,6 +35,14 @@ public class JheController {
 	@Autowired
 	private final JheService hes;
 
+	@GetMapping(value = "/myStudyHomeNav")
+	public String getLctrId(@RequestParam("lctr_id") String lctr_id, HttpSession session, Model model) {
+		System.out.println("Received lctr_id: " + lctr_id);
+
+		model.addAttribute("lctr_id", lctr_id);
+		return "myStudyHomeNav";
+	}
+
 	@GetMapping(value = "/myLecture")
 	public String getLectureHomeworkList(HttpSession session, Model model) {
 		System.out.println("내 강의 리스트 컨트롤러");
@@ -152,12 +160,13 @@ public class JheController {
 	}
 
 	@GetMapping(value = "/studHomeworkList")
-	public String getStudHomeworkList(HttpSession session, Model model) {
+	public String getStudHomeworkList(@RequestParam("lctr_id") String lctr_id, HttpSession session, Model model) {
 		System.out.println("학생 강의 과제 리스트 깐따삐아");
 		int user_seq = (int) session.getAttribute("user_seq");
 		List<Homework> studHomeworkList = hes.getStudHomeworkList(user_seq);
 		System.out.println(studHomeworkList);
-		model.addAttribute("homeworkList", studHomeworkList);
+		model.addAttribute("lctr_id", lctr_id);
+		model.addAttribute("studHomeworkList", studHomeworkList);
 		return "view_Jhe/studHomeworkList";
 	}
 
