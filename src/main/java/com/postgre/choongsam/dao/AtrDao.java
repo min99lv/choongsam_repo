@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.postgre.choongsam.dto.Classroom;
 import com.postgre.choongsam.dto.Lecture;
+import com.postgre.choongsam.dto.Syllabus;
 
 public interface AtrDao {
 
@@ -27,5 +28,9 @@ public interface AtrDao {
 	List<Lecture> getRecruitLectureList();
 
 	void applyCourse(String parameter, String parameter2);
+
+	List<Syllabus> getSyllabus(String lctr_id);
+
+	void changeLectureState(String parameter, String parameter2);
 
 }

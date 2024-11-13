@@ -157,6 +157,7 @@
             <ul class="submenu" id="myClassroomSubmenu">
                 <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
                 <li onclick="location.href='../view_Hjh/gangyilistTeacher?user_seq=${user_seq}'"><label class="txt">강의 목록</label></li>
+                <li onclick="location.href='/registerCourseForm'"><label class="txt">강의 등록</label></li>
             </ul>
             <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="txt">성적 관리</label></li>
             <ul class="submenu" id="gradeManagementSubmenu">
@@ -196,7 +197,7 @@
              </ul>
             <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="txt">강의</label></li>
             <ul class="submenu" id="gradeManagementSubmenu">
-           		  <li>강의 승인</li>
+           		  <li onclick="location.href='/courseApproveList'">강의 승인</li>
           		  <li>강의 목록</li>
             </ul>
             <li onclick="toggleSubMenu('inquirySubmenu')"><label class="txt">1:1문의</label></li>
