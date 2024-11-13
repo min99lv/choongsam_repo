@@ -20,7 +20,7 @@
 	
 	#listBody{
 		width: 1582px;
-		height: 100%;
+		height: 100vh;
 		background-color: #F1F1F1;
 		float: right;
 	}
