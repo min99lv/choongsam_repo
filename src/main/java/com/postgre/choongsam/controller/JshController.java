@@ -668,10 +668,10 @@ public class JshController {
 			model.addAttribute("contentList", contentList);
 			
 			
-			String url = "view_Jsh/teaLecture";  //비대면 강의
+			String url = "view_Jsh/stuLecture";  //비대면 강의
 			
 			if(onoff==7001) {
-				url = "view_Jsh/teaLectureOff";
+				url = "view_Jsh/stuLectureOff";
 			}
 			
 			System.out.println("********************************JshController StudentLecture url >> "+url);
