@@ -125,7 +125,7 @@
 		    SET 
 		        "PAY_STATE" = 'Y', 
 		        "PAY_DATE" = CURRENT_DATE,
-		        "REG_STATE" =  '2002'
+		        "REG_STATE" =  '2003'
 		    WHERE "USER_SEQ" = #{user_seq}
 		      AND "LCTR_ID" = #{lctr_id};
 		</update>

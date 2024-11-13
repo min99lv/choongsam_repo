@@ -114,17 +114,11 @@
 <c:when test="${usertype == 1001}">
     <nav>
         <ul>
-            <h1>학생</h1>
+            <h1>&nbsp;</h1>
             <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">내 강의실</label></li>
             <ul class="submenu" id="myClassroomSubmenu">
-                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
                 <li onclick="location.href='../view_Hjh/suganglistStd?user_seq=${user_seq}'"><label class="txt">수강신청내역</li>
-            </ul>
-            <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="txt">성적 관리</label></li>
-            <ul class="submenu" id="gradeManagementSubmenu">
-                <li><label class="txt">하은</label></li>
-                <li><label class="txt">하은</label></li>
-                <li><label class="txt">하은</label></li>
+                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
             </ul>
             <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="txt">회원정보</label></li>
             <ul class="submenu" id="userInfoSubmenu">
@@ -152,18 +146,12 @@
 <c:when test="${usertype == 1002}">
     <nav>
         <ul>
-            <h1>강사</h1>
+            <h1>&nbsp;</h1>
             <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">나의 강의실</label></li>
             <ul class="submenu" id="myClassroomSubmenu">
                 <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
                 <li onclick="location.href='../view_Hjh/gangyilistTeacher?user_seq=${user_seq}'"><label class="txt">강의 목록</label></li>
                 <li onclick="location.href='/registerCourseForm'"><label class="txt">강의 등록</label></li>
-            </ul>
-            <li onclick="toggleSubMenu('gradeManagementSubmenu')"><label class="txt">성적 관리</label></li>
-            <ul class="submenu" id="gradeManagementSubmenu">
-                <li><label class="txt">하은</label></li>
-                <li><label class="txt">하은</label></li>
-                <li><label class="txt">하은</label></li>
             </ul>
             <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="txt">회원정보</label></li>
             <ul class="submenu" id="userInfoSubmenu">
@@ -190,7 +178,7 @@
 <c:when test="${usertype == 1003}">
     <nav>
         <ul>
-            <h1>관리자</h1>
+            <h1>&nbsp;</h1>
             <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">회원관리</label></li>
             <ul class="submenu" id="myClassroomSubmenu">
                  <li onclick="location.href='../view_Hjh/updateProfileAdmin'">회원정보수정</li>

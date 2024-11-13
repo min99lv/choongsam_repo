@@ -163,7 +163,7 @@
         </tr>
         <tr>
             <th>대면여부</th>
-            <td>${lecture.onoff}</td>
+            <td>${lecture.onoff_tr}</td>
         </tr>
         <tr>
             <th>분류</th>
