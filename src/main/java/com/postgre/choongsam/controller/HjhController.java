@@ -588,14 +588,26 @@ public class HjhController {
 	    return "view_Hjh/changePW";
 	}
 	
-	@PostMapping("changePassword");
-	public String changePassword(HttpSession session,Model model) {
-		
-		
-	}
+    // 비밀번호 변경 처리
+    @PostMapping("changePassword")
+    public String changePassword(@RequestParam("password") String password,
+                                 @RequestParam("new_password") String new_password,
+                                 @RequestParam("user_id") String user_id,
+                                 Model model) {
+        
+        // 비밀번호 변경 요청을 서비스 레이어로 전달
+        int result = hjh.changePW(password, user_id, new_password);
+        
+        if (result == 1) {
+            model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
+            return "redirect:../Jhe/myLecture";  // 비밀번호 변경 후 프로필 페이지로 리다이렉트
+        } else {
+            model.addAttribute("msg", "비밀번호 확인해주세요. 다시 시도해 주세요.");
+            return "view_Hjh/changePW";  // 실패 시 비밀번호 변경 페이지로 돌아감
+        }
 	
 	
-	
+    }
 
 }
 
