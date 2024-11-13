@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myPageNav.jsp" %>
 <!DOCTYPE html>
 <html>
 
@@ -29,9 +32,8 @@ body {
 	box-sizing: border-box;
 	/* 자동으로 좌우 여백을 설정하여 가운데 정렬 */
 	margin: 0 auto;
-	height: auto;
-	margin-bottom: 200px;
-	height: 900px;
+	height: 1300px;
+	margin-bottom: 300px;
 	
 }
 
@@ -211,11 +213,6 @@ td.cell-Yn {
 
 <body>
 
-<header>
-	<%@ include file="../headerGreen.jsp" %>
-</header>
-	<%@ include file="../myPageNav.jsp" %>
-
 
 	<div class="container">
 
@@ -226,11 +223,7 @@ td.cell-Yn {
 		<div class="contents1">
 		
 				<div class="manager_Qna_header_search">
-					<select>
-						<option>전체검색</option>
-						<option>제목</option>
-						<option>내용</option>
-					</select> <input type="text" name="keyword" class="keyword" id="keyword">
+					<input type="text" name="keyword" class="keyword" id="keyword">
 					<button type="submit" class="search_btn">검색</button>
 				</div>
 			

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.postgre.choongsam.dto.Classroom;
 import com.postgre.choongsam.dto.Lecture;
 import com.postgre.choongsam.dto.Paging;
+import com.postgre.choongsam.dto.Syllabus;
 import com.postgre.choongsam.service.AtrService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -97,7 +98,9 @@ public class AtrController {
 			return "view_Atr/courseDetailAdmin";
 		}
 		
-		if(lecture.getOnoff().equals("대면")) {
+
+		if(lecture.getOnoff_tr().equals("대면")) {
+
 			List<Classroom> classroomList=as.getAllClassRoom();
 			String schdTGemp = "";
 			System.out.println("addClassRoomForm schd->" + lecture.getLctr_schd());
@@ -127,6 +130,8 @@ public class AtrController {
 		
 		Lecture lecture = new Lecture();
 		lecture = as.getLectureDetail(lctr_id);
+		List<Syllabus> syllabusList= as.getSyllabus(lctr_id);
+		model.addAttribute("syllabusList", syllabusList);
 		model.addAttribute("lecture", lecture);
 		return "view_Atr/courseApplyDetail";
 		
@@ -151,6 +156,11 @@ public class AtrController {
 	public String applyCourse(HttpServletRequest request, Model model) {
 		as.applyCourse(request.getParameter("lctr_id"),request.getParameter("student_id"));
 		return "redirect:courseApplyList";
+	}
+	@RequestMapping(value = "/changeLectureState")
+	public String changeLectureState(HttpServletRequest request, Model model) {
+		as.changeLectureState(request.getParameter("lctr_id"),request.getParameter("lctr_state"));
+		return "redirect:lectureDetail?lctr_id="+request.getParameter("lctr_id");
 	}
 
 	@GetMapping(value = "/overlapCheck")

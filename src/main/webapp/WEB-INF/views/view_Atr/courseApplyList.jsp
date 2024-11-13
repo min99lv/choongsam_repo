@@ -119,7 +119,7 @@ a.apply-link[hidden] {
 			<c:forEach var="lecture" items="${lectureList}">
 				<tr>
 					<td>${lecture.user_name}</td>
-					<td>${lecture.onoff}</td>
+					<td>${lecture.onoff_tr}</td>
 					<td>${lecture.lctr_category}</td>
 					<td>${lecture.lctr_name}</td>
 					<td>${lecture.lctr_count}</td>
