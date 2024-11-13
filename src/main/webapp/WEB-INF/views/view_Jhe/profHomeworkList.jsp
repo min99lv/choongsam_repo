@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myStudyHomeNav.jsp" %>
+<link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +12,10 @@
 <title>진행중인 강의 과제 리스트</title>
 </head>
 <body>
-	<h2>나는 진행중인 내 강의 과제 리스트 (강사)</h2>
+	<div class="container">
+	<div class="contents">
+		<h1>나는 진행중인 내 강의 과제 리스트 (강사)</h1>
+	</div>
 	<form action="/Jhe/insertHomework" method="get">
 		<input type="hidden" name="lctr_id" value="${lctr_id}">
     		<button type="submit">과제 등록</button>
@@ -81,5 +85,6 @@
 		</c:forEach>
 	</table>
 </form>
+</div>
 </body>
 </html>
