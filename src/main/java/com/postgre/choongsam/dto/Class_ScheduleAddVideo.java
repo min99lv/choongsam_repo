@@ -19,7 +19,7 @@ public class Class_ScheduleAddVideo {
 	private	int	vdo_length;		// 영상 길이
 	private int		file_group;		// 파일 그룹
 	
-	private String 		onoff;				// 온오프라인 여부
+	private int 		onoff;				// 온오프라인 여부
 	private String 		lctr_category;		// 강의구분명
 	private String 		lctr_name;			// 강의명
 	private int 		lctr_count;			// 모집인원수
