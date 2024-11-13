@@ -98,7 +98,9 @@ public class AtrController {
 			return "view_Atr/courseDetailAdmin";
 		}
 		
-		if(lecture.getOnoff() == 7001) {
+
+		if(lecture.getOnoff_tr().equals("대면")) {
+
 			List<Classroom> classroomList=as.getAllClassRoom();
 			String schdTGemp = "";
 			System.out.println("addClassRoomForm schd->" + lecture.getLctr_schd());
