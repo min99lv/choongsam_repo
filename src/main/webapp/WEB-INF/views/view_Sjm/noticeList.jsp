@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	<%@ include file="../header.jsp" %>
 		<!DOCTYPE html>
 		<html>
 
@@ -212,9 +213,7 @@
 		</script>
 
 		<body>
-			<header>
-				<%@ include file="../header.jsp" %>
-			</header>
+
 
 			<div class="container">
 				<div class="contents">
@@ -227,7 +226,7 @@
 				
 					<form action="/api/notice" id="frm">
 						<div class="manager_Qna_header_search">
-							<input type="text" name="keyword" class="keyword" id="keyword" >
+							<input type="text" name="keyword" class="keyword" id="keyword" placeholder="제목 또는 내용">
 							<button type="submit" class="search_btn">검색</button>
 						</div>
 					</form>
