@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myStudyHomeNav.jsp" %>
+<link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +11,10 @@
 <title>수강생 출결현황</title>
 </head>
 <body>
-	<h2>차시별 수강생 출결현황</h2>
+	<div class="container">
+	<div class="contents">
+		<h1>차시별 수강생 출결현황</h1>
+	</div>
 	<table>
 		<tr>
 			<th>차시</th>
@@ -22,11 +28,11 @@
 		<c:forEach var="AttMain" items="${profAttMainList}">
 		<tr>
 		 	<td><c:if test="${onoff != 7002}">
-		 			<a href="/Jhe/insertStudAtt?LCTR_ID=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
+		 			<a href="/Jhe/insertStudAtt?lctr_id=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
 		 			${AttMain.lctr_no}</a>
 		 		</c:if>
 		 		<c:if test="${onoff == 7002}">
-		 			<a href="/Jhe/profAttDetail?LCTR_ID=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
+		 			<a href="/Jhe/profAttDetail?lctr_id=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
 		 			${AttMain.lctr_no}</a>
 		 		</c:if>
 		 	</td>
@@ -37,5 +43,6 @@
 		</tr>
 		</c:forEach>
 	</table>
+	</div>
 </body>
 </html>

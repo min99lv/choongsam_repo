@@ -19,7 +19,7 @@
 		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
 		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
-	<select id="getProfHomeworkList" resultType="Homework">
+	<select id="getProfHomework" parameterType="String" resultType="Homework">
 		SELECT		u."USER_NAME" AS prof_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",
 					h."ASMT_NO", h."ASMT_NM", h."ASMT_CN",
 					h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD", h."FILE_GROUP"
