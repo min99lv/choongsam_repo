@@ -78,12 +78,12 @@ th {
 					<td><c:if test="${usertype == 1002}">${homeworkList.reg_count}</c:if></td>
 					<td>
 						<c:if test="${usertype == 1002}">
-							<a href="/sh_lecture_teacher?lctr_id=${homeworkList.lctr_id}&user_seq=${user_seq}" id="myLecture">
-							<img alt="강의실입장" src="../chFile/Homework/입장.png" id="door"></a>
+							<a href="/sh_lecture_teacher?lctr_id=${homeworkList.lctr_id}&user_seq=${user_seq}&onOff=${onoff}" id="myLecture">
+								<img alt="강의실입장" src="../chFile/Homework/입장.png" id="door"></a>
 						</c:if>
 						<c:if test="${usertype == 1001}">
-							<a href="/sh_lecture_student?lctr_id=${homeworkList.lctr_id}&user_seq=${user_seq}" id="myLecture">
-							<img alt="강의실입장" src="../chFile/Homework/입장.png" id="door"></a>
+							<a href="/sh_lecture_student?lctr_id=${homeworkList.lctr_id}&user_seq=${user_seq}&onOff=${onoff}" id="myLecture">
+								<img alt="강의실입장" src="../chFile/Homework/입장.png" id="door"></a>
 						</c:if>
 					</td>
 				</tr>

@@ -31,36 +31,36 @@
 		<c:set var="previousName" value="" />
 		<c:set var="previousAsmtNm" value="" />
 		<c:set var="previousprofNm" value="" />
-		<c:forEach var="profHomeworkList" items="${profHomeworkList}">
-			<c:if test="${profHomeworkList.lctr_name != previousName}">
+		<c:forEach var="profHomework" items="${profHomeworkList}">
+			<c:if test="${profHomework.lctr_name != previousName}">
 				<tr>
-					<td>${profHomeworkList.lctr_name}</td>
-					<td>${profHomeworkList.prof_name}</td>
-					<td><a href="/Jhe/updateHomework?ASMT_NO=${profHomeworkList.asmt_no}">${profHomeworkList.asmt_nm}</a></td>
-					<td>${profHomeworkList.asmtStatus}</td>
-					<td>${profHomeworkList.sbmsn_bgng_ymd}</td>
-					<td>${profHomeworkList.sbmsn_end_ymd}</td>
-					<td>${profHomeworkList.submissionRate}%</td>
-					<td><input type="checkbox" name="delCheck" value="${profHomeworkList.asmt_no}"></td>
+					<td>${profHomework.lctr_name}</td>
+					<td>${profHomework.prof_name}</td>
+					<td><a href="/Jhe/updateHomework?ASMT_NO=${profHomework.asmt_no}">${profHomework.asmt_nm}</a></td>
+					<td>${profHomework.asmtStatus}</td>
+					<td>${profHomework.sbmsn_bgng_ymd}</td>
+					<td>${profHomework.sbmsn_end_ymd}</td>
+					<td>${profHomework.submissionRate}%</td>
+					<td><input type="checkbox" name="delCheck" value="${profHomework.asmt_no}"></td>
 				</tr>
-				<c:set var="previousName" value="${profHomeworkList.lctr_name}" />
-				<c:set var="previousprofNm" value="${profHomeworkList.prof_name}" />
-				<c:set var="previousAsmtNm" value="${profHomeworkList.asmt_nm}" />
+				<c:set var="previousName" value="${profHomework.lctr_name}" />
+				<c:set var="previousprofNm" value="${profHomework.prof_name}" />
+				<c:set var="previousAsmtNm" value="${profHomework.asmt_nm}" />
 			</c:if>
-			<c:if test="${profHomeworkList.lctr_name == previousName
-						&& profHomeworkList.prof_name == previousprofNm
-						&& profHomeworkList.asmt_nm != previousAsmtNm}">
+			<c:if test="${profHomework.lctr_name == previousName
+						&& profHomework.prof_name == previousprofNm
+						&& profHomework.asmt_nm != previousAsmtNm}">
 				<tr>
 					<td></td>
 					<td></td>
-					<td><a href="/Jhe/updateHomework?ASMT_NO=${profHomeworkList.asmt_no}">${profHomeworkList.asmt_nm}</a></td>
-					<td>${profHomeworkList.asmtStatus}</td>
-					<td>${profHomeworkList.sbmsn_bgng_ymd}</td>
-					<td>${profHomeworkList.sbmsn_end_ymd}</td>
-					<td>${profHomeworkList.submissionRate}%</td>
-					<td><input type="checkbox" name="delCheck" value="${profHomeworkList.asmt_no}"></td>
+					<td><a href="/Jhe/updateHomework?ASMT_NO=${profHomework.asmt_no}">${profHomework.asmt_nm}</a></td>
+					<td>${profHomework.asmtStatus}</td>
+					<td>${profHomework.sbmsn_bgng_ymd}</td>
+					<td>${profHomework.sbmsn_end_ymd}</td>
+					<td>${profHomework.submissionRate}%</td>
+					<td><input type="checkbox" name="delCheck" value="${profHomework.asmt_no}"></td>
 				</tr>
-				<c:set var="previousAsmtNm" value="${profHomeworkList.asmt_nm}" />
+				<c:set var="previousAsmtNm" value="${profHomework.asmt_nm}" />
 			</c:if>
 		</c:forEach>
 	</table>

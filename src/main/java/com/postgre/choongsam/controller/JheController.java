@@ -35,14 +35,6 @@ public class JheController {
 	@Autowired
 	private final JheService hes;
 
-	@GetMapping(value = "/myStudyHomeNav")
-	public String getLctrId(@RequestParam("lctr_id") String lctr_id, HttpSession session, Model model) {
-		System.out.println("Received lctr_id: " + lctr_id);
-
-		model.addAttribute("lctr_id", lctr_id);
-		return "myStudyHomeNav";
-	}
-
 	@GetMapping(value = "/myLecture")
 	public String getLectureHomeworkList(HttpSession session, Model model) {
 		System.out.println("내 강의 리스트 컨트롤러");
@@ -54,12 +46,25 @@ public class JheController {
 			List<Lecture> profLectureList = hes.getLectureHomeworkList(user_seq);
 			model.addAttribute("homeworkList", profLectureList);
 			System.out.println("profLectureList: " + profLectureList);
+			
+			String onOff = profLectureList.stream()
+	                .map(Lecture::getOnoff)
+	                .findFirst()
+	                .orElse("");
+			
+			model.addAttribute("onoff",onOff);
 		} else if (user_status == 1001) {
 			List<Lecture> studLectureList = hes.studLecture(user_seq);
 			model.addAttribute("homeworkList", studLectureList);
 			System.out.println("studLectureList: " + studLectureList);
+			
+			String onOff = studLectureList.stream()
+	                .map(Lecture::getOnoff)
+	                .findFirst()
+	                .orElse("");
+			
+			model.addAttribute("onoff",onOff);
 		}
-
 		return "view_Jhe/myLecture";
 	}
 
@@ -165,7 +170,6 @@ public class JheController {
 		int user_seq = (int) session.getAttribute("user_seq");
 		List<Homework> studHomeworkList = hes.getStudHomeworkList(user_seq);
 		System.out.println(studHomeworkList);
-		//****************************************************************
 		String lctrId = studHomeworkList.stream()
                 .map(Homework::getLctr_id)
                 .findFirst()
