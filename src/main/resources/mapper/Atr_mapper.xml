@@ -19,7 +19,7 @@
 		SELECT
 			l."LCTR_ID",
 			user_info_name."USER_NAME" AS "user_name", 
-			comm_onoff."CD_NM" AS "onoff",
+			comm_onoff."CD_NM" AS "onoff_tr",
 			comm_category."CD_NM" AS "lctr_category",
 			l."LCTR_NAME",
 			l."LCTR_COUNT",
@@ -46,7 +46,7 @@
 		SELECT
 			l."LCTR_ID",
 			user_info_name."USER_NAME" AS "user_name", 
-			comm_onoff."CD_NM" AS "onoff",
+			comm_onoff."CD_NM" AS "onoff_tr",
 			comm_category."CD_NM" AS "lctr_category",
 			l."LCTR_NAME",
 			l."LCTR_COUNT",
@@ -75,7 +75,7 @@
 		SELECT
 			l."LCTR_ID",
 			user_info_name."USER_NAME" AS "user_name", 
-			comm_onoff."CD_NM" AS "onoff",
+			comm_onoff."CD_NM" AS "onoff_tr",
 			comm_category."CD_NM" AS "lctr_category",
 			l."LCTR_NAME",
 			l."LCTR_COUNT",
