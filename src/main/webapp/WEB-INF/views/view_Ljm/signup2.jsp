@@ -213,7 +213,7 @@
 $(document).ready(function() {
     let isIdConfirmed = false; // 아이디 중복 확인 여부
 
-    //아이디 중복 체크
+    // 아이디 중복 체크
     function confirmId() {
         var userId = $("#user_id").val();
 
@@ -222,7 +222,7 @@ $(document).ready(function() {
         if (!regex.test(userId)) {
             alert("아이디는 4~12자의 영문 또는 숫자만 가능합니다.\n특수문자나 한글은 포함될 수 없습니다.");
             $("#user_id").val('');  // 아이디 입력 필드 초기화
-            return;  // 유효하지 않으면 중복 확인 로직을 실행하지 않음
+            return;
         }
 
         $.ajax({
@@ -255,7 +255,6 @@ $(document).ready(function() {
 
     // 회원가입 버튼 클릭 시 중복 확인 여부 체크
     $("#btnNext").click(function(event) {
-        // 아이디 중복 확인이 안 된 경우
         if (!isIdConfirmed) {
             alert("아이디 중복 확인을 해주세요.");
             event.preventDefault();  // 폼 제출을 막음
@@ -264,7 +263,6 @@ $(document).ready(function() {
 
     // 폼 제출 이벤트 처리 (다른 방법으로도 제출될 수 있으므로)
     $("#signupForm").submit(function(event) {
-        // 아이디 중복 확인이 안 된 경우
         if (!isIdConfirmed) {
             alert("아이디 중복 확인을 해주세요.");
             event.preventDefault();  // 폼 제출을 막음
