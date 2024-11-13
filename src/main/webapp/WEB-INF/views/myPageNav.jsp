@@ -117,8 +117,8 @@
             <h1>&nbsp;</h1>
             <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">내 강의실</label></li>
             <ul class="submenu" id="myClassroomSubmenu">
-                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
                 <li onclick="location.href='../view_Hjh/suganglistStd?user_seq=${user_seq}'"><label class="txt">수강신청내역</li>
+                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
             </ul>
             <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="txt">회원정보</label></li>
             <ul class="submenu" id="userInfoSubmenu">
