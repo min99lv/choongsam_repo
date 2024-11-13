@@ -53,11 +53,10 @@ public class JshController {
 	//교수**********************************************************************
 	
 	@GetMapping("/sh_lecture_teacher")
-	public String sh_lecture_teacher(Model model,
+	public String sh_lecture_teacher(Model model,@RequestParam(value = "onoff", defaultValue = "0") int onoff,
 														   Class_ScheduleAddVideo info,
 														   @RequestParam String lctr_id,
-														   @RequestParam int user_seq,
-														   @RequestParam String onOff) {
+														   @RequestParam int user_seq) {
 		
 		System.out.println("JshController sh_lecture_teacher start...");
 		
@@ -85,7 +84,7 @@ public class JshController {
 		
 		String url = "view_Jsh/teaLecture";  //비대면 강의
 		
-		if(onOff.equals("7001")) {
+		if(onoff==7001) {
 			url = "view_Jsh/teaLectureOff";
 		}
 		
@@ -634,15 +633,14 @@ public class JshController {
 	 	
 	 	//학생
 	 	@GetMapping("/sh_lecture_student")
-		public String StudentLecture(Model model,
+		public String StudentLecture(Model model, @RequestParam(value = "onoff", defaultValue = "0") int onoff,
 									 @RequestParam String lctr_id,
 									 @RequestParam int user_seq,
-									 @RequestParam String onOff,
 									 Class_ScheduleAddVideo csad) {
 			System.out.println("JshController StudentLecture start...");
 			System.out.println("JshController StudentLecture lctr_id >> "+lctr_id);
 			System.out.println("JshController StudentLecture user_seq >> "+user_seq);
-			System.out.println("********************************JshController StudentLecture onOff >> "+onOff);
+			System.out.println("********************************JshController StudentLecture onoff >> "+onoff);
 			
 			List<Class_ScheduleAddVideo> contentList = service.studentLecture(lctr_id, user_seq);
 			System.out.println("JshController StudentLecture contentList >> "+contentList);
@@ -670,10 +668,10 @@ public class JshController {
 			model.addAttribute("contentList", contentList);
 			
 			
-			String url = "view_Jsh/teaLecture";  //비대면 강의
+			String url = "view_Jsh/stuLecture";  //비대면 강의
 			
-			if(onOff.equals("7001")) {
-				url = "view_Jsh/teaLectureOff";
+			if(onoff==7001) {
+				url = "view_Jsh/stuLectureOff";
 			}
 			
 			System.out.println("********************************JshController StudentLecture url >> "+url);

@@ -58,6 +58,9 @@ public class JheDaoImpl implements JheDao {
 			System.out.println("다오 LCTR_ID: " + lctr_id);
 		} catch (Exception e) {
 			System.out.println("getProfHomeworkList error: " + e.getMessage());
+			System.out.println("다오 LCTR_ID: " + lctr_id);
+			System.out.println("다오 profHomeworkList: " + profHomeworkList);
+			e.printStackTrace();
 		}
 		return profHomeworkList;
 	}

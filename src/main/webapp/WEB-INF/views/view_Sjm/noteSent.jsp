@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myPageNav.jsp" %>
 <!DOCTYPE html>
 <html>
 
@@ -215,7 +217,6 @@ td.cell-date {
 
 <body>
 
-<%@ include file="../headerGreen.jsp" %>
 
 	<div class="container">
 
@@ -334,7 +335,7 @@ td.cell-date {
 			const startIndex = total - (paging.currentPage - 1) * paging.rowPage;  // startIndex 계산
 		
 			notes.forEach((note, index) => {
-				const indexInTable = startIndex - index + 1;  // 각 항목의 번호 계산
+				const indexInTable = startIndex - index;  // 각 항목의 번호 계산
 		
 				const checkboxDisabled = note.rcvr_note_yn === 'Y' ? 'disabled' : '';
 				
