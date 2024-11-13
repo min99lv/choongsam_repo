@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회원탈퇴</title>
+    <title>비밀번호 변경</title>
     <style>
         /* 기본 폰트와 배경 설정 */
         body {
@@ -19,8 +19,8 @@
         /* 컨테이너 스타일 */
         .container {
             max-width: 500px;
-            margin: 200px auto 350px auto;  /* 상단에 여백 추가 */
-            padding: 30px;
+            margin: 150px auto 100px auto;  /* 상단에 더 많은 여백 추가 */
+            padding: 100px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 1);
@@ -63,7 +63,7 @@
         .form-container button {
             width: 100%;
             padding: 14px;
-            background-color: #f44336;  /* 탈퇴 버튼은 붉은색 */
+            background-color: #f28a8c;
             color: white;
             border: none;
             border-radius: 5px;
@@ -73,10 +73,10 @@
         }
 
         .form-container button:hover {
-            background-color: #d32f2f; /* 버튼 hover 시 색상 */
+            background-color: #45a049;
         }
 
-        /* 탈퇴 메시지 */
+        /* 비밀번호 변경 메시지 */
         .form-container .msg {
             color: #ff4d4d;
             text-align: center;
@@ -118,7 +118,7 @@
                 </div>
 
                 <!-- 비밀번호 입력 필드 -->
-                <div>
+                <div style="padding-top: 30px;">
                     <label for="password">비밀번호:</label>
                     <input type="password" id="password" name="password" required />
                 </div>
