@@ -275,8 +275,13 @@
 					
 					<span id="title">${conts.vdo_file_nm }</span>
 					
+					
 					<div class="jindo">
 						<span id="perTxt">진도율 </span>
+						
+						<c:out value="${conts.conts_max}" />
+    					<c:out value="${conts.vdo_length}" />
+						
 							<c:choose>
 							    <c:when test="${conts != null && conts.conts_max != null && conts.conts_max > 0}">
 							        <meter id="meter" min="0" max="${conts.vdo_length}" value="${conts.vdo_length != null && conts.vdo_length >= 0 ? conts.conts_max : 0}"></meter>
