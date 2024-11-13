@@ -8,7 +8,7 @@
 		"LECTURE" ("LCTR_ID", "USER_SEQ", "ONOFF","LCTR_CATEGORY","LCTR_NAME",
 		"LCTR_COUNT","RCRT_DATE", "LCTR_COST", "LCTR_STATE", "EVAL_CRITERIA",
 		"LCTR_START_DATE", "LCTR_CNTSCHD", "FILE_GROUP", "LCTR_SCHD")
-		values (NEXTVAL('lctr_id_seq'), 0,CAST (#{onoff} AS INTEGER),CAST (#{lctr_category} AS INTEGER),#{lctr_name},#{lctr_count},#{rcrt_date},#{lctr_cost},'4001',#{eval_criteria},#{lctr_start_date},#{lctr_cntschd},#{file_group},#{lctr_schd})
+		values (NEXTVAL('lctr_id_seq'), #{user_seq},CAST (#{onoff} AS INTEGER),CAST (#{lctr_category} AS INTEGER),#{lctr_name},#{lctr_count},#{rcrt_date},#{lctr_cost},'4001',#{eval_criteria},#{lctr_start_date},#{lctr_cntschd},#{file_group},#{lctr_schd})
 	</insert>
 	<insert id="trRegisterSyllabus">
 		INSERT INTO "SYLLABUS"
@@ -112,6 +112,9 @@
 	<select  id="trGetAllClassRoom"  resultType="Classroom">
 	SELECT * FROM "CLASSROOM"
 	</select>
+	<select  id="trGetSyllabus"  resultType="Syllabus">
+	SELECT * FROM "SYLLABUS" WHERE "LCTR_ID" = #{lctr_id}
+	</select>
 	<update id="trApproveCourse">
 	UPDATE "LECTURE"
 	SET "LCTR_STATE" = '4002' 
@@ -125,5 +128,10 @@
 		INSERT INTO "COURSE_REGISTRATION" ("LCTR_ID","USER_SEQ","APLY_DATE","REG_STATE","PAY_STATE")
 		 VALUES (#{lctr_id},#{student_id},TO_CHAR( NOW(), 'YYMMDD'),'2001','N')
 	</insert>
+	<update id="trChangeLectureState">
+	UPDATE "LECTURE" 
+	SET "LCTR_STATE" = #{lctr_state} 
+	WHERE "LCTR_ID" = #{lctr_id}
+	</update>
 	
 </mapper>
