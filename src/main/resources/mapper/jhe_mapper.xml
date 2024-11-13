@@ -3,7 +3,10 @@
 
 <mapper namespace = "com.postgre.choongsam.dto.jheMapper">
 	<select id="getLectureHomeworkList" resultType="Lecture">
-		SELECT		u."USER_NAME" AS user_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME"
+		SELECT		u."USER_NAME" AS user_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",  l."ONOFF",
+					(SELECT COUNT(*)
+					 FROM	"COURSE_REGISTRATION" AS c
+					 WHERE	c."LCTR_ID" = l."LCTR_ID" AND c."REG_STATE" = '2003') AS reg_count
 		FROM		"USER_INFO" AS u
 		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
 		WHERE		l."USER_SEQ" = #{user_seq}
@@ -11,10 +14,7 @@
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
 	<select id="profLectureInfo" resultType="Lecture">
-		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF", u."USER_SEQ", u."USER_NAME", l."LCTR_CNTSCHD",
-					(SELECT COUNT(*)
-					 FROM	"COURSE_REGISTRATION" AS c
-					 WHERE	c."LCTR_ID" = l."LCTR_ID" AND c."REG_STATE" = '2003') AS reg_count
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF", u."USER_SEQ", u."USER_NAME", l."LCTR_CNTSCHD"
 		FROM		"LECTURE" AS l
 		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
 		WHERE		l."LCTR_ID" = #{lctr_id}
@@ -89,7 +89,7 @@
 		DELETE	FROM  "HOMEWORK"  WHERE	 "ASMT_NO" = #{asmt_no}
 	</delete>
 	<select id="getStudHomeworkList" resultType="Homework">
-		SELECT		u."USER_NAME" AS prof_name, l."LCTR_ID", l."LCTR_NAME", hs."SBMSN_YN",
+		SELECT		u."USER_NAME" AS prof_name, l."LCTR_ID", l."LCTR_NAME", l."ONOFF",  hs."SBMSN_YN",
 					h."ASMT_NO", h."ASMT_NM", h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD"
 		FROM		"COURSE_REGISTRATION" AS c
 		JOIN		"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"
@@ -207,7 +207,7 @@
 		AND		a."USER_SEQ" = c."USER_SEQ"
 	</update>
 	<select id="studLecture" resultType="Lecture">
-		SELECT		p."USER_NAME", l."USER_SEQ", l."LCTR_ID", l."LCTR_NAME"
+		SELECT		p."USER_NAME", l."USER_SEQ", l."LCTR_ID", l."LCTR_NAME", l."ONOFF"
 		FROM		"USER_INFO" AS u
 		JOIN		"COURSE_REGISTRATION" AS c ON u."USER_SEQ" = c."USER_SEQ"
 		JOIN		"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"

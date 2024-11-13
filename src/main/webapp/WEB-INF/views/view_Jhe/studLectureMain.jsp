@@ -124,7 +124,7 @@ width: 10%;
 							<td id="cell-2">${lecture.user_name}</td>
 							<td id="cell-3">
 								<form action="/Jhe/studAtt" method="get">
-									<input type="hidden" name="LCTR_ID" value="${LCTR_ID}" /> <input
+									<input type="hidden" name="lctr_id" value="${lctr_id}" /> <input
 										type="hidden" name="onoff" value="${onoff}" />
 									<c:if test="${onoff == 7001}">
 										<button class="submitBtn" type="submit">출석</button>
@@ -136,13 +136,13 @@ width: 10%;
 							</td>
 							<td id="cell-4">
 								<form action="/Jhe/studHomeworkList" method="get">
-									<input type="hidden" name="LCTR_ID" value="${LCTR_ID}" />
+									<input type="hidden" name="lctr_id" value="${lctr_id}" />
 									<button class="submitBtn" type="submit">과제</button>
 								</form>
 							</td>
 							<td id="cell-5">
 								<form action="/Jhe/studGrade" method="get">
-									<input type="hidden" name="LCTR_ID" value="${LCTR_ID}" />
+									<input type="hidden" name="lctr_id" value="${lctr_id}" />
 									<button class="submitBtn" type="submit">성적</button>
 								</form>
 
