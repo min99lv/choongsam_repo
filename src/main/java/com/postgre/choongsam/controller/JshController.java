@@ -56,7 +56,8 @@ public class JshController {
 	public String sh_lecture_teacher(Model model,
 														   Class_ScheduleAddVideo info,
 														   @RequestParam String lctr_id,
-														   @RequestParam int user_seq) {
+														   @RequestParam int user_seq,
+														   @RequestParam String onOff) {
 		
 		System.out.println("JshController sh_lecture_teacher start...");
 		
@@ -82,9 +83,17 @@ public class JshController {
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("user_seq", user_seq);
 		
+		String url = "view_Jsh/teaLecture";  //비대면 강의
 		
-		return "view_Jsh/teaLecture";
+		if(onOff.equals("7001")) {
+			url = "view_Jsh/teaLectureOff";
+		}
+		
+		
+		return url;
 	}
+	
+	
 	
 	//강의 등록 폼에 정보를 띄워주기 위함
 	@GetMapping("/contsUploadForm")
@@ -628,10 +637,12 @@ public class JshController {
 		public String StudentLecture(Model model,
 									 @RequestParam String lctr_id,
 									 @RequestParam int user_seq,
+									 @RequestParam String onOff,
 									 Class_ScheduleAddVideo csad) {
 			System.out.println("JshController StudentLecture start...");
 			System.out.println("JshController StudentLecture lctr_id >> "+lctr_id);
 			System.out.println("JshController StudentLecture user_seq >> "+user_seq);
+			System.out.println("********************************JshController StudentLecture onOff >> "+onOff);
 			
 			List<Class_ScheduleAddVideo> contentList = service.studentLecture(lctr_id, user_seq);
 			System.out.println("JshController StudentLecture contentList >> "+contentList);
@@ -653,12 +664,21 @@ public class JshController {
 			System.out.println("강사명 >> "+teacherName);
 			
 			
-			
+			model.addAttribute("lctr_id", lctr_id);
 			model.addAttribute("lectName", lectName);
 			model.addAttribute("teacherName", teacherName);
 			model.addAttribute("contentList", contentList);
 			
-			return "view_Jsh/stuLecture";
+			
+			String url = "view_Jsh/teaLecture";  //비대면 강의
+			
+			if(onOff.equals("7001")) {
+				url = "view_Jsh/teaLectureOff";
+			}
+			
+			System.out.println("********************************JshController StudentLecture url >> "+url);
+			
+			return url;
 		}
 	 	
 	 	//만약 학습시작 버튼을 눌렀는데 클래스 스케쥴 테이블에 컬럼이 없다면 insert

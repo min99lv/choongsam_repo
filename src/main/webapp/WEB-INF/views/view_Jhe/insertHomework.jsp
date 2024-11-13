@@ -52,11 +52,11 @@
 			<tr>
 				<th>과제내용</th>
 				<td><textarea name="asmt_cn"></textarea>
-				<input type="hidden" name="LCTR_ID" value="${findByLctrName.lctr_id}"></td>
+				<input type="hidden" name="lctr_id" value="${findByLctrName.lctr_id}"></td>
 			</tr>
 		</table>
 		<input type="submit" value="등록">
-		<a href="../Jhe/profHomeworkList?LCTR_ID=${findByLctrName.lctr_id}"><button type="button">취소</button></a>
+		<a href="../Jhe/profHomeworkList?lctr_id=${findByLctrName.lctr_id}"><button type="button">취소</button></a>
 	</form>
 </body>
 </html>

@@ -3,7 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ include file="../header.jsp" %>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myStudyHomeNav.jsp" %>
 <link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
@@ -30,7 +31,7 @@
 		<c:set var="previousName" value="" />
 		<c:set var="previousAsmtNm" value="" />
 		<c:set var="previousprofNm" value="" />
-		<c:forEach var="homeworkList" items="${homeworkList}">
+		<c:forEach var="homeworkList" items="${studHomeworkList}">
 			<c:if test="${homeworkList.lctr_name != previousName}">
 				<tr>
 					<td>${homeworkList.lctr_name}</td>
