@@ -113,9 +113,13 @@
             color: white;
         }
 
-        #profileUpdatePage .file-input-wrapper {
-            text-align: center;
-        }
+		#profileUpdatePage .file-input-wrapper {
+		    text-align: center; /* 기본적으로 이미지가 가운데 정렬되도록 설정 */
+		    display: flex; /* 플렉스를 사용하여 중앙 정렬 */
+		    justify-content: center; /* 수평으로 중앙 정렬 */
+		    align-items: center; /* 수직으로 중앙 정렬 */
+		    flex-direction: column; /* 이미지 위/아래 공간을 유지할 수 있도록 */
+		}
 
         #profileUpdatePage .file-input-wrapper input {
             font-size: 14px;
