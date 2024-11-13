@@ -108,7 +108,7 @@
         	</a>
         </div>
         <div class="header__navBar">
-            <a href="#">수강신청</a>
+            <a href="/courseApplyList">수강신청</a>
 		<c:choose>
 		    <c:when test="${usertype == 1001}">
 		        <a href="../Jhe/myLecture?user=${user}&user_seq=${user_seq}">마이페이지</a>

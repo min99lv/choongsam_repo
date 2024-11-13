@@ -139,6 +139,56 @@
         </tr>
     </table>
     
+    <!-- 강의 계획 모달 버튼 -->
+	<div class="text-center mt-3">
+		<button type="button" class="btn btn-primary" data-toggle="modal"
+			data-target="#syllabusModal" style="background-color: #00664F"
+			id="lookDetail">강의 계획 보기</button>
+	</div>
+
+	<!-- 강의 계획 모달 -->
+	<div class="modal fade" id="syllabusModal" tabindex="-1" role="dialog"
+		aria-labelledby="syllabusModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="syllabusModalLabel">강의 계획</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="syllabus-table table table-bordered">
+						<tbody>
+							<c:forEach var="syllabus" items="${syllabusList}"
+								varStatus="status">
+								<c:choose>
+									<c:when test="${status.index eq 0 }">
+										<tr>
+											<th style="width: 20%;">강의 목표</th>
+											<td>${syllabus.lctr_otln}</td>
+										</tr>
+									</c:when>
+									<c:otherwise>
+										<tr>
+											<th style="width: 20%;">${status.index}주차강의계획</th>
+											<td>${syllabus.lctr_otln}</td>
+										</tr>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+    
     <form action="approveOnlineCourse">
         <input type="text" name="lctr_id" value="${lecture.lctr_id}" hidden="">
         <input type="submit" value="개설 허가">

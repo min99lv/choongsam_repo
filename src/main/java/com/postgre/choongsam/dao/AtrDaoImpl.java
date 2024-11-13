@@ -12,6 +12,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.postgre.choongsam.dto.Classroom;
 import com.postgre.choongsam.dto.Lecture;
+import com.postgre.choongsam.dto.Syllabus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -142,6 +143,27 @@ public class AtrDaoImpl implements AtrDao {
 			System.out.println(e.getMessage());
 			transactionManager.rollback(txStatus);
 		}
+	}
+
+	@Override
+	public List<Syllabus> getSyllabus(String lctr_id) {
+		List<Syllabus> syllabusList = null;
+	 try {
+		 syllabusList=session.selectList("trGetSyllabus",lctr_id);
+	} catch (Exception e) {
+		System.out.println(e.getMessage());
+	}
+		return syllabusList;
+	}
+
+	@Override
+	public void changeLectureState(String parameter, String parameter2) {
+		try {
+			session.update("trChangeLectureState", Map.of("lctr_id", parameter, "lctr_state", Integer.parseInt(parameter2)));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
 	}
 
 }

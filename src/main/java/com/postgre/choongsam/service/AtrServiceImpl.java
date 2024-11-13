@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.postgre.choongsam.dao.AtrDao;
 import com.postgre.choongsam.dto.Classroom;
 import com.postgre.choongsam.dto.Lecture;
+import com.postgre.choongsam.dto.Syllabus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -77,6 +78,18 @@ public class AtrServiceImpl implements AtrService {
 	@Override
 	public void applyCourse(String parameter, String parameter2) {
 		ad.applyCourse(parameter,parameter2);
+		
+	}
+
+	@Override
+	public List<Syllabus> getSyllabus(String lctr_id) {
+	List<Syllabus> syllabusList=ad.getSyllabus(lctr_id);
+		return syllabusList;
+	}
+
+	@Override
+	public void changeLectureState(String parameter, String parameter2) {
+		ad.changeLectureState(parameter,parameter2);
 		
 	}
 
