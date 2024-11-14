@@ -94,6 +94,10 @@
 				<c:if test="${usertype == 1001}"><a href="/Jhe/studHomeworkList?lctr_id=${lctr_id}" class="header_link">과제</a></c:if>
 				<c:if test="${usertype == 1002}"><a href="/Jhe/profHomeworkList?lctr_id=${lctr_id}" class="header_link">과제</a></c:if>
 			</div>
+			<div class="header_butt">
+				<c:if test="${usertype == 1001}"><a href="/Jhe/studGrade?lctr_id=${lctr_id}" class="header_link">성적</a></c:if>
+				<c:if test="${usertype == 1002}"><a href="/Jhe/profGrade?lctr_id=${lctr_id}" class="header_link">성적</a></c:if>
+			</div>
 			<!-- <div class="header_utt">
 				<a href="" class="header_link">공지사항</a>
 			</div> -->

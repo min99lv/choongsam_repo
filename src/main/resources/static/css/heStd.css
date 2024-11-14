@@ -37,7 +37,7 @@ th {
 	font-weight: bold;
 	text-align: center;
 	/* 중앙 정렬 */
-	padding: 20px 0;
+	padding: 10px;
 	background-color: #F9F9F9;
 	color: black;
 	border-bottom: 0.4px solid #e2e8ee;
@@ -53,6 +53,7 @@ td {
 	/* 중앙 정렬 */
 	color: #323232;
 	height: 50px;
+	padding: 10px;
 }
 
 .submitBtn{

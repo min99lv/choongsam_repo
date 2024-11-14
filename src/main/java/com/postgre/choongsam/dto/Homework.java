@@ -1,5 +1,7 @@
 package com.postgre.choongsam.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,5 +26,6 @@ public class Homework  { // 과제
     private int        user_seq;        // 회원 번호
     private String    sbmsn_yn;        // 과제 제출 여부
     private int        submissionRate; // 제출률
-    private String    fileName;        // 파일명
+    private MultipartFile file;
+    private String    file_nm;        // 파일명
 }
