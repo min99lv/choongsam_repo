@@ -90,6 +90,9 @@
 		font-size: 12px;
 		margin: 5px 0;
 	}
+	.container{
+	margin: 200px 0;
+	}
         
 </style>
 
@@ -104,7 +107,7 @@
         
         <main>
 		
-		<div>	
+		<div class="container">	
 		<form action="login" method="post" id="myForm">
 		  <div class="main_container">
 		    <h2 style="color: #00664F ">로그인</h2>
