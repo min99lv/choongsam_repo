@@ -122,7 +122,8 @@
 	</update>
 	<update id="trRaiseRegisterCount">
 	UPDATE "LECTURE" 
-	SET "REGISTER_COUNT" = "REGISTER_COUNT"+1
+	SET "REGISTER_COUNT" = "REGISTER_COUNT"+1 
+	WHERE #{lctr_id} = "LCTR_ID"
 	</update>
 	<insert id="trApplyCourse">
 		INSERT INTO "COURSE_REGISTRATION" ("LCTR_ID","USER_SEQ","APLY_DATE","REG_STATE","PAY_STATE")
