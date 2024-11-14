@@ -233,7 +233,7 @@ WHERE
 		"RCVR_NOTE_YN")
 		VALUES (NEXTVAL('note_sn_seq'), #{bfr_note_sn},
 		#{sndpty_seq},#{rcvr_seq},LOCALTIMESTAMP(0), #{rcptn_dt}, #{note_ttl},
-		#{note_cn}, #{sndpty_note_yn}, #{rcvr_note_yn})
+		#{note_cn},'Y', 'Y')
 
 
 	</insert>
