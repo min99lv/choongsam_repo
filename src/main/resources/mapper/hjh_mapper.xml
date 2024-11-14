@@ -125,7 +125,7 @@
 		    SET 
 		        "PAY_STATE" = 'Y', 
 		        "PAY_DATE" = CURRENT_DATE,
-		        "REG_STATE" =  '2002'
+		        "REG_STATE" =  '2003'
 		    WHERE "USER_SEQ" = #{user_seq}
 		      AND "LCTR_ID" = #{lctr_id};
 		</update>
@@ -133,13 +133,14 @@
 		<select id="sugangStuTotalCount"   resultType="int">
 		    SELECT count(*)
 		    FROM "LECTURE"
+		    FROM "COURSE_REGISTRATION"
 		    WHERE "USER_SEQ" = #{user_seq}
 		</select>
 		
 		<select id="totalLectureCount" resultType="int">
 		    SELECT count(*)
-		    FROM "COURSE_REGISTRATION"
-		    WHERE CAST("USER_SEQ" AS INTEGER) = #{user_seq}
+		    FROM "LECTURE"
+		    WHERE "USER_SEQ" = #{user_seq}
 		</select>
 
 </mapper> 
