@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myPageNav.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,7 +81,8 @@ input {
 	margin-top: 10px;
 	max-width: 100%;
 	height: auto;
-	border: 1px solid #ddd;
+	border: #949494 1px solid;
+	border-radius: none;
 	padding: 10px;
 }
 
@@ -110,20 +113,23 @@ button {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 900px;
 }
 
 .file_input {
+	margin-left: 57px;
     display: flex;
     align-items: center;
+ width: 900px;
 }
 
 .file_input input[type="text"] {
-    width:200px;
+    width:500px;
     padding: 8px;
     margin-right: 10px;
     font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: #949494 1px solid;
+	border-radius: none;
    
 }
 
@@ -131,10 +137,16 @@ button {
     font-size: 14px;
     color: #00664F;
     cursor: pointer;
+    width: 100px;
 }
 
 .file_input input[type="file"] {
     display: none; /* 파일 선택 버튼 숨기기 */
+}
+
+.file_item {
+    display: flex;
+    align-items: center;
 }
 
 .btns {
@@ -146,6 +158,7 @@ button {
     font-size: 14px;
     border-radius: 4px;
     margin-left: 10px;
+    width: 100px;
 }
 
 .fn_add_btn {
@@ -176,9 +189,7 @@ button[type="submit"] {
 
 </head>
 <body>
-	<header>
-		<%@ include file="../header.jsp"%>
-	</header>
+
 
 	<div class="container">
 		<div class="contents">
@@ -197,7 +208,7 @@ button[type="submit"] {
 					<th>첨부파일</th>
 					<td>
 						<div class="file_list">
-							<div>
+							<div class="file_item">
 								<div class="file_input">
 									<input type="text" readonly /> <label> 첨부파일 <input
 										type="file" name="files" onchange="selectFile(this);" />
@@ -230,7 +241,7 @@ button[type="submit"] {
      function selectFile(element) {
 
          const file = element.files[0];
-         const filename = element.closest('.file_input').firstElementChild;
+         const filename = element.closest('.file_input').querySelector('input[type="text"]');
 
          // 1. 파일 선택 창에서 취소 버튼이 클릭된 경우
          if ( !file ) {
@@ -255,6 +266,7 @@ button[type="submit"] {
      // 파일 추가
      function addFile() {
          const fileDiv = document.createElement('div');
+         fileDiv.classList.add('file_item');
          fileDiv.innerHTML =`
              <div class="file_input">
                  <input type="text" readonly />
@@ -268,15 +280,20 @@ button[type="submit"] {
      }
 
 
-     // 파일 삭제
+  // 파일 삭제
      function removeFile(element) {
-         const fileAddBtn = element.nextElementSibling;
-         if (fileAddBtn) {
-             const inputs = element.previousElementSibling.querySelectorAll('input');
-             inputs.forEach(input => input.value = '')
-             return false;
+         // 파일 목록에서 해당 파일 입력 영역을 제거
+         const fileContainer = element.parentElement;
+
+         // 파일 추가 버튼이 있는 경우 파일 입력 필드를 초기화
+         const inputs = fileContainer.querySelectorAll('input[type="text"], input[type="file"]');
+         inputs.forEach(input => input.value = '');
+
+         // 추가된 파일이 여러 개인 경우 해당 파일 입력만 삭제, 
+         // 파일 목록에 파일이 하나만 남아있는 경우 초기화만 진행
+         if (document.querySelectorAll('.file_input').length > 1) {
+             fileContainer.remove();
          }
-         element.parentElement.remove();
      }
 
     </script>

@@ -156,29 +156,7 @@ public class LjmController {
 					System.out.println("로그인 성공");
 					return "redirect:/"; // 로그인 성공 시 리다이렉트
 
-				}
-		
-		@RequestMapping(value = "/view_Ljm/extendSession")
-		public String extendSession(HttpSession session, Model model) {
-		    // 세션 만료 시간을 1시간으로 연장
-		    session.setMaxInactiveInterval(60 * 60); // 1시간
-
-		    // 연장 후, 세션 만료까지 남은 시간을 다시 계산해서 모델에 담기
-		    int sessionTimeout = session.getMaxInactiveInterval();
-		    long currentTime = System.currentTimeMillis() / 1000; // 현재 시간을 초 단위로 계산
-		    long sessionExpirationTime = session.getCreationTime() / 1000 + sessionTimeout;
-		    long remainingTime = sessionExpirationTime - currentTime;
-		    
-		    int minutes = (int) ((remainingTime % 3600) / 60);
-		    int seconds = (int) (remainingTime % 60);
-
-		    String remainingTimeFormatted = String.format("%02d:%02d", minutes, seconds);
-		    System.out.println("remainingTimeFormatted -> " + remainingTimeFormatted);
-
-		    model.addAttribute("remainingTime", remainingTimeFormatted);
-
-		    return "redirect:/"; // 원하는 페이지로 리턴 (세션 연장 후 화면 갱신)
-		}
+				}		
 		
 		// 관리자 로그인 페이지 이동
 		@RequestMapping(value =  "view_Ljm/adminLoginForm")

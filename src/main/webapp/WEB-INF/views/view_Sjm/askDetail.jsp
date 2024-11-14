@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myPageNav.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -185,6 +187,26 @@
 				text-decoration: none;
 				cursor: pointer;
 			}
+			
+			
+			.NavBtn {
+	display: flex;
+	justify-content: center;
+}
+
+.NavBtn button{
+		width: 200px;
+	text-align: center;
+	margin: 20px 20px; 
+	display: block; 
+	height: 50px;
+	background-color: #00664F;
+	border: none;
+	color: white;
+	font-size: 16px;
+	text-decoration: none;
+}
+			
     </style>
     <script type="text/javascript">
     async function fetchAskDetail() {
@@ -253,45 +275,50 @@ window.onclick = function (event) {
       </script>
 </head>
 <body>
-    <header>
-        <%@ include file="../header.jsp" %>
-    </header>
 
-    
-    <div class="container">
-        <div class="contents">
-            <h1>1:1 문의사항</h1>
-        </div>
-            <table class="list">
-                <tr>
-                    <th>제목</th>
-                    <td id="dscsn_ttl"></td>
-                </tr>
-                <tr>
-                    <th>내용</th>
-                    <td class="contentsss" id="dscsn_cn" ></td>
-                </tr>
+
+
+	<div class="container">
+		<div class="contents">
+			<h1>1:1 문의사항</h1>
+		</div>
+		<table class="list">
+			<tr>
+				<th>제목</th>
+				<td id="dscsn_ttl"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td class="contentsss" id="dscsn_cn"></td>
+			</tr>
 			<tr id="dscsn_ans" class="answer-row" style="display: none;">
-                <th>답변</th>
-                <td class="answer-content" id="dscsn_ans_cn"></td>
-            </tr>
+				<th>답변</th>
+				<td class="answer-content" id="dscsn_ans_cn"></td>
+			</tr>
 		</table>
-            <button onclick="history.back();">목록</button>
-            
-            <c:choose>
-    <c:when test="${sessionScope.usertype == 1003}">
-        <!-- userType이 1003일 경우 버튼을 보여줍니다 -->
-        <button onclick="openModal()">답변등록</button>
-    </c:when>
-    <c:otherwise>
-        <!-- userType이 1003이 아닐 경우 버튼은 보이지 않습니다 -->
-        <!-- 아무 것도 출력하지 않음 -->
-    </c:otherwise>
-</c:choose>
-            
-    </div>
-			
-            <div id="adminModal" class="modal">
+
+<div class="NavBtn">
+
+		<button onclick="history.back();">목록</button>
+
+		<c:choose>
+			<c:when test="${sessionScope.usertype == 1003}">
+				<!-- userType이 1003일 경우 버튼을 보여줍니다 -->
+				<button onclick="openModal()">답변등록</button>
+			</c:when>
+			<c:otherwise>
+				<!-- userType이 1003이 아닐 경우 버튼은 보이지 않습니다 -->
+				<!-- 아무 것도 출력하지 않음 -->
+			</c:otherwise>
+		</c:choose>
+
+
+
+</div>
+
+	</div>
+
+	<div id="adminModal" class="modal">
                 <div class="modal-content">
                     <span class="close" onclick="closeModal()">&times;</span>
                     <h2>답변 작성</h2>

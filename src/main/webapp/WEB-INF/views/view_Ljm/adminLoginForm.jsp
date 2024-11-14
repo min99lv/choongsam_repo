@@ -23,8 +23,7 @@
     }
 
     footer {	  
-    	margin-top: 165px; 
-	    padding: 10px 0; /* 푸터 내 패딩 추가 (옵션) */
+    	margin-top: 192px; 
 	}
 
     .main_container {
