@@ -35,7 +35,7 @@
 		JOIN		"USER_INFO" AS u ON l."USER_SEQ" = u."USER_SEQ"
 		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
-	<insert id="FileUpload" parameterType="File_Group">
+	<insert id="fileUpload" parameterType="File_Group">
 		INSERT INTO "FILE_GROUP" ("FILE_GROUP","FILE_SEQ","IDNTF_NO","FILE_NM","FILE_EXTN_NM","FILE_SZ","FILE_PATH_NM")
 		VALUES (#{file_group},#{file_seq},#{idntf_no},#{file_nm},#{file_extn_nm},#{file_sz},#{file_path_nm})
 	</insert>
@@ -70,12 +70,21 @@
 		VALUES (#{user_seq}, #{asmt_no}, 'N')
 	</insert>
 	<select id="findById" parameterType="Homework" resultType="Homework">
-		SELECT	h.*, l."LCTR_ID", l."LCTR_NAME", l."USER_SEQ", u."USER_NAME" AS prof_name
+		SELECT	h.*, l."LCTR_ID", l."LCTR_NAME", l."USER_SEQ", u."USER_NAME" AS prof_name, fg."FILE_NM"
 		FROM	"HOMEWORK" AS h
 		JOIN	"LECTURE" AS l ON l."LCTR_ID" = h."LCTR_ID"
 		JOIN	"USER_INFO" AS u ON u."USER_SEQ" = l."USER_SEQ"
+		JOIN	"FILE_GROUP" AS fg ON h."FILE_GROUP" = fg."FILE_GROUP"
 		WHERE	"ASMT_NO" = #{asmt_no}
 	</select>
+	<select id="getFileGroup" parameterType="int" resultType="File_Group">
+		SELECT	*
+		FROM	"FILE_GROUP"
+		WHERE	"FILE_GROUP" = #{file_group}
+	</select>
+	<delete id="deletefile" parameterType="int">
+		DELETE	FROM  "FILE_GROUP"  WHERE  "FILE_GROUP" = #{file_group}
+	</delete>
 	<update id="updateHomework" parameterType="Homework">
 		UPDATE	"HOMEWORK"
 		SET		"ASMT_NM" = #{asmt_nm}, "ASMT_CN" = #{asmt_cn},
@@ -89,7 +98,8 @@
 		DELETE	FROM  "HOMEWORK"  WHERE	 "ASMT_NO" = #{asmt_no}
 	</delete>
 	<select id="getStudHomeworkList" resultType="Homework">
-		SELECT		u."USER_NAME" AS prof_name, l."LCTR_ID", l."LCTR_NAME", l."ONOFF", hs."SBMSN_YN",
+		SELECT	DISTINCT
+					u."USER_NAME" AS prof_name, l."LCTR_ID", l."LCTR_NAME", l."ONOFF", hs."SBMSN_YN",
 					h."ASMT_NO", h."ASMT_NM", h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD"
 		FROM		"COURSE_REGISTRATION" AS c
 		JOIN		"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"
@@ -182,10 +192,6 @@
 		AND		a."LCTR_NO" = c."LCTR_NO"
 		WHERE	a."LCTR_ID" = #{lctr_id}
 	</select>
-	<insert id="insertStudAtt" parameterType="Attendance_Check">
-		INSERT INTO	"ATTENDANCE_CHECK" ("LCTR_NO", "LCTR_ID", "USER_SEQ", "ATT_STATUS")
-		VALUES (#{lctr_no}, #{lctr_id}, #{user_seq}, #{att_status})
-	</insert>
 	<update id="updateStudAtt" parameterType="Attendance_Check">
 		UPDATE	"ATTENDANCE_CHECK"
 		SET		"ATT_STATUS" = #{att_status}
