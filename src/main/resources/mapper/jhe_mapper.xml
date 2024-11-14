@@ -10,7 +10,7 @@
 		FROM		"USER_INFO" AS u
 		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
 		WHERE		l."USER_SEQ" = #{user_seq}
-		AND			l."LCTR_STATE" = 4005
+		AND			l."LCTR_STATE" IN (4003, 4004, 4005)
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
 	<select id="profLectureInfo" resultType="Lecture">
