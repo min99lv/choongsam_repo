@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ include file="../headerGreen.jsp"%>
+<%@ include file="../header.jsp"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -95,9 +95,14 @@ a.apply-link {
 a.apply-link[hidden] {
 	display: none;
 }
+.container{
+	margin-top: 100px;
+	margin-bottom: 200px;
+}
 </style>
 </head>
 <body>
+<div class="container">
 	<h2>강의 리스트</h2>
 	<table>
 		<thead>
@@ -153,6 +158,7 @@ a.apply-link[hidden] {
 			<a href="?page=${paging.endPage + 1}">Next</a>
 			<a href="?page=${paging.totalPage}">Last</a>
 		</c:if>
+	</div>
 	</div>
 </body>
 <footer><%@ include file="../footer.jsp"%></footer>
