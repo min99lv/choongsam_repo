@@ -29,9 +29,9 @@
 	
 	<insert id="userSignup" parameterType="User_Info">
 		INSERT INTO "USER_INFO" ("USER_SEQ", "USER_ID", "USER_NAME", "BIRTH", "PROFILE_NAME", "PROFILE_ADDR",
-		"ADDRESS", "EMAIL", "PHONE_NUM", "DEL_STATE", "FILE_GROUP", "ADDR_DETAIL")
+		"ADDRESS", "EMAIL", "PHONE_NUM", "DEL_STATE", "ADDR_DETAIL")
 		VALUES (CURRVAL('user_seq'), #{user_id}, #{user_name}, #{birth}, #{profile_name}, #{profile_addr}, #{address},
-		#{email}, #{phone_num}, 0, #{file_group}, #{addr_detail})
+		#{email}, #{phone_num}, 0, #{addr_detail})
 	</insert>
 	
 	<select id="confirmId" resultType="int" parameterType="String"> 
