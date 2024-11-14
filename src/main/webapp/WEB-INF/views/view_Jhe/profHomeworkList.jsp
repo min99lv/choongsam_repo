@@ -9,16 +9,32 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style type="text/css">
+	#insHomework{
+		margin-left: 982px;
+		margin-bottom: 10px;
+	}
+	#delHomework {
+		margin-left: 940px;
+		margin-top: 10px;
+	}
+	#asmtName {
+		padding: 0px 250px;
+	}
+	#asmt {
+		padding: 20px;
+	}
+</style>
 <title>진행중인 강의 과제 리스트</title>
 </head>
 <body>
 	<div class="container">
 	<div class="contents">
-		<h1>나는 진행중인 내 강의 과제 리스트 (강사)</h1>
+		<h1>과제 관리</h1>
 	</div>
 	<form action="/Jhe/insertHomework" method="get">
 		<input type="hidden" name="lctr_id" value="${lctr_id}">
-    		<button type="submit">과제 등록</button>
+    		<button type="submit" id="insHomework">과제 등록</button>
 	</form>
 <form action="/Jhe/deleteHomework?lctr_id=${lctr_id}" method="post">
 	<table id="homeworkList">
@@ -30,7 +46,7 @@
 			<th>시작일</th>
 			<th>마감일</th>
 			<th>제출</th>
-			<th></th>
+			<th>삭제</th>
 		</tr>
 		<c:set var="previousName" value="" />
 		<c:set var="previousAsmtNm" value="" />
@@ -68,19 +84,19 @@
 			</c:if>
 		</c:forEach>
 	</table>
-	<button type="submit">선택한 과제 삭제</button>
-	<h2>수강중인 학생 과제 제출 현황</h2>
+	<button type="submit" id="delHomework">선택한 과제 삭제</button>
+	<h2>과제 제출 현황</h2>
 	<table>
 		<tr>
-			<th>과제명</th>
-			<th>학생 이름</th>
-			<th>제출 상태</th>
+			<th id="asmtName">과제명</th>
+			<th id="asmt">학생 이름</th>
+			<th id="asmt">제출 상태</th>
 		</tr>
 		<c:forEach var="studList" items="${studList}">
 			<tr>
-				<td>${studList.asmt_nm}</td>
-				<td>${studList.stud_name}</td>
-				<td>${studList.sbmsn_yn}</td>
+				<td id="asmtName">${studList.asmt_nm}</td>
+				<td id="asmt">${studList.stud_name}</td>
+				<td id="asmt">${studList.sbmsn_yn}</td>
 			</tr>
 		</c:forEach>
 	</table>

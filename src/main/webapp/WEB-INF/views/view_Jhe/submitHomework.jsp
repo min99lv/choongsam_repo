@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myStudyHomeNav.jsp" %>
 <link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
@@ -16,7 +18,7 @@ form#submitHomework table {
 <body>
 <div class="container">
 <div class="contents">
-	<h1>나는 과제 제출 (학생)</h1>
+	<h1>과제 제출</h1>
 </div>
 	<form action="/Jhe/submitHomework" method="post" id="submitHomework">
 		<table>
@@ -39,7 +41,7 @@ form#submitHomework table {
 			</tr>
 			<tr>
 				<th>첨부파일</th>
-				<td><a href="/api/files/${upHomework.file_group}/1">과제</a></td>
+				<td><a href="/api/files/${upHomework.file_group}/1">${upHomework.file_nm}</a></td>
 			</tr>
 			<tr>
 				<th>과제 파일 업로드</th>
