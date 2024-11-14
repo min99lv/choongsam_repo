@@ -1,5 +1,6 @@
 package com.postgre.choongsam.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.postgre.choongsam.dto.Attendance_Check;
+import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
 import com.postgre.choongsam.dto.Lecture;
@@ -148,10 +150,18 @@ public class JheController {
 	public String updateHomework(@RequestParam("lctr_id") String lctr_id,
 								 @RequestParam(value = "file", required = false) MultipartFile file,
 								 @ModelAttribute Homework homework,
-								 RedirectAttributes redirectAttributes) {
+								 RedirectAttributes redirectAttributes, 
+								 HttpServletRequest request) throws IOException {
 		System.out.println("과제 수정 포오스트");
 
-		int upHomeworkList = hes.updateHomework(homework, file);
+		// 파일이 업로드된 경우
+		if (file != null && !file.isEmpty()) {
+			File_Group uploadedFile = hes.uploadFile(file, request);
+			// 업로드된 파일 정보로 file_nm 설정
+			System.out.println(uploadedFile.getFile_nm());
+			homework.setFile_nm(uploadedFile.getFile_nm());
+		}
+		int upHomeworkList = hes.updateHomework(homework, file, request);
 		redirectAttributes.addFlashAttribute("status", upHomeworkList > 0 ? "success" : "failure");
 		return "redirect:/Jhe/profHomeworkList?lctr_id=" + lctr_id;
 	}
@@ -190,7 +200,7 @@ public class JheController {
 	}
 
 	@PostMapping(value = "/submitHomework")
-	public String updatesubmitHomework(@RequestParam int ASMT_NO, HttpSession session) {
+	public String updatesubmitHomework(@RequestParam(value = "lctr_id", defaultValue = "0") String lctr_id, @RequestParam int ASMT_NO, HttpSession session) {
 		System.out.println("과제 제출 포오스트");
 		System.out.println("ASMT_NO: " + ASMT_NO);
 		int user_seq = (int) session.getAttribute("user_seq");
@@ -251,7 +261,7 @@ public class JheController {
 		System.out.println("lctr_id: " + lctr_id);
 		System.out.println("LCTR_NO: " + LCTR_NO);
 
-		hes.insertStudAtt(lctr_id, LCTR_NO, user_seq, att_status, onoff);
+		hes.updateStudAtt(lctr_id, LCTR_NO, user_seq, att_status, onoff);
 		return "redirect:/Jhe/profAttMain?lctr_id=" + lctr_id + "&onoff=" + onoff;
 	}
 
@@ -334,7 +344,7 @@ public class JheController {
 	}
 
 	@GetMapping("/studGrade")
-	public String studGrade(@RequestParam("lctr_id") String lctr_id, HttpSession session, Model model) {
+	public String studGrade(@RequestParam(value = "lctr_id", defaultValue = "0") String lctr_id, HttpSession session, Model model) {
 		System.out.println("수강생 내 성적 조회 컨트롤러");
 		int user_seq = (int) session.getAttribute("user_seq");
 		List<Grade> myGradeList = hes.studGrade(user_seq);

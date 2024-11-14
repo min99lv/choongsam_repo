@@ -14,8 +14,13 @@ public interface JheDao {
 	List<Lecture>	getProfLectureInfo(String lctr_id);
 	List<Homework>	getProfHomeworkList(String lctr_id);
 	Lecture			findByLCTR(String lctr_id);
-	int				insertHomework(Homework homework, List<File_Group> uploadFiles);
+	int				newFileGroup();
+	int				newFileSeq(int fileGroupId);
+//	int 			saveFiles(List<File_Group> uploadedFiles, int fileGroupId);
+	int				insertHomework(Homework homework, List<File_Group> uploadedFile);
 	Homework		findById(int asmt_no);
+	File_Group		getFileByGroup(int file_group);
+	int				deletefile(int file_group);
 	int				updateHomework(Homework homework);
 	void			deleteHomeworkSubmission(int asmt_no);
 	void			deleteHomework(int asmt_no);
@@ -25,12 +30,11 @@ public interface JheDao {
 	int				updatesubmitHomework(Homework_Submission homework_Submission);
 	int				getTotStudInCourse(String lctr_id);
 	int				getSubmittedStuds(int asmt_no);
-	void			insertFile(File_Group file_Group);
 	List<Homework>	getStudSubmitList(String lctr_id);
 	List<Attendance_Check> profAttMain(String lctr_id);
 	List<Attendance_Check> getStudAtt(String lctr_id, int lctr_no);
 	List<Attendance_Check> getOnlineStudAtt(String lctr_id);
-	int				insertStudAtt(Attendance_Check attendance_Check);
+	int				updateStudAtt(Attendance_Check attendance_Check);
 	int upStudOnlineAtt(Attendance_Check attendance_Check);
 	List<Lecture>	studLecture(int user_seq);
 	List<Lecture>	studLectureMain(String lctr_id);

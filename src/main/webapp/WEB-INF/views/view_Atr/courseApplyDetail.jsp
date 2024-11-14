@@ -214,6 +214,8 @@ td {
 
 	<form class="form-button" action="applyCourse">
 		<input type="hidden" value="${lecture.lctr_id}" name="lctr_id">
+		<input type="hidden" value="${lecture.lctr_cntschd}" name="lctr_cntschd">
+		
 		<input type="hidden" value="${user_seq}" name="student_id"> <input
 			type="submit" value="신청하기">
 	</form>

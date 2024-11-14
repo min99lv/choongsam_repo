@@ -90,7 +90,20 @@
 			</c:choose>
 			
             <a href="/api/notice">공지사항</a>
-            <a href="/asks/new">문의사항</a>
+           <c:choose>
+			    <c:when test="${usertype == 1001}">
+			         <a href="/asks/new">문의사항</a>문의사항</a>
+			    </c:when>
+			    <c:when test="${usertype == 1002}">
+			         <a href="/asks/new">문의사항</a>문의사항</a>
+			    </c:when>
+			    <c:when test="${usertype == 1003}">
+			         <a href="/asks/new">문의사항</a>문의사항</a>
+			    </c:when>
+			    <c:otherwise>
+			        <a href="/view_Ljm/loginForm">문의사항</a>
+			    </c:otherwise>
+			</c:choose>
         </div>
         
             <!-- 로그인 여부에 따라 버튼 표시 -->

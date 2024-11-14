@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,9 @@ public class JheServiceImpl implements JheService {
 
 	@Autowired
 	private final JheDao hed;
+
+	@Autowired
+	private final SqlSession session;
 
 	@Override
 	public List<Lecture> getLectureHomeworkList(int user_seq) {
@@ -102,21 +106,21 @@ public class JheServiceImpl implements JheService {
 
 		List<File_Group> uploadFiles = new ArrayList<>();
 
-	    // 파일 리스트를 순회하며 업로드
-	    for (MultipartFile file : files) {
-	        if (file != null && !file.isEmpty()) {
-	            try {
-	                File_Group uploadFile = uploadFile(file, request);
-	                if (uploadFile != null) {
-	                    uploadFiles.add(uploadFile);
-	                }
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	                return -1;
-	            }
-	        }
-	    }
-	    
+		// 파일 리스트를 순회하며 업로드
+		for (MultipartFile file : files) {
+			if (file != null && !file.isEmpty()) {
+				try {
+					File_Group uploadFile = uploadFile(file, request);
+					if (uploadFile != null) {
+						uploadFiles.add(uploadFile);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					return -1;
+				}
+			}
+		}
+
 		// 과제 정보 저장
 		int insHWList = hed.insertHomework(homework, uploadFiles);
 		return insHWList;
@@ -124,68 +128,64 @@ public class JheServiceImpl implements JheService {
 
 	// 업로드된 파일을 처리하는 메서드
 	public File_Group uploadFile(MultipartFile file, HttpServletRequest request) throws IOException {
-	    // 파일 정보 변수 선언
+		// 파일 정보 변수 선언
 		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String idntf_no = UUID.randomUUID().toString() + "_" + timestamp;
-	    String originFile = file.getOriginalFilename();
-	    String file_nm = ""; // 실제 파일명
-	    String file_extn_nm = ""; // 확장자
-	    int file_sz = 0; // 파일 크기
+		String originFile = file.getOriginalFilename();
+		String file_nm = ""; // 실제 파일명
+		String file_extn_nm = ""; // 확장자
+		int file_sz = 0; // 파일 크기
 
-	    // 파일이 있는 경우 처리
-	    if (originFile != null && !originFile.isEmpty()) {
-	        int lastIndex = originFile.lastIndexOf(".");
-	        if (lastIndex != -1) {
-	            file_nm = originFile.substring(0, lastIndex);
-	            file_extn_nm = originFile.substring(lastIndex + 1);
-	            file_sz = (int) file.getSize();
+		// 파일이 있는 경우 처리
+		if (originFile != null && !originFile.isEmpty()) {
+			int lastIndex = originFile.lastIndexOf(".");
+			if (lastIndex != -1) {
+				file_nm = originFile.substring(0, lastIndex);
+				file_extn_nm = originFile.substring(lastIndex + 1);
+				file_sz = (int) file.getSize();
 
-	            System.out.println("originFile >> " + file_nm);
-	            System.out.println("fileSuffix >> " + file_extn_nm);
-	            System.out.println("fileSize >> " + file_sz + "바이트");
+				InputStream inputStream = file.getInputStream();
 
-	            InputStream inputStream = file.getInputStream();
+				// 파일이 저장될 경로
+				String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/Homework");
 
-	            // 파일이 저장될 경로
-	            String uploadPath = request.getSession().getServletContext().getRealPath("/chFile/Homework");
+				// 경로가 없으면 생성
+				File uploadDir = new File(uploadPath);
+				if (!uploadDir.exists()) {
+					boolean dirCreated = uploadDir.mkdirs(); // 디렉토리 생성
+					if (!dirCreated) {
+						throw new IOException("업로드 디렉토리를 생성할 수 없습니다: " + uploadPath);
+					}
+				}
 
-	            // 경로가 없으면 생성
-	            File uploadDir = new File(uploadPath);
-	            if (!uploadDir.exists()) {
-	            	boolean dirCreated = uploadDir.mkdirs(); // 디렉토리 생성
-	            	if (!dirCreated) {
-	            		throw new IOException("업로드 디렉토리를 생성할 수 없습니다: " + uploadPath);
-	            	}
-	            }
-	            
-	            // 파일 저장
-	            File targetFile = new File(uploadPath, idntf_no + "." + file_extn_nm);
-	            try (FileOutputStream outputStream = new FileOutputStream(targetFile)) {
-	                byte[] buffer = new byte[1024];
-	                int bytesRead;
-	                while ((bytesRead = inputStream.read(buffer)) != -1) {
-	                    outputStream.write(buffer, 0, bytesRead);
-	                }
-	            }
-	            
-	            String fileUrl = "/chFile/Homework/" +idntf_no +"."+ file_extn_nm ;
+				// 파일 저장
+				File targetFile = new File(uploadPath, idntf_no + "." + file_extn_nm);
+				try (FileOutputStream outputStream = new FileOutputStream(targetFile)) {
+					byte[] buffer = new byte[1024];
+					int bytesRead;
+					while ((bytesRead = inputStream.read(buffer)) != -1) {
+						outputStream.write(buffer, 0, bytesRead);
+					}
+				}
 
-	            // 파일 객체 생성 및 반환
-	            File_Group uploadFile = new File_Group(); // Filegroup 클래스 생성
-	            uploadFile.setIdntf_no(idntf_no);
-	            uploadFile.setFile_nm(file_nm);
-	            uploadFile.setFile_extn_nm(file_extn_nm);
-	            uploadFile.setFile_sz(file_sz);
-	            uploadFile.setFile_path_nm(fileUrl);
+				String fileUrl = "/chFile/Homework/" +idntf_no +"."+ file_extn_nm ;
 
-	            return uploadFile; // 업로드된 파일 정보를 반환
-	        } else {
-	            System.out.println("파일에 확장자가 없습니다.");
-	        }
-	    } else {
-	        System.out.println("업로드된 파일이 없습니다.");
-	    }
-	    return null; // 파일이 없는 경우 null 반환
+				// 파일 객체 생성 및 반환
+				File_Group uploadFile = new File_Group(); // Filegroup 클래스 생성
+				uploadFile.setIdntf_no(idntf_no);
+				uploadFile.setFile_nm(file_nm);
+				uploadFile.setFile_extn_nm(file_extn_nm);
+				uploadFile.setFile_sz(file_sz);
+				uploadFile.setFile_path_nm(fileUrl);
+
+				return uploadFile; // 업로드된 파일 정보를 반환
+			} else {
+				System.out.println("파일에 확장자가 없습니다.");
+			}
+		} else {
+			System.out.println("업로드된 파일이 없습니다.");
+		}
+		return null; // 파일이 없는 경우 null 반환
 	}
 
 	@Override
@@ -197,8 +197,71 @@ public class JheServiceImpl implements JheService {
 
 	@Override
 	@Transactional
-	public int updateHomework(Homework homework , MultipartFile file) {
+	public int updateHomework(Homework homework , MultipartFile file, HttpServletRequest request) {
 		System.out.println("과제 수정 서비스");
+
+		// 기존 파일 삭제 처리 (옵션 체크)
+		if ("true".equals(request.getParameter("deleteFile"))) {
+			System.out.println("삭제할 파일 그룹: " + homework.getFile_group());
+			if (homework.getFile_group() != 0) {
+				File_Group fileGroup = hed.getFileByGroup(homework.getFile_group());
+				System.out.println("deleteFile 파라미터 값: " + request.getParameter("deleteFile"));
+
+				// 기존 파일이 있으면 삭제
+				if (fileGroup != null) {
+					System.out.println("기존 파일 경로: " + fileGroup.getFile_path_nm());
+					String filePath = request.getSession().getServletContext().getRealPath(fileGroup.getFile_path_nm());
+					File oldFile = new File(filePath);
+
+					if (oldFile.exists() && oldFile.delete()) {
+						System.out.println("기존 파일이 삭제되었습니다.");
+					} else {
+						System.out.println("기존 파일 삭제에 실패했습니다.");
+					}
+
+					int delFile = hed.deletefile(homework.getFile_group());
+					if (delFile > 0) {
+						System.out.println("파일 그룹이 DB에서 삭제되었습니다.");
+					} else {
+						System.out.println("파일 그룹 삭제에 실패했습니다.");
+					}
+				}
+			} else {
+				System.out.println("삭제할 파일이 없습니다. (file_group == 0)");
+			}
+		}
+
+		// 파일이 업로드된 경우 새 파일 업로드
+		if (file != null && !file.isEmpty()) {
+			// 새 파일 업로드 처리
+			File_Group uploadedFile = null;
+			try {
+				uploadedFile = uploadFile(file, request);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			if (uploadedFile != null) {
+				// 새 파일의 file_group을 과제에 설정
+				int newFileGroupId = hed.newFileGroup();
+				System.out.println("newFileGroupId: " + newFileGroupId);
+				uploadedFile.setFile_group(newFileGroupId);
+	
+				// file_seq 설정
+				int fileSeq = hed.newFileSeq(newFileGroupId);
+				System.out.println("fileSeq: " + fileSeq);
+				uploadedFile.setFile_seq(fileSeq);
+	
+				// 새 파일의 file_group을 과제에 설정
+	
+				// 파일 정보 저장
+				int fileResult = session.insert("com.postgre.choongsam.dto.jheMapper.fileUpload", uploadedFile);
+				if (fileResult <= 0) {
+					System.out.println("파일 업로드 실패");
+				}
+				homework.setFile_group(newFileGroupId);
+			}
+		}
 
 		int upHomeworkList = hed.updateHomework(homework);
 		return upHomeworkList;
@@ -286,7 +349,7 @@ public class JheServiceImpl implements JheService {
 		List<Attendance_Check> onlineStudAttList = hed.getOnlineStudAtt(lctr_id);
 
 		for (Attendance_Check attendance : onlineStudAttList) {
-			insertStudAtt(attendance.getLctr_id(), attendance.getLctr_no(),
+			updateStudAtt(attendance.getLctr_id(), attendance.getLctr_no(),
 						  Arrays.asList(attendance.getUser_seq()),
 						  Map.of("att_status_" + attendance.getUser_seq(), String.valueOf(attendance.getAtt_status())),
 						  7002);
@@ -295,9 +358,9 @@ public class JheServiceImpl implements JheService {
 	}
 
 	@Override
-	public void insertStudAtt(String lctr_id, int lctr_no,
+	public void updateStudAtt(String lctr_id, int lctr_no,
 							  List<Integer> user_seq, Map<String, String> att_status, int onoff) {
-		System.out.println("출석 insert 서비스");
+		System.out.println("출석 update 서비스");
 
 		for (int i = 0; i < user_seq.size(); i++) {
 			Integer userSeq = user_seq.get(i);
@@ -312,7 +375,7 @@ public class JheServiceImpl implements JheService {
 				attendance_Check.setAtt_status(attStatusValue);
 
 				if (onoff == 7001) {
-					hed.insertStudAtt(attendance_Check);
+					hed.updateStudAtt(attendance_Check);
 				} else if (onoff == 7002) {
 					hed.upStudOnlineAtt(attendance_Check);
 				}
