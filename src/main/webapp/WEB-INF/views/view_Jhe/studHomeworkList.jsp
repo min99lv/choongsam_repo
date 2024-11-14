@@ -17,7 +17,7 @@
 
 <div class="container">
 <div class="contents">
-<h1>나는 수강중인 강의 과제 리스트 (학생)</h1>
+<h1>과제 목록</h1>
 </div>
 	<table id="homeworkList">
 		<tr>

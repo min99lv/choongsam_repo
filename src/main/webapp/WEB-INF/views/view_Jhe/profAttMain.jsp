@@ -19,17 +19,13 @@
 		<tr>
 			<th>차시</th>
 			<th>출석</th>
-			<c:if test="${onoff != 7002}">
-			<th>지각</th>
-			</c:if>
 			<th>결석</th>
 			<th>출석률</th>
 		</tr>
 		<c:forEach var="AttMain" items="${profAttMainList}">
 		<tr>
-		 	<td><c:if test="${onoff != 7002}">
-		 			<a href="/Jhe/insertStudAtt?lctr_id=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
-		 			${AttMain.lctr_no}</a>
+		 	<td><c:if test="${onoff != 7001}">
+		 			${AttMain.lctr_no}
 		 		</c:if>
 		 		<c:if test="${onoff == 7002}">
 		 			<a href="/Jhe/profAttDetail?lctr_id=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
@@ -37,7 +33,6 @@
 		 		</c:if>
 		 	</td>
 			<td>${AttMain.present_count}</td>
-			<c:if test="${onoff != 7002}"><td>${AttMain.late_count}</td></c:if>
 			<td>${AttMain.absent_count}</td>
 			<td>${AttMain.attendance_rate}%</td>
 		</tr>
