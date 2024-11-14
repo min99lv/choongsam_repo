@@ -93,6 +93,8 @@ public class AtrController {
 
 		Lecture lecture = new Lecture();
 		lecture = as.getLectureDetail(lctr_id);
+		List<Syllabus> syllabusList= as.getSyllabus(lctr_id);
+		model.addAttribute("syllabusList", syllabusList);
 		if(!lecture.getLctr_state().equals("개설 허가 대기중")) {
 			model.addAttribute("lecture", lecture);
 			return "view_Atr/courseDetailAdmin";
