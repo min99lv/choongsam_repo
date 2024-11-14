@@ -193,11 +193,12 @@ public class HjhDaoImpl implements HjhDao {
 	}
 
 	@Override
-	public int updatePayState(int userSeq, String lctrId) {
+	public int updatePayState(int userSeq, String lctrId,int class_count) {
 	    int updatePayState = 0;
 	    Map<String, Object> params = new HashMap<>();
 	    params.put("user_seq", userSeq);
 	    params.put("lctr_id", lctrId); 
+	   
 	    
 	    System.out.println("userSeq: " + userSeq);
 	    System.out.println("lctrId: " + lctrId);
@@ -205,6 +206,12 @@ public class HjhDaoImpl implements HjhDao {
 	    try {
 	        // 수정된 부분: session.update() 호출 시, "updatePayState"와 params를 두 번째 인자로 전달
 	        updatePayState = session.update("updatePayState", params);
+	        for (int i = 1;
+	        		i <= class_count; i++) {
+	        	params.put("cnt", i); 
+	        	session.insert("jhattendance", params);
+	        }
+	        session.insert("jhattendance", params);
 	    } catch (Exception e) {
 	        System.out.println("Error during updatePayState: " + e.getMessage());
 	        System.out.println("params: " + params);

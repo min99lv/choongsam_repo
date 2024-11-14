@@ -110,7 +110,8 @@
 			        cr.*, 
 			        ui."USER_NAME" AS std_name, 
 			        l."ONOFF" AS ONOFF, 
-			        l."LCTR_NAME" AS LCTR_NAME
+			        l."LCTR_NAME" AS LCTR_NAME,
+			        l."LCTR_CNTSCHD" AS CLASS_COUNT 
 			    FROM "COURSE_REGISTRATION" cr
 			    LEFT JOIN "USER_INFO" ui ON cr."USER_SEQ" = ui."USER_SEQ"
 			    LEFT JOIN "LECTURE" l ON cr."LCTR_ID" = l."LCTR_ID"
@@ -142,6 +143,11 @@
 		    FROM "LECTURE"
 		    WHERE "USER_SEQ" = #{user_seq}
 		</select>
+		<insert id="jhattendance">
+			insert into "ATTENDANCE_CHECK" ("LCTR_NO","LCTR_ID","USER_SEQ")
+			VALUES (#{cnt},#{lctr_id},CAST (#{user_seq} AS INTEGER))
+			
+		</insert>
 
 </mapper> 
 

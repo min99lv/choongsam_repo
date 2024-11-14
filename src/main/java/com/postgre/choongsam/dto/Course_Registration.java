@@ -23,5 +23,5 @@ public class Course_Registration {	// 수강신청
 	
 	private String 		ONOFF;
 	private String 		LCTR_NAME;
-	
+	private int 	    CLASS_COUNT;
 }

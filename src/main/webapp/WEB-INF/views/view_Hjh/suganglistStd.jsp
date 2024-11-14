@@ -179,6 +179,7 @@
 <table>
     <thead>
         <tr>
+            
             <th>번호</th>
             <th>대면/온라인</th>
             <th>강의명</th>
@@ -192,6 +193,7 @@
     <tbody>
         <c:forEach var="course" items="${sugangStu}" varStatus="status">
             <tr>
+            	
                 <td>${status.index + 1}</td>
                 <td>
                  <c:choose>
@@ -219,7 +221,7 @@
                             <span>수납완료</span>
                         </c:when>
                         <c:when test="${(course.pay_state == 'N' or course.pay_state == null) and course.reg_state == '2001'}">
-                            <button class="openModalButton" data-lctr-id="${course.lctr_id}" data-user-seq="${course.user_seq}">수납하기</button>
+                         <button class="openModalButton" data-lctr-id="${course.lctr_id}" data-user-seq="${course.user_seq}" data-user-cnt="${course.CLASS_COUNT}" >수납하기</button>
                         </c:when>
                         <c:otherwise>
                             <span>기간만료</span>
@@ -261,8 +263,10 @@
         <img src="${pageContext.request.contextPath}/chFile/user/QR.png" alt="QR Code" width="200" />
         <p class="timer" id="timer">남은 시간: 60초</p>
         <form id="paymentForm" action="/view_Hjh/updatePayState" method="POST">
+        
             <input type="hidden" name="lctr_id" id="lctrId" />
             <input type="hidden" name="user_seq" id="userSeq" />
+            <input type="hidden" name="class_count" id="classcount" />
             <button type="submit">수납하기</button>
         </form>
     </div>
@@ -280,9 +284,11 @@
         btn.onclick = function() {
             var lctrId = this.getAttribute("data-lctr-id");
             var userSeq = this.getAttribute("data-user-seq");
+            var classcount = this.getAttribute("data-user-cnt");
 
             document.getElementById("lctrId").value = lctrId;
             document.getElementById("userSeq").value = userSeq;
+            document.getElementById("classcount").value = classcount;
 
             modal.style.display = "block";
 
