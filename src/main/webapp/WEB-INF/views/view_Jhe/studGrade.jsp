@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myStudyHomeNav.jsp" %>
 <link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
@@ -21,7 +23,6 @@
 		<th>과제점수</th>
 		<th>총 점수</th>
 		<th>수료여부</th>
-		<th>상세</th>
 		<th>쪽지</th>
 	</tr>
 	<c:forEach var="myScore" items="${myGradeList}">
@@ -35,9 +36,6 @@
 					<c:when test="${myScore.fnsh_yn == 'Y'}">수료</c:when>
 					<c:otherwise>미수료</c:otherwise>
 				</c:choose>
-			</td>
-			<td>
-				<a href="/Jhe/studGradeDetail?LCTR_ID=${myScore.lctr_id}">상세보기</a>
 			</td>
 			<td>
 <a href="../notes/new"><button type="button" class="submitBtn">쪽지</button></a>
