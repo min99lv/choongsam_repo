@@ -60,6 +60,8 @@ public class JshController {
 		
 		System.out.println("JshController sh_lecture_teacher start...");
 		
+		System.out.println("onoffonoffonoffonoffonoffonoffonoffonoff >> " + onoff);
+		
 		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
 		
 		//강사정보, 강의이름 가져오기
