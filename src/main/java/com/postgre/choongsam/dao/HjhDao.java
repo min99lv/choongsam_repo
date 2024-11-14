@@ -37,7 +37,7 @@ public interface HjhDao {
 
 	List<Course_Registration> sugangStu(Map<String, Object> params);
 
-	int updatePayState(int userSeq, String lctrId);
+	int updatePayState(int userSeq, String lctrId, int class_count);
 
 	int sugangStuTotalCount(int userSeq, String keyword);
 

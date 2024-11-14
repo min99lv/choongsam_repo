@@ -155,8 +155,8 @@ public class HjhServiceImpl implements HjhService {
 	}
 
 	@Override
-	public int updatePayState(int userSeq,String lctrId) {
-		int updatePayState = hjhdao.updatePayState(userSeq,lctrId);
+	public int updatePayState(int userSeq,String lctrId,int class_count) {
+		int updatePayState = hjhdao.updatePayState(userSeq,lctrId,class_count);
 		System.out.println("updatePayState 서비스"+updatePayState);
 		System.out.println("userSeq"+userSeq);
 		System.out.println("lctrId"+lctrId);

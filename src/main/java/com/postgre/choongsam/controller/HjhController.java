@@ -92,7 +92,8 @@ public class HjhController {
 
 
 	@PostMapping("/updatePayState")
-	public String updatePayState(Model model, HttpSession session, @RequestParam("lctr_id") String lctrId) {
+	public String updatePayState(Model model, HttpSession session, @RequestParam("lctr_id") String lctrId,
+																   @RequestParam("class_count") int class_count) {
 	    // 세션에서 user_seq 값을 가져옵니다.
 	    Object userSeqObject = session.getAttribute("user_seq");
 	    System.out.println("updatePayStateㅋㅋㅋ");
@@ -113,7 +114,7 @@ public class HjhController {
 	    // userSeq가 올바르게 설정되었을 경우
 	    if (userSeq > 0) {
 	        // 결제 상태 업데이트
-	        int updatePayState = hjh.updatePayState(userSeq, lctrId);
+	        int updatePayState = hjh.updatePayState(userSeq, lctrId,class_count);
 	        System.out.println("updatePayState 결과: " + updatePayState);
 	    } else {
 	        System.out.println("유효하지 않은 userSeq 값입니다.");
