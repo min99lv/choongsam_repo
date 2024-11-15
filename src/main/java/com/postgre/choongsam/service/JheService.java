@@ -31,7 +31,7 @@ public interface JheService {
 	List<Attendance_Check> profAttMain(String lctr_id);
 	List<Attendance_Check> getStudAtt(String lctr_id, int lctr_no);
 	List<Attendance_Check> getOnlineStudAtt(String lctr_id);
-	int				updatesubmitHomework(int user_seq, int asmt_no);
+	int				updatesubmitHomework(int user_seq, int asmt_no, MultipartFile file, HttpServletRequest request);
 	void			updateStudAtt(String lctr_id, int lctr_no, List<Integer> user_seq, Map<String, String> att_status, int onoff);
 	List<Lecture>	studLecture(int user_seq);
 	List<Lecture>	studLectureMain(String lctr_id);
@@ -42,6 +42,5 @@ public interface JheService {
 	void			updateGrade(Integer userSeq, String lctr_id, int atndcScr, int asmtScr, int lastScr);
 	List<Grade>		studGrade(int user_seq);
 	List<Grade>		studGradeDetail(String lctr_id, int user_seq);
-	Integer			getProfSeq(String lctr_id);
-	String			getProfName(Integer rcvrSeq);
+	Homework		checkHomework(int asmt_no, int user_seq);
 }

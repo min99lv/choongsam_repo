@@ -146,7 +146,7 @@ public class JheDaoImpl implements JheDao {
 		Homework findByASMT = null;
 		try {
 			findByASMT = session.selectOne("findById", asmt_no);
-			System.out.println("asmt_no: " + asmt_no);
+			System.out.println("findById 다오 asmt_no: " + asmt_no);
 			System.out.println("findByASMT: " + findByASMT);
 		} catch (Exception e) {
 			System.out.println("findById error: " + e.getMessage());
@@ -162,7 +162,7 @@ public class JheDaoImpl implements JheDao {
 
 	@Override
 	public int deletefile(int file_group) {
-		System.out.println("과제에 등록된 파일그룹 다오");
+		System.out.println("과제에 기존에 등록된 파일그룹 다오");
 		return session.delete("deletefile", file_group);
 	}
 
@@ -289,6 +289,7 @@ public class JheDaoImpl implements JheDao {
 		List<Attendance_Check> profAttMainList = null;
 		try {
 			profAttMainList = session.selectList("profAttMain", lctr_id);
+			System.out.println("다오 profAttMainList: " + profAttMainList);
 		} catch (Exception e) {
 			System.out.println("profAttMain error: " + e.getMessage());
 		}
@@ -362,6 +363,20 @@ public class JheDaoImpl implements JheDao {
 		return upStudOnAtt;
 	}
 
+//	@Override
+//	public LocalDate getViewingPeriod(String lctr_id, int lctr_no) {
+//		System.out.println("getViewingPeriod 다오");
+//		String viewingPeriod = null;
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+//		try {
+//			viewingPeriod =session.selectOne("getViewingPeriod", Map.of("LCTR_ID", lctr_id, "LCTR_NO", lctr_no));
+//		} catch (Exception e) {
+//			System.out.println("getViewingPeriod error: " + e.getMessage());
+//			System.out.println("다오 viewingPeriod: " + viewingPeriod);
+//		}
+//		return LocalDate.parse(viewingPeriod, formatter);
+//	}
+
 	@Override
 	public List<Lecture> studLecture(int user_seq) {
 		System.out.println("학생 강의 리스트");
@@ -429,7 +444,7 @@ public class JheDaoImpl implements JheDao {
 	public Grade selectGrade(Grade grade) {
 		System.out.println("selectGrade 다오");
 		try {
-			System.out.println("grade: " + grade);
+			System.out.println("grade 다오: " + grade);
 			return session.selectOne("selectGrade", grade);
 		} catch (Exception e) {
 			System.out.println("studScoresList error: " + e.getMessage());
@@ -581,14 +596,14 @@ public class JheDaoImpl implements JheDao {
 	}
 
 	@Override
-	public Integer getProfSeq(String lctr_id) {
-		System.out.println("강사 seq 다오");
-		return session.selectOne("getProfSeq", lctr_id);
-	}
-
-	@Override
-	public String getProfName(Integer rcvrSeq) {
-		System.out.println("강사 이름 다오");
-		return session.selectOne("getProfName", rcvrSeq);
+	public Homework checkHomework(Homework homework) {
+		System.out.println("checkHomeworkList 다오");
+		Homework checkHomeworkList = null;
+		try {
+			checkHomeworkList = session.selectOne("checkHomework", homework);
+		} catch (Exception e) {
+			System.out.println("checkHomework error: " + e.getMessage());
+		}
+		return checkHomeworkList;
 	}
 }
