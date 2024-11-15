@@ -70,7 +70,7 @@
         <div class="header__color">
         <div class="header__nav">
         <div class="header__logo"><a href="/">
-        	<img alt="로고" src="../image/headerLogoGreen.png" id="logo">
+        	<img alt="로고" src="<%=request.getContextPath()%>/image/headerLogoGreen.png" id="logo">
         </a></div>
         <div class="header__navBar">
            <a href="/courseApplyList">수강신청</a>
