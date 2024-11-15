@@ -40,6 +40,7 @@ th, td {
 	padding: 12px;
 	font-size: 15px;
 	text-align: left;
+	height: 50px;
 }
 
 th {
@@ -96,8 +97,8 @@ a.apply-link[hidden] {
 	display: none;
 }
 .container{
-	margin-top: 100px;
-	margin-bottom: 200px;
+	margin-top: 150px;
+	margin-bottom: 300px;
 }
 </style>
 </head>
