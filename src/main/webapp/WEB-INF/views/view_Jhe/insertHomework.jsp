@@ -59,8 +59,8 @@
 					<input type="hidden" name="lctr_id" value="${findByLctrName.lctr_id}"></td>
 				</tr>
 			</table>
-			<input type="submit" value="등록">
-			<a href="../Jhe/profHomeworkList?lctr_id=${findByLctrName.lctr_id}"><button type="button">취소</button></a>
+			<input type="submit" value="등록" class="submitBtn" style=" margin-left: 180px; margin-top: 10px;">
+			<a href="../Jhe/profHomeworkList?lctr_id=${findByLctrName.lctr_id}"><button type="button" class="submitBtn">취소</button></a>
 		</form>
 	</div>
 

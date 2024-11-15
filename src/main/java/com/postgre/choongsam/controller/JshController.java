@@ -60,6 +60,8 @@ public class JshController {
 		
 		System.out.println("JshController sh_lecture_teacher start...");
 		
+		System.out.println("onoffonoffonoffonoffonoffonoffonoffonoff >> " + onoff);
+		
 		List<Class_ScheduleAddVideo> contsList = service.searchTeachConts(lctr_id, user_seq);
 		
 		//강사정보, 강의이름 가져오기
@@ -73,9 +75,14 @@ public class JshController {
 		                .map(Class_ScheduleAddVideo::getUser_name)
 		                .findFirst()
 		                .orElse("");
+		int onOff = contsList.stream()
+				.map(Class_ScheduleAddVideo::getOnoff)
+				.findFirst()
+				.orElse(0);
 		System.out.println("강의명 >> "+lectName);
 		System.out.println("강사명 >> "+teacherName);
 		
+		model.addAttribute("onoff", onOff);
 		model.addAttribute("lectName", lectName);
 		model.addAttribute("teacherName", teacherName);
 		model.addAttribute("contentList", contsList);
@@ -657,11 +664,15 @@ public class JshController {
 									                  .map(Class_ScheduleAddVideo::getUser_name)
 									                  .findFirst()
 									                  .orElse("");
-			
+			int onOff = contentList.stream()
+					.map(Class_ScheduleAddVideo::getOnoff)
+					.findFirst()
+					.orElse(0);
+
 			System.out.println("강의명 >> "+lectName);
 			System.out.println("강사명 >> "+teacherName);
 			
-			
+			model.addAttribute("onoff", onOff);
 			model.addAttribute("lctr_id", lctr_id);
 			model.addAttribute("lectName", lectName);
 			model.addAttribute("teacherName", teacherName);

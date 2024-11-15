@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -307,8 +308,20 @@ public class JheServiceImpl implements JheService {
 	}
 
 	@Override
-	public int updatesubmitHomework(int user_seq, int asmt_no) {
+	public int updatesubmitHomework(int user_seq, int asmt_no, MultipartFile file, HttpServletRequest request) {
 		System.out.println("학생 과제 제출 수정 서비스");
+
+		File_Group uploadedFile = null;
+		try {
+			uploadedFile = uploadFile(file, request);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (uploadedFile != null) {
+			int fileGroupId = hed.newFileGroup();
+			saveFiles(Collections.singletonList(uploadedFile), fileGroupId);
+		}
+		
 		Homework_Submission homework_Submission = new Homework_Submission();
 		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		homework_Submission.setUser_seq(user_seq);
@@ -316,10 +329,28 @@ public class JheServiceImpl implements JheService {
 		homework_Submission.setSbmsn_yn("Y");
 		homework_Submission.setSbmsn_ymd(today);
 		homework_Submission.setAsmt_scr(10);
-		homework_Submission.setFile_group(1);
+		homework_Submission.setFile_group(uploadedFile.getFile_group());
 		System.out.println("Sbmsn_yn: " + homework_Submission.getSbmsn_yn());
 		int upSubmitHomework = hed.updatesubmitHomework(homework_Submission);
 		return upSubmitHomework;
+	}
+
+	private int saveFiles(List<File_Group> uploadFiles, int fileGroupId) {
+		int result = 0;
+		for (File_Group fileUpload : uploadFiles) {
+			int fileSeq = hed.newFileSeq(fileGroupId);
+			fileUpload.setFile_group(fileGroupId);
+			fileUpload.setFile_seq(fileSeq);
+
+			result = session.insert("com.postgre.choongsam.dto.jheMapper.fileUpload", fileUpload);
+			if (result > 0) {
+				System.out.println("파일 업로드 성공");
+			} else {
+				System.out.println("파일 업로드 실패");
+				break;
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -362,6 +393,8 @@ public class JheServiceImpl implements JheService {
 							  List<Integer> user_seq, Map<String, String> att_status, int onoff) {
 		System.out.println("출석 update 서비스");
 
+//		LocalDate today = LocalDate.now();
+
 		for (int i = 0; i < user_seq.size(); i++) {
 			Integer userSeq = user_seq.get(i);
 			String  attStatus = att_status.get("att_status_" + userSeq);
@@ -377,6 +410,10 @@ public class JheServiceImpl implements JheService {
 				if (onoff == 7001) {
 					hed.updateStudAtt(attendance_Check);
 				} else if (onoff == 7002) {
+//					LocalDate viewingPeriod = hed.getViewingPeriod(lctr_id, lctr_no);
+//					if (viewingPeriod != null && viewingPeriod.isBefore(today)) {
+//						attendance_Check.setAtt_status(5003);
+//					}
 					hed.upStudOnlineAtt(attendance_Check);
 				}
 			}
@@ -431,18 +468,18 @@ public class JheServiceImpl implements JheService {
 					grade.setLctr_id(lctr_id);
 					grade.setUser_seq(userSeq);
 					Grade existingGrade = hed.selectGrade(grade);
+
 					if (existingGrade == null) {
 						insertGrade(lctr_id, userSeq);
 					}
-				}
-				if (lctrState == 4005) {
+
 					List<Grade> studScoresList = hed.profGrade(userSeq);
 					allGrades.addAll(studScoresList);
 					System.out.println("service studScoresList: " + studScoresList);
 				}
-		}
+			}
 		return allGrades;
-	}
+		}
 
 	private void insertGrade(String lctr_id, Integer userSeq) {
 		System.out.println("강사 수강생 성적 등록 서비스");
@@ -583,14 +620,12 @@ public class JheServiceImpl implements JheService {
 	}
 
 	@Override
-	public Integer getProfSeq(String lctr_id) {
-		System.out.println("강사 seq 찾기 서비스");
-		return hed.getProfSeq(lctr_id);
-	}
-
-	@Override
-	public String getProfName(Integer rcvrSeq) {
-		System.out.println("강사 이름 찾기 서비스");
-		return hed.getProfName(rcvrSeq);
+	public Homework checkHomework(int asmt_no, int user_seq) {
+		System.out.println("checkHomework 서비스");
+		Homework homework = new Homework();
+		homework.setAsmt_no(asmt_no);
+		homework.setUser_seq(user_seq);
+		Homework checkHomeworkList = hed.checkHomework(homework);
+		return checkHomeworkList;
 	}
 }

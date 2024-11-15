@@ -10,7 +10,7 @@
 		FROM		"USER_INFO" AS u
 		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
 		WHERE		l."USER_SEQ" = #{user_seq}
-		AND			l."LCTR_STATE" IN (4003, 4004, 4005)
+		AND			l."LCTR_STATE" IN (4003, 4004, 4005, 4006)
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
 	<select id="profLectureInfo" resultType="Lecture">
@@ -20,7 +20,7 @@
 		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
 	<select id="getProfHomework" parameterType="String" resultType="Homework">
-		SELECT		u."USER_NAME" AS prof_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",
+		SELECT		u."USER_NAME" AS prof_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME", l."ONOFF",
 					h."ASMT_NO", h."ASMT_NM", h."ASMT_CN",
 					h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD", h."FILE_GROUP"
 		FROM		"USER_INFO" AS u
@@ -205,13 +205,19 @@
 				CASE
 					WHEN c."CONTS_PRGRT" >= 90 THEN 5001
 					WHEN c."CONTS_PRGRT" &lt; 90 THEN 5003
-					ELSE a."ATT_STATUS"
+					ELSE 5003
 				END
 		FROM	"CLASS_SCHEDULE" AS c
 		WHERE	a."LCTR_NO" = c."LCTR_NO"
 		AND		a."LCTR_ID" = c."LCTR_ID"
 		AND		a."USER_SEQ" = c."USER_SEQ"
 	</update>
+	<select id="getViewingPeriod" resultType="String">
+		SELECT		"VIEWING_PERIOD"
+		FROM		"LECTURE_VIDEO"
+		WHERE		"LCTR_ID" = #{lctr_id}
+		AND			"LCTR_NO" = #{lctr_no}
+	</select>
 	<select id="studLecture" resultType="Lecture">
 		SELECT		p."USER_NAME", l."USER_SEQ", l."LCTR_ID", l."LCTR_NAME", l."ONOFF"
 		FROM		"USER_INFO" AS u
@@ -229,9 +235,10 @@
 		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
 	<select id="studAtt" resultType="Attendance_Check">
-		SELECT		u."USER_SEQ", a."LCTR_NO", a."LCTR_ID", a."ATT_STATUS"
+		SELECT		u."USER_SEQ", a."LCTR_NO", a."LCTR_ID", a."ATT_STATUS", l."ONOFF"
 		FROM		"ATTENDANCE_CHECK" AS a
 		JOIN		"USER_INFO" AS u ON a."USER_SEQ" = u."USER_SEQ"
+		JOIN		"LECTURE" AS l ON a."LCTR_ID" = l."LCTR_ID"
 		WHERE		a."LCTR_ID" = #{lctr_id}
 		AND			a."USER_SEQ" = #{user_seq}
 		ORDER BY	a."LCTR_NO" ASC
@@ -254,7 +261,7 @@
 		AND			"USER_SEQ" = #{user_seq}
 	</select>
 	<select id="studScores" resultType="Grade">
-		SELECT		u."USER_NAME" AS stud_name, l."LCTR_ID", l."LCTR_NAME",
+		SELECT		u."USER_NAME" AS stud_name, l."LCTR_ID", l."LCTR_NAME", l."ONOFF",
 					g."USER_SEQ", g."LCTR_ID", g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR", g."FNSH_YN"
 		FROM		"GRADE" AS g
 		JOIN		"USER_INFO" u ON g."USER_SEQ" = u."USER_SEQ"
@@ -320,7 +327,7 @@
 		AND			"LCTR_ID" = #{lctr_id}
 	</update>
 	<select id="studGrade" resultType="Grade">
-		SELECT		l."LCTR_ID", l."LCTR_NAME",
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF",
 					g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR", g."FNSH_YN"
 		FROM		"GRADE" AS g
 		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
@@ -334,14 +341,17 @@
 		WHERE		g."USER_SEQ" = #{user_seq}	
 		AND			g."LCTR_ID" = #{lctr_id}	
 	</select>
-	<select id="getProfSeq" resultType="int">
-		SELECT		"USER_SEQ"
-		FROM		"LECTURE"
-		WHERE		"LCTR_ID" = #{lctr_id}
-	</select>
-	<select id="getProfName" resultType="String">
-		SELECT		"USER_NAME"
-		FROM		"USER_INFO"
-		WHERE		"USER_SEQ" = #{user_seq}
+	<select id="checkHomework" resultType="Homework">
+		SELECT		l."LCTR_NAME", u."USER_NAME" AS prof_name, h."ASMT_NM",
+					fg1."FILE_GROUP" AS assigned_file_group, fg1."FILE_NM" AS assigned_file,
+					fg2."FILE_GROUP" AS submitted_file_group, fg2."FILE_NM" AS submitted_file
+		FROM		"HOMEWORK" AS h
+		JOIN		"LECTURE" l ON l."LCTR_ID" = h."LCTR_ID"
+		JOIN		"USER_INFO" u ON u."USER_SEQ" = l."USER_SEQ"
+		LEFT JOIN	"FILE_GROUP" fg1 ON fg1."FILE_GROUP" = h."FILE_GROUP"
+		LEFT JOIN	"HOMEWORK_SUBMISSION" hs ON hs."ASMT_NO" = h."ASMT_NO"
+		LEFT JOIN	"FILE_GROUP" fg2 ON fg2."FILE_GROUP" = hs."FILE_GROUP"
+		WHERE		h."ASMT_NO" = #{asmt_no}
+		AND			hs."USER_SEQ" = #{user_seq}
 	</select>
 </mapper>

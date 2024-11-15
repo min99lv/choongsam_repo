@@ -25,8 +25,8 @@
 			<th>강사명</th>
 			<th>과제명</th>
 			<th>진행</th>
-			<th>제출</th>
 			<th>마감일</th>
+			<th>제출</th>
 		</tr>
 		<c:set var="previousName" value="" />
 		<c:set var="previousAsmtNm" value="" />
@@ -36,13 +36,15 @@
 				<tr>
 					<td>${homeworkList.lctr_name}</td>
 					<td>${homeworkList.prof_name}</td>
-					<td><a href="/Jhe/submitHomework?ASMT_NO=${homeworkList.asmt_no}">${homeworkList.asmt_nm}</a></td>
+					<td>${homeworkList.asmt_nm}</td>
 					<td>${homeworkList.asmtStatus}</td>
-					<td><c:choose>
-						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">제출</c:when>
-						<c:when test="${homeworkList.sbmsn_yn == 'N'}">미제출</c:when>
-					</c:choose></td>
 					<td>${homeworkList.sbmsn_end_ymd}</td>
+					<td><c:choose>
+						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">
+							<a href="/Jhe/checkHomework?asmt_no=${homeworkList.asmt_no}">과제 제출 확인</a></c:when>
+						<c:when test="${homeworkList.sbmsn_yn == 'N'}">
+							<a href="/Jhe/submitHomework?asmt_no=${homeworkList.asmt_no}">제출하기</a></c:when>
+					</c:choose></td>
 				</tr>
 				<c:set var="previousName" value="${homeworkList.lctr_name}" />
 				<c:set var="previousprofNm" value="${homeworkList.prof_name}" />
@@ -55,13 +57,14 @@
 					<td></td>
 					<td><a href="/Jhe/submitHomework?ASMT_NO=${homeworkList.asmt_no}">${homeworkList.asmt_nm}</a></td>
 					<td>${homeworkList.asmtStatus}</td>
-					<td><c:choose>
-						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">제출</c:when>
-						<c:when test="${homeworkList.sbmsn_yn == 'N'}">미제출</c:when>
-					</c:choose></td>
 					<td>${homeworkList.sbmsn_end_ymd}</td>
+					<td><c:choose>
+						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">
+							<a href="/Jhe/checkHomework?asmt_no=${homeworkList.asmt_no}">과제 제출 확인</a></c:when>
+						<c:when test="${homeworkList.sbmsn_yn == 'N'}">
+							<a href="/Jhe/submitHomework?asmt_no=${homeworkList.asmt_no}">제출하기</a></c:when>
+					</c:choose><input type="hidden" name="onoff" value="${homeworkList.onoff}" id="onoff"></td>
 				</tr>
-				<c:set var="previousAsmtNm" value="${homeworkList.asmt_nm}" />
 			</c:if>
 		</c:forEach>
 	</table>
