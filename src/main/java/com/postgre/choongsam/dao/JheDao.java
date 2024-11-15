@@ -54,7 +54,5 @@ public interface JheDao {
 	Grade			getupdateGrade(Grade grade);
 	List<Grade>		studGrade(int user_seq);
 	List<Grade>		studGradeDetail(Grade grade);
-	Integer			getProfSeq(String lctr_id);
-	String			getProfName(Integer rcvrSeq);
 	List<Integer>	getLctrNoList(String lctr_id);
 }

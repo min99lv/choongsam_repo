@@ -362,6 +362,8 @@ public class JheServiceImpl implements JheService {
 							  List<Integer> user_seq, Map<String, String> att_status, int onoff) {
 		System.out.println("출석 update 서비스");
 
+//		LocalDate today = LocalDate.now();
+
 		for (int i = 0; i < user_seq.size(); i++) {
 			Integer userSeq = user_seq.get(i);
 			String  attStatus = att_status.get("att_status_" + userSeq);
@@ -377,6 +379,10 @@ public class JheServiceImpl implements JheService {
 				if (onoff == 7001) {
 					hed.updateStudAtt(attendance_Check);
 				} else if (onoff == 7002) {
+//					LocalDate viewingPeriod = hed.getViewingPeriod(lctr_id, lctr_no);
+//					if (viewingPeriod != null && viewingPeriod.isBefore(today)) {
+//						attendance_Check.setAtt_status(5003);
+//					}
 					hed.upStudOnlineAtt(attendance_Check);
 				}
 			}
@@ -431,18 +437,18 @@ public class JheServiceImpl implements JheService {
 					grade.setLctr_id(lctr_id);
 					grade.setUser_seq(userSeq);
 					Grade existingGrade = hed.selectGrade(grade);
+
 					if (existingGrade == null) {
 						insertGrade(lctr_id, userSeq);
 					}
-				}
-				if (lctrState == 4005) {
+
 					List<Grade> studScoresList = hed.profGrade(userSeq);
 					allGrades.addAll(studScoresList);
 					System.out.println("service studScoresList: " + studScoresList);
 				}
-		}
+			}
 		return allGrades;
-	}
+		}
 
 	private void insertGrade(String lctr_id, Integer userSeq) {
 		System.out.println("강사 수강생 성적 등록 서비스");
@@ -580,17 +586,5 @@ public class JheServiceImpl implements JheService {
 		grade.setUser_seq(user_seq);
 		List<Grade> myGradeDetailList = hed.studGradeDetail(grade);
 		return myGradeDetailList;
-	}
-
-	@Override
-	public Integer getProfSeq(String lctr_id) {
-		System.out.println("강사 seq 찾기 서비스");
-		return hed.getProfSeq(lctr_id);
-	}
-
-	@Override
-	public String getProfName(Integer rcvrSeq) {
-		System.out.println("강사 이름 찾기 서비스");
-		return hed.getProfName(rcvrSeq);
 	}
 }
