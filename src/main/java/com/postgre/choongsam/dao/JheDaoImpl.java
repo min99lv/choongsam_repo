@@ -594,4 +594,16 @@ public class JheDaoImpl implements JheDao {
 		}
 		return myGradeDetailList;
 	}
+
+	@Override
+	public Homework checkHomework(Homework homework) {
+		System.out.println("checkHomeworkList 다오");
+		Homework checkHomeworkList = null;
+		try {
+			checkHomeworkList = session.selectOne("checkHomework", homework);
+		} catch (Exception e) {
+			System.out.println("checkHomework error: " + e.getMessage());
+		}
+		return checkHomeworkList;
+	}
 }

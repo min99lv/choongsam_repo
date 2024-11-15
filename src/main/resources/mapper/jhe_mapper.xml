@@ -20,7 +20,7 @@
 		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
 	<select id="getProfHomework" parameterType="String" resultType="Homework">
-		SELECT		u."USER_NAME" AS prof_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",
+		SELECT		u."USER_NAME" AS prof_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME", l."ONOFF",
 					h."ASMT_NO", h."ASMT_NM", h."ASMT_CN",
 					h."SBMSN_BGNG_YMD", h."SBMSN_END_YMD", h."FILE_GROUP"
 		FROM		"USER_INFO" AS u
@@ -261,7 +261,7 @@
 		AND			"USER_SEQ" = #{user_seq}
 	</select>
 	<select id="studScores" resultType="Grade">
-		SELECT		u."USER_NAME" AS stud_name, l."LCTR_ID", l."LCTR_NAME",
+		SELECT		u."USER_NAME" AS stud_name, l."LCTR_ID", l."LCTR_NAME", l."ONOFF",
 					g."USER_SEQ", g."LCTR_ID", g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR", g."FNSH_YN"
 		FROM		"GRADE" AS g
 		JOIN		"USER_INFO" u ON g."USER_SEQ" = u."USER_SEQ"
@@ -327,7 +327,7 @@
 		AND			"LCTR_ID" = #{lctr_id}
 	</update>
 	<select id="studGrade" resultType="Grade">
-		SELECT		l."LCTR_ID", l."LCTR_NAME",
+		SELECT		l."LCTR_ID", l."LCTR_NAME", l."ONOFF",
 					g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR", g."FNSH_YN"
 		FROM		"GRADE" AS g
 		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
@@ -340,5 +340,18 @@
 		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
 		WHERE		g."USER_SEQ" = #{user_seq}	
 		AND			g."LCTR_ID" = #{lctr_id}	
+	</select>
+	<select id="checkHomework" resultType="Homework">
+		SELECT		l."LCTR_NAME", u."USER_NAME" AS prof_name, h."ASMT_NM",
+					fg1."FILE_GROUP" AS assigned_file_group, fg1."FILE_NM" AS assigned_file,
+					fg2."FILE_GROUP" AS submitted_file_group, fg2."FILE_NM" AS submitted_file
+		FROM		"HOMEWORK" AS h
+		JOIN		"LECTURE" l ON l."LCTR_ID" = h."LCTR_ID"
+		JOIN		"USER_INFO" u ON u."USER_SEQ" = l."USER_SEQ"
+		LEFT JOIN	"FILE_GROUP" fg1 ON fg1."FILE_GROUP" = h."FILE_GROUP"
+		LEFT JOIN	"HOMEWORK_SUBMISSION" hs ON hs."ASMT_NO" = h."ASMT_NO"
+		LEFT JOIN	"FILE_GROUP" fg2 ON fg2."FILE_GROUP" = hs."FILE_GROUP"
+		WHERE		h."ASMT_NO" = #{asmt_no}
+		AND			hs."USER_SEQ" = #{user_seq}
 	</select>
 </mapper>

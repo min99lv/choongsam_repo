@@ -40,7 +40,8 @@
 					<td>${homeworkList.asmtStatus}</td>
 					<td>${homeworkList.sbmsn_end_ymd}</td>
 					<td><c:choose>
-						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">제출</c:when>
+						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">
+							<a href="/Jhe/checkHomework?asmt_no=${homeworkList.asmt_no}">과제 제출 확인</a></c:when>
 						<c:when test="${homeworkList.sbmsn_yn == 'N'}">
 							<a href="/Jhe/submitHomework?asmt_no=${homeworkList.asmt_no}">제출하기</a></c:when>
 					</c:choose></td>
@@ -58,10 +59,11 @@
 					<td>${homeworkList.asmtStatus}</td>
 					<td>${homeworkList.sbmsn_end_ymd}</td>
 					<td><c:choose>
-						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">제출</c:when>
+						<c:when test="${homeworkList.sbmsn_yn == 'Y'}">
+							<a href="/Jhe/checkHomework?asmt_no=${homeworkList.asmt_no}">과제 제출 확인</a></c:when>
 						<c:when test="${homeworkList.sbmsn_yn == 'N'}">
 							<a href="/Jhe/submitHomework?asmt_no=${homeworkList.asmt_no}">제출하기</a></c:when>
-					</c:choose></td>
+					</c:choose><input type="hidden" name="onoff" value="${homeworkList.onoff}" id="onoff"></td>
 				</tr>
 			</c:if>
 		</c:forEach>
