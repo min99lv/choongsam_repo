@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.postgre.choongsam.dto.Attendance_Check;
+import com.postgre.choongsam.dto.Class_ScheduleAddVideo;
 import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
@@ -93,7 +94,15 @@ public class JheController {
 	public String getProfHomeworkList(@RequestParam("lctr_id") String lctr_id, HttpSession session, Model model) {
 		System.out.println("강의 과제 리스트 컨트롤러");
 		List<Homework> profHomeworkList = hes.getProfHomeworkList(lctr_id);
+		System.out.println("profHomeworkList: " + profHomeworkList);
 		List<Homework> studSubmitList = hes.getStudSubmitList(lctr_id);
+
+		int onOff = profHomeworkList.stream()
+				.map(Homework::getOnoff)
+				.findFirst()
+				.orElse(0);
+
+		model.addAttribute("onoff", onOff);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("profHomeworkList", profHomeworkList);
 		model.addAttribute("studList", studSubmitList);
@@ -185,7 +194,12 @@ public class JheController {
                 .map(Homework::getLctr_id)
                 .findFirst()
                 .orElse("");
+		int onOff = studHomeworkList.stream()
+                .map(Homework::getOnoff)
+                .findFirst()
+                .orElse(0);
 		
+		model.addAttribute("onoff", onOff);
 		model.addAttribute("lctr_id", lctrId);
 		model.addAttribute("studHomeworkList", studHomeworkList);
 		return "view_Jhe/studHomeworkList";
@@ -201,13 +215,27 @@ public class JheController {
 	}
 
 	@PostMapping(value = "/submitHomework")
-	public String updatesubmitHomework(@RequestParam(value = "lctr_id", defaultValue = "0") String lctr_id, @RequestParam int asmt_no, HttpSession session) {
+	public String updatesubmitHomework(@RequestParam(value = "lctr_id", defaultValue = "0") String lctr_id,
+									   @RequestParam int asmt_no, 
+									   @RequestParam("files") MultipartFile file,
+									   HttpSession session,
+									   HttpServletRequest request) throws IOException {
 		System.out.println("과제 제출 포오스트");
 		System.out.println("ASMT_NO: " + asmt_no);
 		int user_seq = (int) session.getAttribute("user_seq");
-		int upsubmitHomework = hes.updatesubmitHomework(user_seq, asmt_no);
+		int upsubmitHomework = hes.updatesubmitHomework(user_seq, asmt_no, file, request);
 		System.out.println("upsubmitHomework: " + upsubmitHomework);
 		return "redirect:/Jhe/studHomeworkList";
+	}
+
+	@GetMapping(value = "/checkHomework")
+	public String checkHomework(@RequestParam int asmt_no, HttpSession session, Model model) {
+		System.out.println("컨트롤러 checkHomework");
+		int user_seq = (int) session.getAttribute("user_seq");
+		Homework checkHomeworkList = hes.checkHomework(asmt_no, user_seq);
+		System.out.println("checkHomework: " + checkHomeworkList);
+		model.addAttribute("checkHomework", checkHomeworkList);
+		return "view_Jhe/checkHomework";
 	}
 
 	@GetMapping("/profAttMain")
@@ -322,6 +350,12 @@ public class JheController {
 		int user_seq = (int) session.getAttribute("user_seq");
 		List<Grade> studentScoreList = hes.profGrade(lctr_id, user_seq);
 		System.out.println("controller studentScoreList: " + studentScoreList);
+		int onOff = studentScoreList.stream()
+				.map(Grade::getOnoff)
+				.findFirst()
+				.orElse(0);
+
+		model.addAttribute("onoff", onOff);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("studentScoreList", studentScoreList);
 		return "view_Jhe/profGrade";
@@ -352,6 +386,12 @@ public class JheController {
 		System.out.println("수강생 내 성적 조회 컨트롤러");
 		int user_seq = (int) session.getAttribute("user_seq");
 		List<Grade> myGradeList = hes.studGrade(user_seq);
+		int onOff = myGradeList.stream()
+				.map(Grade::getOnoff)
+				.findFirst()
+				.orElse(0);
+
+		model.addAttribute("onoff", onOff);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("myGradeList", myGradeList);
 		return "view_Jhe/studGrade";

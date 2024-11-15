@@ -28,4 +28,8 @@ public class Homework  { // 과제
     private int        submissionRate; // 제출률
     private MultipartFile file;
     private String    file_nm;        // 파일명
+    private int		  assigned_file_group;	// 강사 첨부파일 그룹
+    private String	  assigned_file;		// 강사 첨부파일명
+    private int		  submitted_file_group;	// 학생 첨부파일 그룹
+    private String	  submitted_file;		// 학생 첨부파일명
 }

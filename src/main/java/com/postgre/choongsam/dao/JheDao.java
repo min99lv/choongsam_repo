@@ -55,4 +55,5 @@ public interface JheDao {
 	List<Grade>		studGrade(int user_seq);
 	List<Grade>		studGradeDetail(Grade grade);
 	List<Integer>	getLctrNoList(String lctr_id);
+	Homework		checkHomework(Homework homework);
 }

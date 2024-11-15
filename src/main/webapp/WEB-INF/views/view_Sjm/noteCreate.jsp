@@ -245,7 +245,6 @@ function populateLectureTable(lectures) {
     });
 }
 async function fetchRecipients(lctr_id) {
-	alert("lctr_id->"+lctr_id);
     try {
         //   const response = await fetch(`/api/lectures/recipients?lctr_id=${lctr_id}`);
        const response = await fetch('/api/lectures/recipients?lctr_id='+lctr_id);
