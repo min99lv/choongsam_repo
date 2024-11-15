@@ -138,10 +138,11 @@ public class JheController {
 	}
 
 	@GetMapping(value = "/updateHomework")
-	public String getUpdateHomework(@RequestParam int ASMT_NO, Model model) {
+	public String getUpdateHomework(@RequestParam int asmt_no, Model model) {
 		System.out.println("과제 수정 겟");
-		Homework findByASMT = hes.findById(ASMT_NO);
-		System.out.println("findByASMT: " + findByASMT);
+		System.out.println("updateHomework 컨트롤러 asmt_no: " + asmt_no);
+		Homework findByASMT = hes.findById(asmt_no);
+		System.out.println("컨트롤러 findByASMT: " + findByASMT);
 		model.addAttribute("upHomework", findByASMT);
 		return "view_Jhe/updateHomework";
 	}
@@ -191,20 +192,20 @@ public class JheController {
 	}
 
 	@GetMapping(value = "/submitHomework")
-	public String getsubmitHomework(@RequestParam int ASMT_NO, Model model) {
+	public String getsubmitHomework(@RequestParam int asmt_no, Model model) {
 		System.out.println("과제 제출 겟");
-		Homework findByASMT = hes.findById(ASMT_NO);
+		Homework findByASMT = hes.findById(asmt_no);
 		System.out.println("findByASMT: " + findByASMT);
 		model.addAttribute("upHomework", findByASMT);
 		return "view_Jhe/submitHomework";
 	}
 
 	@PostMapping(value = "/submitHomework")
-	public String updatesubmitHomework(@RequestParam(value = "lctr_id", defaultValue = "0") String lctr_id, @RequestParam int ASMT_NO, HttpSession session) {
+	public String updatesubmitHomework(@RequestParam(value = "lctr_id", defaultValue = "0") String lctr_id, @RequestParam int asmt_no, HttpSession session) {
 		System.out.println("과제 제출 포오스트");
-		System.out.println("ASMT_NO: " + ASMT_NO);
+		System.out.println("ASMT_NO: " + asmt_no);
 		int user_seq = (int) session.getAttribute("user_seq");
-		int upsubmitHomework = hes.updatesubmitHomework(user_seq, ASMT_NO);
+		int upsubmitHomework = hes.updatesubmitHomework(user_seq, asmt_no);
 		System.out.println("upsubmitHomework: " + upsubmitHomework);
 		return "redirect:/Jhe/studHomeworkList";
 	}
@@ -212,27 +213,30 @@ public class JheController {
 	@GetMapping("/profAttMain")
 	public String profAttMain(@RequestParam("lctr_id") String lctr_id,
 							  @RequestParam(value = "onoff", defaultValue = "0") int onoff, Model model) {
-		System.out.println("차시별 출석 현황");
-
+		System.out.println("컨트롤러 profAttMain onoff: " + onoff);
 		if (onoff == 7002) {
+			System.out.println("온라인 차시별 출석 현황 컨트롤러");
 			List<Attendance_Check> profAttMainList = hes.getOnlineStudAtt(lctr_id);
+			System.out.println("컨트롤러 온라인 출석 현황 profAttMainList: " + profAttMainList);
 			int onOff = profAttMainList.stream()
 					.map(Attendance_Check::getOnoff)
 					.findFirst()
 					.orElse(0);
 			
 			model.addAttribute("onoff", onOff);
+			model.addAttribute("lctr_id", lctr_id);
+			model.addAttribute("profAttMainList", profAttMainList);
 		}
 
+		System.out.println("오프라인 차시별 출석 현황 컨트롤러");
 		List<Attendance_Check> profAttMainList = hes.profAttMain(lctr_id);
-		System.out.println("profAttMainList: " + profAttMainList);
+		System.out.println("컨트롤러 오프라인 출석 현황 profAttMainList: " + profAttMainList);
 		int onOff = profAttMainList.stream()
 				.map(Attendance_Check::getOnoff)
 				.findFirst()
 				.orElse(0);
 		
 		model.addAttribute("onoff", onOff);
-		model.addAttribute("onoff", onoff);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("profAttMainList", profAttMainList);
 		return "view_Jhe/profAttMain";
@@ -287,7 +291,7 @@ public class JheController {
 		int user_seq = (int) session.getAttribute("user_seq");
 		System.out.println("user_seq: " + user_seq);
 		List<Attendance_Check> studAttList = hes.studAtt(lctr_id, user_seq);
-		System.out.println("profAttMainList: " + studAttList);
+		System.out.println("컨트롤러 studAttList: " + studAttList);
 
 		int onOff = studAttList.stream()
                 .map(Attendance_Check::getOnoff)
@@ -295,22 +299,22 @@ public class JheController {
                 .orElse(0);
 
 		model.addAttribute("onoff", onOff);
-		System.out.println("onOff: " +onOff);
+		System.out.println("onoff: " +onOff);
 		model.addAttribute("lctr_id", lctr_id);
 		model.addAttribute("studAttList", studAttList);
 		return "view_Jhe/studAtt";
 	}
 
-	@GetMapping("/profAttDetail")
-	public String profAttDetail(@RequestParam("lctr_id") String lctr_id,
-								@RequestParam int LCTR_NO, @RequestParam int onoff, Model model) {
-		System.out.println("강사 차시별 수강생 출결 현황");
-		List<Attendance_Check> profAttDetailList = hes.profAttDetail(lctr_id, LCTR_NO);
-		model.addAttribute("onoff", onoff);
-		model.addAttribute("lctr_id", lctr_id);
-		model.addAttribute("profAttDetailList", profAttDetailList);
-		return "view_Jhe/profAttDetail";
-	}
+//	@GetMapping("/profAttDetail")
+//	public String profAttDetail(@RequestParam("lctr_id") String lctr_id,
+//								@RequestParam int LCTR_NO, @RequestParam int onoff, Model model) {
+//		System.out.println("강사 차시별 수강생 출결 현황");
+//		List<Attendance_Check> profAttDetailList = hes.profAttDetail(lctr_id, LCTR_NO);
+//		model.addAttribute("onoff", onoff);
+//		model.addAttribute("lctr_id", lctr_id);
+//		model.addAttribute("profAttDetailList", profAttDetailList);
+//		return "view_Jhe/profAttDetail";
+//	}
 
 	@GetMapping("/profGrade")
 	public String profGrade(@RequestParam("lctr_id") String lctr_id, HttpSession session, Model model) {

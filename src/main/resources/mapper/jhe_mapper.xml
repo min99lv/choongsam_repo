@@ -10,7 +10,7 @@
 		FROM		"USER_INFO" AS u
 		JOIN		"LECTURE" AS l ON u."USER_SEQ" = l."USER_SEQ"
 		WHERE		l."USER_SEQ" = #{user_seq}
-		AND			l."LCTR_STATE" IN (4003, 4004, 4005)
+		AND			l."LCTR_STATE" IN (4003, 4004, 4005, 4006)
 		ORDER BY	l."LCTR_NAME" ASC
 	</select>
 	<select id="profLectureInfo" resultType="Lecture">
@@ -205,13 +205,19 @@
 				CASE
 					WHEN c."CONTS_PRGRT" >= 90 THEN 5001
 					WHEN c."CONTS_PRGRT" &lt; 90 THEN 5003
-					ELSE a."ATT_STATUS"
+					ELSE 5003
 				END
 		FROM	"CLASS_SCHEDULE" AS c
 		WHERE	a."LCTR_NO" = c."LCTR_NO"
 		AND		a."LCTR_ID" = c."LCTR_ID"
 		AND		a."USER_SEQ" = c."USER_SEQ"
 	</update>
+	<select id="getViewingPeriod" resultType="String">
+		SELECT		"VIEWING_PERIOD"
+		FROM		"LECTURE_VIDEO"
+		WHERE		"LCTR_ID" = #{lctr_id}
+		AND			"LCTR_NO" = #{lctr_no}
+	</select>
 	<select id="studLecture" resultType="Lecture">
 		SELECT		p."USER_NAME", l."USER_SEQ", l."LCTR_ID", l."LCTR_NAME", l."ONOFF"
 		FROM		"USER_INFO" AS u
@@ -229,9 +235,10 @@
 		WHERE		l."LCTR_ID" = #{lctr_id}
 	</select>
 	<select id="studAtt" resultType="Attendance_Check">
-		SELECT		u."USER_SEQ", a."LCTR_NO", a."LCTR_ID", a."ATT_STATUS"
+		SELECT		u."USER_SEQ", a."LCTR_NO", a."LCTR_ID", a."ATT_STATUS", l."ONOFF"
 		FROM		"ATTENDANCE_CHECK" AS a
 		JOIN		"USER_INFO" AS u ON a."USER_SEQ" = u."USER_SEQ"
+		JOIN		"LECTURE" AS l ON a."LCTR_ID" = l."LCTR_ID"
 		WHERE		a."LCTR_ID" = #{lctr_id}
 		AND			a."USER_SEQ" = #{user_seq}
 		ORDER BY	a."LCTR_NO" ASC
@@ -333,15 +340,5 @@
 		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
 		WHERE		g."USER_SEQ" = #{user_seq}	
 		AND			g."LCTR_ID" = #{lctr_id}	
-	</select>
-	<select id="getProfSeq" resultType="int">
-		SELECT		"USER_SEQ"
-		FROM		"LECTURE"
-		WHERE		"LCTR_ID" = #{lctr_id}
-	</select>
-	<select id="getProfName" resultType="String">
-		SELECT		"USER_NAME"
-		FROM		"USER_INFO"
-		WHERE		"USER_SEQ" = #{user_seq}
 	</select>
 </mapper>

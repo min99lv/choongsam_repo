@@ -23,7 +23,7 @@ form#submitHomework table {
 	<form action="/Jhe/submitHomework" method="post" id="submitHomework">
 		<table>
 			<tr>
-				<th><input type="hidden" name="ASMT_NO" value="${upHomework.asmt_no}">
+				<th><input type="hidden" name="asmt_no" value="${upHomework.asmt_no}">
 					강의명</th>
 				<td>${upHomework.lctr_name}</td>
 			</tr>
@@ -61,8 +61,8 @@ form#submitHomework table {
 			</tr>
 			<tr>
 				<th>제출</th>
-				<td><input  class="submitBtn" type="submit" value="제출">
-		<a href="../Jhe/studHomeworkList"><button  class="submitBtn" type="button">취소</button></a></td>
+				<td><input class="submitBtn" type="submit" value="제출">
+		<a href="../Jhe/studHomeworkList"><button class="submitBtn" type="button">취소</button></a></td>
 			</tr>
 		</table>
 	</form>

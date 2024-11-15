@@ -56,7 +56,7 @@
 				<tr>
 					<td>${profHomework.lctr_name}</td>
 					<td>${profHomework.prof_name}</td>
-					<td><a href="/Jhe/updateHomework?ASMT_NO=${profHomework.asmt_no}">${profHomework.asmt_nm}</a></td>
+					<td><a href="/Jhe/updateHomework?asmt_no=${profHomework.asmt_no}">${profHomework.asmt_nm}</a></td>
 					<td>${profHomework.asmtStatus}</td>
 					<td>${profHomework.sbmsn_bgng_ymd}</td>
 					<td>${profHomework.sbmsn_end_ymd}</td>
@@ -73,7 +73,7 @@
 				<tr>
 					<td></td>
 					<td></td>
-					<td><a href="/Jhe/updateHomework?ASMT_NO=${profHomework.asmt_no}">${profHomework.asmt_nm}</a></td>
+					<td><a href="/Jhe/updateHomework?asmt_no=${profHomework.asmt_no}">${profHomework.asmt_nm}</a></td>
 					<td>${profHomework.asmtStatus}</td>
 					<td>${profHomework.sbmsn_bgng_ymd}</td>
 					<td>${profHomework.sbmsn_end_ymd}</td>

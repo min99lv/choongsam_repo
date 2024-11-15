@@ -69,7 +69,7 @@
 
 <nav>
 	<div class="header_nav">
-	
+
 		<div class="header_detail">
 			<div class="header_info">
 				<!-- <label class="header_user">사용자 정보 </label> -->
@@ -77,7 +77,7 @@
 					<c:out value="${sessionScope.username}" />
 				</div>
 			</div>
-		
+
 			<div class="header_butt">
 				<c:if test="${usertype == 1002}">
 					<a href="/sh_lecture_teacher?lctr_id=${lctr_id }&user_seq=${sessionScope.user_seq}" class="header_link">내 강의실</a>
@@ -87,8 +87,8 @@
 				</c:if>
 			</div>
 			<div class="header_butt">
-				<c:if test="${usertype == 1001}"><a href="/Jhe/studAtt?lctr_id=${lctr_id}" class="header_link">출석</a></c:if>
-				<c:if test="${usertype == 1002}"><a href="/Jhe/profAttMain?lctr_id=${lctr_id}" class="header_link">출석</a></c:if>
+				<c:if test="${usertype == 1001}"><a href="/Jhe/studAtt?lctr_id=${lctr_id}&onoff=${onoff}" class="header_link">출석</a></c:if>
+				<c:if test="${usertype == 1002}"><a href="/Jhe/profAttMain?lctr_id=${lctr_id}&onoff=${onoff}" class="header_link">출석</a></c:if>
 			</div>
 			<div class="header_butt">
 				<c:if test="${usertype == 1001}"><a href="/Jhe/studHomeworkList?lctr_id=${lctr_id}" class="header_link">과제</a></c:if>
@@ -98,11 +98,8 @@
 				<c:if test="${usertype == 1001}"><a href="/Jhe/studGrade?lctr_id=${lctr_id}" class="header_link">성적</a></c:if>
 				<c:if test="${usertype == 1002}"><a href="/Jhe/profGrade?lctr_id=${lctr_id}" class="header_link">성적</a></c:if>
 			</div>
-			<!-- <div class="header_utt">
-				<a href="" class="header_link">공지사항</a>
-			</div> -->
 		</div>
-		
+
 	</div>
 </nav>
 

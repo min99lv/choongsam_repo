@@ -42,6 +42,4 @@ public interface JheService {
 	void			updateGrade(Integer userSeq, String lctr_id, int atndcScr, int asmtScr, int lastScr);
 	List<Grade>		studGrade(int user_seq);
 	List<Grade>		studGradeDetail(String lctr_id, int user_seq);
-	Integer			getProfSeq(String lctr_id);
-	String			getProfName(Integer rcvrSeq);
 }
