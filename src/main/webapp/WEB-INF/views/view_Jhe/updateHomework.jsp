@@ -53,7 +53,7 @@
 				<td style="padding-left: 80px;">
 					<c:if test="${not empty upHomework.file_group}">
 						<a href="/api/files/${upHomework.file_group}/1">${upHomework.file_nm}</a>
-						<input type="checkbox" name="deleteFile" value="true"> 삭제</c:if>
+						<c:if test="${upHomework.file_group != 0}"><input type="checkbox" name="deleteFile" value="true"> 삭제</c:if></c:if>
 					<input type="file" name="file" accept="application/pdf, image/*, .doc, .docx, .txt">
 					<input type="hidden" name="file_group" value="${upHomework.file_group}"></td>
 			</tr>
