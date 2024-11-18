@@ -230,6 +230,7 @@ public class JheServiceImpl implements JheService {
 			} else {
 				System.out.println("삭제할 파일이 없습니다. (file_group == 0)");
 			}
+			homework.setFile_group(0);
 		}
 
 		// 파일이 업로드된 경우 새 파일 업로드
@@ -320,6 +321,7 @@ public class JheServiceImpl implements JheService {
 		if (uploadedFile != null) {
 			int fileGroupId = hed.newFileGroup();
 			saveFiles(Collections.singletonList(uploadedFile), fileGroupId);
+			uploadedFile.setFile_group(fileGroupId);
 		}
 		
 		Homework_Submission homework_Submission = new Homework_Submission();
@@ -329,7 +331,12 @@ public class JheServiceImpl implements JheService {
 		homework_Submission.setSbmsn_yn("Y");
 		homework_Submission.setSbmsn_ymd(today);
 		homework_Submission.setAsmt_scr(10);
-		homework_Submission.setFile_group(uploadedFile.getFile_group());
+
+		if (uploadedFile != null) {
+			homework_Submission.setFile_group(uploadedFile.getFile_group());
+		} else {
+			homework_Submission.setFile_group(0);
+		}
 		System.out.println("Sbmsn_yn: " + homework_Submission.getSbmsn_yn());
 		int upSubmitHomework = hed.updatesubmitHomework(homework_Submission);
 		return upSubmitHomework;
@@ -472,8 +479,7 @@ public class JheServiceImpl implements JheService {
 					if (existingGrade == null) {
 						insertGrade(lctr_id, userSeq);
 					}
-
-					List<Grade> studScoresList = hed.profGrade(userSeq);
+					List<Grade> studScoresList = hed.profGrade(grade);
 					allGrades.addAll(studScoresList);
 					System.out.println("service studScoresList: " + studScoresList);
 				}

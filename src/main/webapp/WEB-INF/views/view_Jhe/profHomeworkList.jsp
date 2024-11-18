@@ -10,26 +10,24 @@
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style type="text/css">
-	#insHomework{
-		margin-bottom: 10px;
-		border-radius: 5px;
-	}
-	#delHomework {
-		margin-top: 10px;
-		background-color: #DB3A00;
-		color: white;
-		border: none;
-		padding: 8px;
-		border-radius: 5px;
-		margin-bottom: 35px;
-		font-weight: bold;
-	}
-	#asmtName {
-		padding: 0px 250px;
-	}
-	#asmt {
-		padding: 20px;
-	}
+.delHomework {
+	margin-top: 10px;
+	background-color: #DB3A00;
+	color: white;
+	border: none;
+	padding: 8px;
+	border-radius: 5px;
+	margin-bottom: 50px;
+	font-weight: bold;
+}
+td {
+	padding: 10px;
+	text-align: center;
+	font-size: 15px;
+}
+table {
+	width: 1200px;
+}
 </style>
 <title>진행중인 강의 과제 리스트</title>
 </head>
@@ -38,21 +36,21 @@
 	<div class="contents">
 		<h1>과제 관리</h1>
 	</div>
-	<form action="/Jhe/insertHomework" method="get" style="text-align: right; margin-right: 80px;">
+	<form action="/Jhe/insertHomework" method="get" style="width: 1200px; text-align: right;">
 		<input type="hidden" name="lctr_id" value="${lctr_id}">
-    		<button type="submit" id="insHomework" class="submitBtn">과제 등록</button>
+    		<button type="submit" class="submitBtn" style="margin-bottom: 10px;">과제 등록</button>
 	</form>
 <form action="/Jhe/deleteHomework?lctr_id=${lctr_id}" method="post">
-	<table id="homeworkList">
+	<table class="homeworkList">
 		<tr>
 			<th>강의명</th>
-			<th>강사명</th>
+			<th class="col_3">강사명</th>
 			<th>과제명</th>
-			<th>진행</th>
-			<th>시작일</th>
-			<th>마감일</th>
-			<th>제출</th>
-			<th>삭제</th>
+			<th class="col_3">진행</th>
+			<th class="col_3">시작일</th>
+			<th class="col_3">마감일</th>
+			<th class="col_3">제출</th>
+			<th class="col_3">삭제</th>
 		</tr>
 		<c:set var="previousName" value="" />
 		<c:set var="previousAsmtNm" value="" />
@@ -66,8 +64,8 @@
 					<td>${profHomework.asmtStatus}</td>
 					<td>${profHomework.sbmsn_bgng_ymd}</td>
 					<td>${profHomework.sbmsn_end_ymd}</td>
-					<td>${profHomework.submissionRate}%</td>
-					<td><input type="checkbox" name="delCheck" value="${profHomework.asmt_no}"></td>
+					<td class="col_3">${profHomework.submissionRate}%</td>
+					<td class="col_3"><input type="checkbox" name="delCheck" value="${profHomework.asmt_no}"></td>
 				</tr>
 				<c:set var="previousName" value="${profHomework.lctr_name}" />
 				<c:set var="previousprofNm" value="${profHomework.prof_name}" />
@@ -83,26 +81,28 @@
 					<td>${profHomework.asmtStatus}</td>
 					<td>${profHomework.sbmsn_bgng_ymd}</td>
 					<td>${profHomework.sbmsn_end_ymd}</td>
-					<td>${profHomework.submissionRate}%</td>
-					<td><input type="checkbox" name="delCheck" value="${profHomework.asmt_no}"></td>
+					<td class="col_3">${profHomework.submissionRate}%</td>
+					<td class="col_3"><input type="checkbox" name="delCheck" value="${profHomework.asmt_no}"></td>
 				</tr>
 				<c:set var="previousAsmtNm" value="${profHomework.asmt_nm}" />
 			</c:if>
 		</c:forEach>
 	</table>
-	<button type="submit" id="delHomework">선택한 과제 삭제</button>
-	<h2>과제 제출 현황</h2>
-	<table>
+	<button type="submit" class="delHomework">선택한 과제 삭제</button>
+	<div class="contents">
+		<h1>과제 제출 현황</h1>
+	</div>
+	<table class="studList">
 		<tr>
-			<th id="asmtName">과제명</th>
-			<th id="asmt">학생 이름</th>
-			<th id="asmt">제출 상태</th>
+			<th>과제명</th>
+			<th class="col_3">학생 이름</th>
+			<th class="col_3">제출 상태</th>
 		</tr>
 		<c:forEach var="studList" items="${studList}">
 			<tr>
-				<td id="asmtName">${studList.asmt_nm}</td>
-				<td id="asmt">${studList.stud_name}</td>
-				<td id="asmt">${studList.sbmsn_yn}</td>
+				<td>${studList.asmt_nm}</td>
+				<td class="col_3">${studList.stud_name}</td>
+				<td class="col_3">${studList.sbmsn_yn}</td>
 			</tr>
 		</c:forEach>
 	</table>
