@@ -8,6 +8,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<style type="text/css">
+td {
+	text-align: center;
+}
+table {
+	width: 1200px;
+}
+.contents {
+	width: 1200px;
+	text-align: center;
+}
+</style>
 <title>내 출결 현황</title>
 </head>
 <body>
