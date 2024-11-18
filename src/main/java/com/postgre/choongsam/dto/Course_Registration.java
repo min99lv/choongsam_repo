@@ -16,4 +16,12 @@ public class Course_Registration {	// 수강신청
 	private int	   		total_scr;	  	// 총점수
 	private int	   		lctr_schd_rt;  	// 차시진행율
 	
+	// 정민 추가 학생 이름 조회용 , 강의 강사 이름 조회용
+	private String std_name;
+	private String prof_name;
+	
+	
+	private String 		ONOFF;
+	private String 		LCTR_NAME;
+	private int 	    CLASS_COUNT;
 }

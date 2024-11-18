@@ -2,9 +2,17 @@ server:
   port: 9999
 # Oracle Connect
 spring:
+  web:
+    resources:
+      static-locations: classpath:/static/
+      static-path-pattern: /static/**
+  profiles:
+    active: local
+
   #File Size
   servlet:
     multipart:
+      enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
       
@@ -34,14 +42,19 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: fantamasitta@gmail.com
-    password: btdq swey iild bdzf
+    username: jxxxmxxn@gmail.com
+    password: vwqx ltmi lgiw slur
     properties:
       mail:
         smtp:
           auth: true
           starttls:
-            enable: true
+            enable: true 
+                 
+  devtools:
+    livereload:
+      enabled: true          
+
 #MyBatis
 mybatis:
   config-location: classpath:configuration.xml
@@ -52,3 +65,13 @@ logging:
     org:
       hibernate:
         SQL: debug
+        
+#youtube api
+youtube:
+  api:
+    key: "AIzaSyDB-l20C9L1cR8XYmyN9Olb-8TZ07ZPbd0"
+    base-url: "https://www.googleapis.com/youtube/v3/"
+
+file:
+  base-path: C:/spring/springSrc17/choongsam_repo/src/main/webapp
+
