@@ -342,7 +342,7 @@ td.cell-date {
 				
 				rows += `
 					<tr>
-					<td class="cell-del"> <input type="checkbox" name="deleteIds" value="\${note.note_sn}" form="deleteForm" \${checkboxDisabled} 
+					<td class="cell-del"> <input type="checkbox" name="deleteIds" value="\${note.note_sn}" form="deleteForm"
                     onclick="if (!this.checked && !note.rcptn_dt) { alert('삭제할 수 없는 항목입니다.'); }"></td>
 					<td class="cell-no">\${indexInTable}</td> <!-- 순번 표시 -->
 						<td class="cell-title"><a href="/note/\${note.note_sn}">\${note.note_ttl}</a></td> <!-- 제목에 a태그 추가 -->
