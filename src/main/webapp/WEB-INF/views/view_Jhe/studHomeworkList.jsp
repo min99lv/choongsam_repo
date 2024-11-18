@@ -55,7 +55,7 @@
 				<tr>
 					<td></td>
 					<td></td>
-					<td><a href="/Jhe/submitHomework?ASMT_NO=${homeworkList.asmt_no}">${homeworkList.asmt_nm}</a></td>
+					<td>${homeworkList.asmt_nm}</td>
 					<td>${homeworkList.asmtStatus}</td>
 					<td>${homeworkList.sbmsn_end_ymd}</td>
 					<td><c:choose>

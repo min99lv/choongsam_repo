@@ -11,12 +11,18 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style type="text/css">
 	#insHomework{
-		margin-left: 982px;
 		margin-bottom: 10px;
+		border-radius: 5px;
 	}
 	#delHomework {
-		margin-left: 940px;
 		margin-top: 10px;
+		background-color: #DB3A00;
+		color: white;
+		border: none;
+		padding: 8px;
+		border-radius: 5px;
+		margin-bottom: 35px;
+		font-weight: bold;
 	}
 	#asmtName {
 		padding: 0px 250px;
@@ -32,9 +38,9 @@
 	<div class="contents">
 		<h1>과제 관리</h1>
 	</div>
-	<form action="/Jhe/insertHomework" method="get">
+	<form action="/Jhe/insertHomework" method="get" style="text-align: right; margin-right: 80px;">
 		<input type="hidden" name="lctr_id" value="${lctr_id}">
-    		<button type="submit" id="insHomework">과제 등록</button>
+    		<button type="submit" id="insHomework" class="submitBtn">과제 등록</button>
 	</form>
 <form action="/Jhe/deleteHomework?lctr_id=${lctr_id}" method="post">
 	<table id="homeworkList">
