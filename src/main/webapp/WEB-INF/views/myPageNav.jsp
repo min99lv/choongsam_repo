@@ -118,7 +118,7 @@
             <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">내 강의실</label></li>
             <ul class="submenu" id="myClassroomSubmenu">
                 <li onclick="location.href='../view_Hjh/suganglistStd?user_seq=${user_seq}'"><label class="txt">수강신청내역</li>
-                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
+                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">수강중인 강의 목록</label></li>
             </ul>
             <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="txt">회원정보</label></li>
             <ul class="submenu" id="userInfoSubmenu">
@@ -135,7 +135,6 @@
             <ul class="submenu" id="zzji">
                 <li onclick="location.href='/notes/received'"><label class="txt">받은쪽지</label></li>
                 <li onclick="location.href='/notes/sent'"><label class="txt">보낸쪽지</label></li>
-                <li onclick="location.href='/asks/my'"><label class="txt">휴지통</label></li>
             </ul>
         </ul>
     </nav>
@@ -149,9 +148,9 @@
             <h1>&nbsp;</h1>
             <li onclick="toggleSubMenu('myClassroomSubmenu')"><label class="txt">나의 강의실</label></li>
             <ul class="submenu" id="myClassroomSubmenu">
-                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">현재 수업중인 강의</label></li>
-                <li onclick="location.href='../view_Hjh/gangyilistTeacher?user_seq=${user_seq}'"><label class="txt">강의 목록</label></li>
                 <li onclick="location.href='/registerCourseForm'"><label class="txt">강의 등록</label></li>
+                <li onclick="location.href='../Jhe/myLecture'"><label class="txt">강의 관리</label></li>
+                <li onclick="location.href='../view_Hjh/gangyilistTeacher?user_seq=${user_seq}'"><label class="txt">강의 목록</label></li>
             </ul>
             <li onclick="toggleSubMenu('userInfoSubmenu')"><label class="txt">회원정보</label></li>
             <ul class="submenu" id="userInfoSubmenu">
@@ -168,7 +167,6 @@
             <ul class="submenu" id="zzji">
                 <li onclick="location.href='/notes/received'"><label class="txt">받은쪽지</label></li>
                 <li onclick="location.href='/notes/sent'"><label class="txt">보낸쪽지</label></li>
-                <li onclick="location.href='/asks/my'"><label class="txt">휴지통</label></li>
             </ul>
         </ul>
     </nav>

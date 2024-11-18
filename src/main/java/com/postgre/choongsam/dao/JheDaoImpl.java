@@ -427,20 +427,6 @@ public class JheDaoImpl implements JheDao {
 	}
 
 	@Override
-	public List<Grade> profGrade(int user_seq) {
-		System.out.println("강사 수강생 성적 다오");
-		List<Grade> studScoresList = null;
-		try {
-			studScoresList = session.selectList("studScores", user_seq);
-			System.out.println("user_seq: " + user_seq);
-			System.out.println("dao studScoresList: " + studScoresList);
-		} catch (Exception e) {
-			System.out.println("studScoresList error: " + e.getMessage());
-		}
-		return studScoresList;
-	}
-
-	@Override
 	public Grade selectGrade(Grade grade) {
 		System.out.println("selectGrade 다오");
 		try {
@@ -450,6 +436,20 @@ public class JheDaoImpl implements JheDao {
 			System.out.println("studScoresList error: " + e.getMessage());
 			return null;
 		}
+	}
+
+	@Override
+	public List<Grade> profGrade(Grade grade) {
+		System.out.println("강사 수강생 성적 다오");
+		List<Grade> studScoresList = null;
+		try {
+			studScoresList = session.selectList("studScores", grade);
+			System.out.println("grade: " + grade);
+			System.out.println("dao studScoresList: " + studScoresList);
+		} catch (Exception e) {
+			System.out.println("studScoresList error: " + e.getMessage());
+		}
+		return studScoresList;
 	}
 
 	@Override
