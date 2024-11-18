@@ -1,22 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ include file="../headerGreen.jsp" %>
+<%@ include file="../myStudyHomeNav.jsp" %>
+<link rel="stylesheet" type="text/css" href="/css/heStd.css">
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <title>Insert title here</title>
+<style type="text/css">
+form {
+	width: 1200px;
+}
+td {
+	text-align: center;
+}
+table {
+	width: 1200px;
+}
+</style>
 </head>
 <body>
-<h2>차시별 출석 입력</h2>
+	<div class="container">
+	<div class="contents">
+		<h1>차시별 출석 입력</h1>
+	</div>
 <form action="/Jhe/insertStudAtt" method="post">
 <input type="hidden" name="lctr_id" value="${lctr_id}">
 <input type="hidden" name="LCTR_NO" value="${LCTR_NO}">
 <input type="hidden" name="onoff" value="${onoff}">
-<button type="button" id="markAllPresent">전체 출석</button>
+<button type="button" id="markAllPresent" class="submitBtn" style="float: right; margin-bottom: 10px;">전체 출석</button>
 <table>
 	<tr>
 		<th>이름</th>
@@ -41,8 +56,9 @@
 	</tr>
 	</c:forEach>
 </table>
-<button type="submit">등록</button>
+<button type="submit" class="submitBtn" style="margin-top: 10px;">등록</button>
 </form>
+</div>
 <script type="text/javascript">
 document.getElementById("markAllPresent").addEventListener("click", function() {
 	const radioButtons = document.querySelectorAll('input[type="radio"][name^="att_status_"]');
