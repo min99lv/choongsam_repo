@@ -62,20 +62,29 @@ th {
 </head>
 <body>
 <main>
-	<c:if test="${usertype == 1002}"><h2>내 강의 목록</h2></c:if>
+	<c:if test="${usertype == 1002}"><h2>강의 관리</h2></c:if>
 	<c:if test="${usertype == 1001}"><h2>수강중인 강의 목록</h2></c:if>
 	<table id="homeworkList">
 		<tr>
 			<th id="lctrName">강의명</th>
-			<th><c:if test="${usertype == 1001}">강사명</c:if></th>
-			<th><c:if test="${usertype == 1002}">수강인원</c:if></th>
+				<c:if test="${usertype == 1001}"><th>강사명</th></c:if>
+				<c:if test="${usertype == 1002}"><th>수강인원</th></c:if>
+				<c:if test="${usertype == 1002}"><th>강의상태</th></c:if>
 			<th>강의실</th>
 		</tr>
 		<c:forEach var="homeworkList" items="${homeworkList}">
 				<tr>
 					<td id="lctrName"><strong>${homeworkList.lctr_name}</strong></td>
-					<td><c:if test="${usertype == 1001}">${homeworkList.user_name}</c:if></td>
-					<td><c:if test="${usertype == 1002}">${homeworkList.reg_count}</c:if></td>
+					<td><c:if test="${usertype == 1001}">${homeworkList.user_name}</c:if>
+					<c:if test="${usertype == 1002}">${homeworkList.reg_count}</c:if></td>
+					<c:if test="${usertype == 1002}">
+						<td><c:choose>
+								<c:when test="${homeworkList.lctr_state == 4003}">모집중</c:when>
+								<c:when test="${homeworkList.lctr_state == 4004}">강의전</c:when>
+								<c:when test="${homeworkList.lctr_state == 4005}">강의중</c:when>
+								<c:when test="${homeworkList.lctr_state == 4006}">종강</c:when>
+							</c:choose></td>
+					</c:if>
 					<td>
 						<c:if test="${usertype == 1002}">
 							<a href="/sh_lecture_teacher?lctr_id=${homeworkList.lctr_id}&user_seq=${user_seq}&onoff=${homeworkList.onoff}" id="myLecture">
