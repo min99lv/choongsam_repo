@@ -12,9 +12,20 @@
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <title>수강중인 강의 과제 리스트</title>
+<style type="text/css">
+td {
+	text-align: center;
+}
+table {
+	width: 1200px;
+}
+.contents {
+	width: 1200px;
+	text-align: center;
+}
+</style>
 </head>
 <body>
-
 <div class="container">
 <div class="contents">
 <h1>과제 목록</h1>
@@ -22,11 +33,11 @@
 	<table id="homeworkList">
 		<tr>
 			<th>강의명</th>
-			<th>강사명</th>
+			<th class="col_3">강사명</th>
 			<th>과제명</th>
-			<th>진행</th>
-			<th>마감일</th>
-			<th>제출</th>
+			<th class="col_3">진행</th>
+			<th class="col_3">마감일</th>
+			<th class="col_3">제출</th>
 		</tr>
 		<c:set var="previousName" value="" />
 		<c:set var="previousAsmtNm" value="" />

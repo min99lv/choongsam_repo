@@ -8,6 +8,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<style type="text/css">
+.contents{
+	width: 1200px;
+	text-align: center;
+}
+td {
+	text-align: center;
+}
+table {
+	width: 1200px;
+}
+</style>
 <title>수강생 출결현황</title>
 </head>
 <body>
@@ -32,7 +44,8 @@
 		 			${AttMain.lctr_no}</a>
 		 		</c:if>
 		 		<c:if test="${AttMain.onoff != 7001}">
-		 			${AttMain.lctr_no}
+		 			<a href="/Jhe/profAttDetail?lctr_id=${AttMain.lctr_id}&LCTR_NO=${AttMain.lctr_no}&onoff=${AttMain.onoff}">
+		 			${AttMain.lctr_no}</a>
 		 		</c:if>
 		 	</td>
 			<td>${AttMain.present_count}</td>

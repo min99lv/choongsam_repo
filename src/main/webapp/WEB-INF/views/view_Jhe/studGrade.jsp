@@ -8,6 +8,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<style type="text/css">
+td {
+	text-align: center;
+}
+table {
+	width: 1200px;
+}
+.contents {
+	width: 1200px;
+	text-align: center;
+}
+</style>
 <title>내 성적 조회</title>
 </head>
 <body>
@@ -19,11 +31,11 @@
 <table>
 	<tr>
 		<th>강의명</th>
-		<th>출석점수</th>
-		<th>과제점수</th>
-		<th>총 점수</th>
-		<th>수료여부</th>
-		<th>쪽지</th>
+		<th class="col_3">출석점수</th>
+		<th class="col_3">과제점수</th>
+		<th class="col_3">총 점수</th>
+		<th class="col_3">수료여부</th>
+		<th class="col_3">쪽지</th>
 	</tr>
 	<c:forEach var="myScore" items="${myGradeList}">
 		<tr>
