@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.postgre.choongsam.dto.Attendance_Check;
-import com.postgre.choongsam.dto.Class_ScheduleAddVideo;
 import com.postgre.choongsam.dto.File_Group;
 import com.postgre.choongsam.dto.Grade;
 import com.postgre.choongsam.dto.Homework;
@@ -333,16 +332,16 @@ public class JheController {
 		return "view_Jhe/studAtt";
 	}
 
-//	@GetMapping("/profAttDetail")
-//	public String profAttDetail(@RequestParam("lctr_id") String lctr_id,
-//								@RequestParam int LCTR_NO, @RequestParam int onoff, Model model) {
-//		System.out.println("강사 차시별 수강생 출결 현황");
-//		List<Attendance_Check> profAttDetailList = hes.profAttDetail(lctr_id, LCTR_NO);
-//		model.addAttribute("onoff", onoff);
-//		model.addAttribute("lctr_id", lctr_id);
-//		model.addAttribute("profAttDetailList", profAttDetailList);
-//		return "view_Jhe/profAttDetail";
-//	}
+	@GetMapping("/profAttDetail")
+	public String profAttDetail(@RequestParam("lctr_id") String lctr_id,
+								@RequestParam int LCTR_NO, @RequestParam int onoff, Model model) {
+		System.out.println("강사 차시별 수강생 출결 현황");
+		List<Attendance_Check> profAttDetailList = hes.profAttDetail(lctr_id, LCTR_NO);
+		model.addAttribute("onoff", onoff);
+		model.addAttribute("lctr_id", lctr_id);
+		model.addAttribute("profAttDetailList", profAttDetailList);
+		return "view_Jhe/profAttDetail";
+	}
 
 	@GetMapping("/profGrade")
 	public String profGrade(@RequestParam("lctr_id") String lctr_id, HttpSession session, Model model) {

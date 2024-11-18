@@ -277,7 +277,7 @@
 			                    강의 수정
 			                </div>
 			            </a>
-						<a href="/video-details?videoId=${conts.conts_id }&user_seq=${conts.user_seq }">
+						<a href="/video-details?videoId=${conts.conts_id }&user_seq=${conts.user_seq }&lctr_no=${conts.lctr_no }">
 						<!-- <button onclick="chkClassSche()"> -->
 							<div id="startDiv">
 								<span id="startTxt"><div id="start">학습 시작</div></span>
