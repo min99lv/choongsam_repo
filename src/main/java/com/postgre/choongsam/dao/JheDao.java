@@ -40,8 +40,8 @@ public interface JheDao {
 	List<Lecture>	studLectureMain(String lctr_id);
 	List<Attendance_Check> studAtt(Attendance_Check attendance_Check);
 	List<Attendance_Check> profAttDetail(Attendance_Check attendance_Check);
-	List<Grade> 	profGrade(int user_seq);
 	Grade			selectGrade(Grade grade);
+	List<Grade> 	profGrade(Grade grade);
 	List<Integer>	studUserSeq(String lctr_id);
 	String			getEvalCriteria(String lctr_id);
 	void			insertGrade(Grade grade);

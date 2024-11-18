@@ -3,7 +3,7 @@
 
 <mapper namespace = "com.postgre.choongsam.dto.jheMapper">
 	<select id="getLectureHomeworkList" resultType="Lecture">
-		SELECT		u."USER_NAME" AS user_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",  l."ONOFF",
+		SELECT		u."USER_NAME" AS user_name, u."USER_SEQ", l."LCTR_ID", l."LCTR_NAME",  l."ONOFF", l."LCTR_STATE",
 					(SELECT COUNT(*)
 					 FROM	"COURSE_REGISTRATION" AS c
 					 WHERE	c."LCTR_ID" = l."LCTR_ID" AND c."REG_STATE" = '2003') AS reg_count
@@ -74,7 +74,7 @@
 		FROM	"HOMEWORK" AS h
 		JOIN	"LECTURE" AS l ON l."LCTR_ID" = h."LCTR_ID"
 		JOIN	"USER_INFO" AS u ON u."USER_SEQ" = l."USER_SEQ"
-		JOIN	"FILE_GROUP" AS fg ON h."FILE_GROUP" = fg."FILE_GROUP"
+		LEFT JOIN	"FILE_GROUP" AS fg ON h."FILE_GROUP" = fg."FILE_GROUP"
 		WHERE	"ASMT_NO" = #{asmt_no}
 	</select>
 	<select id="getFileGroup" parameterType="int" resultType="File_Group">
@@ -219,7 +219,7 @@
 		AND			"LCTR_NO" = #{lctr_no}
 	</select>
 	<select id="studLecture" resultType="Lecture">
-		SELECT		p."USER_NAME", l."USER_SEQ", l."LCTR_ID", l."LCTR_NAME", l."ONOFF"
+		SELECT		p."USER_NAME", l."USER_SEQ", l."LCTR_ID", l."LCTR_NAME", l."ONOFF", c."REG_STATE"
 		FROM		"USER_INFO" AS u
 		JOIN		"COURSE_REGISTRATION" AS c ON u."USER_SEQ" = c."USER_SEQ"
 		JOIN		"LECTURE" AS l ON c."LCTR_ID" = l."LCTR_ID"
@@ -267,6 +267,7 @@
 		JOIN		"USER_INFO" u ON g."USER_SEQ" = u."USER_SEQ"
 		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
 		WHERE		g."USER_SEQ" = #{user_seq}
+		AND			g."LCTR_ID" = #{lctr_id}
 	</select>
 	<select id="studUserSeqList" resultType="Integer">
 		SELECT		"USER_SEQ", "LCTR_ID"
@@ -331,7 +332,8 @@
 					g."ATNDC_SCR", g."ASMT_SCR", g."LAST_SCR", g."FNSH_YN"
 		FROM		"GRADE" AS g
 		JOIN		"LECTURE" AS l ON g."LCTR_ID" = l."LCTR_ID"
-		WHERE		g."USER_SEQ" = #{user_seq}	
+		WHERE		g."USER_SEQ" = #{user_seq}
+		ORDER BY	l."LCTR_NAME"
 	</select>
 	<select id="studGradeDetail" resultType="Grade">
 		SELECT		l."LCTR_ID", l."LCTR_NAME",
