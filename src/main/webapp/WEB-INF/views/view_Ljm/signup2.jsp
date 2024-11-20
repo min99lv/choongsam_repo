@@ -216,6 +216,7 @@ $(document).ready(function() {
     // 아이디 중복 체크
     function confirmId() {
         var userId = $("#user_id").val();
+        var selectElement = document.getElementById('user_status');
 
         // 아이디 유효성 검사
         var regex = /^[a-zA-Z0-9]{4,12}$/;  // 4~12자의 영문 또는 숫자만 허용
@@ -259,6 +260,12 @@ $(document).ready(function() {
             alert("아이디 중복 확인을 해주세요.");
             event.preventDefault();  // 폼 제출을 막음
         }
+        
+     // 사용자가 회원 유형을 선택하지 않았다면
+        if (selectElement.selectedIndex === 0) {  // 첫 번째 option은 disabled로 선택 불가          
+            alert('회원 유형을 선택해주세요');  // 경고 메시지 띄우기
+            event.preventDefault();  // 폼 제출 막기
+        }
     });
 
     // 폼 제출 이벤트 처리 (다른 방법으로도 제출될 수 있으므로)
@@ -266,6 +273,12 @@ $(document).ready(function() {
         if (!isIdConfirmed) {
             alert("아이디 중복 확인을 해주세요.");
             event.preventDefault();  // 폼 제출을 막음
+        }
+        
+     // 사용자가 회원 유형을 선택하지 않았다면
+        if (selectElement.selectedIndex === 0) {  // 첫 번째 option은 disabled로 선택 불가
+        	alert('회원 유형을 선택해주세요');  // 경고 메시지 띄우기
+            event.preventDefault();  // 폼 제출 막기           
         }
     });
 });

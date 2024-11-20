@@ -280,7 +280,7 @@ public class LjmController {
 		        String uniqueFileName = UUID.randomUUID().toString() + fileExtension;  // UUID + 확장자
 
 		        // 파일 경로 설정
-		        String profileAddr = uploadDir + uniqueFileName;  // /WEB-INF/chFile/user/UUID.png
+		        String profileAddr = "/chFile/user/" + uniqueFileName;  // /WEB-INF/chFile/user/UUID.png
 
 		        // 파일을 저장할 디렉토리 생성
 		        File dir = new File(uploadDir);
