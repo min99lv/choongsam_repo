@@ -27,3 +27,6 @@ build/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# yml 파일 (API key 숨김)
+*.yml
