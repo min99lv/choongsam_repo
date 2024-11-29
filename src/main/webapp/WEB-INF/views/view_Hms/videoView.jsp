@@ -404,44 +404,54 @@ body {
     });
     
     //유튜브 api 자료 가져오기 함수
-    const apiKey = 'AIzaSyDB-l20C9L1cR8XYmyN9Olb-8TZ07ZPbd0';  // 유효한 API 키로 교체 필요
-    //const videoId = videoId;  // 조회할 비디오 ID
-
     $(document).ready(function(){
         $.ajax({
-            url: "https://www.googleapis.com/youtube/v3/videos",
+        	url: "/api/youtube/config",
             type: "GET",
-            data: {
-                part: 'snippet,contentDetails,statistics',
-                id: videoId,            
-                key: apiKey
-            },
-            success: function(data) {
-            	console.log(data);
-                if (data.items && data.items.length > 0) {
-                    const item = data.items[0];
-                    const title = item.snippet.title;
-                    const description = item.snippet.description;
-                    const thumbnailUrl = item.snippet.thumbnails.high.url;
-                    const channelId = item.snippet.channelId;
-                    
-                    // YouTube 영상 정보를 출력
-                    const output = `
-                        <h3>${title}</h3>
-                        <p>${description}</p>
-                        <img src="${thumbnailUrl}" alt="${title}">
-                        <p>채널 ID: ${channelId}</p>
-                    `;
-                    $("#player").append(output);
-                } else {
-                    console.error("해당 비디오 정보를 찾을 수 없습니다.");
-                }
-            },
-            error: function(error) {
-                console.error("YouTube API 요청 오류:", error);
-            }
-        });
-    });
+            success: function(config) {
+            	const apiKey = config.apiKey;  // YouTube API Key
+            	const baseUrl = config.baseUrl;  // Base URL
+
+        		// YouTube API 호출을 위한 영상 정보 가져오기
+	        	$.ajax({
+	        		url: `${baseUrl}videos`,
+	        		type: "GET",
+	        		data: {
+	                    part: 'snippet,contentDetails,statistics',
+	                    id: videoId,            
+	                    key: apiKey
+                	},
+	            	success: function(data) {
+	            		console.log(data);
+	                	if (data.items && data.items.length > 0) {
+	                    	const item = data.items[0];
+	                    	const title = item.snippet.title;
+	                    	const description = item.snippet.description;
+	                    	const thumbnailUrl = item.snippet.thumbnails.high.url;
+	                    	const channelId = item.snippet.channelId;
+
+	              			// YouTube 영상 정보를 출력
+	                    	const output = `
+	                        	<h3>${title}</h3>
+	                        	<p>${description}</p>
+	                        	<img src="${thumbnailUrl}" alt="${title}">
+	                        	<p>채널 ID: ${channelId}</p>
+	                    	`;
+	                    	$("#player").append(output);
+	                	} else {
+	                    	console.error("해당 비디오 정보를 찾을 수 없습니다.");
+	                	}
+	            	},
+	            	error: function(error) {
+	                	console.error("YouTube API 요청 오류:", error);
+	            	}
+	        	});
+        	},
+        	error: function(error) {
+        		console.error("YouTube API 설정 로딩 오류:", error);
+        	}
+		});
+	});
       
     document.getElementById('exitButton').addEventListener('click', () => {
         // 폼의 hidden input 필드에 데이터 설정
