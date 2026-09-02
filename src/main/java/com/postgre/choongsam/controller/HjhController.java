@@ -330,7 +330,7 @@ public class HjhController {
 	        String originalFileName = profileImage.getOriginalFilename();
 	        if (originalFileName == null || originalFileName.isEmpty()) {
 	            model.addAttribute("msg", "파일을 선택하지 않았습니다.");
-	            return "main";  // 파일이 없으면 오류 메시지를 반환
+	            return "main";  // 파일이 없으면 오류 메시지를 반환 
 	        }
 
 	        // 확장자 추출 시, 확장자가 없는 경우 처리
